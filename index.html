@@ -77,11 +77,11 @@ h1 {
   letter-spacing: .01em;
   color: var(--beam);
   margin: 0;
-  max-width: 18ch;
+  max-width: 12em;   /* ch 는 한글 폭을 절반으로 센다 — em 으로 잡는다 */
 }
 .lede {
   margin: clamp(14px, 3vh, 20px) 0 0;
-  max-width: 42ch;
+  max-width: 32em;   /* 한 문장이 한 줄에 들어가는 폭 */
 }
 /* 문장마다 줄을 바꾼다 — 세 문장이 한 덩어리로 뭉치면 읽는 속도가 떨어진다.
    문장이 화면보다 길면 그때만 어절에서 접힌다. */
@@ -116,6 +116,8 @@ h1 {
   color: var(--ink);
   padding: clamp(20px, 4vw, 30px);
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 .slide-tag {
   font-family: var(--font-mono);
@@ -149,8 +151,11 @@ h1 {
   font-family: var(--font-mono);
   font-size: 10px;
   opacity: .38;
-  margin: 14px 0 0;
+  margin: 20px 0 0;
   display: flex; justify-content: space-between; gap: 8px;
+  /* 실제 슬라이드처럼 바닥에 붙는다 — 코드 바로 밑에 붙으면 여백이 위로 몰린다 */
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 /* 오른쪽: 튜터의 말 — 방 쪽에 남아 있다(스크린 위가 아니다) */
@@ -175,7 +180,7 @@ h1 {
 .stuck-mark::before {
   content: ""; width: 14px; height: 2px; background: var(--flag); flex: 0 0 auto;
 }
-.tutor blockquote { margin: 0; max-width: 34ch; }
+.tutor blockquote { margin: 0; max-width: 26em; }
 /* 튜터의 문장은 길다. 의미가 끊기는 자리에서 줄을 나눠 두면 눈이 되짚지 않는다. */
 .tutor blockquote p {
   margin: 0 0 .3em;
@@ -222,7 +227,7 @@ h1 {
   padding: 12px 15px;
   font-size: 13px;
   margin: 0 0 18px;
-  max-width: 46ch;
+  max-width: 30em;
 }
 .down.on { display: block; }
 
@@ -256,7 +261,7 @@ h1 {
   font-size: clamp(12.5px, 3vw, 13.5px);
   line-height: 1.75;
   opacity: .6;
-  max-width: 44ch;
+  max-width: 30em;
 }
 .boundary p { margin: 0 0 .3em; }
 .boundary b { color: var(--beam-dim); opacity: 1; }
@@ -327,7 +332,7 @@ let rec append l1 l2 = <span class="cut"></span></pre>
           늘어난 순간</p>
         <p>어느 쪽을 <span class="nb">패턴 매칭</span> 대상으로 삼아야 할지,</p>
         <p>그리고 <span class="nb">base case</span>를 무엇으로 잡아야 할지에서 막힙니다.</p>
-        <cite>AI 학습튜터가 이 슬라이드에 실제로 쓴 문장 — 손대지 않았습니다</cite>
+        <cite>AI 학습튜터가 실제로 쓴 문장 (손대지 않음)</cite>
       </blockquote>
     </div>
   </section>
