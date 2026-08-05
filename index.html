@@ -31,6 +31,9 @@
   --mute:   #8A8A8A;
   --rule:   #DCD8CD;   /* 표면 위의 헤어라인 */
   --voice:  #DF592E;   /* 본원 강조 — 이 페이지에서는 튜터의 목소리 */
+  /* 주황은 튜터가 말할 때만 쓴다. 머리 문구는 튜터의 말이 아니라 프로그램
+     표지이므로 다른 색을 쓴다 — 이 구분이 있어야 주황이 목소리로 읽힌다. */
+  --program: #103C7A;  /* 진한 파랑 */
 
   --f-display: Enriqueta, Constantia, Cambria, Georgia, serif;
   --f-body: "Titillium Web", "Malgun Gothic", "맑은 고딕", Dotum, sans-serif;
@@ -71,9 +74,9 @@ body {
 .eyebrow {
   display: flex; align-items: center; gap: 14px;
   font-size: clamp(14px, 3.2vw, 17px); font-weight: 700;
-  color: var(--voice); margin: 0 0 clamp(22px, 4.5vh, 40px);
+  color: var(--program); margin: 0 0 clamp(22px, 4.5vh, 40px);
 }
-.eyebrow::before { content: ""; width: 44px; height: 4px; background: var(--voice); flex: 0 0 auto; }
+.eyebrow::before { content: ""; width: 44px; height: 4px; background: var(--program); flex: 0 0 auto; }
 
 .slug {
   font-family: var(--f-mono); font-size: clamp(10.5px, 2.4vw, 12px);
@@ -187,6 +190,8 @@ body {
 }
 .edge p { margin: 0 0 .25em; font-size: clamp(14px, 3.1vw, 15.5px); max-width: 32em; }
 .edge b { color: var(--paper); font-weight: 600; }
+/* 논지가 "안전한가"에서 "믿어도 되는가"로 꺾이는 자리. 여백이 그 전환을 표시한다. */
+.edge p.turn { margin-top: 1.15em; }
 
 /* ---------- 꼬리 — 강의 슬라이드 하단 바 그대로 ---------- */
 .foot .inner { padding-bottom: 30px; }
@@ -278,12 +283,14 @@ body {
   <div class="inner">
     <h2>튜터는<br>교수님이 아닙니다</h2>
     <div>
-      <p>무엇을 배울지 정하는 것은 교수님,</p>
-      <p>과제를 채점하는 것은 조교님의 일입니다.</p>
-      <!-- 이 블록은 한 줄에 한 문장이다. 여기만 두 문장이 붙어 있어 리듬이 끊겼다. -->
-      <p>튜터는 둘 다 하지 않습니다.</p>
-      <p>채점하지 않으니 편하게 모른다고 하셔도 됩니다.</p>
-      <p>설명이 강의와 다르면 <b>기준은 언제나 강의</b>입니다.</p>
+      <!-- 이 블록은 한 줄에 한 문장이다. 두 문장을 붙이면 리듬이 끊긴다.
+           앞 세 줄은 "안전한가", 뒤 세 줄은 "믿어도 되는가"에 답한다. -->
+      <p>무엇을 가르칠지 정하는 사람은 교수님입니다.</p>
+      <p>튜터는 정하지도, 점수를 매기지도 않습니다.</p>
+      <p>그래서 <b>모른다고 말해도 점수에 영향이 없습니다.</b></p>
+      <p class="turn">튜터가 늘 맞는 것은 아닙니다.</p>
+      <p>설명 아래에 근거가 된 슬라이드를 함께 적어 둡니다.</p>
+      <p>강의와 다르면 그 자리에서 알려 주세요.</p>
     </div>
   </div>
 </section>
