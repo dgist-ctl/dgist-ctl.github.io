@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DGIST CTL — AI 학습튜터</title>
+<meta name="robots" content="noindex">
+<style>
+  /* 튜터 화면과 같은 어두운 강의실. 학생이 두 화면을 같은 곳으로 느끼게 한다. */
+  :root {
+    --room:      #0E1420;
+    --room-lift: #18202F;
+    --beam:      #FFFDF7;
+    --beam-dim:  #E8E3D6;
+    --ink:       #12233F;
+    --flag:      #E8A33D;
+    --font-display: Constantia, Cambria, Georgia, serif;
+    --font-body: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+    --font-mono: Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--room);
+    color: var(--beam);
+    word-break: keep-all;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+  }
+  .vignette {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse 78% 62% at 50% 36%, var(--room-lift), transparent 72%);
+  }
+  .card {
+    position: relative; z-index: 1;
+    width: 100%; max-width: 640px;
+    background: radial-gradient(130% 150% at 50% 30%, var(--beam) 58%, var(--beam-dim) 100%);
+    color: var(--ink);
+    padding: clamp(28px, 6vw, 52px);
+    box-shadow: 0 40px 140px -30px rgba(255,253,247,.30), 0 0 220px 30px rgba(255,253,247,.05);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(26px, 5vw, 40px);
+    line-height: 1.25;
+    margin: 0 0 6px;
+    letter-spacing: .01em;
+  }
+  .sub { font-size: 14px; opacity: .7; margin: 0 0 22px; }
+  .rule { height: 1px; background: rgba(18,35,63,.18); margin: 22px 0; }
+  .enter {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background: var(--ink);
+    color: var(--beam);
+    font-size: 17px;
+    font-weight: 700;
+    padding: 16px 20px;
+    margin: 4px 0 14px;
+  }
+  .enter:hover { opacity: .9; }
+  .steps { margin: 0; padding-left: 1.2em; font-size: 14.5px; }
+  .steps li { margin-bottom: .5em; }
+  .addr {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    word-break: break-all;
+    opacity: .55;
+    margin: 0;
+  }
+  .down {
+    display: none;
+    border: 1px dashed rgba(18,35,63,.35);
+    background: rgba(18,35,63,.05);
+    padding: 12px 14px;
+    font-size: 13.5px;
+    margin-bottom: 14px;
+  }
+  .down.on { display: block; }
+  .foot {
+    display: flex; justify-content: space-between; gap: 10px;
+    font-family: var(--font-mono); font-size: 11px; opacity: .55;
+    margin-top: 24px; padding-top: 12px;
+    border-top: 1px solid rgba(18,35,63,.18);
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="vignette" aria-hidden="true"></div>
+
+<main class="card">
+  <h1>막힌 데서부터 같이 봐요.</h1>
+  <p class="sub">DGIST 교수학습센터 · AI 학습튜터 (시범 운영)</p>
+
+  <div id="down" class="down">
+    지금은 튜터 서버가 꺼져 있습니다. 시범 운영 시간에 다시 들어와 주세요.
+  </div>
+
+  <a id="enter" class="enter" href="#">튜터 들어가기</a>
+  <p class="addr" id="addr"></p>
+
+  <div class="rule"></div>
+
+  <ol class="steps">
+    <li>학교 이메일과 <b>접속 코드</b>를 넣습니다. 코드는 교수학습센터가 따로 보내 드립니다.</li>
+    <li>내 과목에서 <b>튜터링 신청</b>을 한 번 하면, 다음부터는 바로 들어갑니다.</li>
+    <li>왼쪽은 강의 슬라이드, 오른쪽은 AI 튜터입니다. 막히는 데서 물어보세요.</li>
+  </ol>
+
+  <div class="foot">
+    <span>AI TUTOR · PROTOTYPE</span>
+    <span id="updated"></span>
+  </div>
+</main>
+
+<script>
+// 터널 주소는 서버를 다시 띄울 때마다 바뀐다. 주소를 이 페이지에 박아 두면
+// 바뀔 때마다 페이지를 고쳐야 하므로, 옆의 tunnel.json 한 파일만 고치면
+// 되도록 분리한다. 서버가 꺼져 있으면 그 사실을 먼저 알린다.
+(async () => {
+  const enter = document.getElementById("enter");
+  const addr = document.getElementById("addr");
+  const down = document.getElementById("down");
+  const updated = document.getElementById("updated");
+  try {
+    const res = await fetch("tunnel.json?t=" + Date.now(), { cache: "no-store" });
+    const data = await res.json();
+    enter.href = data.url;
+    addr.textContent = data.url;
+    updated.textContent = data.updated || "";
+  } catch (e) {
+    down.classList.add("on");
+    enter.style.opacity = ".45";
+    enter.style.pointerEvents = "none";
+    addr.textContent = "";
+  }
+})();
+</script>
+</body>
+</html>
