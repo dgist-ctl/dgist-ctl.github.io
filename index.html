@@ -19,16 +19,19 @@
    어둠은 이 페이지에서 딱 한 곳, 강의실 장면 안에만 남긴다.
    ============================================================ */
 :root {
+  /* 전부 본원 사이트에서 실측한 값이다. DGIST 는 의도적으로 무채색이고,
+     유채색은 #DF592E 와 #FFAE34 둘뿐이다. 없는 브랜드색을 지어내지 않는다. */
   --ink:     #12161F;   /* 제목 */
-  --body:    #494949;   /* 본문 */
+  --body:    #494949;   /* 본문 — 본원 링크·본문 353회 */
+  --slate:   #323745;   /* 제목용 남회색 — 본원 10회 */
   --mute:    #8A8A8A;   /* 보조 */
-  --line:    #E4E4E4;
-  --wash:    #FBFBFB;
-  --navy:    #253242;
-  --accent:  #DF592E;   /* DGIST 강조 */
+  --line:    #DCDCDC;
+  --wash:    #EFEFEF;   /* 본원 구역 배경 */
+  --wash-lo: #FBFBFB;   /* 본원 옅은 배경 */
+  --accent:  #DF592E;   /* 본원 버튼색 */
   --room:    #12161F;   /* 강의실 */
   --beam:    #FFFDF7;
-  --flag:    #FFAE34;   /* DGIST 앰버 — 막힘 표시 전용 */
+  --flag:    #FFAE34;   /* 본원 앰버 — 막힘 표시 전용 */
 
   --font-display: Enriqueta, Constantia, Cambria, Georgia, serif;
   --font-body: "Titillium Web", "Malgun Gothic", "맑은 고딕", Dotum, 돋움, sans-serif;
@@ -100,7 +103,7 @@ h1 {
   transition: background .15s ease, transform .15s ease;
 }
 .enter:hover { background: #C64C24; transform: translateY(-1px); }
-.enter:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+.enter:focus-visible { outline: 3px solid var(--slate); outline-offset: 3px; }
 .enter[aria-disabled="true"] { background: var(--mute); pointer-events: none; }
 .enter .arrow { font-family: var(--font-mono); }
 /* 로그인 — 첫 화면에서 바로 들어간다. 문을 두 번 열게 하지 않는다. */
@@ -196,33 +199,36 @@ h1 {
 }
 
 /* ---------- 이용 순서 — 실제로 순서가 있어 번호를 쓴다 ---------- */
-.how { background: var(--wash); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+/* 구역마다 배경을 바꿔 리듬을 만든다 — 머리띠(먹) · 히어로(흼) ·
+   강의실(먹) · 이용 순서(회색) · 경계(흼) · 꼬리(검정).
+   본원 사이트가 흰 바탕에 회색 띠로 구역을 나누는 방식 그대로다. */
+.how { background: var(--wash); }
 .how .inner { padding-top: clamp(34px, 6vh, 60px); padding-bottom: clamp(34px, 6vh, 60px); }
 .how h2 {
   font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
   color: var(--mute); margin: 0 0 22px;
 }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; }
-@media (min-width: 780px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0 32px; } }
-.steps li { padding: 18px 0; border-top: 2px solid var(--ink); }
-@media (max-width: 779px) { .steps li + li { border-top: 1px solid var(--line); } }
+@media (min-width: 780px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0 20px; } }
+.steps li { padding: 20px 18px; background: #fff; border-top: 3px solid var(--ink); }
+@media (max-width: 779px) { .steps li + li { margin-top: 10px; } }
 .steps .n { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); margin-bottom: 8px; }
 .steps .t { display: block; font-size: clamp(14.5px, 3.3vw, 16px); color: var(--ink); font-weight: 600; }
 .steps .note { display: block; font-size: 13px; color: var(--body); margin-top: 4px; }
 
 /* ---------- 경계 ---------- */
-.boundary { padding: clamp(34px, 6vh, 60px) 0; }
+.boundary { padding: clamp(34px, 6vh, 60px) 0; background: var(--wash-lo); border-top: 1px solid var(--line); }
 .boundary .inner { display: grid; gap: 6px 40px; }
 @media (min-width: 780px) { .boundary .inner { grid-template-columns: 14em 1fr; } }
 .boundary h2 {
   font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(19px, 4vw, 24px); color: var(--ink); margin: 0;
+  font-size: clamp(19px, 4vw, 24px); color: var(--slate); margin: 0;
 }
 .boundary p { margin: 0 0 .25em; font-size: clamp(13.5px, 3.1vw, 15px); max-width: 32em; }
 .boundary b { color: var(--ink); font-weight: 600; }
 
 /* ---------- 꼬리 ---------- */
-.foot { background: var(--ink); color: rgba(255,255,255,.5); }
+.foot { background: #000; color: rgba(255,255,255,.5); }
 .foot .inner {
   padding-top: 22px; padding-bottom: 26px;
   display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
