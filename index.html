@@ -103,6 +103,27 @@ h1 {
 .enter:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
 .enter[aria-disabled="true"] { background: var(--mute); pointer-events: none; }
 .enter .arrow { font-family: var(--font-mono); }
+/* 로그인 — 첫 화면에서 바로 들어간다. 문을 두 번 열게 하지 않는다. */
+.login { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; max-width: 40em; }
+.field { display: flex; flex-direction: column; gap: 6px; flex: 1 1 15em; min-width: 0; }
+.field-code { flex: 0 1 11em; }
+.field label {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--mute);
+}
+.field input {
+  font-family: var(--font-body); font-size: clamp(15px, 3.4vw, 16.5px);
+  color: var(--ink); background: #fff;
+  border: 1px solid var(--line); border-bottom: 2px solid var(--ink);
+  padding: 13px 14px; width: 100%;
+}
+.field input::placeholder { color: #B6B6B6; }
+.field input:focus { outline: none; border-color: var(--accent); }
+/* 접속 코드는 사람이 옮겨 적는 값이다. 고정폭·자간으로 O/0 오독을 줄인다. */
+.field input.code { font-family: var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.hint { font-size: 12.5px; color: var(--mute); margin: 12px 0 0; }
+.msg { margin: 10px 0 0; font-size: 13.5px; color: var(--accent); font-weight: 600; }
+.msg.ok { color: var(--body); font-weight: 400; }
 .addr { font-family: var(--font-mono); font-size: 10.5px; color: var(--mute); margin: 12px 0 0; word-break: break-all; }
 .down {
   display: none;
@@ -243,7 +264,21 @@ h1 {
     </div>
     <div class="cta-row rise d2">
       <div id="down" class="down">지금은 튜터 서버가 꺼져 있습니다. 시범 운영 시간에 다시 들어와 주세요.</div>
-      <a id="enter" class="enter" href="#">튜터 들어가기 <span class="arrow" aria-hidden="true">→</span></a>
+      <form id="login" class="login">
+        <div class="field">
+          <label for="email">학교 이메일</label>
+          <input id="email" type="email" inputmode="email" autocomplete="email"
+                 placeholder="이름@dgist.ac.kr" required>
+        </div>
+        <div class="field field-code">
+          <label for="code">접속 코드</label>
+          <input id="code" class="code" type="text" inputmode="latin" spellcheck="false"
+                 autocomplete="one-time-code" placeholder="ABCD-2345" required>
+        </div>
+        <button id="go" type="submit" class="enter">들어가기 <span class="arrow" aria-hidden="true">→</span></button>
+      </form>
+      <p class="hint">접속 코드는 교수학습센터가 수강생에게 따로 보내 드립니다.</p>
+      <p id="msg" class="msg" hidden></p>
       <p class="addr" id="addr"></p>
     </div>
   </div>
@@ -315,23 +350,69 @@ let rec append l1 l2 = <span class="cut"></span></pre>
 // 바뀔 때마다 페이지를 고쳐야 하므로 tunnel.json 한 파일로 분리했다.
 // 서버가 꺼져 있으면 들어가기를 막고 그 사실을 먼저 알린다.
 (async () => {
-  const enter = document.getElementById("enter");
+  const form = document.getElementById("login");
+  const go = document.getElementById("go");
+  const msg = document.getElementById("msg");
   const addr = document.getElementById("addr");
   const down = document.getElementById("down");
   const updated = document.getElementById("updated");
+  let base = null;
+
+  const say = (text, ok) => {
+    msg.hidden = false;
+    msg.textContent = text;
+    msg.classList.toggle("ok", !!ok);
+  };
+
+  // 세션이 만료돼 앱에서 되돌아온 경우를 먼저 알린다
+  if (new URLSearchParams(location.search).get("e") === "expired") {
+    say("로그인이 만료되었습니다. 다시 들어와 주세요.", true);
+    history.replaceState(null, "", location.pathname);
+  }
+
   try {
     const res = await fetch("tunnel.json?t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
     if (!data.url) throw new Error("주소 없음");
-    enter.href = data.url;
-    addr.textContent = data.url;
+    base = data.url.replace(/[/]+$/, "");
+    addr.textContent = base;
     updated.textContent = data.updated || "";
   } catch (e) {
     down.classList.add("on");
-    enter.setAttribute("aria-disabled", "true");
-    enter.removeAttribute("href");
-    addr.textContent = "";
+    go.disabled = true;
+    form.querySelectorAll("input").forEach(el => el.disabled = true);
   }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!base) return;
+    const email = document.getElementById("email").value.trim();
+    const code = document.getElementById("code").value.trim();
+    if (!email || !code) return;
+
+    go.disabled = true;
+    say("확인하는 중…", true);
+    try {
+      const res = await fetch(base + "/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        say(data.error || "들어가지 못했습니다.", false);
+        document.getElementById("code").value = "";
+        document.getElementById("code").focus();
+        return;
+      }
+      // 세션은 조각(#)으로 넘긴다 — 서버로 전송되지 않고 리퍼러에도 남지 않는다.
+      window.location.href = base + "/#s=" + encodeURIComponent(data.session);
+    } catch (err) {
+      say("연결하지 못했습니다. 잠시 후 다시 시도해 주세요.", false);
+    } finally {
+      go.disabled = false;
+    }
+  });
 })();
 </script>
 </body>
