@@ -107,7 +107,8 @@ h1 {
   border: 1px solid rgba(232, 227, 214, .14);
 }
 @media (min-width: 760px) {
-  .demo { grid-template-columns: 1.05fr .95fr; }
+  /* 튜터의 문장이 이 페이지의 주인공이다. 슬라이드보다 넓게 준다. */
+  .demo { grid-template-columns: .92fr 1.08fr; }
 }
 
 /* 왼쪽: 투영된 슬라이드 표면 */
@@ -180,7 +181,7 @@ h1 {
 .stuck-mark::before {
   content: ""; width: 14px; height: 2px; background: var(--flag); flex: 0 0 auto;
 }
-.tutor blockquote { margin: 0; max-width: 26em; }
+.tutor blockquote { margin: 0; }
 /* 튜터의 문장은 길다. 의미가 끊기는 자리에서 줄을 나눠 두면 눈이 되짚지 않는다. */
 .tutor blockquote p {
   margin: 0 0 .3em;
@@ -305,7 +306,7 @@ h1 {
   <p class="eyebrow rise d1">2026년 2학기 DGIST 튜터링 프로그램</p>
   <h1 class="rise d1">막힌 데서부터<br>같이 봐요.</h1>
   <div class="lede rise d2">
-    <p>강의 슬라이드는 교수님의 설명을 전제로 만들어집니다.</p>
+    <p>강의 슬라이드는 교수님의 설명을 전제로 합니다.</p>
     <p>그래서 혼자 보면 꼭 어딘가에서 걸립니다.</p>
     <p><span class="nb">AI 학습튜터</span>는 그 자리를 먼저 짚습니다.</p>
   </div>
@@ -347,7 +348,7 @@ let rec append l1 l2 = <span class="cut"></span></pre>
 
   <ol class="steps rise d4">
     <li><span class="n">01</span><span><b>학교 이메일과 접속 코드</b>를 넣습니다.</span>
-      <span class="note">코드는 교수학습센터가 수강생에게 따로 보내 드립니다.</span></li>
+      <span class="note">코드는 교수학습센터가 따로 보내 드립니다.</span></li>
     <li><span class="n">02</span><span>내 과목에서 <b>튜터링 신청</b>을 한 번 합니다.</span>
       <span class="note">다음부터는 바로 들어갑니다.</span></li>
     <li><span class="n">03</span><span>왼쪽은 강의 슬라이드, 오른쪽은 <b>AI 튜터</b>입니다.</span>
