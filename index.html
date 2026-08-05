@@ -161,7 +161,6 @@ body {
 .hint { font-size: 12.5px; color: var(--mute); margin: 14px 0 0; }
 .msg { margin: 10px 0 0; font-size: 14px; color: var(--voice); font-weight: 600; }
 .msg.ok { color: var(--body); font-weight: 400; }
-.addr { font-family: var(--f-mono); font-size: 10px; color: #B8B3A7; margin: 10px 0 0; word-break: break-all; }
 .down {
   display: none; border-left: 3px solid var(--voice);
   padding: 10px 0 10px 16px; font-size: 13.5px; margin: 0 0 18px; max-width: 30em;
@@ -258,7 +257,6 @@ body {
       </form>
       <p class="hint">접속 코드는 교수학습센터가 수강생에게 따로 보내 드립니다.</p>
       <p id="msg" class="msg" hidden></p>
-      <p class="addr" id="addr"></p>
     </div>
   </div>
 </main>
@@ -310,7 +308,6 @@ body {
   const form = document.getElementById("login");
   const go = document.getElementById("go");
   const msg = document.getElementById("msg");
-  const addr = document.getElementById("addr");
   const down = document.getElementById("down");
   const updated = document.getElementById("updated");
   let base = null;
@@ -330,8 +327,9 @@ body {
     const res = await fetch("tunnel.json?t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
     if (!data.url) throw new Error("주소 없음");
+    // 터널 주소는 화면에 보이지 않는다. 학생이 옮겨 적을 주소가 아니고,
+    // 서버를 다시 띄울 때마다 바뀌어 적어 두면 오히려 틀린 주소가 된다.
     base = data.url.replace(/[/]+$/, "");
-    addr.textContent = base;
     updated.textContent = data.updated || "";
   } catch (e) {
     down.classList.add("on");
