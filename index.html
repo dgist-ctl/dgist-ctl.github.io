@@ -5,368 +5,309 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>2026년 2학기 DGIST 튜터링 프로그램 — AI 학습튜터</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="DGIST 교수학습센터 AI 학습튜터. 강의자료의 막히는 지점부터 함께 봅니다.">
+<meta name="description" content="DGIST 교수학습센터 AI 학습튜터. 강의자료에서 막히는 지점부터 함께 봅니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Enriqueta:wght@400;700&family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   어두운 강의실과 그 안에 켜진 스크린 하나.
-   튜터 화면과 같은 색·같은 서체를 쓴다 — 학생이 문과 방을 같은 곳으로
-   느껴야 하기 때문이다. 이 페이지에서 색을 쓰는 자리는 단 하나,
-   튜터가 "여기서 막힌다"고 짚는 표시뿐이다.
+   DGIST 본원 사이트의 문법을 따른다 — 흰 바탕, 얇은 어두운 머리띠,
+   절제된 회색 계조, 주황빨강 강조 하나. 색·서체는 인상이 아니라
+   본원 사이트에서 실측한 값이다.
+     글자 #494949 / 제목 #12161F / 남색 #253242 / 강조 #DF592E
+     본문 Titillium Web + Malgun Gothic / 디스플레이 Enriqueta
+   어둠은 이 페이지에서 딱 한 곳, 강의실 장면 안에만 남긴다.
    ============================================================ */
 :root {
-  --room:      #0E1420;
-  --room-lift: #18202F;
-  --beam:      #FFFDF7;
-  --beam-dim:  #E8E3D6;
-  --ink:       #12233F;
-  --flag:      #E8A33D;
+  --ink:     #12161F;   /* 제목 */
+  --body:    #494949;   /* 본문 */
+  --mute:    #8A8A8A;   /* 보조 */
+  --line:    #E4E4E4;
+  --wash:    #FBFBFB;
+  --navy:    #253242;
+  --accent:  #DF592E;   /* DGIST 강조 */
+  --room:    #12161F;   /* 강의실 */
+  --beam:    #FFFDF7;
+  --flag:    #FFAE34;   /* DGIST 앰버 — 막힘 표시 전용 */
 
-  --font-display: Constantia, Cambria, Georgia, "Times New Roman", serif;
-  --font-body: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --font-display: Enriqueta, Constantia, Cambria, Georgia, serif;
+  --font-body: "Titillium Web", "Malgun Gothic", "맑은 고딕", Dotum, 돋움, sans-serif;
   --font-mono: Consolas, "Courier New", monospace;
 }
 
 * { box-sizing: border-box; }
 /* 한글은 어절 단위로 끊어야 읽힌다. 상속에 기대지 않고 글이 들어가는
    요소에 직접 건다 — 한 군데라도 빠지면 그 문단만 음절로 쪼개진다. */
-h1, h2, p, li, blockquote, cite, span, b, a { word-break: keep-all; overflow-wrap: break-word; }
+h1, h2, h3, p, li, blockquote, cite, span, b, a { word-break: keep-all; overflow-wrap: break-word; }
 /* 한 낱말처럼 읽혀야 하는 것들. 줄 끝에서 갈라지면 뜻이 흩어진다. */
 .nb { white-space: nowrap; }
 html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
 
 body {
   font-family: var(--font-body);
-  background: var(--room);
-  color: var(--beam-dim);
-  line-height: 1.65;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background: #fff;
+  color: var(--body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.inner { width: 100%; max-width: 1060px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 40px); }
+
+/* ---------- 머리띠 ---------- */
+.topbar { background: var(--ink); color: #fff; }
+.topbar .inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+  min-height: 58px; padding-top: 10px; padding-bottom: 10px;
+}
+.brand { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.brand .kr { font-size: clamp(14px, 3.2vw, 16px); font-weight: 700; letter-spacing: -.01em; }
+.brand .en { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; opacity: .55; }
+.topbar .term {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em;
+  color: var(--flag); white-space: nowrap;
 }
 
-/* 방의 깊이를 만드는 유일한 장치. 평평한 검정은 화면이지 공간이 아니다. */
-.room {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 76% 60% at 50% 30%, var(--room-lift), transparent 70%);
-}
-
-.wrap {
-  position: relative; z-index: 1;
-  width: 100%; max-width: 880px;
-  margin: 0 auto;
-  padding: clamp(36px, 8vh, 88px) clamp(20px, 5vw, 40px) 56px;
-  flex: 1 1 auto;
-}
-
-/* ---------- 머리 ---------- */
+/* ---------- 히어로 ---------- */
+.hero { padding: clamp(44px, 9vh, 92px) 0 clamp(36px, 7vh, 68px); }
 .eyebrow {
-  font-family: var(--font-mono);
-  font-size: clamp(11px, 2.6vw, 12.5px);
-  letter-spacing: .16em;
-  color: var(--flag);
-  opacity: .9;
-  margin: 0 0 clamp(14px, 3vh, 22px);
+  display: flex; align-items: center; gap: 12px;
+  font-size: clamp(12px, 2.8vw, 13px); font-weight: 700;
+  letter-spacing: .02em; color: var(--accent);
+  margin: 0 0 clamp(16px, 3vh, 24px);
 }
+.eyebrow::before { content: ""; width: 34px; height: 3px; background: var(--accent); flex: 0 0 auto; }
 h1 {
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(30px, 7vw, 54px);
-  line-height: 1.2;
-  letter-spacing: .01em;
-  color: var(--beam);
+  font-size: clamp(32px, 7.2vw, 58px);
+  line-height: 1.22;
+  color: var(--ink);
   margin: 0;
-  max-width: 12em;   /* ch 는 한글 폭을 절반으로 센다 — em 으로 잡는다 */
+  max-width: 13em;   /* ch 는 한글 폭을 절반으로 센다 — em 으로 잡는다 */
 }
-.lede {
-  margin: clamp(14px, 3vh, 20px) 0 0;
-  max-width: 32em;   /* 한 문장이 한 줄에 들어가는 폭 */
+.lede { margin: clamp(18px, 3.5vh, 28px) 0 0; max-width: 34em; }
+/* 문장마다 줄을 바꾼다 — 세 문장이 한 덩어리로 뭉치면 읽는 속도가 떨어진다. */
+.lede p { margin: 0 0 .3em; font-size: clamp(15px, 3.4vw, 17.5px); line-height: 1.75; }
+.lede b { color: var(--ink); font-weight: 600; }
+
+.cta-row { margin: clamp(26px, 5vh, 40px) 0 0; }
+.enter {
+  display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none;
+  background: var(--accent); color: #fff;
+  font-size: clamp(15px, 3.4vw, 17px); font-weight: 700;
+  padding: 16px 30px;
+  transition: background .15s ease, transform .15s ease;
 }
-/* 문장마다 줄을 바꾼다 — 세 문장이 한 덩어리로 뭉치면 읽는 속도가 떨어진다.
-   문장이 화면보다 길면 그때만 어절에서 접힌다. */
-.lede p {
-  margin: 0 0 .35em;
-  font-size: clamp(14.5px, 3.4vw, 17px);
-  line-height: 1.7;
-  color: var(--beam-dim);
-  opacity: .78;
+.enter:hover { background: #C64C24; transform: translateY(-1px); }
+.enter:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+.enter[aria-disabled="true"] { background: var(--mute); pointer-events: none; }
+.enter .arrow { font-family: var(--font-mono); }
+.addr { font-family: var(--font-mono); font-size: 10.5px; color: var(--mute); margin: 12px 0 0; word-break: break-all; }
+.down {
+  display: none;
+  border-left: 3px solid var(--accent); background: var(--wash);
+  padding: 12px 16px; font-size: 13.5px; margin: 0 0 18px; max-width: 30em;
 }
+.down.on { display: block; }
 
 /* ============================================================
-   시그니처 — 끊긴 슬라이드와, 그 자리를 이어받는 튜터.
-   왼쪽은 실제 CSE307 4강 8번 슬라이드다. 원문이 정말 이 줄에서 끝난다.
+   강의실 장면 — 이 페이지에서 유일하게 어두운 곳.
+   왼쪽은 실제 CSE307 4강 8번 슬라이드다. 원문이 정말 이 줄에서 끊긴다.
    오른쪽은 그 슬라이드에 대해 튜터가 실제로 쓴 문장이다. 지어낸 예시가
    아니라 학생이 들어가면 보게 될 바로 그 문장이다.
    ============================================================ */
-.demo {
-  margin: clamp(30px, 6vh, 52px) 0 clamp(28px, 5vh, 44px);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  border: 1px solid rgba(232, 227, 214, .14);
+.scene { background: var(--room); padding: clamp(34px, 7vh, 68px) 0; }
+.scene-label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em;
+  color: var(--flag); margin: 0 0 clamp(16px, 3vh, 24px);
 }
-@media (min-width: 760px) {
+.demo { display: grid; grid-template-columns: 1fr; border: 1px solid rgba(255,255,255,.1); }
+@media (min-width: 780px) {
   /* 튜터의 문장이 이 페이지의 주인공이다. 슬라이드보다 넓게 준다. */
   .demo { grid-template-columns: .92fr 1.08fr; }
 }
 
-/* 왼쪽: 투영된 슬라이드 표면 */
 .slide {
-  background: radial-gradient(120% 140% at 40% 20%, var(--beam) 60%, var(--beam-dim) 100%);
-  color: var(--ink);
-  padding: clamp(20px, 4vw, 30px);
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
+  background: var(--beam); color: var(--ink);
+  padding: clamp(22px, 4vw, 32px);
+  min-width: 0; display: flex; flex-direction: column;
 }
-.slide-tag {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: .1em;
-  opacity: .5;
-  margin: 0 0 10px;
-}
-.slide h2 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(17px, 3.6vw, 21px);
-  margin: 0 0 4px;
-  letter-spacing: .01em;
-}
-.slide p { margin: 0 0 12px; font-size: clamp(12.5px, 2.9vw, 13.5px); opacity: .8; }
+.slide-tag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; color: var(--mute); margin: 0 0 12px; }
+.slide h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(18px, 3.8vw, 22px); margin: 0 0 6px; }
+.slide .q { margin: 0 0 14px; font-size: clamp(12.5px, 2.9vw, 13.5px); color: var(--body); }
 .code {
-  font-family: var(--font-mono);
-  font-size: clamp(11.5px, 2.7vw, 13px);
-  line-height: 1.85;
-  white-space: pre;
-  overflow-x: auto;
-  margin: 0;
-  padding-bottom: 2px;
+  font-family: var(--font-mono); font-size: clamp(11.5px, 2.7vw, 13px);
+  line-height: 1.9; white-space: pre; overflow-x: auto; margin: 0; color: var(--ink);
 }
-.code .dim { opacity: .45; }
+.code .dim { color: var(--mute); }
 /* 원문이 여기서 끝난다. 커서 하나가 그 사실을 말한다. */
-.cut { border-right: 2px solid var(--ink); animation: blink 1.15s step-end infinite; padding-right: 1px; }
+.cut { border-right: 2px solid var(--accent); animation: blink 1.15s step-end infinite; padding-right: 1px; }
 @keyframes blink { 50% { border-color: transparent; } }
 .slide-foot {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  opacity: .38;
-  margin: 20px 0 0;
+  font-family: var(--font-mono); font-size: 10px; color: var(--mute);
   display: flex; justify-content: space-between; gap: 8px;
   /* 실제 슬라이드처럼 바닥에 붙는다 — 코드 바로 밑에 붙으면 여백이 위로 몰린다 */
-  margin-top: auto;
-  padding-top: 20px;
+  margin-top: auto; padding-top: 22px;
 }
 
-/* 오른쪽: 튜터의 말 — 방 쪽에 남아 있다(스크린 위가 아니다) */
 .tutor {
-  background: rgba(24, 32, 47, .55);
-  padding: clamp(20px, 4vw, 30px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  border-top: 1px solid rgba(232, 227, 214, .14);
+  background: rgba(255,255,255,.035); color: #E9EAEC;
+  padding: clamp(22px, 4vw, 32px);
+  display: flex; flex-direction: column; justify-content: center; min-width: 0;
+  border-top: 1px solid rgba(255,255,255,.1);
 }
-@media (min-width: 760px) {
-  .tutor { border-top: none; border-left: 1px solid rgba(232, 227, 214, .14); }
-}
+@media (min-width: 780px) { .tutor { border-top: none; border-left: 1px solid rgba(255,255,255,.1); } }
 .stuck-mark {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: 11.5px; font-weight: 700; letter-spacing: .02em;
-  color: var(--flag);
-  margin: 0 0 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; color: var(--flag); margin: 0 0 12px;
 }
-.stuck-mark::before {
-  content: ""; width: 14px; height: 2px; background: var(--flag); flex: 0 0 auto;
-}
+.stuck-mark::before { content: ""; width: 16px; height: 2px; background: var(--flag); flex: 0 0 auto; }
 .tutor blockquote { margin: 0; }
-/* 튜터의 문장은 길다. 의미가 끊기는 자리에서 줄을 나눠 두면 눈이 되짚지 않는다. */
-.tutor blockquote p {
-  margin: 0 0 .3em;
-  font-size: clamp(13.5px, 3.1vw, 15px);
-  line-height: 1.8;
-  color: var(--beam);
-}
+/* 튜터의 문장은 길다. 뜻이 끊기는 자리에서 줄을 나눠 두면 눈이 되짚지 않는다. */
+.tutor blockquote p { margin: 0 0 .3em; font-size: clamp(14px, 3.1vw, 15.5px); line-height: 1.8; color: #fff; }
 .tutor cite {
-  display: block;
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  opacity: .45;
-  margin-top: 12px;
+  display: block; font-style: normal; font-family: var(--font-mono);
+  font-size: 10.5px; color: rgba(255,255,255,.4); margin-top: 14px;
 }
 
-/* ---------- 들어가기 ---------- */
-.enter {
-  display: inline-flex; align-items: center; gap: 10px;
-  text-decoration: none;
-  background: var(--beam);
-  color: var(--ink);
-  font-size: clamp(15px, 3.4vw, 17px);
-  font-weight: 700;
-  padding: 15px 28px;
-  transition: transform .15s ease, box-shadow .15s ease;
+/* ---------- 이용 순서 — 실제로 순서가 있어 번호를 쓴다 ---------- */
+.how { background: var(--wash); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.how .inner { padding-top: clamp(34px, 6vh, 60px); padding-bottom: clamp(34px, 6vh, 60px); }
+.how h2 {
+  font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--mute); margin: 0 0 22px;
 }
-.enter:hover { transform: translateY(-1px); box-shadow: 0 10px 30px -12px rgba(255,253,247,.5); }
-.enter:focus-visible { outline: 3px solid var(--flag); outline-offset: 3px; }
-.enter[aria-disabled="true"] { opacity: .4; pointer-events: none; }
-.enter .arrow { font-family: var(--font-mono); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; }
+@media (min-width: 780px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0 32px; } }
+.steps li { padding: 18px 0; border-top: 2px solid var(--ink); }
+@media (max-width: 779px) { .steps li + li { border-top: 1px solid var(--line); } }
+.steps .n { display: block; font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); margin-bottom: 8px; }
+.steps .t { display: block; font-size: clamp(14.5px, 3.3vw, 16px); color: var(--ink); font-weight: 600; }
+.steps .note { display: block; font-size: 13px; color: var(--body); margin-top: 4px; }
 
-.addr {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  opacity: .35;
-  margin: 12px 0 0;
-  word-break: break-all;
+/* ---------- 경계 ---------- */
+.boundary { padding: clamp(34px, 6vh, 60px) 0; }
+.boundary .inner { display: grid; gap: 6px 40px; }
+@media (min-width: 780px) { .boundary .inner { grid-template-columns: 14em 1fr; } }
+.boundary h2 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(19px, 4vw, 24px); color: var(--ink); margin: 0;
 }
-.down {
-  display: none;
-  border: 1px dashed rgba(232, 163, 61, .4);
-  color: var(--flag);
-  padding: 12px 15px;
-  font-size: 13px;
-  margin: 0 0 18px;
-  max-width: 30em;
-}
-.down.on { display: block; }
+.boundary p { margin: 0 0 .25em; font-size: clamp(13.5px, 3.1vw, 15px); max-width: 32em; }
+.boundary b { color: var(--ink); font-weight: 600; }
 
-/* ---------- 순서 — 실제로 순서가 있어 번호를 쓴다 ---------- */
-.steps {
-  margin: clamp(32px, 6vh, 52px) 0 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid rgba(232, 227, 214, .14);
-}
-.steps li {
-  display: grid;
-  grid-template-columns: 2.6em 1fr;
-  gap: 4px 14px;
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(232, 227, 214, .09);
-  font-size: clamp(13.5px, 3.1vw, 14.5px);
-}
-.steps .n {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  opacity: .4;
-  padding-top: .3em;
-}
-.steps b { color: var(--beam); }
-.steps .note { grid-column: 2; font-size: 12.5px; opacity: .55; }
-
-/* ---------- 경계 — 튜터가 아닌 것 ---------- */
-.boundary {
-  margin: clamp(28px, 5vh, 42px) 0 0;
-  font-size: clamp(12.5px, 3vw, 13.5px);
-  line-height: 1.75;
-  opacity: .6;
-  max-width: 30em;
-}
-.boundary p { margin: 0 0 .3em; }
-.boundary b { color: var(--beam-dim); opacity: 1; }
-
-.foot {
-  position: relative; z-index: 1;
-  max-width: 880px; width: 100%;
-  margin: 0 auto;
-  padding: 0 clamp(20px, 5vw, 40px) 32px;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  opacity: .35;
+/* ---------- 꼬리 ---------- */
+.foot { background: var(--ink); color: rgba(255,255,255,.5); }
+.foot .inner {
+  padding-top: 22px; padding-bottom: 26px;
   display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  font-size: 11.5px;
 }
+.foot .en { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .04em; }
 
-/* ---------- 점등 순서 ----------
+/* ---------- 등장 순서 ----------
    슬라이드가 먼저 뜨고, 한 박자 뒤 튜터가 그 자리를 이어받는다.
    순서 자체가 이 서비스가 하는 일이다. */
-.rise { opacity: 0; animation: rise .55s ease-out forwards; }
-.d1 { animation-delay: .05s; }
-.d2 { animation-delay: .30s; }
-.d3 { animation-delay: .75s; }   /* 튜터의 말 — 슬라이드가 끊긴 뒤에 온다 */
-.d4 { animation-delay: 1.0s; }
-@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-
+.rise { opacity: 0; animation: rise .5s ease-out forwards; }
+.d1 { animation-delay: .04s; } .d2 { animation-delay: .22s; }
+.d3 { animation-delay: .62s; }
+@keyframes rise { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .001ms !important;
-  }
+  *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
   .rise { opacity: 1; }
-  .cut { border-right-color: var(--ink); }
+  .cut { border-right-color: var(--accent); }
 }
 </style>
 </head>
 <body>
-<div class="room" aria-hidden="true"></div>
 
-<main class="wrap">
-  <p class="eyebrow rise d1">2026년 2학기 DGIST 튜터링 프로그램</p>
-  <h1 class="rise d1">막힌 데서부터<br>같이 봐요.</h1>
-  <div class="lede rise d2">
-    <p>강의 슬라이드는 교수님의 설명을 전제로 합니다.</p>
-    <p>그래서 혼자 보면 꼭 어딘가에서 걸립니다.</p>
-    <p><span class="nb">AI 학습튜터</span>는 그 자리를 먼저 짚습니다.</p>
+<header class="topbar">
+  <div class="inner">
+    <div class="brand">
+      <span class="kr">DGIST 교수학습센터</span>
+      <span class="en">Center for Teaching &amp; Learning</span>
+    </div>
+    <span class="term">2026-2 AI 학습튜터</span>
   </div>
+</header>
 
-  <!-- 시그니처: 실제 슬라이드가 끊긴 자리와, 튜터가 실제로 쓴 문장 -->
-  <section class="demo" aria-label="튜터가 하는 일의 예">
-    <div class="slide rise d2">
-      <p class="slide-tag">CSE307 · LECTURE 4 · 8/32</p>
-      <h2>Exercise 1: append</h2>
-      <p>Write a function that appends two lists:</p>
+<section class="hero">
+  <div class="inner">
+    <p class="eyebrow rise d1">2026년 2학기 DGIST 튜터링 프로그램</p>
+    <h1 class="rise d1">막힌 데서부터<br>같이 봐요.</h1>
+    <div class="lede rise d2">
+      <p>강의 슬라이드는 교수님의 설명을 전제로 합니다.</p>
+      <p>그래서 혼자 보면 꼭 어딘가에서 걸립니다.</p>
+      <p><span class="nb">AI 학습튜터</span>는 <b>그 자리를 먼저 짚습니다.</b></p>
+    </div>
+    <div class="cta-row rise d2">
+      <div id="down" class="down">지금은 튜터 서버가 꺼져 있습니다. 시범 운영 시간에 다시 들어와 주세요.</div>
+      <a id="enter" class="enter" href="#">튜터 들어가기 <span class="arrow" aria-hidden="true">→</span></a>
+      <p class="addr" id="addr"></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" aria-label="튜터가 하는 일">
+  <div class="inner">
+    <p class="scene-label rise d2">이런 식으로 짚습니다</p>
+    <div class="demo">
+      <div class="slide rise d2">
+        <p class="slide-tag">CSE307 · LECTURE 4 · 8/32</p>
+        <h2>Exercise 1: append</h2>
+        <p class="q">Write a function that appends two lists:</p>
 <pre class="code"><span class="dim"># append [1; 2; 3] [4; 5; 6; 7];;
 - : int list = [1; 2; 3; 4; 5; 6; 7]</span>
 
 let rec append l1 l2 = <span class="cut"></span></pre>
-      <p class="slide-foot"><span>Minseok Jeon</span><span>2026 Spring</span></p>
+        <p class="slide-foot"><span>Minseok Jeon</span><span>2026 Spring</span></p>
+      </div>
+      <div class="tutor rise d3">
+        <p class="stuck-mark">여기서 자주 막혀요</p>
+        <blockquote>
+          <p>여기서 대개 학생은 length에서 쓰던 <span class="nb">head/tail 분해</span> 습관을 그대로 옮기려다,</p>
+          <p>인자가 <span class="nb">l1 하나</span>에서 <span class="nb">l1과 l2 두 개</span>로 늘어난 순간</p>
+          <p>어느 쪽을 <span class="nb">패턴 매칭</span> 대상으로 삼아야 할지,</p>
+          <p>그리고 <span class="nb">base case</span>를 무엇으로 잡아야 할지에서 막힙니다.</p>
+          <cite>AI 학습튜터가 실제로 쓴 문장 (손대지 않음)</cite>
+        </blockquote>
+      </div>
     </div>
-
-    <div class="tutor rise d3">
-      <p class="stuck-mark">여기서 자주 막혀요</p>
-      <blockquote>
-        <p>여기서 대개 학생은 length에서 쓰던 <span class="nb">head/tail 분해</span> 습관을
-          그대로 옮기려다,</p>
-        <p>인자가 <b><span class="nb">l1 하나</span>에서 <span class="nb">l1과 l2 두 개</span>로</b>
-          늘어난 순간</p>
-        <p>어느 쪽을 <span class="nb">패턴 매칭</span> 대상으로 삼아야 할지,</p>
-        <p>그리고 <span class="nb">base case</span>를 무엇으로 잡아야 할지에서 막힙니다.</p>
-        <cite>AI 학습튜터가 실제로 쓴 문장 (손대지 않음)</cite>
-      </blockquote>
-    </div>
-  </section>
-
-  <div class="rise d4">
-    <div id="down" class="down">
-      지금은 튜터 서버가 꺼져 있습니다. 시범 운영 시간에 다시 들어와 주세요.
-    </div>
-    <a id="enter" class="enter" href="#">튜터 들어가기 <span class="arrow" aria-hidden="true">→</span></a>
-    <p class="addr" id="addr"></p>
   </div>
+</section>
 
-  <ol class="steps rise d4">
-    <li><span class="n">01</span><span><b>학교 이메일과 접속 코드</b>를 넣습니다.</span>
-      <span class="note">코드는 교수학습센터가 따로 보내 드립니다.</span></li>
-    <li><span class="n">02</span><span>내 과목에서 <b>튜터링 신청</b>을 한 번 합니다.</span>
-      <span class="note">다음부터는 바로 들어갑니다.</span></li>
-    <li><span class="n">03</span><span>왼쪽은 강의 슬라이드, 오른쪽은 <b>AI 튜터</b>입니다.</span>
-      <span class="note">막히는 데서 그냥 물어보세요. 채점하지 않습니다.</span></li>
-  </ol>
-
-  <div class="boundary rise d4">
-    <p><b>튜터는 교수님이 아닙니다.</b></p>
-    <p>무엇을 배울지 정하는 것은 교수님,</p>
-    <p>과제를 채점하는 것은 조교님의 일입니다.</p>
-    <p>튜터는 둘 다 하지 않습니다.</p>
-    <p>설명이 강의와 다르면 <b>기준은 언제나 강의</b>입니다.</p>
+<section class="how">
+  <div class="inner">
+    <h2>이용 순서</h2>
+    <ol class="steps">
+      <li><span class="n">01</span><span class="t">학교 이메일과 접속 코드</span>
+        <span class="note">코드는 교수학습센터가 따로 보내 드립니다.</span></li>
+      <li><span class="n">02</span><span class="t">내 과목에서 튜터링 신청</span>
+        <span class="note">한 번만 하면 다음부터는 바로 들어갑니다.</span></li>
+      <li><span class="n">03</span><span class="t">막히는 데서 그냥 물어보기</span>
+        <span class="note">왼쪽은 슬라이드, 오른쪽은 AI 튜터입니다.</span></li>
+    </ol>
   </div>
-</main>
+</section>
+
+<section class="boundary">
+  <div class="inner">
+    <h2>튜터는<br>교수님이 아닙니다</h2>
+    <div>
+      <p>무엇을 배울지 정하는 것은 교수님,</p>
+      <p>과제를 채점하는 것은 조교님의 일입니다.</p>
+      <p>튜터는 둘 다 하지 않습니다.</p>
+      <p>설명이 강의와 다르면 <b>기준은 언제나 강의</b>입니다.</p>
+    </div>
+  </div>
+</section>
 
 <footer class="foot">
-  <span>DGIST 교수학습센터 · AI TUTOR · PROTOTYPE</span>
-  <span id="updated"></span>
+  <div class="inner">
+    <span>DGIST 교수학습센터 · 시범 운영</span>
+    <span class="en">AI TUTOR · PROTOTYPE · <span id="updated"></span></span>
+  </div>
 </footer>
 
 <script>
