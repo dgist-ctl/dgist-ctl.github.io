@@ -5,287 +5,275 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 튜터를 어떻게 설계했나: Harvard PS2 Pal 해부 (Vol. 1, No. 3)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #f5f7fa;
-    --surface: #ffffff;
-    --ink: #1a1a2e;
-    --sub: #4a5568;
-    --muted: #718096;
-    --accent: #002D72;
-    --accent2: #1a4a9b;
-    --accent-soft: #D8E4F4;
-    --line: #dfe5ee;
-    --warn: #7d4e00;
-    --warn-bg: #fff3cd;
-    --good: #2d6a4f;
-    --good-bg: #d8f3dc;
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
   }
-  html, body { height: 100%; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    overflow: hidden;
-    word-break: keep-all;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
   }
 
-  .progress {
-    position: fixed; top: 0; left: 0; height: 3px;
-    background: var(--accent2);
-    z-index: 100; transition: width 0.3s ease;
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
   }
-  .counter {
-    position: fixed; bottom: 14px; right: 26px;
-    font-size: 12px; color: rgba(26,26,46,0.45);
-    font-family: monospace; z-index: 100;
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-  .hint {
-    position: fixed; bottom: 14px; left: 26px;
-    font-size: 12px; color: rgba(26,26,46,0.45); z-index: 100;
-  }
-
-  .slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center;
-    padding: 44px 60px 56px;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease;
-    overflow-y: auto;
-  }
-  .slide.center { justify-content: center; text-align: center; }
-  .slide.active { opacity: 1; pointer-events: auto; z-index: 2; }
-  .slide.active .a { opacity: 0; animation: fadeInUp 0.4s ease forwards; }
-  .a:nth-child(1) { animation-delay: 0.05s; }
-  .a:nth-child(2) { animation-delay: 0.1s; }
-  .a:nth-child(3) { animation-delay: 0.15s; }
-  .a:nth-child(4) { animation-delay: 0.2s; }
-  .a:nth-child(5) { animation-delay: 0.25s; }
-  .a:nth-child(6) { animation-delay: 0.3s; }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+  .masthead a.slidebtn {
+    font-size: 12px; font-weight: 700; color: #fff; background: var(--accent);
+    border-radius: 999px; padding: 6px 14px; text-decoration: none; white-space: nowrap;
   }
 
-  .wrap { width: 100%; max-width: 900px; margin: 0 auto; text-align: left; }
-
-  .kicker {
-    font-size: 12.5px; letter-spacing: 2px;
-    color: var(--accent2); font-weight: 700; margin-bottom: 14px;
-    text-transform: uppercase;
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
   }
-  h1 { font-size: clamp(26px, 4.4vw, 46px); font-weight: 800; line-height: 1.35; }
-  h2 { font-size: clamp(19px, 2.6vw, 28px); font-weight: 800; margin-bottom: 16px; line-height: 1.4; color: var(--ink); }
-  .itemno {
-    display: inline-block; font-size: 14px; font-weight: 800; color: #fff;
-    background: var(--accent); border-radius: 8px; padding: 4px 13px; margin-bottom: 12px;
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
   }
-  .sub { font-size: clamp(14px, 1.7vw, 18px); color: var(--sub); margin-top: 18px; line-height: 1.75; }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
 
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px; }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30초 요약 */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  h3.boxtitle { font-family: var(--serif); font-size: clamp(17px, 2.5vw, 21px); font-weight: 700; line-height: 1.5; margin: 20px 0 12px; color: var(--ink); }
   .hanmadi {
-    background: var(--accent-soft); border-radius: 10px; padding: 12px 18px;
-    font-size: 14.5px; font-weight: 700; color: var(--accent);
-    line-height: 1.65; margin-bottom: 16px;
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
   }
-  .hanmadi::before { content: "한마디 "; font-size: 11px; letter-spacing: 1px; opacity: 0.75; margin-right: 6px; }
+  .hanmadi::before { content: "한마디"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; }
+  .item p.body, .box p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, .box p.body b, ul.arrows b { color: var(--accent); }
 
-  p.body {
-    font-size: 14.5px; line-height: 1.8; color: var(--ink); margin-bottom: 14px;
-  }
-  p.body b { color: var(--accent); }
-
-  ul.arrows { list-style: none; margin-bottom: 14px; }
+  ul.arrows { list-style: none; margin: 0 0 16px; }
   ul.arrows li {
-    font-size: 13.8px; line-height: 1.75; padding: 7px 0 7px 26px;
-    position: relative; color: var(--ink);
-    border-bottom: 1px solid #eef1f6;
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
   }
   ul.arrows li:last-child { border-bottom: none; }
-  ul.arrows li::before {
-    content: "►"; position: absolute; left: 2px; top: 8px;
-    color: var(--accent2); font-size: 11px;
-  }
-  ul.arrows b { color: var(--accent); }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
 
-  ol.steps { list-style: none; margin-bottom: 14px; counter-reset: st; }
-  ol.steps li {
-    font-size: 13.8px; line-height: 1.75; padding: 7px 0 7px 34px;
-    position: relative; color: var(--ink); counter-increment: st;
-    border-bottom: 1px solid #eef1f6;
-  }
-  ol.steps li:last-child { border-bottom: none; }
-  ol.steps li::before {
-    content: counter(st) "."; position: absolute; left: 4px; top: 7px;
-    color: var(--accent2); font-weight: 800; font-size: 13px;
-  }
+  ol.steps { margin: 0 0 16px 22px; }
+  ol.steps li { font-size: 14.5px; line-height: 1.85; padding: 4px 0; }
   ol.steps b { color: var(--accent); }
 
   .caveat {
-    background: #fbfbf3; border: 1px solid #e8e4c9; border-radius: 10px;
-    padding: 11px 16px; font-size: 13px; color: var(--warn); line-height: 1.7;
-    margin-bottom: 12px;
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
   }
   .caveat b { font-weight: 800; }
 
-  .src { font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
   .bdg {
     display: inline-block; padding: 1px 6px; border-radius: 3px;
     font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
   }
   .bdg.r { background: var(--good-bg); color: var(--good); }
-  .bdg.p { background: var(--warn-bg); color: var(--warn); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
   .bdg.x { background: #fde8e8; color: #b03030; }
   .bdg.o { background: #f1f5f9; color: #4a5568; }
 
   .pre {
+    font-family: Consolas, "Courier New", monospace;
     background: #f4f6f9; border: 1px solid var(--line); border-radius: 10px;
-    padding: 14px 18px; font-family: 'Courier New', Courier, monospace;
-    font-size: 12.5px; line-height: 1.7; color: #333333; margin-bottom: 14px;
-    white-space: pre-wrap; word-break: break-word;
+    padding: 16px 18px; font-size: 12.5px; line-height: 1.75; color: #2a3442;
+    white-space: pre-wrap; word-break: break-word; overflow-x: auto; margin: 14px 0 16px;
   }
-  .pre b { color: var(--accent2); }
-  .pre .cap { display: block; font-family: "Pretendard", "Malgun Gothic", sans-serif; font-weight: 800; color: var(--accent); font-size: 13px; margin-bottom: 8px; }
+  .pre .ptitle {
+    display: block; font-family: "Pretendard", sans-serif; font-size: 12px; font-weight: 800;
+    color: var(--accent); margin-bottom: 10px; letter-spacing: 0.5px;
+  }
 
-  table.box { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(26,26,46,0.05); margin-bottom: 14px; }
-  table.box th {
-    background: var(--accent); color: #fff; font-size: 13px; padding: 10px 14px; text-align: left;
-  }
-  table.box td {
-    border-top: 1px solid var(--line); font-size: 13px; color: var(--ink);
-    padding: 10px 14px; text-align: left; line-height: 1.7; vertical-align: top;
-  }
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: left; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: top; }
   table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
   table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
 
   .lensbox {
-    background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--accent);
-    border-radius: 12px; padding: 20px 26px; margin-bottom: 16px;
-    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
   }
-  .lensbox h3 { font-size: 16px; color: var(--accent); margin-bottom: 10px; }
-  .lensbox p { font-size: 14px; color: var(--ink); line-height: 1.85; margin-bottom: 10px; }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
   .lensbox p:last-child { margin-bottom: 0; }
   .lensbox b { color: var(--accent); }
 
-  .stats { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .stat {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 18px 22px; min-width: 190px; max-width: 270px; text-align: left;
-    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
   }
-  .stat .big { font-size: clamp(20px, 2.6vw, 30px); font-weight: 800; color: var(--accent); line-height: 1.2; }
-  .stat .lbl { font-size: 13px; color: var(--sub); margin-top: 8px; line-height: 1.55; }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
 
-  @media (max-width: 700px) {
-    .slide { padding: 36px 18px 52px; }
-    .stat { width: 100%; max-width: none; }
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
   }
 
-  @media print {
-    .progress, .counter, .controls, nav, button,
-    [class*="hint"], [class*="btn"] { display: none !important; }
-    .slide {
-      page-break-after: always;
-      position: relative !important;
-      opacity: 1 !important;
-      display: flex !important;
-      width: 100vw; height: auto; min-height: 100vh;
-      overflow: visible;
-    }
-    @page { size: landscape; margin: 0; }
+  @media (max-width: 640px) {
+    .hero .inner { padding: 52px 18px 44px; }
+    .article { padding: 32px 16px 64px; }
   }
 </style>
 </head>
 <body>
 
-<div class="progress" id="progress"></div>
-<div class="counter" id="counter"></div>
-<div class="hint">← → 이동 · F 전체화면 · S 노트 · 긴 장은 스크롤</div>
-
-<!-- 1. 표지 -->
-<div class="slide center active" data-notes="DGIST CTL AI 활용 교수법 트렌드 리포트 3호의 슬라이드판입니다. Harvard PS2 Pal 한 연구를 시스템 프롬프트 전문까지 해부한 호입니다. 긴 장은 슬라이드 안에서 스크롤됩니다.">
-  <div class="a kicker">DGIST 교수학습센터 · AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 3 (Jun. 2026)</div>
-  <h1 class="a">AI 튜터를 어떻게 설계했나:<br>Harvard PS2 Pal 해부</h1>
-  <p class="a sub">효과의 진짜 엔진은 AI가 아니라 교수가 쓴 설계였다.</p>
-</div>
-
-<!-- 2. 30초 요약 -->
-<div class="slide" data-notes="바쁘면 이 한 장이면 됩니다. 원문의 30초 요약 세 문장을 그대로 옮겼습니다.">
-  <div class="wrap">
-    <div class="a kicker">⏱ 30초 요약 — 바쁘면 여기까지만</div>
-    <ul class="a arrows" style="font-size:15px;">
-      <li><b>1.</b> Harvard 물리 수업에서 AI 튜터가 능동학습 수업보다 학습 향상 약 2배 — 동료심사·독립·고등교육을 모두 충족하는 사실상 유일한 강한 긍정 증거다.</li>
-      <li><b>2.</b> 비결은 AI가 아니라 설계였다. 교수가 쓴 7개 행동규칙("한 단계씩 · 정답 먼저 주지 말 것 · 먼저 시도하게")과 문항별 정답·해설 주입이 핵심. 같은 기술이라도 기성품(Khanmigo)을 그냥 깔면 효과 차이가 사라졌다.</li>
-      <li><b>3.</b> DGIST 교수도 오늘 복제 가능(Custom GPT·Claude Project, 코딩 0). 단, 진짜 노동은 '문항별 단계 해설 작성'이고, 소규모 고선발 집단에서의 효과 전이는 아직 미검증이다.</li>
-    </ul>
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL <small>AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 3 (Jun. 2026)</small></div>
+    <a class="slidebtn" href="./slide/">슬라이드로 보기 →</a>
   </div>
 </div>
 
-<!-- 3. 읽는 법 -->
-<div class="slide center" data-notes="이번 호는 한 연구를 다섯 각도로 읽습니다. 사례와 설계, 결과와 한계, 실전 박스, 맥락, 편집자 렌즈 순입니다.">
-  <h2 class="a">이번 호 읽는 법 — 한 연구를 다섯 각도로</h2>
-  <div class="a stats" style="max-width:940px;">
-    <div class="stat"><div class="big">①</div><div class="lbl"><b>사례·설계 (1–4)</b><br>무엇을·어떻게 만들었나</div></div>
-    <div class="stat"><div class="big">②</div><div class="lbl"><b>결과·한계 (5–6)</b><br>효과는 있나·언제 안 되나</div></div>
-    <div class="stat"><div class="big">③</div><div class="lbl"><b>실전 박스</b><br>교수가 만든다면 / 학생이 쓴다면</div></div>
-    <div class="stat"><div class="big">④</div><div class="lbl"><b>맥락 (7–9)</b><br>대조 증거·검증의 간극</div></div>
-    <div class="stat"><div class="big">⑤</div><div class="lbl"><b>편집자 렌즈</b><br>DGIST 처방</div></div>
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report · 리포트</div>
+    <h1>AI 튜터를 어떻게 설계했나: Harvard PS2 Pal 해부</h1>
+    <p class="lede">주목할 것은 결과 자체가 아니라 그 결과를 만든 '설계'다 — 시스템 프롬프트 전문까지, 한 연구를 다섯 각도로 해부한다.</p>
+    <div class="meta">
+      <b>AI 활용 교수법 트렌드 리포트</b> · Vol. 1, No. 3 (Jun. 2026)<br>
+      발행: DGIST 교수학습센터(CTL) · 문의: ctl@dgist.ac.kr
+    </div>
   </div>
 </div>
 
-<!-- 4. 아이템 1 -->
-<div class="slide" data-notes="Harvard 최대 규모 물리학 수업 PS2에서 맞춤형 AI 튜터와 능동학습 수업을 정면 비교한 연구입니다. AI 조건의 학습 향상 중앙값이 능동학습 수업의 2배를 넘었습니다. 이번 호는 결과보다 그 결과를 만든 설계를 해부합니다.">
-  <div class="wrap">
-    <div class="a kicker">🏛 사례 개요 · The Case</div>
-    <div class="a"><span class="itemno">1</span>
-    <h2>AI 튜터가 능동학습 수업을 앞섰다 — 고등교육 최초의 동료심사 통과 정면 비교</h2></div>
-    <div class="a hanmadi">동료심사를 통과한, 독립적이고 고등교육에서 나온 '거의 유일한' 강력한 AI 긍정 증거다. 주목할 것은 결과 자체가 아니라 그 결과를 만든 '설계'다.</div>
-    <p class="a body">Harvard 물리학과 연구진(Kestin, Miller 외)은 생명과학 전공자 대상 입문 물리학 과목 Physical Sciences 2(PS2) — Harvard 최대 규모 물리학 수업 — 에서 맞춤형 AI 튜터(PS2 Pal)와 능동학습(active learning) 수업을 정면 비교했다. 결과는 2025년 6월 Nature 계열 Scientific Reports에 게재됐고, 접속 13.9만 회·피인용 86회(2026년 6월 기준)로 AI 교수법 논쟁의 중심 근거가 됐다. <b>AI 조건의 학습 향상 중앙값이 능동학습 수업의 2배를 넘었다.</b> 이번 호는 이 결과보다 그 결과를 만든 설계를 시스템 프롬프트 전문까지 해부한다.</p>
-    <ul class="a arrows">
-      <li><b>설계</b>: 수강생 233명 중 적격 194명(Group 1 N=96, Group 2 N=98), 무작위 교차(crossover) 설계 — 1주차에 한 그룹은 AI 튜터(자택), 다른 그룹은 교실 능동학습 → 2주차에 조건 교차. 모든 학생이 두 조건을 모두 1회씩 경험</li>
-      <li><b>주제</b>: 표면장력(1차시)·유체 흐름(2차시) — 선행 학습 의존도가 낮은 독립 주제로 통제(학생 90% 이상이 "깊이 공부한 적 없음"이라고 응답), 각 차시는 사전시험 → 학습 → 사후시험 구조. 사전 동등성 확인(FCI·중간고사 점수 두 그룹 간 유의차 없음)</li>
+<div class="paper">
+<div class="article">
+
+  <div class="toc">
+    <a href="#sec-case">① 사례·설계 (1–4)</a>
+    <a href="#sec-results">② 결과·한계 (5–6)</a>
+    <a href="#sec-practice">③ 실전 박스</a>
+    <a href="#sec-context">④ 맥락 (7–9)</a>
+    <a href="#sec-lens">⑤ 편집자 렌즈</a>
+  </div>
+
+  <div class="sechead">⏱ 30초 요약 — 바쁘면 여기까지만</div>
+  <div class="summary">
+    <div class="itm"><span>Harvard 물리 수업에서 AI 튜터가 능동학습 수업보다 학습 향상 약 2배 — 동료심사·독립·고등교육을 모두 충족하는 사실상 유일한 강한 긍정 증거다.</span></div>
+    <div class="itm"><span>비결은 AI가 아니라 설계였다. 교수가 쓴 7개 행동규칙("한 단계씩 · 정답 먼저 주지 말 것 · 먼저 시도하게")과 문항별 정답·해설 주입이 핵심. 같은 기술이라도 기성품(Khanmigo)을 그냥 깔면 효과 차이가 사라졌다.</span></div>
+    <div class="itm"><span>DGIST 교수도 오늘 복제 가능(Custom GPT·Claude Project, 코딩 0). 단, 진짜 노동은 '문항별 단계 해설 작성'이고, 소규모 고선발 집단에서의 효과 전이는 아직 미검증이다.</span></div>
+  </div>
+
+  <div class="sechead" id="sec-case">🏛 사례 개요 · The Case</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>AI 튜터가 능동학습 수업을 앞섰다 — 고등교육 최초의 동료심사 통과 정면 비교</h2>
+    <div class="hanmadi">동료심사를 통과한, 독립적이고 고등교육에서 나온 '거의 유일한' 강력한 AI 긍정 증거다. 주목할 것은 결과 자체가 아니라 그 결과를 만든 '설계'다.</div>
+    <p class="body">Harvard 물리학과 연구진(Kestin, Miller 외)은 생명과학 전공자 대상 입문 물리학 과목 Physical Sciences 2(PS2) — Harvard 최대 규모 물리학 수업 — 에서 맞춤형 AI 튜터(PS2 Pal)와 능동학습(active learning) 수업을 정면 비교했다. 결과는 2025년 6월 Nature 계열 Scientific Reports에 게재됐고, 접속 13.9만 회·피인용 86회(2026년 6월 기준)로 AI 교수법 논쟁의 중심 근거가 됐다. <b>AI 조건의 학습 향상 중앙값이 능동학습 수업의 2배를 넘었다.</b> 이번 호는 이 결과보다 그 결과를 만든 설계를 시스템 프롬프트 전문까지 해부한다.</p>
+    <ul class="arrows">
+      <li>설계: 수강생 233명 중 적격 194명(Group 1 N=96, Group 2 N=98), 무작위 교차(crossover) 설계 — 1주차에 한 그룹은 AI 튜터(자택), 다른 그룹은 교실 능동학습 → 2주차에 조건 교차. 모든 학생이 두 조건을 모두 1회씩 경험</li>
+      <li>주제: 표면장력(1차시)·유체 흐름(2차시) — 선행 학습 의존도가 낮은 독립 주제로 통제(학생 90% 이상이 "깊이 공부한 적 없음"이라고 응답), 각 차시는 사전시험 → 학습 → 사후시험 구조. 사전 동등성 확인(FCI·중간고사 점수 두 그룹 간 유의차 없음)</li>
       <li><b>비교 대상이 '강의식 수업'이 아니라는 점이 핵심</b> — 대조군은 이미 효과가 입증된 능동학습 수업(교수가 활동 도입 → 학생이 자율 그룹으로 활동 → 교수·조교가 표적 피드백). AI가 이긴 상대는 낮은 기준선이 아님</li>
       <li>본 호 기준 "독립(공급자 무관) + 동료심사 + 고등교육"을 모두 충족하는 유일한 강한 긍정 증거 — 그래서 이 연구의 설계 조건을 해부하는 것이 이번 호의 목적. IRB 승인 No. IRB23-0797, 데이터·코드 공개(GitHub: HarvardAItutor)</li>
     </ul>
-    <p class="a src">출처: Kestin, Miller, Klales, Milbourne &amp; Ponti, Scientific Reports 15, Art. 17458 (2025.06.03), DOI: 10.1038/s41598-025-97652-6</p>
+    <p class="src">출처: Kestin, Miller, Klales, Milbourne &amp; Ponti, Scientific Reports 15, Art. 17458 (2025.06.03), DOI: 10.1038/s41598-025-97652-6</p>
   </div>
-</div>
 
-<!-- 5. 아이템 2 -->
-<div class="slide" data-notes="같은 GPT-4인데 왜 여기서만 통했나. 답은 모델이 아니라 그 위에 얹은 플랫폼과 2단 프롬프트 구조에 있습니다. 저자들은 GPT-4를 배치하고 잘 되기를 바라는 접근을 명시적으로 거부했습니다.">
-  <div class="wrap">
-    <div class="a kicker">⚙ 설계 해부 · How the Tutor Was Built</div>
-    <div class="a"><span class="itemno">2</span>
-    <h2>PS2 Pal의 뼈대 — 플랫폼 1개 + 2층위 프롬프트 구조</h2></div>
-    <div class="a hanmadi">같은 GPT-4인데 왜 여기서만 통했나? 답은 모델이 아니라 그 위에 얹은 '플랫폼 + 2단 프롬프트' 구조에 있다.</div>
-    <p class="a body">저자들은 "GPT-4를 배치하고 잘 되기를 바라는" 접근을 명시적으로 거부했다. PS2 Pal은 GPT-4-0613을 엔진으로 쓰되, 그 위에 맞춤 플랫폼(TeachGPT.com 프레임워크)과 두 층위로 나뉜 시스템 프롬프트를 얹은 교육 시스템이다. 이 구조를 이해하는 것이 "왜 같은 GPT-4가 다른 곳에선 효과가 없었나"에 대한 답이다.</p>
-    <div class="a lensbox">
-      <h3>시스템 프롬프트 = 2개 층의 합</h3>
-      <p><b>① Assignment Persona (과제 전체 공통)</b><br>튜터의 성격·행동 규칙. 과제 내 모든 문항에 동일 적용. "한 번에 한 단계만", "정답을 먼저 알려주지 말 것" 등 교수법 행동을 규정. 교실 투입 전 반복 테스트로 다듬음</p>
-      <p><b>② Question-Specific Prompt (문항별)</b><br>각 문항마다 문제문 + 정답 + 단계별 모범 해설을 프롬프트에 주입. 이 해설은 대조군(교실 수업)에서 학생이 받는 live 설명과 같은 내용 — 즉 두 조건의 교육 내용을 동일하게 통제</p>
+  <div class="sechead">⚙ 설계 해부 · How the Tutor Was Built</div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>PS2 Pal의 뼈대 — 플랫폼 1개 + 2층위 프롬프트 구조</h2>
+    <div class="hanmadi">같은 GPT-4인데 왜 여기서만 통했나? 답은 모델이 아니라 그 위에 얹은 '플랫폼 + 2단 프롬프트' 구조에 있다.</div>
+    <p class="body">저자들은 "GPT-4를 배치하고 잘 되기를 바라는" 접근을 명시적으로 거부했다. PS2 Pal은 GPT-4-0613을 엔진으로 쓰되, 그 위에 맞춤 플랫폼(TeachGPT.com 프레임워크)과 두 층위로 나뉜 시스템 프롬프트를 얹은 교육 시스템이다. 이 구조를 이해하는 것이 "왜 같은 GPT-4가 다른 곳에선 효과가 없었나"에 대한 답이다.</p>
+    <div class="tablewrap">
+    <table class="box">
+      <tr><th colspan="2">시스템 프롬프트 = 2개 층의 합</th></tr>
+      <tr><td>① Assignment Persona<br>(과제 전체 공통)</td><td>튜터의 성격·행동 규칙. 과제 내 모든 문항에 동일 적용. "한 번에 한 단계만", "정답을 먼저 알려주지 말 것" 등 교수법 행동을 규정. 교실 투입 전 반복 테스트로 다듬음</td></tr>
+      <tr><td>② Question-Specific Prompt<br>(문항별)</td><td>각 문항마다 문제문 + 정답 + 단계별 모범 해설을 프롬프트에 주입. 이 해설은 대조군(교실 수업)에서 학생이 받는 live 설명과 같은 내용 — 즉 두 조건의 교육 내용을 동일하게 통제</td></tr>
+    </table>
     </div>
-    <ul class="a arrows">
+    <ul class="arrows">
       <li><b>플랫폼이 강제한 것 — 순차 진행</b>: 시스템 프롬프트만으로는 여러 단계 문제의 비계를 안정적으로 줄 수 없었다. 그래서 플랫폼 수준에서 "문항의 각 부분을 순서대로 안내"하도록 설계 — 교수가 교실에서 진행하는 방식을 그대로 옮김. AI의 자유 재량이 아니라 UI 구조가 비계를 보장</li>
       <li><b>환각(hallucination) 차단의 실제 기제</b>: GPT-4는 다음 토큰 예측으로 작동하므로 복잡한 수식에서 오류가 난다. 해법은 모델의 생성력에 맡기지 않고 교수진이 작성한 단계별 정답 해설을 프롬프트에 미리 넣는 것 — AI는 '설명을 창작'하지 않고 '검증된 해설을 한 단계씩 전달'. 학생 83%가 "AI 설명이 인간 교수자와 같거나 더 낫다"고 평가</li>
-      <li><b>멀티미디어 통합</b>: 고품질 강의 영상을 레슨에 임베드(Harvard Derek Bok Center 제작 스튜디오 촬영) — AI 대화는 영상·문제풀이를 묶는 진행자 역할</li>
+      <li>멀티미디어 통합: 고품질 강의 영상을 레슨에 임베드(Harvard Derek Bok Center 제작 스튜디오 촬영) — AI 대화는 영상·문제풀이를 묶는 진행자 역할</li>
       <li><b>비용 구조의 진실(가장 중요)</b>: 개발 비용이 두 층으로 분리된다. 플랫폼 개발은 수개월이 걸렸으나 이는 이 연구 이전에 독립적으로 진행된 일회성 투자. 반면 레슨 1개 준비는 며칠 — 이미 작성된 교실용 활동·해설을 AI 형식으로 변환하고 문항별 테스트 대화를 돌리며 다듬는 작업. 플랫폼이 한 번 갖춰지면 추가 과목 확장 비용은 낮음</li>
-      <li><b>Sweller — 인지부하 이론의 직접 구현</b>: "한 번에 한 단계" + 사전 작성 해설은 worked example 효과의 변형. "AI 자동화가 곧 인지 최적화를 보장하지는 않는다"는 우려를, 이 시스템은 플랫폼 구조와 프롬프트 제약으로 정면 해소함</li>
+      <li>Sweller — 인지부하 이론의 직접 구현: "한 번에 한 단계" + 사전 작성 해설은 worked example 효과의 변형. "AI 자동화가 곧 인지 최적화를 보장하지는 않는다"는 우려를, 이 시스템은 플랫폼 구조와 프롬프트 제약으로 정면 해소함</li>
     </ul>
-    <p class="a src">출처: Kestin et al. (2025), Methods · Supplementary Material 1 (AI Tutor System and Implementation)</p>
+    <p class="src">출처: Kestin et al. (2025), Methods · Supplementary Material 1 (AI Tutor System and Implementation)</p>
   </div>
-</div>
 
-<!-- 6. 아이템 3 -->
-<div class="slide" data-notes="보충자료에 공개된 Assignment Persona 원문입니다. 추상적 교육학 원칙이 아니라 한 줄 한 줄이 검증 가능한 행동 규칙으로 적혀 있습니다. 한 명의 교수가 자기 수업에서 학생을 어떻게 대하는가를 7개 문장으로 옮긴 것입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚙ 설계 해부 · How the Tutor Was Built</div>
-    <div class="a"><span class="itemno">3</span>
-    <h2>실제 시스템 프롬프트 전문 — 교수의 교육 철학이 7개 제약으로 코드화되다</h2></div>
-    <div class="a hanmadi">효과의 진짜 엔진은 교수가 쓴 7개 행동규칙이다. 화려한 AI 기술이 아니라 교수법 전문성이 자산이라는 뜻.</div>
-    <p class="a body">보충자료에 공개된 Assignment Persona 원문이다. 추상적 '교육학 원칙'이 아니라, 한 줄 한 줄이 검증 가능한 행동 규칙으로 적혀 있다. 번역과 함께 각 규칙이 어떤 교수법 원리를 구현하는지 표시한다.</p>
-    <div class="a pre"><span class="cap">📝 Assignment Persona — 원문 (GPT-4-0613 system prompt)</span># Base Persona: You are an AI physics tutor, designed for the course PS2 (Physical Sciences 2). You are also called the PS2 Pal 🤗. You are friendly, supportive and helpful. You are helping the student with the following question. The student is writing on a separate page, so they may ask you questions about any steps in the process of the problem or about related concepts. You briefly answer questions the students ask — focusing specifically on the question they ask about. If asked, you may CONFIRM if their ANSWER is right, but DO NOT tell them the answer UNLESS they demand you to give them the answer.
+  <div class="item">
+    <div class="no">3</div>
+    <h2>실제 시스템 프롬프트 전문 — 교수의 교육 철학이 7개 제약으로 코드화되다</h2>
+    <div class="hanmadi">효과의 진짜 엔진은 교수가 쓴 7개 행동규칙이다. 화려한 AI 기술이 아니라 교수법 전문성이 자산이라는 뜻.</div>
+    <p class="body">보충자료에 공개된 Assignment Persona 원문이다. 추상적 '교육학 원칙'이 아니라, 한 줄 한 줄이 검증 가능한 행동 규칙으로 적혀 있다. 번역과 함께 각 규칙이 어떤 교수법 원리를 구현하는지 표시한다.</p>
+    <div class="pre"><span class="ptitle">📝 Assignment Persona — 원문 (GPT-4-0613 system prompt)</span># Base Persona: You are an AI physics tutor, designed for the course PS2 (Physical Sciences 2). You are also called the PS2 Pal 🤗. You are friendly, supportive and helpful. You are helping the student with the following question. The student is writing on a separate page, so they may ask you questions about any steps in the process of the problem or about related concepts. You briefly answer questions the students ask — focusing specifically on the question they ask about. If asked, you may CONFIRM if their ANSWER is right, but DO NOT tell them the answer UNLESS they demand you to give them the answer.
 
 # Constraints:
 1. Keep responses BRIEF (a few sentences or less) but helpful.
@@ -295,356 +283,223 @@
 5. YOU MAY CONFIRM the answer if they get it right at any point, but if the student wants the answer in the first message, encourage them to give it a try first.
 6. Assume the student is learning this topic for the first time. Assume no prior knowledge.
 7. Be friendly! You may use emojis 😊🎉.</div>
-    <ul class="a arrows">
+    <ul class="arrows">
       <li><b>제약 2 "한 번에 한 단계만"</b> = Sweller의 worked example·점진적 비계. AI가 답을 쏟아내 인지부하를 높이는 기본 행동을 정면으로 금지 — 이 한 줄이 "AI = 대체"를 "AI = 비계"로 돌려놓는 핵심 스위치</li>
       <li><b>"정답을 먼저 주지 말 것"(Base + 제약 5)</b> = Vygotsky ZPD의 생산적 씨름 보존. 학생이 먼저 시도하게 만들고, 요구해야만 답을 줌 — "AI가 학습자의 생산적 씨름 경험을 제거하는 경로"를 설계로 차단</li>
-      <li><b>제약 1 "BRIEF" + 제약 6 "선행지식 0 가정"</b> = 인지부하 관리 + 접근성. 장황한 설명이 working memory를 넘치게 하는 것을 막고, 모든 학생을 같은 출발선에 둠</li>
-      <li><b>"friendly·supportive"(Base + 제약 7) + 제약 4 "추가 질문 격려"</b> = Dweck 성장 마인드셋의 정서적 토대. "give it a try first"는 노력 귀인을 유도하는 언어. 단, 후술하듯 측정된 성장 마인드셋은 2개 차시로는 변하지 않았음</li>
-      <li><b>주목</b>: 이 프롬프트는 화려한 기법이 아니다. 한 명의 교수가 "내 수업에서 학생을 어떻게 대하는가"를 7개 문장으로 옮긴 것 — AI 전문성이 아니라 교수법 전문성이 자산. 이것이 본 호 편집자 렌즈의 핵심 주장으로 이어진다</li>
+      <li>제약 1 "BRIEF" + 제약 6 "선행지식 0 가정" = 인지부하 관리 + 접근성. 장황한 설명이 working memory를 넘치게 하는 것을 막고, 모든 학생을 같은 출발선에 둠</li>
+      <li>"friendly·supportive"(Base + 제약 7) + 제약 4 "추가 질문 격려" = Dweck 성장 마인드셋의 정서적 토대. "give it a try first"는 노력 귀인을 유도하는 언어. 단, 후술하듯 측정된 성장 마인드셋은 2개 차시로는 변하지 않았음</li>
+      <li><b>주목: 이 프롬프트는 화려한 기법이 아니다.</b> 한 명의 교수가 "내 수업에서 학생을 어떻게 대하는가"를 7개 문장으로 옮긴 것 — AI 전문성이 아니라 교수법 전문성이 자산. 이것이 본 호 편집자 렌즈의 핵심 주장으로 이어진다</li>
     </ul>
-    <p class="a src">출처: Kestin et al. (2025), Supplementary Material 1 — "Assignment persona" 전문 인용</p>
+    <p class="src">출처: Kestin et al. (2025), Supplementary Material 1 — "Assignment persona" 전문 인용</p>
   </div>
-</div>
 
-<!-- 7. 아이템 4 -->
-<div class="slide" data-notes="두 번째 층인 문항별 프롬프트의 실제 예시입니다. AI에게 문제를 풀게 하지 않고 완성된 정답과 단계별 유도과정을 미리 줍니다. AI의 역할은 검증된 풀이를 학생의 질문에 맞춰 한 단계씩 꺼내 주는 것뿐입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚙ 설계 해부 · How the Tutor Was Built</div>
-    <div class="a"><span class="itemno">4</span>
-    <h2>문항별 프롬프트 예시 — "정답 + 단계별 풀이"를 통째로 주입한다</h2></div>
-    <div class="a hanmadi">AI에게 문제를 '풀게' 하지 않고 정답과 단계별 풀이를 미리 넣어 둔다. 그래서 환각이 안 생기고, 그래서 '해설 작성'이 진짜 일이 된다.</div>
-    <p class="a body">두 번째 층인 Question-Specific Prompt의 실제 예시다(레이놀즈 수 문제). 핵심은 AI에게 문제를 "풀게" 하지 않고, 완성된 정답과 단계별 유도과정을 미리 주는 것이다. AI의 역할은 이 검증된 풀이를 학생의 질문에 맞춰 한 단계씩 꺼내 주는 것뿐이다.</p>
-    <div class="a pre"><span class="cap">📄 Question-Specific Prompt — 원문 예시</span><b>PROBLEM:</b> Vorticella is a stalk-shaped protozoan, which contracts rapidly. Suppose you wish to study the flow about the cell body keeping the Reynolds number the same but with a model that is scaled up by a factor of 100. How much slower or faster must the model move the body, compared to the speed of the real vorticella?
+  <div class="item">
+    <div class="no">4</div>
+    <h2>문항별 프롬프트 예시 — "정답 + 단계별 풀이"를 통째로 주입한다</h2>
+    <div class="hanmadi">AI에게 문제를 '풀게' 하지 않고 정답과 단계별 풀이를 미리 넣어 둔다. 그래서 환각이 안 생기고, 그래서 '해설 작성'이 진짜 일이 된다.</div>
+    <p class="body">두 번째 층인 Question-Specific Prompt의 실제 예시다(레이놀즈 수 문제). 핵심은 AI에게 문제를 "풀게" 하지 않고, 완성된 정답과 단계별 유도과정을 미리 주는 것이다. AI의 역할은 이 검증된 풀이를 학생의 질문에 맞춰 한 단계씩 꺼내 주는 것뿐이다.</p>
+    <div class="pre"><span class="ptitle">📄 Question-Specific Prompt — 원문 예시</span>PROBLEM: Vorticella is a stalk-shaped protozoan, which contracts rapidly. Suppose you wish to study the flow about the cell body keeping the Reynolds number the same but with a model that is scaled up by a factor of 100. How much slower or faster must the model move the body, compared to the speed of the real vorticella?
 
-<b>ANSWER:</b> The model must move 100 times slower than the real vorticella.
+ANSWER: The model must move 100 times slower than the real vorticella.
 
-<b>Keep in mind &#8212; # Steps:</b>
-&#8226; Set the Reynolds numbers equal: Re&#8347;&#8337;&#8344;&#8343; = Re&#8348;&#8338;&#8359;&#8337;&#8343;
-&#8226; Substitute the Reynolds-number expression (both in water, "w")
-&#8226; Cancel water density &amp; viscosity on both sides &#8594; l&#8347;&#8337;&#8344;&#8343;&#183;v&#8347;&#8337;&#8344;&#8343; = l&#8348;&#8338;&#8359;&#8337;&#8343;&#183;v&#8348;&#8338;&#8359;&#8337;&#8343;
-&#8226; v&#8348;&#8338;&#8359;&#8337;&#8343; = (l&#8347;&#8337;&#8344;&#8343; / l&#8348;&#8338;&#8359;&#8337;&#8343;)&#183;v&#8347;&#8337;&#8344;&#8343; = (1/100)&#183;v&#8347;&#8337;&#8344;&#8343; &#8594; 100배 느리게</div>
-    <ul class="a arrows">
+Keep in mind — # Steps:
+• Set the Reynolds numbers equal: Reₛₑₘₗ = Reₜₒ₧ₑₗ
+• Substitute the Reynolds-number expression (both in water, "w")
+• Cancel water density &amp; viscosity on both sides → lₛₑₘₗ·vₛₑₘₗ = lₜₒ₧ₑₗ·vₜₒ₧ₑₗ
+• vₜₒ₧ₑₗ = (lₛₑₘₗ / lₜₒ₧ₑₗ)·vₛₑₘₗ = (1/100)·vₛₑₘₗ → 100배 느리게</div>
+    <ul class="arrows">
       <li>이 풀이는 대조군 학생이 교실에서 받는 live 설명과 같은 내용 — 두 조건의 교육 콘텐츠를 동일하게 맞춰 "AI 효과"를 "내용 차이"로부터 분리한 통제 장치</li>
-      <li><b>환각이 원천 차단되는 이유</b>: AI는 v=(1/100)v를 스스로 유도하지 않는다. 정답이 프롬프트에 이미 있으므로, AI가 할 일은 "어떤 단계를 지금 학생에게 보여줄까"의 교육적 판단뿐</li>
-      <li><b>재현 가능성의 실체</b>: 다른 교수가 이 구조를 쓰려면 자기 과목의 모든 문항에 대해 정답+단계별 해설을 작성해야 한다. 이것이 "레슨당 며칠"의 정체이자, 효과의 진짜 전제 조건. <b>해설 품질이 곧 튜터 품질</b></li>
-      <li><b>시사</b>: DGIST 학내에서 개발된 '수업자료 자동 생성 프레임워크'(마크다운 단일 소스 → 문항·해설 파생)는 정확히 이 전제 조건의 비용을 낮추는 경로 — PS2 Pal이 손으로 만든 문항별 해설을, 마크다운 파이프라인으로 반자동 생성하는 그림</li>
+      <li><b>환각이 원천 차단되는 이유</b>: AI는 vₜₒ₧ₑₗ=(1/100)v를 스스로 유도하지 않는다. 정답이 프롬프트에 이미 있으므로, AI가 할 일은 "어떤 단계를 지금 학생에게 보여줄까"의 교육적 판단뿐</li>
+      <li><b>재현 가능성의 실체</b>: 다른 교수가 이 구조를 쓰려면 자기 과목의 모든 문항에 대해 정답+단계별 해설을 작성해야 한다. 이것이 "레슨당 며칠"의 정체이자, 효과의 진짜 전제 조건. 해설 품질이 곧 튜터 품질</li>
+      <li>시사: DGIST 학내에서 개발된 '수업자료 자동 생성 프레임워크'(마크다운 단일 소스 → 문항·해설 파생)는 정확히 이 전제 조건의 비용을 낮추는 경로 — PS2 Pal이 손으로 만든 문항별 해설을, 마크다운 파이프라인으로 반자동 생성하는 그림</li>
     </ul>
-    <p class="a src">출처: Kestin et al. (2025), Supplementary Material 1 — "Question-Specific Prompt" 예시</p>
+    <p class="src">출처: Kestin et al. (2025), Supplementary Material 1 — "Question-Specific Prompt" 예시</p>
   </div>
-</div>
 
-<!-- 8. 아이템 5 -->
-<div class="slide" data-notes="사후시험 중앙값은 AI 조건 4.5점, 교실 조건 3.5점. 천장 효과를 보정한 효과 크기는 0.73에서 1.3 표준편차입니다. 시간은 더 적게 쓰고 향상은 2배였고, 신규성 효과가 아니라는 증거도 함께 나왔습니다.">
-  <div class="wrap">
-    <div class="a kicker">📊 결과 상세 · Results</div>
-    <div class="a"><span class="itemno">5</span>
-    <h2>더 적은 시간에 2배의 향상 — 그리고 '신규성 효과 아님'의 증거</h2></div>
-    <div class="a hanmadi">더 적은 시간(중앙값 49분)으로 2배 향상. '그냥 신기해서 잘한 것'이 아니라는 증거도 함께 나왔다.</div>
-    <p class="a body">사후시험 중앙값은 AI 조건 4.5점, 교실 조건 3.5점이었다(공통 사전시험 2.75점). 차이는 통계적으로 매우 유의미했다. 천장 효과를 보정한 효과 크기는 <b>0.73–1.3 표준편차</b>로, 교육 효과의 일반 기준선(Hattie d=0.40)을 크게 웃돈다. (통계 상세: Mann-Whitney z = −5.6, p &lt; 10⁻⁸ · 회귀 표준화계수 0.63, p&lt;0.001 · 분위 회귀 기준)</p>
-    <ul class="a arrows">
-      <li><b>시간 효율</b>: 교실 조건은 60분 고정, AI 조건 중앙값은 49분(70%가 60분 미만) — 더 적은 시간에 더 큰 향상</li>
+  <div class="sechead" id="sec-results">📊 결과 상세 · Results</div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>더 적은 시간에 2배의 향상 — 그리고 '신규성 효과 아님'의 증거</h2>
+    <div class="hanmadi">더 적은 시간(중앙값 49분)으로 2배 향상. '그냥 신기해서 잘한 것'이 아니라는 증거도 함께 나왔다.</div>
+    <p class="body">사후시험 중앙값은 AI 조건 4.5점, 교실 조건 3.5점이었다(공통 사전시험 2.75점). 차이는 통계적으로 매우 유의미했다. 천장 효과를 보정한 효과 크기는 <b>0.73–1.3 표준편차</b>로, 교육 효과의 일반 기준선(Hattie d=0.40)을 크게 웃돈다. (통계 상세: Mann-Whitney z = −5.6, p &lt; 10⁻⁸ · 회귀 표준화계수 0.63, p&lt;0.001 · 분위 회귀 기준)</p>
+    <ul class="arrows">
+      <li>시간 효율: 교실 조건은 60분 고정, AI 조건 중앙값은 49분(70%가 60분 미만) — 더 적은 시간에 더 큰 향상</li>
       <li><b>주목할 발견</b>: 학습 시간과 사후시험 점수 사이 상관관계 없음 — 자기 속도 조절(self-pacing)이 작동했다는 신호. 빨리 끝낸 학생이 대충 한 것이 아니라 각자 필요한 만큼 쓴 것</li>
       <li><b>신규성(novelty) 효과 반박 증거</b>: 학생들은 개입 4주 이상 전부터 AI 교수법에 노출됐고 이후에도 주기적으로 사용. '사전 AI 경험'은 대조군에서 약한 음의 상관(r=−0.2)이나 실험군에선 무상관 — AI 조건의 우위가 '신기해서'가 아님을 시사(단, 저자도 2개 차시 한계는 인정)</li>
-      <li><b>정의적(affective) 결과</b>: 참여도 4.1 vs 3.6(p&lt;0.0001), 동기 3.4 vs 3.1(p&lt;0.001)로 AI 조건 우위. 단, 즐거움·성장 마인드셋은 유의차 없음</li>
-      <li><b>Dweck — 설계와 결과의 정직한 간극</b>: 성장 마인드셋 '촉진'을 프롬프트(제약 4·7)에 넣었지만 측정값은 변하지 않음 — 마인드셋은 2개 차시 개입으로 움직이는 변수가 아니라는 기존 연구와 정합. 설계 의도가 모든 차원에서 실현되지는 않음을 보여주는 데이터</li>
-      <li><b>통계 처리의 정직성</b>: 단순 선형 회귀(0.63)가 천장 효과로 효과를 과소 추정함을 밝히고 분위 회귀로 보정 — 효과를 부풀리는 방향이 아니라 정확히 추정하는 방향. 24개 문항의 psychometric 타당도(점이연 상관·변별도·난이도)도 보충자료에 전부 공개</li>
+      <li>정의적(affective) 결과: 참여도 4.1 vs 3.6(p&lt;0.0001), 동기 3.4 vs 3.1(p&lt;0.001)로 AI 조건 우위. 단, 즐거움·성장 마인드셋은 유의차 없음</li>
+      <li>Dweck — 설계와 결과의 정직한 간극: 성장 마인드셋 '촉진'을 프롬프트(제약 4·7)에 넣었지만 측정값은 변하지 않음 — 마인드셋은 2개 차시 개입으로 움직이는 변수가 아니라는 기존 연구와 정합. 설계 의도가 모든 차원에서 실현되지는 않음을 보여주는 데이터</li>
+      <li>통계 처리의 정직성: 단순 선형 회귀(0.63)가 천장 효과로 효과를 과소 추정함을 밝히고 분위 회귀로 보정 — 효과를 부풀리는 방향이 아니라 정확히 추정하는 방향. 24개 문항의 psychometric 타당도(점이연 상관·변별도·난이도)도 보충자료에 전부 공개</li>
     </ul>
-    <p class="a src">출처: Kestin et al. (2025), Results · Table S1–S4</p>
+    <p class="src">출처: Kestin et al. (2025), Results · Table S1–S4</p>
   </div>
-</div>
 
-<!-- 9. 아이템 6 -->
-<div class="slide" data-notes="이 연구의 신뢰도는 효과 크기만큼이나 저자들이 한계를 명시한 방식에서 나옵니다. 구조화된 AI 튜터링이 모든 맥락에서 능동학습을 능가한다고 전제하지 않는다는 것이 저자들의 원문입니다. 4가지 성공 조건이 모두 갖춰질 때만 같은 결과를 기대할 수 있습니다.">
-  <div class="wrap">
-    <div class="a kicker">⚠ 한계와 전이 조건 · Limits &amp; Transfer</div>
-    <div class="a"><span class="itemno">6</span>
-    <h2>저자들이 직접 그은 경계선 — 이 결과가 적용되지 않는 곳</h2></div>
-    <div class="a hanmadi">저자들이 직접 "여기까지만 적용된다"고 선을 그었다. 4가지 성공 조건이 모두 갖춰질 때만 같은 결과를 기대할 수 있다.</div>
-    <p class="a body">이 연구의 신뢰도는 효과 크기만큼이나 저자들이 한계를 명시한 방식에서 나온다. <b>"구조화된 AI 튜터링이 모든 맥락에서 능동학습을 능가한다고 전제하지 않는다"</b>가 저자들의 원문이다.</p>
-    <ul class="a arrows">
+  <div class="sechead">⚠ 한계와 전이 조건 · Limits &amp; Transfer</div>
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>저자들이 직접 그은 경계선 — 이 결과가 적용되지 않는 곳</h2>
+    <div class="hanmadi">저자들이 직접 "여기까지만 적용된다"고 선을 그었다. 4가지 성공 조건이 모두 갖춰질 때만 같은 결과를 기대할 수 있다.</div>
+    <p class="body">이 연구의 신뢰도는 효과 크기만큼이나 저자들이 한계를 명시한 방식에서 나온다. "구조화된 AI 튜터링이 모든 맥락에서 능동학습을 능가한다고 전제하지 않는다"가 저자들의 원문이다.</p>
+    <ul class="arrows">
       <li><b>인지 수준의 천장</b>: 두 차시의 학습 목표는 Bloom 분류상 이해·적용·분석 수준 — 복합 개념의 종합(synthesis)·고차 비판적 사고에는 일반화 불가를 명시</li>
       <li><b>첫 학습 맥락</b>: 학생들이 해당 주제를 사실상 처음 접하는 조건(프롬프트 제약 6 "선행지식 0 가정"과도 연결) — 누적 지식 위에 쌓는 후속 학습에서의 효과는 미검증</li>
       <li><b>성공 의존 요소 4가지(저자 명시)</b>: ① 다양한 학습 속도를 가진 이질적 학생 집단 ② 고품질 강의 영상 통합 ③ 복잡한 프롬프트를 정확히 따르는 모델(GPT-4급) ④ 내용에 정통한 교수진이 작성한 문항별 맞춤 프롬프트 — 이 중 하나라도 빠지면 같은 결과를 기대할 근거가 없음. 앞의 2–4번 아이템이 보여준 설계가 바로 이 조건들의 실체</li>
-      <li><b>표본 한계</b>: 전원 Harvard 학부생, 2개 차시 — 효과의 지속성은 후속 연구 과제(신규성 효과는 위에서 일부 반박됐으나 장기 효과는 별개)</li>
+      <li>표본 한계: 전원 Harvard 학부생, 2개 차시 — 효과의 지속성은 후속 연구 과제(신규성 효과는 위에서 일부 반박됐으나 장기 효과는 별개)</li>
       <li><b>평가 주체의 위치</b>: 본 연구의 '독립'은 상업 벤더로부터의 독립을 뜻하며, 튜터를 설계한 연구진이 자신이 만든 시스템을 평가한 designer-evaluated 구조라는 점은 해석 시 감안해야 함(IRB 승인·데이터/코드 공개로 투명성은 확보)</li>
-      <li><b>저자들의 사용 경고</b>: 학생이 "비판적 사고를 우회하는 목발(crutch)"로 쓸 수 있는 상황 — 예: 과제 대행 — 에는 배치하지 말 것을 권고. PS2 Pal의 제약 2·5("한 단계씩", "먼저 시도")가 바로 이 목발화를 막는 장치</li>
+      <li>저자들의 사용 경고: 학생이 "비판적 사고를 우회하는 목발(crutch)"로 쓸 수 있는 상황 — 예: 과제 대행 — 에는 배치하지 말 것을 권고. PS2 Pal의 제약 2·5("한 단계씩", "먼저 시도")가 바로 이 목발화를 막는 장치</li>
     </ul>
-    <p class="a src">출처: Kestin et al. (2025), Discussion/Limitations</p>
+    <p class="src">출처: Kestin et al. (2025), Discussion/Limitations</p>
   </div>
-</div>
 
-<!-- 10. 실전 적용 1 -->
-<div class="slide" data-notes="교수가 직접 만든다면. 프롬프트가 어려운 부분이라는 가정은 정반대입니다. 프롬프트는 가장 쉬운 부분이고 어려운 건 따로 있습니다. PS2 Pal을 세 층으로 분해하면 오늘 할 수 있는 것과 할 필요가 없는 것, 진짜 병목이 갈립니다.">
-  <div class="wrap">
-    <div class="a kicker">🔨 실전 적용 · DGIST 교수가 직접 만들어 본다면 (1/2)</div>
-    <h2 class="a">프롬프트는 가장 쉬운 부분이다 — 세 층 분해</h2>
-    <p class="a body">"이 프롬프트로 우리 과목 AI 튜터를 만들 수 있나?"라는 질문에는 숨은 전제가 있다 — 프롬프트가 어려운 부분이라는 가정이다. 그런데 PS2 연구가 보여준 것은 정반대다. <b>프롬프트는 가장 쉬운 부분이고, 어려운 건 따로 있다.</b> PS2 Pal을 세 층으로 분해하면 DGIST 교수가 오늘 할 수 있는 것과 할 필요가 없는 것, 그리고 진짜 병목이 갈린다.</p>
-    <table class="a box">
+  <div class="sechead" id="sec-practice">🔨 실전 적용 · DGIST 교수가 직접 만들어 본다면</div>
+
+  <div class="item box">
+    <p class="body">"이 프롬프트로 우리 과목 AI 튜터를 만들 수 있나?"라는 질문에는 숨은 전제가 있다 — 프롬프트가 어려운 부분이라는 가정이다. 그런데 PS2 연구가 보여준 것은 정반대다. <b>프롬프트는 가장 쉬운 부분이고, 어려운 건 따로 있다.</b> PS2 Pal을 세 층으로 분해하면 DGIST 교수가 오늘 할 수 있는 것과 할 필요가 없는 것, 그리고 진짜 병목이 갈린다.</p>
+    <div class="tablewrap">
+    <table class="box">
       <tr><th>구성 요소</th><th>PS2 비용</th><th>DGIST 교수 개인이?</th></tr>
       <tr><td>① 시스템 프롬프트<br>(7개 제약)</td><td>며칠</td><td>5분이면 복사 — 교육 원리가 여기 다 있음</td></tr>
-      <tr><td>② 문항별 정답+단계 해설</td><td>레슨당 며칠</td><td>직접 작성 — <b style="color:#002D72;">진짜 병목</b>, 교수·조교 노동</td></tr>
+      <tr><td>② 문항별 정답+단계 해설</td><td>레슨당 며칠</td><td>직접 작성 — 진짜 병목, 교수·조교 노동</td></tr>
       <tr><td>③ 순차 진행 강제 플랫폼</td><td>수개월</td><td>개인은 불가능 — 단, 수업용이면 불필요</td></tr>
     </table>
-    <div class="a lensbox">
-      <h3>오늘 할 수 있는 것 — Custom GPT / Claude Project (코딩 0, 오후 한나절)</h3>
-      <p>1. ChatGPT Custom GPT 또는 Claude Project를 생성<br>
-      2. 시스템 프롬프트에 4개 핵심 규칙을 붙여넣기 — "한 번에 한 단계만 / 정답 먼저 주지 말 것 / 선행지식 0 가정 / 먼저 시도하게"<br>
-      3. 자기 과목 문제집의 정답+단계별 해설을 지식 파일로 업로드 — PS2가 프롬프트에 주입한 것과 같은 환각 차단 효과</p>
     </div>
+    <h3 class="boxtitle">오늘 할 수 있는 것 — Custom GPT / Claude Project (코딩 0, 오후 한나절)</h3>
+    <ol class="steps">
+      <li>ChatGPT Custom GPT 또는 Claude Project를 생성</li>
+      <li>시스템 프롬프트에 4개 핵심 규칙을 붙여넣기 — "한 번에 한 단계만 / 정답 먼저 주지 말 것 / 선행지식 0 가정 / 먼저 시도하게"</li>
+      <li>자기 과목 문제집의 정답+단계별 해설을 지식 파일로 업로드 — PS2가 프롬프트에 주입한 것과 같은 환각 차단 효과</li>
+    </ol>
+    <div class="caveat"><b>⚠ "만들 수 있다"와 "같은 효과가 난다"는 다르다 — 세 가지 경고</b></div>
+    <ul class="arrows">
+      <li><b>빠지는 것</b>: Custom GPT는 ③ 순차 진행을 강제하지 못함 — 학생이 단계를 건너뛰고 "그냥 답 줘"로 우회 가능. 자유도가 높을수록 '목발화' 위험이 돌아옴</li>
+      <li><b>효과 전이 불확실</b>: PS2 효과의 상당 부분은 '이질적 학습 속도 집단의 자기 속도 조절'에서 왔음 — DGIST의 동질적 고능력 집단에서는 이 이득이 약할 수 있음. 만들 수 있어도 0.73–1.3 SD 재현은 보장 안 됨</li>
+      <li><b>보안·라이선스</b>: 과목 문제+해설을 외부 AI에 업로드하는 것은 데이터 정책 사안 — DGIST의 모델 접근권·데이터 보존(zero-retention) 설정 확인이 실무 1차 장벽</li>
+    </ul>
+    <h3 class="boxtitle">진짜 병목은 ②, 그리고 학내 자료 생성 자동화가 여기 연결된다</h3>
+    <p class="body">교수의 시간은 프롬프트가 아니라 모든 문항에 양질의 단계별 해설을 쓰는 일에 들어간다. <b>해설 품질이 곧 튜터 품질이다.</b> DGIST에서 개발된 전민석 교수의 마크다운 수업자료 자동 생성 프레임워크(단일 소스 → 문항·해설 파생)가 정확히 이 ②의 비용을 낮추는 경로다 — PS2 Pal이 손으로 만든 해설을 반자동 생성하는 그림. 자료 생성 자동화와 AI 튜터가 한 줄로 이어지는 지점이다.</p>
+    <h3 class="boxtitle">현실적 경로 — 단계별</h3>
+    <ol class="steps">
+      <li><b>1단계</b> 개인 실습 — 교수가 자기 과목 문항 1개로 4규칙 프롬프트+해설을 Claude Project에 넣고 테스트. 비용 0, 진입 장벽 최저</li>
+      <li><b>2단계</b> 단일 과목 파일럿 — 조교 1명+교수가 한 문제집 전체를 Custom GPT로 구축, 한 주제에서 사전·사후 효과 측정</li>
+      <li><b>3단계</b> 효과 확인 시 — 순차 강제·보안을 갖춘 공유 플랫폼(전민석 프레임워크 재활용 또는 LMS 플러그인) 도입 검토</li>
+    </ol>
+    <p class="body">요컨대 답은 "예, 단 조건부"다. 교육 원리는 누구나 오늘 복제할 수 있고, 연구급 플랫폼은 복제할 필요가 없으며, 성패는 '해설 작성 노동 + DGIST 집단에서의 효과 전이 검증'에 달려 있다.</p>
   </div>
-</div>
 
-<!-- 11. 실전 적용 2 -->
-<div class="slide" data-notes="만들 수 있다와 같은 효과가 난다는 다릅니다. 세 가지 경고와 함께, 진짜 병목은 해설 작성 노동이고 학내 자료 생성 자동화가 여기 연결됩니다. 현실적 경로는 개인 실습, 단일 과목 파일럿, 공유 플랫폼 순입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔨 실전 적용 · DGIST 교수가 직접 만들어 본다면 (2/2)</div>
-    <h2 class="a">"만들 수 있다"와 "같은 효과가 난다"는 다르다</h2>
-    <div class="a caveat"><b>⚠ 세 가지 경고</b><br>
-    ► <b>빠지는 것</b>: Custom GPT는 ③ 순차 진행을 강제하지 못함 — 학생이 단계를 건너뛰고 "그냥 답 줘"로 우회 가능. 자유도가 높을수록 '목발화' 위험이 돌아옴<br>
-    ► <b>효과 전이 불확실</b>: PS2 효과의 상당 부분은 '이질적 학습 속도 집단의 자기 속도 조절'에서 왔음 — DGIST의 동질적 고능력 집단에서는 이 이득이 약할 수 있음. 만들 수 있어도 0.73–1.3 SD 재현은 보장 안 됨<br>
-    ► <b>보안·라이선스</b>: 과목 문제+해설을 외부 AI에 업로드하는 것은 데이터 정책 사안 — DGIST의 모델 접근권·데이터 보존(zero-retention) 설정 확인이 실무 1차 장벽</div>
-    <div class="a lensbox">
-      <h3>진짜 병목은 ②, 그리고 학내 자료 생성 자동화가 여기 연결된다</h3>
-      <p>교수의 시간은 프롬프트가 아니라 모든 문항에 양질의 단계별 해설을 쓰는 일에 들어간다. <b>해설 품질이 곧 튜터 품질이다.</b> DGIST에서 개발된 전민석 교수의 마크다운 수업자료 자동 생성 프레임워크(단일 소스 → 문항·해설 파생)가 정확히 이 ②의 비용을 낮추는 경로다 — PS2 Pal이 손으로 만든 해설을 반자동 생성하는 그림. 자료 생성 자동화와 AI 튜터가 한 줄로 이어지는 지점이다.</p>
-    </div>
-    <div class="a lensbox">
-      <h3>현실적 경로 — 단계별</h3>
-      <p><b>1단계</b> 개인 실습 — 교수가 자기 과목 문항 1개로 4규칙 프롬프트+해설을 Claude Project에 넣고 테스트. 비용 0, 진입 장벽 최저<br>
-      <b>2단계</b> 단일 과목 파일럿 — 조교 1명+교수가 한 문제집 전체를 Custom GPT로 구축, 한 주제에서 사전·사후 효과 측정<br>
-      <b>3단계</b> 효과 확인 시 — 순차 강제·보안을 갖춘 공유 플랫폼(전민석 프레임워크 재활용 또는 LMS 플러그인) 도입 검토</p>
-      <p>요컨대 답은 <b>"예, 단 조건부"</b>다. 교육 원리는 누구나 오늘 복제할 수 있고, 연구급 플랫폼은 복제할 필요가 없으며, 성패는 '해설 작성 노동 + DGIST 집단에서의 효과 전이 검증'에 달려 있다.</p>
-    </div>
-  </div>
-</div>
+  <div class="sechead">🎓 학생 관점 · 학생은 이것을 어떻게 사용하나</div>
 
-<!-- 12. 학생 관점 1 -->
-<div class="slide" data-notes="학생은 AI에게 문제를 풀게 시키지 않았습니다. 직접 손으로 풀면서 AI를 옆에 둔 것입니다. 학생 입장에서 PS2 Pal은 답을 주는 챗봇이 아니라 24시간 대기하는 조교에 가까웠습니다.">
-  <div class="wrap">
-    <div class="a kicker">🎓 학생 관점 · 학생은 이것을 어떻게 사용하나 (1/2)</div>
-    <h2 class="a">학생은 AI에게 문제를 풀게 시키지 않았다</h2>
-    <p class="a body">교수가 만드는 쪽을 봤다면, 이제 학생이 쓰는 쪽을 봐야 한다. PS2 사례의 가장 중요한 사실 하나가 여기서 드러난다 — <b>학생은 AI에게 문제를 풀게 시키지 않았다. 직접 손으로 풀면서 AI를 옆에 둔 것이다.</b> 학생 입장에서 PS2 Pal은 "답을 주는 챗봇"이 아니라 24시간 대기하는 조교에 가까웠다.</p>
-    <div class="a lensbox">
-      <h3>PS2에서 학생이 실제로 한 일 (시스템 프롬프트 원문 기준)</h3>
-      <p>1. 자택에서 배정된 레슨을 웹 플랫폼으로 연다 (AI 조건은 교실이 아니라 집 과제)<br>
-      2. 임베드된 강의 영상을 본다<br>
-      3. 별도의 종이에 직접 문제를 푼다 — 프롬프트 원문: "The student is writing on a separate page..." AI가 푸는 게 아님<br>
-      4. 막히는 단계나 궁금한 개념이 생기면 그때 PS2 Pal에게 묻는다<br>
-      5. PS2 Pal은 한 번에 한 단계만 힌트, 먼저 시도하라 격려, 맞으면 확인 — 요구 전엔 답을 안 줌<br>
-      6. 문항의 각 부분을 순서대로, 자기 속도로 진행(중앙값 49분, 빨리 끝낸 학생도 점수 안 떨어짐) → 사후시험</p>
-    </div>
-    <div class="a lensbox">
-      <h3>설계가 학생의 '사용 방식'을 강제했다 — 이게 진짜 포인트</h3>
-      <p>학생이 이걸 비계(scaffold)로 쓴 건 학생이 성실해서가 아니라 <b>그렇게밖에 못 쓰게 설계됐기 때문이다.</b> "한 단계씩 / 답 먼저 안 줌 / 순차 진행" 제약이 학생의 목발화(crutch) 경로를 구조적으로 차단했다. 같은 GPT-4라도 사용 방식은 도구가 아니라 설계가 결정한다.</p>
-    </div>
-  </div>
-</div>
-
-<!-- 13. 학생 관점 2 -->
-<div class="slide" data-notes="DGIST에서 교수가 만든 튜터를 학생이 쓸 때 달라지는 지점과, 학생 사용을 비계 모드로 묶는 세 레버입니다. 결국 평가 설계가 학생의 사용 방식을 사실상 결정합니다.">
-  <div class="wrap">
-    <div class="a kicker">🎓 학생 관점 · 학생은 이것을 어떻게 사용하나 (2/2)</div>
-    <h2 class="a">DGIST에서 학생이 쓸 때 — 달라지는 지점</h2>
-    <div class="a caveat"><b>⚠ 달라지는 지점</b><br>
-    ► Custom GPT엔 ③ 순차 강제가 빠지므로 학생이 "그냥 답 줘"로 우회 가능<br>
-    ► 튜터가 낸 문제를 다른 AI에 붙여넣어 풀 수 있음 — 이른바 이중 자동화 루프(교수−AI−학생−AI)<br>
-    ► 접근 불평등: GPT-4급 접근권 없는 학생은 같은 도구를 못 씀 (PS2는 전원에게 동일 플랫폼 제공으로 통제)</div>
-    <p class="a body" style="font-weight:700; color:#002D72;">학생 사용을 '비계 모드'로 묶는 세 레버</p>
-    <table class="a box">
+  <div class="item box">
+    <p class="body">교수가 만드는 쪽을 봤다면, 이제 학생이 쓰는 쪽을 봐야 한다. PS2 사례의 가장 중요한 사실 하나가 여기서 드러난다 — <b>학생은 AI에게 문제를 풀게 시키지 않았다. 직접 손으로 풀면서 AI를 옆에 둔 것이다.</b> 학생 입장에서 PS2 Pal은 "답을 주는 챗봇"이 아니라 24시간 대기하는 조교에 가까웠다.</p>
+    <h3 class="boxtitle">PS2에서 학생이 실제로 한 일 (시스템 프롬프트 원문 기준)</h3>
+    <ol class="steps">
+      <li>자택에서 배정된 레슨을 웹 플랫폼으로 연다 (AI 조건은 교실이 아니라 집 과제)</li>
+      <li>임베드된 강의 영상을 본다</li>
+      <li>별도의 종이에 직접 문제를 푼다 — 프롬프트 원문: "The student is writing on a separate page..." AI가 푸는 게 아님</li>
+      <li>막히는 단계나 궁금한 개념이 생기면 그때 PS2 Pal에게 묻는다</li>
+      <li>PS2 Pal은 한 번에 한 단계만 힌트, 먼저 시도하라 격려, 맞으면 확인 — 요구 전엔 답을 안 줌</li>
+      <li>문항의 각 부분을 순서대로, 자기 속도로 진행(중앙값 49분, 빨리 끝낸 학생도 점수 안 떨어짐) → 사후시험</li>
+    </ol>
+    <h3 class="boxtitle">설계가 학생의 '사용 방식'을 강제했다 — 이게 진짜 포인트</h3>
+    <p class="body">학생이 이걸 비계(scaffold)로 쓴 건 학생이 성실해서가 아니라 <b>그렇게밖에 못 쓰게 설계됐기 때문이다.</b> "한 단계씩 / 답 먼저 안 줌 / 순차 진행" 제약이 학생의 목발화(crutch) 경로를 구조적으로 차단했다. 같은 GPT-4라도 사용 방식은 도구가 아니라 설계가 결정한다.</p>
+    <div class="caveat"><b>⚠ DGIST에서 교수가 만든 튜터를 학생이 쓸 때 — 달라지는 지점</b></div>
+    <ul class="arrows">
+      <li>Custom GPT엔 ③ 순차 강제가 빠지므로 학생이 "그냥 답 줘"로 우회 가능</li>
+      <li>튜터가 낸 문제를 다른 AI에 붙여넣어 풀 수 있음 — 이른바 이중 자동화 루프(교수−AI−학생−AI)</li>
+      <li>접근 불평등: GPT-4급 접근권 없는 학생은 같은 도구를 못 씀 (PS2는 전원에게 동일 플랫폼 제공으로 통제)</li>
+    </ul>
+    <h3 class="boxtitle">학생 사용을 '비계 모드'로 묶는 세 레버</h3>
+    <div class="tablewrap">
+    <table class="box">
       <tr><th>레버</th><th>내용</th></tr>
       <tr><td>① 설계</td><td>프롬프트가 "한 단계씩·답 먼저 X"를 강제</td></tr>
       <tr><td>② 평가</td><td>과정·구술·현장 평가로 '답 우회'를 무력화</td></tr>
       <tr><td>③ 규범</td><td>AI 허용범위·출처표기를 과제 지시문에 사전 명시</td></tr>
     </table>
-    <p class="a body">설계만으로 부족한 만큼, 결국 <b>평가 설계가 학생의 사용 방식을 사실상 결정한다</b> — 답을 베껴도 의미 없는 과제라면 학생은 비계로 쓸 수밖에 없다. (참고: EDUCAUSE 2025 보고서 기준 학생 86%가 이미 AI를 1차 학습 파트너로 사용 중 — 문제는 '쓰느냐'가 아니라 '어떻게 쓰게 설계하느냐'다.)</p>
+    </div>
+    <p class="body">설계만으로 부족한 만큼, 결국 <b>평가 설계가 학생의 사용 방식을 사실상 결정한다</b> — 답을 베껴도 의미 없는 과제라면 학생은 비계로 쓸 수밖에 없다. (참고: EDUCAUSE 2025 보고서 기준 학생 86%가 이미 AI를 1차 학습 파트너로 사용 중 — 문제는 '쓰느냐'가 아니라 '어떻게 쓰게 설계하느냐'다.)</p>
   </div>
-</div>
 
-<!-- 14. 아이템 7 -->
-<div class="slide" data-notes="기성품을 그대로 배치하면 독립 RCT에서 효과가 사라집니다. 학부생 69명을 Khanmigo, 구글 검색, 종이 자료에 무작위 배정했더니 모든 조건에서 학습이 향상됐지만 조건 간 차이는 유의미하지 않았습니다. 승부를 가른 건 도구가 아니라 설계입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚖ 대조 증거 · 같은 'AI 튜터', 다른 결과</div>
-    <div class="a"><span class="itemno">7</span>
-    <h2>기성품을 그대로 배치하면 — 독립 RCT에서 효과가 사라진다</h2></div>
-    <div class="a hanmadi">똑같은 'AI 튜터'라도 기성품을 그냥 배치하면 효과 차이가 사라졌다. 승부를 가른 건 도구가 아니라 설계다.</div>
-    <p class="a body">PS2 Pal의 효과가 'AI 튜터 일반'의 효과가 아니라는 것은 대조 증거가 보여준다. 공급자와 무관한 연구진(Eastern Kentucky Univ.)의 동료심사 RCT는 학부생 69명을 Khanmigo AI 튜터 / 구글 검색 / 종이 자료에 무작위 배정했다 — <b>모든 조건에서 학습이 향상됐지만, 조건 간 차이는 통계적으로 유의미하지 않았다.</b></p>
-    <ul class="a arrows">
+  <div class="sechead" id="sec-context">⚖ 대조 증거 · 같은 'AI 튜터', 다른 결과</div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>기성품을 그대로 배치하면 — 독립 RCT에서 효과가 사라진다</h2>
+    <div class="hanmadi">똑같은 'AI 튜터'라도 기성품을 그냥 배치하면 효과 차이가 사라졌다. 승부를 가른 건 도구가 아니라 설계다.</div>
+    <p class="body">PS2 Pal의 효과가 'AI 튜터 일반'의 효과가 아니라는 것은 대조 증거가 보여준다. 공급자와 무관한 연구진(Eastern Kentucky Univ.)의 동료심사 RCT는 학부생 69명을 Khanmigo AI 튜터 / 구글 검색 / 종이 자료에 무작위 배정했다 — 모든 조건에서 학습이 향상됐지만, <b>조건 간 차이는 통계적으로 유의미하지 않았다.</b></p>
+    <ul class="arrows">
       <li><b>결정적 차이는 도구가 아니라 설계</b>: Khanmigo는 기성 플랫폼의 일반 배치, PS2 Pal은 2–4번에서 본 2층위 프롬프트·문항별 해설·순차 비계까지 교수가 직접 설계한 시스템 — 같은 'AI 튜터'에서 0배와 2배가 갈림</li>
-      <li><b>읽기 주의</b>: 이 결과는 "AI 튜터가 효과 없다"가 아니라 "자동으로 우월하지 않다"의 증거 — 소표본(69명)·짧은 노출·단일 주제(달의 위상)라는 한계도 저자들이 명시</li>
-      <li><b>Hattie — 효과크기의 해석</b>: "학습과학 원리 없는 AI 도입은 기준선(d=0.40) 이하에 머문다"는 명제가 독립 RCT 쌍(PS2 vs Khanmigo)으로 뒷받침되기 시작 — 효과 요인은 도입이 아니라 원리의 구현</li>
+      <li>읽기 주의: 이 결과는 "AI 튜터가 효과 없다"가 아니라 "자동으로 우월하지 않다"의 증거 — 소표본(69명)·짧은 노출·단일 주제(달의 위상)라는 한계도 저자들이 명시</li>
+      <li>Hattie — 효과크기의 해석: "학습과학 원리 없는 AI 도입은 기준선(d=0.40) 이하에 머문다"는 명제가 독립 RCT 쌍(PS2 vs Khanmigo)으로 뒷받침되기 시작 — 효과 요인은 도입이 아니라 원리의 구현</li>
     </ul>
-    <p class="a src">출처: Slijepcevic &amp; Yaylali, Journal of Teaching and Learning 19(4), 2025, pp.155–178 (ERIC EJ1487444)</p>
+    <p class="src">출처: Slijepcevic &amp; Yaylali, Journal of Teaching and Learning 19(4), 2025, pp.155–178 (ERIC EJ1487444)</p>
   </div>
-</div>
 
-<!-- 15. 아이템 8 -->
-<div class="slide" data-notes="에이전틱 AI 효과로 인용되는 연구들도 뜯어보면 전부 인간이 감독 루프 안에 있습니다. 자율 에이전틱 AI의 독립 교실 실증은 본 호 검증 코퍼스에 존재하지 않습니다.">
-  <div class="wrap">
-    <div class="a kicker">⚖ 대조 증거 · 같은 'AI 튜터', 다른 결과</div>
-    <div class="a"><span class="itemno">8</span>
-    <h2>'에이전틱 AI 효과'로 인용되는 연구들도 같은 패턴 — 인간이 루프 안에 있다</h2></div>
-    <div class="a hanmadi">'에이전틱 AI가 효과 있다'며 도는 연구들도, 뜯어보면 전부 인간이 감독 루프 안에 있다. 자율 AI의 독립 교실 증거는 아직 없다.</div>
-    <p class="a body">PS2 Pal과 함께 'AI 튜터링 효과'의 근거로 유통되는 연구들을 평가 주체와 인간 개입 수준으로 재분류하면, <b>긍정적 결과는 모두 인간이 설계·감독 루프 안에 있는 시스템에서 나왔다.</b> 자율 에이전틱 AI의 독립 교실 실증은 본 호 검증 코퍼스에 존재하지 않는다.</p>
-    <ul class="a arrows">
+  <div class="item">
+    <div class="no">8</div>
+    <h2>'에이전틱 AI 효과'로 인용되는 연구들도 같은 패턴 — 인간이 루프 안에 있다</h2>
+    <div class="hanmadi">'에이전틱 AI가 효과 있다'며 도는 연구들도, 뜯어보면 전부 인간이 감독 루프 안에 있다. 자율 AI의 독립 교실 증거는 아직 없다.</div>
+    <p class="body">PS2 Pal과 함께 'AI 튜터링 효과'의 근거로 유통되는 연구들을 평가 주체와 인간 개입 수준으로 재분류하면, <b>긍정적 결과는 모두 인간이 설계·감독 루프 안에 있는 시스템에서 나왔다.</b> 자율 에이전틱 AI의 독립 교실 실증은 본 호 검증 코퍼스에 존재하지 않는다.</p>
+    <ul class="arrows">
       <li><b>LearnLM RCT(Google/Eedi, 영국 중등 165명)</b>: 전문 튜터 17명이 AI 초안 3,617건을 학생 전달 전 전수 검토(74.4% 무수정 승인) — 자율 배치가 아닌 인간 감독형이며, 독립 학계 공동 저자가 없는 공급자 자체 평가. ※ 유통 중인 "인간 튜터 대비 5.5%p 우위" 수치는 원논문에 기재돼 있으나 독립 학계 검증이 없는 공급자 자체 평가값이므로 인용을 보류함</li>
       <li><b>Stanford Tutor CoPilot(독립, 튜터 700+·학생 1,000+)</b>: AI가 인간 튜터를 실시간 보조했을 때 수학 숙달 +4%p, 하위 숙련 튜터의 학생은 +9%p — 검증된 역할은 '대체'가 아니라 '하위 교수자 평준화'. 대상은 미국 저소득 학군 초등 수학 (※ 2024.10. 공개 — 12개월 윈도우 예외 수록, 대조 증거 목적)</li>
       <li><b>IISc Bangalore(독립, 대학원 과목 n=17)</b>: LLM을 주 강의자로 배치한 현장 실증조차 저자들이 "본 연구는 에이전틱 AI를 포함하지 않는다 — 우리 에이전트는 반응적·단명하며 검증·기억·적응 능력이 없다"고 명시 — '에이전틱' 명칭의 인플레이션을 보여주는 정의의 선</li>
     </ul>
-    <p class="a src">출처: LearnLM Team (Google &amp; Eedi), arXiv:2512.23633 — 공급자 자체 평가 · Tutor CoPilot, arXiv:2410.03017 · IISc, arXiv:2510.20255 · Stanford NSSA</p>
+    <p class="src">출처: LearnLM Team (Google &amp; Eedi), arXiv:2512.23633 — 공급자 자체 평가 · Tutor CoPilot, arXiv:2410.03017 · IISc, arXiv:2510.20255 · Stanford NSSA</p>
   </div>
-</div>
 
-<!-- 16. 아이템 9 -->
-<div class="slide" data-notes="자주 인용되는 MIT 인지부채는 아직 예비연구이고, Ohio State는 성과 데이터가 아직 없습니다. 많이 인용됨과 검증됨은 다릅니다. MIT가 경고하는 의존형 사용과 PS2 Pal의 비계형 사용은 같은 기술의 정반대 설계입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔄 검증의 간극 · The Verification Gap</div>
-    <div class="a"><span class="itemno">9</span>
-    <h2>MIT 인지 부채는 여전히 예비연구, Ohio State는 아직 성과 데이터가 없다</h2></div>
-    <div class="a hanmadi">자주 인용되는 MIT 인지부채는 아직 예비연구, Ohio State는 성과 데이터가 아직 없다. '많이 인용됨'과 '검증됨'은 다르다.</div>
-    <p class="a body">널리 인용되는 두 사안의 최신 검증 상태. 두 건 모두 <b>"널리 인용되는 것"과 "검증된 것" 사이의 간극</b>이 핵심이다.</p>
-    <ul class="a arrows">
+  <div class="sechead">🔄 검증의 간극 · The Verification Gap</div>
+
+  <div class="item">
+    <div class="no">9</div>
+    <h2>MIT 인지 부채는 여전히 예비연구, Ohio State는 아직 성과 데이터가 없다</h2>
+    <div class="hanmadi">자주 인용되는 MIT 인지부채는 아직 예비연구, Ohio State는 성과 데이터가 아직 없다. '많이 인용됨'과 '검증됨'은 다르다.</div>
+    <p class="body">널리 인용되는 두 사안의 최신 검증 상태. 두 건 모두 "널리 인용되는 것"과 "검증된 것" 사이의 간극이 핵심이다.</p>
+    <ul class="arrows">
       <li><b>MIT 인지 부채</b>: 2026년 6월 현재까지 동료심사 미통과 — 2025.12.31. 개정판(v2)도 저널 게재 기록 없음. 그 사이 University of Vienna + TU Dresden 독립 연구진이 표본 크기(54명 중 4차 세션 완료 18명, 필요 검정력 ~159명)·재현성·EEG 방법론·보고 불일치·투명성 5개 약점을 공개 지적 — "더 보수적으로 해석해야"</li>
       <li><b>Ohio State AI Fluency</b>: Class of 2029 대상 의무화는 확정·진행 중(필수 GE Launch Seminar + GenAI 워크숍 + 신설 교양 과목). 공식 FAQ는 "과목 내 AI 사용은 교수가 결정"을 명시 — "모든 수업 AI 의무"는 언론의 과장. 공개 수치는 참여 규모(교수 1,300+명 연수)뿐, 학습 성과 데이터는 없음 — 진짜 1년차 성과는 2026년 가을 이후에나 가능</li>
       <li><b>PS2 사례와의 연결</b>: MIT 연구가 경고하는 'AI 의존형 사용'과 PS2 Pal의 '비계형 사용'은 같은 기술의 정반대 설계 — 3·4번에서 본 "한 단계씩, 먼저 시도" 프롬프트가 바로 인지 부채를 막는 설계. 두 연구는 모순이 아니라 설계 변수의 양극단을 보여줌</li>
     </ul>
-    <p class="a src">출처: arXiv:2506.08872 (v2) · arXiv:2601.00856 (독립 논평) · OSU AI Fluency · 공식 FAQ</p>
+    <p class="src">출처: arXiv:2506.08872 (v2) · arXiv:2601.00856 (독립 논평) · OSU AI Fluency · 공식 FAQ</p>
   </div>
-</div>
 
-<!-- 17. 편집자 렌즈 1 -->
-<div class="slide" data-notes="역설 — AI 튜터 성공의 비결은 AI가 아닙니다. PS2 Pal에서 효과를 만든 요소 중 AI 고유의 것은 거의 없습니다. 자동화처럼 보이는 이 사례의 실체는 교수 전문성의 증폭입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔎 편집자 렌즈 · PS2 설계가 DGIST에 묻는 것 (1/2)</div>
-    <div class="a lensbox">
-      <h3>역설 — AI 튜터 성공의 비결은 AI가 아니다</h3>
-      <p>3·4번에서 본 프롬프트를 다시 읽어 보면, PS2 Pal에서 효과를 만든 요소 중 AI 고유의 것은 거의 없습니다: "한 단계씩"(교수의 비계 철학), 문항별 단계 해설(교수가 손으로 작성), 순차 진행 UI(교수의 수업 방식 반영), "먼저 시도하게"(교수의 학습관). AI가 기여한 것은 이 전문성을 학생 1인당 무한 복제한 것뿐입니다. <b>자동화처럼 보이는 이 사례의 실체는 교수 전문성의 증폭이며, 전문성이 없는 곳에서는 증폭할 것도 없습니다</b> — Khanmigo 결과(차이 없음)가 그 대조군입니다.</p>
-    </div>
-    <div class="a lensbox">
-      <h3>Biggs — 구성적 정렬이 내장된 드문 사례</h3>
-      <p>"자동 생성 자료가 구성적 정렬(목표–활동–평가)을 보장하지는 않는다"는 일반적 한계와 달리, PS2 Pal은 반대 사례입니다: 학습 목표(교수 설정) → 학습 활동(단계별 문제, question-specific prompt) → 평가(사전·사후시험, 24문항 타당도 검증)가 한 명의 설계자 아래 정렬됐고, AI는 그 정렬 안에서만 작동합니다. <b>효과 크기 0.73–1.3 SD는 AI의 성능이 아니라 정렬의 성능으로 읽는 것이 정확합니다.</b></p>
-    </div>
+  <div class="sechead" id="sec-lens">🔎 편집자 렌즈 · PS2 설계가 DGIST에 묻는 것</div>
+
+  <div class="lensbox">
+    <h3>역설 — AI 튜터 성공의 비결은 AI가 아니다</h3>
+    <p>3·4번에서 본 프롬프트를 다시 읽어 보면, PS2 Pal에서 효과를 만든 요소 중 AI 고유의 것은 거의 없습니다: "한 단계씩"(교수의 비계 철학), 문항별 단계 해설(교수가 손으로 작성), 순차 진행 UI(교수의 수업 방식 반영), "먼저 시도하게"(교수의 학습관). AI가 기여한 것은 이 전문성을 학생 1인당 무한 복제한 것뿐입니다. <b>자동화처럼 보이는 이 사례의 실체는 교수 전문성의 증폭이며, 전문성이 없는 곳에서는 증폭할 것도 없습니다</b> — Khanmigo 결과(차이 없음)가 그 대조군입니다.</p>
   </div>
-</div>
 
-<!-- 18. 편집자 렌즈 2 -->
-<div class="slide" data-notes="DGIST 적용 조건 점검표와 남은 불확실성입니다. 성공 의존 요소를 DGIST 맥락으로 옮기면 문항별 해설을 작성할 교수자 시간이 가장 결정적 요소입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔎 편집자 렌즈 · PS2 설계가 DGIST에 묻는 것 (2/2)</div>
-    <div class="a lensbox">
-      <h3>DGIST 적용 조건 점검표</h3>
-      <p>저자들이 명시한 성공 의존 요소를 DGIST 맥락으로 옮기면: ① 문항별 정답+단계 해설을 작성할 교수자 시간 — "레슨당 며칠"의 정체이자 <b>가장 결정적 요소</b>(플랫폼은 일회성, 콘텐츠는 매번) ② GPT-4급 모델 접근권 — 라이선스·데이터 보안 정책 확인 ③ 고품질 강의 영상 — 기존 자산 활용 가능 ④ 이질적 학습 속도 집단 — 소규모 고선발 집단인 DGIST에서는 효과가 다르게 나타날 수 있음(검증 필요). DGIST 학내에서 개발된 수업자료 자동 생성 프레임워크(마크다운 단일 소스 → 문항·해설 파생)는 ①의 비용을 낮추는 직접 경로 — PS2 Pal이 손으로 만든 문항별 해설을 반자동 생성하는 구조로 맞물립니다.</p>
-    </div>
-    <div class="a lensbox">
-      <h3>남은 불확실성</h3>
-      <p>① 효과의 지속성 — 2개 차시, 저자 스스로 장기 효과 미검증 명시(신규성 효과는 일부 반박됨). ② 고차 사고(종합·평가·창조) 수준에서는 미검증 — 능동학습 수업이 여전히 우위일 가능성 열려 있음. ③ 고선발 소규모 집단(DGIST형)에서의 재현 — 검증된 연구 없음. ④ 본 호 검증 자료는 미국·영국·인도 편중 — 아시아·유럽 사례는 차호 보강 예정. ⑤ OSU 성과 데이터(2026 가을 이후)·MIT 동료심사 결과는 차호 추적.</p>
-    </div>
-    <p class="a src">※ 편집자 렌즈는 검증된 출처를 교육 이론 프레임으로 해석한 DGIST CTL의 편집 의견이며, 원출처 저자의 견해와 다를 수 있습니다.</p>
+  <div class="lensbox">
+    <h3>Biggs — 구성적 정렬이 내장된 드문 사례</h3>
+    <p>"자동 생성 자료가 구성적 정렬(목표–활동–평가)을 보장하지는 않는다"는 일반적 한계와 달리, PS2 Pal은 반대 사례입니다: 학습 목표(교수 설정) → 학습 활동(단계별 문제, question-specific prompt) → 평가(사전·사후시험, 24문항 타당도 검증)가 한 명의 설계자 아래 정렬됐고, AI는 그 정렬 안에서만 작동합니다. <b>효과 크기 0.73–1.3 SD는 AI의 성능이 아니라 정렬의 성능으로 읽는 것이 정확합니다.</b></p>
   </div>
+
+  <div class="lensbox">
+    <h3>DGIST 적용 조건 점검표</h3>
+    <p>저자들이 명시한 성공 의존 요소를 DGIST 맥락으로 옮기면: ① 문항별 정답+단계 해설을 작성할 교수자 시간 — "레슨당 며칠"의 정체이자 가장 결정적 요소(플랫폼은 일회성, 콘텐츠는 매번) ② GPT-4급 모델 접근권 — 라이선스·데이터 보안 정책 확인 ③ 고품질 강의 영상 — 기존 자산 활용 가능 ④ 이질적 학습 속도 집단 — 소규모 고선발 집단인 DGIST에서는 효과가 다르게 나타날 수 있음(검증 필요). DGIST 학내에서 개발된 수업자료 자동 생성 프레임워크(마크다운 단일 소스 → 문항·해설 파생)는 ①의 비용을 낮추는 직접 경로 — PS2 Pal이 손으로 만든 문항별 해설을 반자동 생성하는 구조로 맞물립니다.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>남은 불확실성</h3>
+    <p>① 효과의 지속성 — 2개 차시, 저자 스스로 장기 효과 미검증 명시(신규성 효과는 일부 반박됨). ② 고차 사고(종합·평가·창조) 수준에서는 미검증 — 능동학습 수업이 여전히 우위일 가능성 열려 있음. ③ 고선발 소규모 집단(DGIST형)에서의 재현 — 검증된 연구 없음. ④ 본 호 검증 자료는 미국·영국·인도 편중 — 아시아·유럽 사례는 차호 보강 예정. ⑤ OSU 성과 데이터(2026 가을 이후)·MIT 동료심사 결과는 차호 추적.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ 편집자 렌즈는 검증된 출처를 교육 이론 프레임으로 해석한 DGIST CTL의 편집 의견이며, 원출처 저자의 견해와 다를 수 있습니다.</p>
+
+</div>
 </div>
 
-<!-- 19. 마무리 -->
-<div class="slide center" data-notes="마무리 장입니다. 참고 출처 목록과 면책 문구까지 원문 푸터를 그대로 옮겼습니다.">
-  <div class="a kicker">DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 3 (Jun. 2026)</div>
-  <h2 class="a" style="text-align:center;">AI 튜터를 어떻게 설계했나 — Harvard PS2 Pal 해부</h2>
-  <p class="a sub" style="max-width:760px; text-align:center;">문의: 교수학습센터 (ctl@dgist.ac.kr)<br><br>
-  참고: Kestin et al., Scientific Reports (2025) · Journal of Teaching and Learning ·<br>
-  arXiv · Stanford NSSA · Ohio State OAA</p>
-  <p class="a src" style="max-width:720px; text-align:center; margin-top:20px;">본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.</p>
+<div class="footer">
+  <b>DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 3 (Jun. 2026)</b><br>
+  문의: 교수학습센터 (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | 주제: AI 튜터를 어떻게 설계했나 — Harvard PS2 Pal 해부<br>
+  참고: Kestin et al., Scientific Reports (2025) · Journal of Teaching and Learning · arXiv · Stanford NSSA · Ohio State OAA<br><br>
+  본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>
+  내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.<br><br>
+  <a href="../">← 전체 호 보기</a>
 </div>
 
-<script>
-// Slide navigation
-const slides = [...document.querySelectorAll('.slide')];
-let current = 0;
+<a class="totop" href="#" aria-label="맨 위로">↑</a>
 
-function goTo(index) {
-  if (index < 0 || index >= slides.length) return;
-  slides[current].classList.remove('active');
-  slides[index].classList.add('active');
-  current = index;
-  slides[index].scrollTop = 0;
-  updateProgress();
-  updateCounter();
-  updateNotes();
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
-  if (e.key.toLowerCase() === 'f') toggleFullscreen();
-  if (e.key.toLowerCase() === 's') toggleNotes();
-});
-
-// Touch/swipe (가로 스와이프만 — 세로 스크롤과 충돌 방지)
-let touchStartX = 0, touchStartY = 0;
-document.addEventListener('touchstart', (e) => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-});
-document.addEventListener('touchend', (e) => {
-  const dx = touchStartX - e.changedTouches[0].clientX;
-  const dy = touchStartY - e.changedTouches[0].clientY;
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-    dx > 0 ? goTo(current + 1) : goTo(current - 1);
-  }
-});
-
-function updateProgress() {
-  document.getElementById('progress').style.width =
-    (current / (slides.length - 1) * 100) + '%';
-}
-
-function updateCounter() {
-  document.getElementById('counter').textContent =
-    (current + 1) + ' / ' + slides.length;
-}
-
-function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-}
-
-let notesWindow = null;
-
-function toggleNotes() {
-  if (notesWindow && !notesWindow.closed) {
-    notesWindow.close();
-    notesWindow = null;
-    return;
-  }
-  notesWindow = window.open('', 'SpeakerNotes', 'width=520,height=420,top=80,left=80');
-  notesWindow.document.write(`<!DOCTYPE html>
-<html><head><style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-         background: #1a1a1a; color: #e0e0e0; padding: 24px; }
-  .slide-num { font-size: 12px; color: #888; margin-bottom: 12px; font-family: monospace; }
-  .label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-           color: #666; margin-bottom: 8px; }
-  .notes { font-size: 16px; line-height: 1.8; color: #ccc; }
-</style></head><body>
-  <div class="slide-num" id="sn"></div>
-  <div class="label">Speaker Notes</div>
-  <div class="notes" id="nt"></div>
-</body></html>`);
-  notesWindow.document.close();
-  updateNotes();
-}
-
-function updateNotes() {
-  if (!notesWindow || notesWindow.closed) return;
-  try {
-    const note = slides[current].dataset.notes || '(No notes)';
-    notesWindow.document.getElementById('nt').textContent = note;
-    notesWindow.document.getElementById('sn').textContent =
-      'Slide ' + (current + 1) + ' / ' + slides.length;
-  } catch(e) {}
-}
-
-updateProgress();
-updateCounter();
-</script>
 </body>
 </html>
