@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning (Vol. 1, No. 4)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
+  }
+
+  /* Masthead */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* Article header */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* Body container */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* In-page nav */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px;
+  }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* Section divider */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30-second summary */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* Item article */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .hanmadi {
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
+  }
+  .hanmadi::before { content: "In one line"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; text-transform: uppercase; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+  .bdg.i { background: #dbeafe; color: #1a4a9b; }
+
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: center; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: middle;  text-align: center; }
+  table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
+  table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 40px 18px 28px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== Design upgrade (2026-08-28) — based on a comparison of six global university publications ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* Masthead: thin (THE 56px / Columbia 66px level), archive breadcrumb */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* Article header */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* Two-column grid: body + right rail */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: keep-all; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* Body typography */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* Signature: serif ledger numerals hung in the margin */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* End matter (references · other issues) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* Narrow screens: collapse rail, sticky chip nav */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* Print: hide nav, rail, CTA; expose link URLs */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body data-vol="4">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI in Teaching Trend Report</div>
+    <div class="crumb"><a href="../">Archive</a><span>Vol. 1, No. 4 (Jul. 2026)</span><a href="../../vol4/" style="margin-left:14px">한국어</a></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report</div>
+    <h1>Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning</h1>
+    <p class="lede">The central question of assessment in the AI era is not "Did the student use AI?" but "Does this submission demonstrate the student's learning?"</p>
+    <div class="meta">
+      <b>AI in Teaching Trend Report</b> · Vol. 1, No. 4 (Jul. 2026)<br>
+      Published by DGIST Center for Teaching &amp; Learning (CTL) · Contact: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="Article guide">
+      <div class="rlabel">In this article</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">Evidence grades</div>
+        <div class="legend">
+          <div><span class="bdg r">[Research]</span>Peer-reviewed research</div>
+          <div><span class="bdg p">[Preprint]</span>Preprint</div>
+          <div><span class="bdg i" style="background:#dbeafe;color:#1a4a9b;">[Institutional Report]</span>Report issued by an institution</div>
+          <div><span class="bdg o">[Open Resource]</span>Practical tools &amp; benchmarks</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">Cite this article</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">Copy citation</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">① Problem &amp; Evidence (1–2)</a>
+    <a href="#sec2">② Principles &amp; Design (3–4)</a>
+    <a href="#sec3">③ Practice Box</a>
+    <a href="#sec4">④ Context (5–8)</a>
+    <a href="#sec6">⑤ Editor's Lens</a>
+  </div>
+
+  <div class="policy">
+    <b>Editorial policy</b> Sources within 12 months of publication · applicable to higher-education practice · only sources with a verifiable original · source-type tags: <span class="bdg r">[Research]</span> <span class="bdg i">[Institutional Report]</span> <span class="bdg o">[Open Resource]</span> ([Open Resource] = a practical framework or tool released under an open licence, not an efficacy study) · read evidence strength as [Research] &gt; [Institutional Report] &gt; [Open Resource] · This report reflects the independent judgment of DGIST CTL and has no external sponsorship.
+  </div>
+
+  <div class="sechead">⏱ 30-Second Summary — If You're Busy, Stop Here</div>
+  <div class="summary">
+    <div class="itm"><span>The central question of assessment in the AI era is not <b>"Did the student use AI?" but "Does this submission demonstrate the student's learning?"</b></span></div>
+    <div class="itm"><span>A 2026 Science policy article reported that AI use and misuse vary sharply by discipline, drawing on a survey of ~95,000 students across 20 U.S. research universities (2023–24 academic year). The implication is not a blanket ban or detection, but discipline- and course-specific assessment redesign.</span></div>
+    <div class="itm"><span>With its research-, lab-, and project-based courses, DGIST is well positioned to convert drafts, revisions, rationale, verification, and reflection into evidence of learning.</span></div>
+    <div class="itm"><span>That said, comparative evidence that redesign actually improves learning outcomes is still thin. <b>A one-course pilot, not a full overhaul, is the realistic choice for this term.</b></span></div>
+  </div>
+
+  <div class="sechead">How to Read This Issue — Assessment Reform from Five Angles</div>
+  <ul class="arrows">
+    <li><b>① Problem &amp; Evidence (1–2)</b> why assessment is shaken</li>
+    <li><b>→ ② Principles &amp; Design (3–4)</b> what to change it by</li>
+    <li><b>→ ③ Practice Box</b> what faculty can do this term</li>
+    <li><b>→ ④ Context (5–8)</b> DGIST application &amp; evidence strength</li>
+    <li><b>→ ⑤ Editor's Lens</b> the DGIST prescription</li>
+  </ul>
+
+  <div class="sechead" id="sec1">🔍 Why Assessment Is Shifting</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>The core problem is not cheating — it is the weakening of evidence</h2>
+    <div class="hanmadi">More important than the fact that AI can do the assignment is that a conventional submission may no longer be sufficient evidence of a student's competence.</div>
+    <p class="body">Generative AI has changed how students write, code, summarize, and review literature. Many assignments now make it hard to confirm "Did the student produce this?" and, further, fail to show "Did the student actually understand this?" <b>The starting point for assessment reform is not tighter surveillance but a redefinition of what counts as evidence of learning.</b></p>
+    <ul class="arrows">
+      <li>For general reports and summaries, AI drafts quickly. The final product alone reveals little of the student's reading, judgment, and structuring.</li>
+      <li>For simple coding tasks, finished code alone makes it hard to verify problem-solving, debugging, and test-design ability.</li>
+      <li>AI detectors may be a supporting aid, but false positives and evasion make them a poor center of gravity for assessment design.</li>
+    </ul>
+    <p class="src"><span class="bdg i">[Institutional Report]</span>See: <a href="https://www.educause.edu/content/2026/the-impact-of-ai-on-learning-assessment" target="_blank" rel="noopener">EDUCAUSE, The Impact of AI on Learning Assessment (2026)</a> — survey of 438 higher-education faculty and staff (Mar. 2026)</p>
+  </div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>Even a large-scale survey points to course-level redesign over a blanket ban</h2>
+    <div class="hanmadi">AI use and misuse differ by discipline and task type. So the remedy lies closer to course-level assessment design than to a single university-wide rule.</div>
+    <p class="body">A 2026 Science Policy Forum article (vol. 392, pp. 818–820), drawing on a survey of ~95,000 students across 20 U.S. research universities, reported that about one-third of students use generative AI regularly for coursework and about 9% used it for cheating. Notably, <b>the disciplines with the highest use are not the ones with the highest misuse.</b> Regular use ran high in computer science (62%) and low in the arts (24%), while misuse ran higher in economics (17%) and journalism (16%) and lower in biology (5%). The finding weighs toward assessment redesign aligned to learning goals and task types rather than the simple prescriptions of "ban AI everywhere" or "solve it with detection tools."</p>
+    <ul class="arrows">
+      <li>Writing, summary, and literature-review tasks are strongly affected by AI drafting. These should also require drafts, feedback uptake, source verification, and oral explanation.</li>
+      <li>For coding and data tasks, test design, error correction, commit history, and code review can be stronger evidence of learning than the final code.</li>
+      <li>Lab and project tasks become less replaceable by AI when they include raw data, lab notebooks, decision logs, and failure analysis.</li>
+      <li>The same survey found AI use varied by gender and racial group as well. An assessment design that does not assume gaps in access and proficiency will widen the fairness problem.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The survey data were collected in the 2023–24 academic year. Tool capability and usage rates have likely shifted since, so read these figures as a floor rather than a current estimate.</div>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1126/science.aec5115" target="_blank" rel="noopener">Science 392, 818–820, Generative AI use and misuse call for assessment reform in higher education (2026)</a></p>
+  </div>
+
+  <div class="sechead" id="sec2">⚖ Redesign Criteria</div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>Check an assessment redesign against five criteria</h2>
+    <div class="hanmadi">Good assessment is not assessment that bans AI, but assessment in which learning goals and evidence of learning stay aligned even when AI is present.</div>
+    <p class="body">The openly published 2026 Assessment Redesign Framework is a practical framework for redesigning assignments rather than an efficacy study. This issue condenses it into a checklist for DGIST faculty.</p>
+    <ul class="arrows">
+      <li><b>Validity</b>: Does it measure actual learning outcomes, not just the final product?</li>
+      <li><b>Fairness</b>: Does it account for differences in AI access, proficiency, and language ability?</li>
+      <li><b>Transparency</b>: Are the permitted, restricted, and disclosure rules clear in the assignment brief?</li>
+      <li><b>Accessibility</b>: Are there diagnostic rubrics, feedback opportunities, and a make-up submission path?</li>
+      <li><b>Alignment</b>: Are learning goals, activities, and rubric connected?</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Open Resource]</span>Source: Conceived by Hazel Farrell (SETU, GenAI:N3), 2026 Assessment Redesign Framework — CC BY-SA 4.0 (site build by Ken McCarthy) — <a href="https://github.com/kenmccarthy/arf" target="_blank" rel="noopener">github.com/kenmccarthy/arf</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>Before detecting AI, run an "assignment stress-test"</h2>
+    <div class="hanmadi">Test the assignment before you suspect the student. If AI easily produces a B-grade answer, the assignment is weak by design.</div>
+    <p class="body">Faculty can paste the existing assignment brief into an AI tool and see how well the AI output meets the submission bar. This is not a cheating investigation but a design diagnostic — <b>a check of whether the assignment truly requires the student's own judgment, verification, and reflection.</b></p>
+    <ul class="arrows">
+      <li><b>Step 1</b>: Paste the assignment brief into the AI as-is.</li>
+      <li><b>Step 2</b>: See how far the AI output satisfies the current rubric.</li>
+      <li><b>Step 3</b>: Add elements unsolvable without the student's own data, lab records, rationale, or oral explanation.</li>
+      <li><b>Step 4</b>: Shift the rubric from final-product-centered to process-, verification-, and reflection-centered.</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Open Resource]</span>Source: <a href="https://github.com/michael-borck/ai-in-pedagogical-design-and-delivery" target="_blank" rel="noopener">michael-borck/ai-in-pedagogical-design-and-delivery</a></p>
+  </div>
+
+  <div class="sechead" id="sec3">🛠 What Faculty Can Do Now</div>
+  <div class="item">
+    <h2>The smallest unit you can change this term:<br>one assignment, one rubric, one verification step</h2>
+    <div class="tablewrap">
+    <table class="box">
+      <tr><th>When</th><th>Action</th><th>Criterion</th></tr>
+      <tr><td>Week 1</td><td>Stress-test one assignment with AI</td><td>Can the AI output reach a B or higher?</td></tr>
+      <tr><td>Week 2</td><td>Add one process artifact and one reflection prompt</td><td>Is the student's judgment and revision visible?</td></tr>
+      <tr><td>Week 3</td><td>Add an oral check or a short in-class performance</td><td>Does the final product match the student's explanation?</td></tr>
+    </table>
+    </div>
+    <div class="caveat"><b>Caution</b> — Do not conclude cheating from a detector score alone. Do not leave AI-use rules vague in the assignment brief. Do not change a whole term's assessment at once. Run process artifacts as sampled checks and credit-for-completion scoring rather than full grading, so the load does not rise for faculty and students alike.</div>
+  </div>
+
+  <div class="sechead" id="sec4">🎓 Course Scenarios</div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>Design "AI-resilient assignments" differently by course type</h2>
+    <div class="hanmadi">An AI-resilient assignment is not one that blocks AI, but one that leaves a trace of the student's choices, judgment, verification, and failure analysis even when AI is used.</div>
+    <ul class="arrows">
+      <li><b>Coding / AI courses</b>: final code only → include test design, debugging logs, commit history, code review</li>
+      <li><b>Lab courses</b>: finished report → include raw data, lab notebook, causes of failure, rationale for design changes</li>
+      <li><b>Seminar courses</b>: paper summary → include critical questions, cross-paper comparison, limitation analysis, oral defense</li>
+      <li><b>Project courses</b>: final presentation → include interim artifacts, decision logs, feedback-uptake records, team contribution</li>
+      <li><b>Convergence foundation courses</b>: right-answer problem sets → include solution path, misconception correction, self-explanation, alternative-solution comparison</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Open Resource]</span>Reference tool (not the direct evidence for the designs above): <a href="https://docs.github.com/en/education/manage-coursework-with-github-classroom/teach-with-github-classroom/use-autograding" target="_blank" rel="noopener">GitHub Classroom, Use autograding — official documentation</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>PAIRR, Roleplay, and Diagnostic Rubric are not "tools" but ways to collect evidence</h2>
+    <div class="hanmadi">The point is not adopting a new tool, but capturing how the student interpreted AI feedback and revised by their own judgment.</div>
+    <ul class="arrows">
+      <li><b>PAIRR</b>: have students compare peer and AI feedback and reflect on which feedback they adopted.</li>
+      <li><b>AI Roleplay</b>: cast the AI as reviewer, patient, industry client, or peer researcher to practice Q&amp;A and oral defense.</li>
+      <li><b>Diagnostic Rubric</b>: diagnose prior knowledge and performance across three levels — Beginning, Developing, Proficient.</li>
+      <li><b>Repository-based Assessment</b>: use commits, issues, tests, and code reviews as process-centered evidence of learning.</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Open Resource]</span>Source: <a href="https://github.com/jkruckivey/education-toolkit" target="_blank" rel="noopener">jkruckivey/education-toolkit</a> · <a href="https://github.com/vgoehler/ai-lit-collab" target="_blank" rel="noopener">vgoehler/ai-lit-collab (research dataset on AI literacy &amp; student–AI collaboration, SNAIL scale)</a></p>
+  </div>
+
+  <div class="sechead" id="sec5">⚠ What Not to Overclaim</div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>The GitHub resources are "practical ideas," not efficacy studies</h2>
+    <div class="hanmadi">Use this issue's GitHub resources as field-application ideas, not as evidence that a method improves learning outcomes.</div>
+    <p class="body">Where Vol. 3 dissected a single case grounded in peer-reviewed research and open data, Vol. 4's GitHub resources are different in kind. The Assessment Redesign Framework, Education Toolkit, and AI in Pedagogical Design and Delivery are useful for faculty workshops and assignment design, but <b>are not themselves verified results that "this approach raises learning outcomes."</b></p>
+    <ul class="arrows">
+      <li><b>Tier-A evidence</b>: sources such as Science 2026 and EDUCAUSE 2026 that show the assessment crisis is a real higher-education agenda.</li>
+      <li><b>Tier-B frameworks</b>: sources such as the Assessment Redesign Framework and <a href="https://github.com/terrene-foundation/co-education" target="_blank" rel="noopener">CO for Education</a> that offer a redesign perspective.</li>
+      <li><b>Tier-C practical ideas</b>: sources such as Education Toolkit and GitHub Classroom that faculty can adapt.</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Open Resource]</span>See: <a href="https://github.com/terrene-foundation/co-education" target="_blank" rel="noopener">CO for Education</a> · <a href="https://github.com/GeminiLight/awesome-ai-llm4education" target="_blank" rel="noopener">Awesome AI &amp; LLM for Education</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>The direction has converged, but evidence verified against learning outcomes is still thin</h2>
+    <div class="hanmadi">The assessment-redesign discourse — including this issue's recommendations — is still at the stage of an agreed direction, not a verified prescription.</div>
+    <p class="body">A 2026 systematic review synthesizing 54 peer-reviewed studies and 6 international policy documents confirms that the field's center of gravity has moved from detection to redesign. Yet the same review notes that those redesign recommendations rest largely on conceptual argument, faculty surveys, and early adopters' experience, and that evidence comparing student learning outcomes over time remains scarce. <b>Agreement on direction and verification of effect are two different things.</b></p>
+    <ul class="arrows">
+      <li>The redesign forms the literature converges on — oral examinations (vivas), iterative portfolios, in-class writing, collaborative projects, and critical analysis of AI output — match the direction of items 5 and 6 in this issue.</li>
+      <li>What is rare is a comparative design showing that these approaches improve learning. So <b>the evidence is not yet sufficient for full adoption, but sufficient for piloting and observation.</b></li>
+      <li>On the problem of scale, one proposal is 'viva-lite': a short oral verification appended only to selected tasks, with standardized questions, recording, and interrater checks to shore up validity. Note that this proposal is a journal letter (Educational Researcher 55(5):339–340), not empirical data.</li>
+      <li>This is also an opening for us. Structuring a one-course pilot as a pre–post or comparison-course design would let us answer the question for our own courses, rather than borrowing an answer from large U.S. universities whose class sizes and assessment traditions differ from ours.</li>
+    </ul>
+    <p class="src"><span class="bdg r">[Research]</span>Source: Slimi, Z. (2026). A systematic critical review of generative AI's impact on authorship, pedagogy, and integrity (2023–2025). <a href="https://doi.org/10.3389/feduc.2026.1769680" target="_blank" rel="noopener">Frontiers in Education</a> — synthesis of 54 peer-reviewed studies and 6 policy documents (29 Apr. 2026)</p>
+  </div>
+
+  <div class="sechead" id="sec6">🔎 Editor's Lens · What Assessment Reform Asks of DGIST</div>
+
+  <div class="lensbox">
+    <h3>Paradox — good assessment in the AI era does not put AI at the center</h3>
+    <p>The goal of assessment reform is not to catch AI use but to see learning more clearly. So a good assignment is not "one AI cannot be used on" but <b>"one that cannot be completed unless the student understands, even with AI."</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Biggs — a reaffirmation of constructive alignment</h3>
+    <p>AI exposes mismatches among goals, activities, and assessment more quickly. If the goal is critical thinking but the task is submitting a summary, AI amplifies that weakness. Conversely, if the goal is verification, design, and explanation, the rubric must directly require those behaviors.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>A DGIST readiness checklist</h3>
+    <p>① pick one high-risk assignment ② run an AI stress-test ③ add one process artifact ④ add an oral check or short in-class performance ⑤ reflect verification, awareness of limits, and reflection in the rubric. <b>A one-course, one-assignment pilot is more realistic than a full overhaul.</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Remaining uncertainties</h3>
+    <p>① the accuracy and fairness of AI detectors remain limited. ② process-evidence assessment can increase faculty grading load. ③ differences in AI access remain a fairness concern. ④ which task types transfer best in DGIST's small, highly selective classes must be confirmed by an internal pilot. ⑤ requiring process evidence also places a burden on students — more to submit, and their missteps made visible. Scaling it without checking student acceptance risks producing records that are merely performative.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">* The Editor's Lens is DGIST CTL's editorial interpretation of verified sources and open practical resources through educational-theory frames, and may differ from the views of the original authors.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL · AI in Teaching Trend Report · Vol. 1, No. 4 (Jul. 2026)</b><br>
+  Contact: Center for Teaching &amp; Learning (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | Theme: Assessment Reform in the AI Era — From Detecting AI to Designing for Evidence of Learning<br>
+  Refs: Science · EDUCAUSE · <a href="https://doi.org/10.3389/feduc.2026.1769680" target="_blank" rel="noopener">Frontiers in Education</a> · GitHub · Assessment Redesign Framework<br><br>
+  This report reflects the independent judgment of DGIST CTL and has no external sponsorship.<br>
+  Its contents are the views of the original authors and may differ from the official position of DGIST CTL. When citing, please credit the original source.<br><br>
+  <a href="../">← All issues</a>
+</div>
+
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (Apr. 2026)', 'What Global Universities Are Doing Right Now'],
+    [2, 'Vol. 1, No. 2 (May 2026)', 'Automating Course Materials with AI Pipelines'],
+    [3, 'Vol. 1, No. 3 (Jun. 2026)', "How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal"],
+    [4, 'Vol. 1, No. 4 (Jul. 2026)', 'Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  // 1) Rail nav = clone of chip nav + active state
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  // 2) Citation
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST Center for Teaching & Learning. (' + year + '). ' + title + '. AI in Teaching Trend Report, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = 'Copied'; setTimeout(function () { cb.textContent = 'Copy citation'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  // 3) End matter: references (collected from source links) · other issues
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = 'References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = 'Other issues';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = 'References'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>
