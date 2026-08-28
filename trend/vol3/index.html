@@ -126,6 +126,8 @@
   }
   .caveat b { font-weight: 800; }
 
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
   .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
   .bdg {
     display: inline-block; padding: 1px 6px; border-radius: 3px;
@@ -237,7 +239,7 @@
       <li><b>비교 대상이 '강의식 수업'이 아니라는 점이 핵심</b> — 대조군은 이미 효과가 입증된 능동학습 수업(교수가 활동 도입 → 학생이 자율 그룹으로 활동 → 교수·조교가 표적 피드백). AI가 이긴 상대는 낮은 기준선이 아님</li>
       <li>본 호 기준 "독립(공급자 무관) + 동료심사 + 고등교육"을 모두 충족하는 유일한 강한 긍정 증거 — 그래서 이 연구의 설계 조건을 해부하는 것이 이번 호의 목적. IRB 승인 No. IRB23-0797, 데이터·코드 공개(GitHub: HarvardAItutor)</li>
     </ul>
-    <p class="src">출처: Kestin, Miller, Klales, Milbourne &amp; Ponti, Scientific Reports 15, Art. 17458 (2025.06.03), DOI: 10.1038/s41598-025-97652-6</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin, Miller, Klales, Milbourne &amp; Ponti, Scientific Reports 15, Art. 17458 (2025.06.03), DOI: 10.1038/s41598-025-97652-6</a></p>
   </div>
 
   <div class="sechead">⚙ 설계 해부 · How the Tutor Was Built</div>
@@ -261,7 +263,7 @@
       <li><b>비용 구조의 진실(가장 중요)</b>: 개발 비용이 두 층으로 분리된다. 플랫폼 개발은 수개월이 걸렸으나 이는 이 연구 이전에 독립적으로 진행된 일회성 투자. 반면 레슨 1개 준비는 며칠 — 이미 작성된 교실용 활동·해설을 AI 형식으로 변환하고 문항별 테스트 대화를 돌리며 다듬는 작업. 플랫폼이 한 번 갖춰지면 추가 과목 확장 비용은 낮음</li>
       <li>Sweller — 인지부하 이론의 직접 구현: "한 번에 한 단계" + 사전 작성 해설은 worked example 효과의 변형. "AI 자동화가 곧 인지 최적화를 보장하지는 않는다"는 우려를, 이 시스템은 플랫폼 구조와 프롬프트 제약으로 정면 해소함</li>
     </ul>
-    <p class="src">출처: Kestin et al. (2025), Methods · Supplementary Material 1 (AI Tutor System and Implementation)</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al. (2025), Methods · Supplementary Material 1 (AI Tutor System and Implementation)</a></p>
   </div>
 
   <div class="item">
@@ -286,7 +288,7 @@
       <li>"friendly·supportive"(Base + 제약 7) + 제약 4 "추가 질문 격려" = Dweck 성장 마인드셋의 정서적 토대. "give it a try first"는 노력 귀인을 유도하는 언어. 단, 후술하듯 측정된 성장 마인드셋은 2개 차시로는 변하지 않았음</li>
       <li><b>주목: 이 프롬프트는 화려한 기법이 아니다.</b> 한 명의 교수가 "내 수업에서 학생을 어떻게 대하는가"를 7개 문장으로 옮긴 것 — AI 전문성이 아니라 교수법 전문성이 자산. 이것이 본 호 편집자 렌즈의 핵심 주장으로 이어진다</li>
     </ul>
-    <p class="src">출처: Kestin et al. (2025), Supplementary Material 1 — "Assignment persona" 전문 인용</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al. (2025), Supplementary Material 1 — "Assignment persona" 전문 인용</a></p>
   </div>
 
   <div class="item">
@@ -309,7 +311,7 @@ Keep in mind — # Steps:
       <li><b>재현 가능성의 실체</b>: 다른 교수가 이 구조를 쓰려면 자기 과목의 모든 문항에 대해 정답+단계별 해설을 작성해야 한다. 이것이 "레슨당 며칠"의 정체이자, 효과의 진짜 전제 조건. 해설 품질이 곧 튜터 품질</li>
       <li>시사: DGIST 학내에서 개발된 '수업자료 자동 생성 프레임워크'(마크다운 단일 소스 → 문항·해설 파생)는 정확히 이 전제 조건의 비용을 낮추는 경로 — PS2 Pal이 손으로 만든 문항별 해설을, 마크다운 파이프라인으로 반자동 생성하는 그림</li>
     </ul>
-    <p class="src">출처: Kestin et al. (2025), Supplementary Material 1 — "Question-Specific Prompt" 예시</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al. (2025), Supplementary Material 1 — "Question-Specific Prompt" 예시</a></p>
   </div>
 
   <div class="sechead" id="sec-results">📊 결과 상세 · Results</div>
@@ -327,7 +329,7 @@ Keep in mind — # Steps:
       <li>Dweck — 설계와 결과의 정직한 간극: 성장 마인드셋 '촉진'을 프롬프트(제약 4·7)에 넣었지만 측정값은 변하지 않음 — 마인드셋은 2개 차시 개입으로 움직이는 변수가 아니라는 기존 연구와 정합. 설계 의도가 모든 차원에서 실현되지는 않음을 보여주는 데이터</li>
       <li>통계 처리의 정직성: 단순 선형 회귀(0.63)가 천장 효과로 효과를 과소 추정함을 밝히고 분위 회귀로 보정 — 효과를 부풀리는 방향이 아니라 정확히 추정하는 방향. 24개 문항의 psychometric 타당도(점이연 상관·변별도·난이도)도 보충자료에 전부 공개</li>
     </ul>
-    <p class="src">출처: Kestin et al. (2025), Results · Table S1–S4</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al. (2025), Results · Table S1–S4</a></p>
   </div>
 
   <div class="sechead">⚠ 한계와 전이 조건 · Limits &amp; Transfer</div>
@@ -345,7 +347,7 @@ Keep in mind — # Steps:
       <li><b>평가 주체의 위치</b>: 본 연구의 '독립'은 상업 벤더로부터의 독립을 뜻하며, 튜터를 설계한 연구진이 자신이 만든 시스템을 평가한 designer-evaluated 구조라는 점은 해석 시 감안해야 함(IRB 승인·데이터/코드 공개로 투명성은 확보)</li>
       <li>저자들의 사용 경고: 학생이 "비판적 사고를 우회하는 목발(crutch)"로 쓸 수 있는 상황 — 예: 과제 대행 — 에는 배치하지 말 것을 권고. PS2 Pal의 제약 2·5("한 단계씩", "먼저 시도")가 바로 이 목발화를 막는 장치</li>
     </ul>
-    <p class="src">출처: Kestin et al. (2025), Discussion/Limitations</p>
+    <p class="src">출처: <a href="https://www.nature.com/articles/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al. (2025), Discussion/Limitations</a></p>
   </div>
 
   <div class="sechead" id="sec-practice">🔨 실전 적용 · DGIST 교수가 직접 만들어 본다면</div>
@@ -428,7 +430,7 @@ Keep in mind — # Steps:
       <li>읽기 주의: 이 결과는 "AI 튜터가 효과 없다"가 아니라 "자동으로 우월하지 않다"의 증거 — 소표본(69명)·짧은 노출·단일 주제(달의 위상)라는 한계도 저자들이 명시</li>
       <li>Hattie — 효과크기의 해석: "학습과학 원리 없는 AI 도입은 기준선(d=0.40) 이하에 머문다"는 명제가 독립 RCT 쌍(PS2 vs Khanmigo)으로 뒷받침되기 시작 — 효과 요인은 도입이 아니라 원리의 구현</li>
     </ul>
-    <p class="src">출처: Slijepcevic &amp; Yaylali, Journal of Teaching and Learning 19(4), 2025, pp.155–178 (ERIC EJ1487444)</p>
+    <p class="src">출처: <a href="https://eric.ed.gov/?id=EJ1487444" target="_blank" rel="noopener">Slijepcevic &amp; Yaylali, Journal of Teaching and Learning 19(4), 2025, pp.155–178 (ERIC EJ1487444)</a></p>
   </div>
 
   <div class="item">
@@ -441,7 +443,7 @@ Keep in mind — # Steps:
       <li><b>Stanford Tutor CoPilot(독립, 튜터 700+·학생 1,000+)</b>: AI가 인간 튜터를 실시간 보조했을 때 수학 숙달 +4%p, 하위 숙련 튜터의 학생은 +9%p — 검증된 역할은 '대체'가 아니라 '하위 교수자 평준화'. 대상은 미국 저소득 학군 초등 수학 (※ 2024.10. 공개 — 12개월 윈도우 예외 수록, 대조 증거 목적)</li>
       <li><b>IISc Bangalore(독립, 대학원 과목 n=17)</b>: LLM을 주 강의자로 배치한 현장 실증조차 저자들이 "본 연구는 에이전틱 AI를 포함하지 않는다 — 우리 에이전트는 반응적·단명하며 검증·기억·적응 능력이 없다"고 명시 — '에이전틱' 명칭의 인플레이션을 보여주는 정의의 선</li>
     </ul>
-    <p class="src">출처: LearnLM Team (Google &amp; Eedi), arXiv:2512.23633 — 공급자 자체 평가 · Tutor CoPilot, arXiv:2410.03017 · IISc, arXiv:2510.20255 · Stanford NSSA</p>
+    <p class="src">출처: <a href="https://arxiv.org/pdf/2512.23633" target="_blank" rel="noopener">LearnLM Team (Google &amp; Eedi), arXiv:2512.23633</a> — 공급자 자체 평가 · <a href="https://arxiv.org/abs/2410.03017" target="_blank" rel="noopener">Tutor CoPilot, arXiv:2410.03017</a> · <a href="https://arxiv.org/pdf/2510.20255" target="_blank" rel="noopener">IISc, arXiv:2510.20255</a> · <a href="https://nssa.stanford.edu/studies/tutor-copilot-human-ai-approach-scaling-real-time-expertise" target="_blank" rel="noopener">Stanford NSSA</a></p>
   </div>
 
   <div class="sechead">🔄 검증의 간극 · The Verification Gap</div>
@@ -453,10 +455,10 @@ Keep in mind — # Steps:
     <p class="body">널리 인용되는 두 사안의 최신 검증 상태. 두 건 모두 "널리 인용되는 것"과 "검증된 것" 사이의 간극이 핵심이다.</p>
     <ul class="arrows">
       <li><b>MIT 인지 부채</b>: 2026년 6월 현재까지 동료심사 미통과 — 2025.12.31. 개정판(v2)도 저널 게재 기록 없음. 그 사이 University of Vienna + TU Dresden 독립 연구진이 표본 크기(54명 중 4차 세션 완료 18명, 필요 검정력 ~159명)·재현성·EEG 방법론·보고 불일치·투명성 5개 약점을 공개 지적 — "더 보수적으로 해석해야"</li>
-      <li><b>Ohio State AI Fluency</b>: Class of 2029 대상 의무화는 확정·진행 중(필수 GE Launch Seminar + GenAI 워크숍 + 신설 교양 과목). 공식 FAQ는 "과목 내 AI 사용은 교수가 결정"을 명시 — "모든 수업 AI 의무"는 언론의 과장. 공개 수치는 참여 규모(교수 1,300+명 연수)뿐, 학습 성과 데이터는 없음 — 진짜 1년차 성과는 2026년 가을 이후에나 가능</li>
+      <li><b>Ohio State AI Fluency</b>: Class of 2029 대상 의무화는 확정·진행 중(필수 GE Launch Seminar + GenAI 워크숍 + 신설 교양 과목). <a href="https://oaa.osu.edu/ai-fluency-faqs" target="_blank" rel="noopener">공식 FAQ</a>는 "과목 내 AI 사용은 교수가 결정"을 명시 — "모든 수업 AI 의무"는 언론의 과장. 공개 수치는 참여 규모(교수 1,300+명 연수)뿐, 학습 성과 데이터는 없음 — 진짜 1년차 성과는 2026년 가을 이후에나 가능</li>
       <li><b>PS2 사례와의 연결</b>: MIT 연구가 경고하는 'AI 의존형 사용'과 PS2 Pal의 '비계형 사용'은 같은 기술의 정반대 설계 — 3·4번에서 본 "한 단계씩, 먼저 시도" 프롬프트가 바로 인지 부채를 막는 설계. 두 연구는 모순이 아니라 설계 변수의 양극단을 보여줌</li>
     </ul>
-    <p class="src">출처: arXiv:2506.08872 (v2) · arXiv:2601.00856 (독립 논평) · OSU AI Fluency · 공식 FAQ</p>
+    <p class="src">출처: <a href="https://arxiv.org/abs/2506.08872" target="_blank" rel="noopener">arXiv:2506.08872 (v2)</a> · <a href="https://arxiv.org/abs/2601.00856" target="_blank" rel="noopener">arXiv:2601.00856 (독립 논평)</a> · <a href="https://oaa.osu.edu/ai-fluency" target="_blank" rel="noopener">OSU AI Fluency</a> · <a href="https://oaa.osu.edu/ai-fluency-faqs" target="_blank" rel="noopener">공식 FAQ</a></p>
   </div>
 
   <div class="sechead" id="sec-lens">🔎 편집자 렌즈 · PS2 설계가 DGIST에 묻는 것</div>
@@ -489,7 +491,7 @@ Keep in mind — # Steps:
 <div class="footer">
   <b>DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 3 (Jun. 2026)</b><br>
   문의: 교수학습센터 (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | 주제: AI 튜터를 어떻게 설계했나 — Harvard PS2 Pal 해부<br>
-  참고: Kestin et al., Scientific Reports (2025) · Journal of Teaching and Learning · arXiv · Stanford NSSA · Ohio State OAA<br><br>
+  참고: Kestin et al., Scientific Reports (2025) · Journal of Teaching and Learning · arXiv · <a href="https://nssa.stanford.edu/studies/tutor-copilot-human-ai-approach-scaling-real-time-expertise" target="_blank" rel="noopener">Stanford NSSA</a> · Ohio State OAA<br><br>
   본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>
   내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.<br><br>
   <a href="../">← 전체 호 보기</a>

@@ -116,6 +116,8 @@
   }
   .caveat b { font-weight: 800; }
 
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
   .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
   .bdg {
     display: inline-block; padding: 1px 6px; border-radius: 3px;
@@ -213,7 +215,7 @@
       <li>단계별 최적 AI 도구 조합: 기반 문헌(ChatGPT+Windsurf) → 슬라이드(Claude Code+Beamer) → 과제(Claude Code)</li>
       <li>생성 코드·과목 페이지를 GitHub에 전부 공개해 외부에서 재현 가능</li>
     </ul>
-    <p class="src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · <span class="bdg o">[언론]</span>DGIST DNA(학생신문), 2025.11.22</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04</a> · <span class="bdg o">[언론]</span><a href="https://dgistdna.com/1021" target="_blank" rel="noopener">DGIST DNA(학생신문), 2025.11.22</a></p>
   </div>
 
   <div class="sechead" id="sec2">⚙ 3단계 프레임워크 · Three-Stage Framework</div>
@@ -227,7 +229,7 @@
       <li>Windsurf 프롬프트: "This is a learning roadmap. Create a list of markdown files for each topic. For each topic, write an introduction and list of knowledge points."</li>
       <li>사용 도구: ChatGPT(대화형 AI, 로드맵 아이디어 발상) + Windsurf(AI 기반 개발 환경, 마크다운 파일 자동 작성)</li>
     </ul>
-    <p class="src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">원문 PDF</a></p>
   </div>
 
   <div class="item">
@@ -239,7 +241,7 @@
       <li>Beamer 기반으로 수식·코드 블록·다단 레이아웃 등 이공계 강의 형식에 최적화</li>
       <li>작업 순서: slides/ 폴더 생성 → Beamer 템플릿 선택 → Claude Code 실행 → /init → 슬라이드 생성 프롬프트 입력</li>
     </ul>
-    <p class="src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">원문 PDF</a></p>
   </div>
 
   <div class="item">
@@ -251,7 +253,7 @@
       <li>test_stack.py로 자동 채점 기반 마련, README.md에 과제 설명 자동 포함</li>
       <li>문헌→슬라이드→과제가 동일 소스(마크다운)에서 파생되므로 구조 일관성 확보 (빈칸 채우기 과제의 인지 부하 적합성은 편집자 렌즈 Sweller 항목 참조)</li>
     </ul>
-    <p class="src">출처: MinseokJGit/DataStructure, GitHub, 2025 · 전민석, 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+    <p class="src">출처: <a href="https://github.com/MinseokJGit/DataStructure/" target="_blank" rel="noopener">MinseokJGit/DataStructure, GitHub, 2025</a> · <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">전민석, 수업자료 자동 생성 프레임워크, 2025.11.04</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">원문 PDF</a></p>
   </div>
 
   <div class="sechead" id="sec3">💡 방법론과 설계 · Design Principles</div>
@@ -265,7 +267,7 @@
       <li>DataStructure/ 단일 루트에서 모든 산출물이 파생되는 단일 코드베이스 구조가 일관성의 핵심</li>
       <li>이 패턴은 자료구조 과목에 한정되지 않고, 마크다운으로 내용을 구조화할 수 있는 어떤 과목에도 적용 가능</li>
     </ul>
-    <p class="src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">원문 PDF</a></p>
   </div>
 
   <div class="item">
@@ -278,7 +280,7 @@
       <li>확장성: 발표자가 제시한 계획에 따르면 CSE307(프로그래밍 언어), IC637(프로그램 분석) 등 타 과목 및 학술 발표 자료까지 적용 확장 예정</li>
     </ul>
     <div class="caveat"><b>단서</b> — 위 가치는 자료 산출 차원의 평가이며, 학습 결과 데이터(시험·전이·만족도)와 교수법 혁신 차원(능동학습·형성평가·자기조절학습)은 본 발표 범위 밖에 있다. 효율성·품질·확장성이 학습 효과로 전환되려면 절감된 시간이 학습 활동·피드백 설계에 재투입되어야 한다(상세는 편집자 렌즈 통합 평가 참조).</div>
-    <p class="src">출처: 전민석, Data Structures (AI-generated course page), DGIST PLX Lab, 2025 · MinseokJGit/DataStructure, GitHub</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/courses/ai_ds/2025/" target="_blank" rel="noopener">전민석, Data Structures (AI-generated course page), DGIST PLX Lab, 2025</a> · <a href="https://github.com/MinseokJGit/DataStructure/" target="_blank" rel="noopener">MinseokJGit/DataStructure, GitHub</a></p>
   </div>
 
   <div class="sechead" id="sec4">⚠ 확장과 한계 · Extension and Limits</div>
@@ -292,7 +294,7 @@
       <li>Level 2 (중급): Beamer 경험자 → 기존 Beamer 자료를 Claude Code와 결합해 자동 생성 흐름으로 전환</li>
       <li>Level 3 (고급): Beamer·Claude Code·AI 에디터 현 사용자 → 전체 파이프라인 고급 활용 (ep9 외부 자료 연동)</li>
     </ul>
-    <p class="src">출처: Claude Code for Automated Lecture Notes and Slides Generation, PLX Lab, 2026</p>
+    <p class="src">출처: <a href="https://dgistpl.github.io/courses/claude_code/2026/" target="_blank" rel="noopener">Claude Code for Automated Lecture Notes and Slides Generation, PLX Lab, 2026</a></p>
   </div>
 
   <div class="item">
