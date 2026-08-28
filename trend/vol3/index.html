@@ -716,9 +716,7 @@ Keep in mind — # Steps:
     a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
     a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
   });
-  var sub = document.createElement('div'); sub.className = 'subscribe';
-  sub.innerHTML = '<b>다음 호를 이메일로 받아 보기</b> — DGIST 교수학습센터에 <a href="mailto:ctl@dgist.ac.kr?subject=AI%20활용%20교수법%20트렌드%20리포트%20구독">구독 신청</a>하시면 새 호가 나올 때 이메일로 보내 드립니다. 문의·의견도 같은 주소로 보내 주십시오.';
-  end.appendChild(hd2); end.appendChild(grid); end.appendChild(sub);
+  end.appendChild(hd2); end.appendChild(grid);
   article.appendChild(end);
   if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = '참고문헌'; nav.appendChild(b); }
 })();
