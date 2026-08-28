@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Teaching Trend Report</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --serif: "Noto Serif KR", Georgia, "Times New Roman", serif;
+  }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--page); color: var(--ink); line-height: 1.7;
+  }
+  .jband { background: var(--accent); height: 6px; }
+  .langbar { max-width: 760px; margin: 0 auto; padding: 10px 20px 0; display: flex; justify-content: flex-end; gap: 6px; font-size: 12.5px; }
+  .langbar a { font-weight: 700; color: var(--accent2); text-decoration: none; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; }
+  .langbar span { font-weight: 800; color: var(--accent); padding: 4px 12px; border: 1px solid var(--accent); border-radius: 999px; }
+  .mast { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .mast .inner { max-width: 760px; margin: 0 auto; padding: 44px 20px 30px; text-align: center; }
+  .mast .pub { font-size: 12px; letter-spacing: 2.5px; color: var(--accent2); font-weight: 700; margin-bottom: 12px; }
+  .mast h1 { font-family: var(--serif); font-size: clamp(26px, 4.6vw, 40px); font-weight: 900; color: var(--accent); line-height: 1.3; }
+  .mast .sub { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+  .container { max-width: 760px; margin: 0 auto; padding: 36px 20px 64px; }
+  .sechead {
+    font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--accent);
+    border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin: 34px 0 18px;
+  }
+  a.issue, div.issue {
+    display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+    padding: 22px 26px; margin-bottom: 14px; text-decoration: none; color: var(--ink);
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  a.issue:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,45,114,0.12); }
+  .issue .vol { font-size: 12px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .issue .title { font-family: var(--serif); font-size: clamp(16px, 2.4vw, 20px); font-weight: 700; line-height: 1.4; color: var(--ink); }
+  .issue .links { margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .issue .links span, .issue .links a { color: var(--accent2); font-weight: 700; }
+  div.issue.pending { border-style: dashed; }
+  .cur-tag { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 3px; padding: 2px 9px; margin-bottom: 10px; letter-spacing: 1px; }
+  .cur-tag.soft { background: var(--accent-soft); color: var(--accent); }
+  .foot { margin-top: 44px; text-align: center; font-size: 12px; color: var(--muted); line-height: 2; }
+  .foot a { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="jband"></div>
+<div class="langbar">
+  <a href="../">국문</a>
+  <span>English</span>
+</div>
+<div class="mast">
+  <div class="inner">
+    <div class="pub">DGIST CENTER FOR TEACHING &amp; LEARNING</div>
+    <h1>AI in Teaching Trend Report</h1>
+    <p class="sub">A periodical from the DGIST Center for Teaching &amp; Learning covering AI-in-teaching research for higher education, edited to journal standards</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="sechead">Current Issue</div>
+  <div class="issue pending">
+    <div class="cur-tag soft">ENGLISH EDITION IN PREPARATION</div>
+    <div class="vol">Vol. 1, No. 5 (Sep. 2026)</div>
+    <div class="title">AI 튜터를 켠 학기 — 무엇이 배움으로 남는가</div>
+    <div class="links">The English edition of this issue is being prepared. <a href="../vol5/">Read the Korean edition →</a></div>
+  </div>
+
+  <div class="sechead">Archive</div>
+  <a class="issue" href="./vol4/">
+    <div class="vol">Vol. 1, No. 4 (Jul. 2026)</div>
+    <div class="title">Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning</div>
+    <div class="links"><span>Read →</span></div>
+  </a>
+  <a class="issue" href="./vol3/">
+    <div class="vol">Vol. 1, No. 3 (Jun. 2026)</div>
+    <div class="title">How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal</div>
+    <div class="links"><span>Read →</span></div>
+  </a>
+  <a class="issue" href="./vol2/">
+    <div class="vol">Vol. 1, No. 2 (May 2026)</div>
+    <div class="title">Automating Course Materials with AI Pipelines</div>
+    <div class="links"><span>Read →</span></div>
+  </a>
+  <a class="issue" href="./vol1/">
+    <div class="vol">Vol. 1, No. 1 (Apr. 2026) · Inaugural issue</div>
+    <div class="title">What Global Universities Are Doing Right Now</div>
+    <div class="links"><span>Read →</span></div>
+  </a>
+
+  <div class="sechead">About</div>
+  <p style="font-size:14px; color:var(--sub); line-height:1.75; margin-bottom:14px;">
+    Published quarterly by the DGIST Center for Teaching &amp; Learning. Each issue covers AI-in-teaching material for higher education
+    published within the previous 12 months, includes only sources whose originals can be verified, and labels every source by type
+    ([Research] &gt; [Preprint] &gt; [Institutional Report] &gt; [Open Resource]). All sources are checked against the originals before
+    publication (bibliographic details, document type, data-collection period, retractions and corrections).
+  </p>
+  <p class="foot">
+    This report is prepared independently by DGIST CTL and receives no external sponsorship.<br>
+    Views are those of the original authors and may differ from the official position of DGIST CTL. Please cite the original sources.<br>
+    Contact: <a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>
+  </p>
+</div>
+</body>
+</html>
