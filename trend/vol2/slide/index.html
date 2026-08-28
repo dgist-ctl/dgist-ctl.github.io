@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 파이프라인으로 수업자료를 자동 생성한다 (Vol. 1, No. 2)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f5f7fa;
+    --surface: #ffffff;
+    --ink: #1a1a2e;
+    --sub: #4a5568;
+    --muted: #718096;
+    --accent: #002D72;
+    --accent2: #1a4a9b;
+    --accent-soft: #D8E4F4;
+    --line: #dfe5ee;
+    --warn: #7d4e00;
+    --warn-bg: #fff3cd;
+    --good: #2d6a4f;
+    --good-bg: #d8f3dc;
+  }
+  html, body { height: 100%; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    overflow: hidden;
+    word-break: keep-all;
+  }
+
+  .progress {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: var(--accent2);
+    z-index: 100; transition: width 0.3s ease;
+  }
+  .counter {
+    position: fixed; bottom: 14px; right: 26px;
+    font-size: 12px; color: rgba(26,26,46,0.45);
+    font-family: monospace; z-index: 100;
+  }
+  .hint {
+    position: fixed; bottom: 14px; left: 26px;
+    font-size: 12px; color: rgba(26,26,46,0.45); z-index: 100;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center;
+    padding: 44px 60px 56px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+    overflow-y: auto;
+  }
+  .slide.center { justify-content: center; text-align: center; }
+  .slide.active { opacity: 1; pointer-events: auto; z-index: 2; }
+  .slide.active .a { opacity: 0; animation: fadeInUp 0.4s ease forwards; }
+  .a:nth-child(1) { animation-delay: 0.05s; }
+  .a:nth-child(2) { animation-delay: 0.1s; }
+  .a:nth-child(3) { animation-delay: 0.15s; }
+  .a:nth-child(4) { animation-delay: 0.2s; }
+  .a:nth-child(5) { animation-delay: 0.25s; }
+  .a:nth-child(6) { animation-delay: 0.3s; }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wrap { width: 100%; max-width: 900px; margin: 0 auto; text-align: left; }
+
+  .kicker {
+    font-size: 12.5px; letter-spacing: 2px;
+    color: var(--accent2); font-weight: 700; margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  h1 { font-size: clamp(26px, 4.4vw, 46px); font-weight: 800; line-height: 1.35; }
+  h2 { font-size: clamp(19px, 2.6vw, 28px); font-weight: 800; margin-bottom: 16px; line-height: 1.4; color: var(--ink); }
+  .itemno {
+    display: inline-block; font-size: 14px; font-weight: 800; color: #fff;
+    background: var(--accent); border-radius: 8px; padding: 4px 13px; margin-bottom: 12px;
+  }
+  .sub { font-size: clamp(14px, 1.7vw, 18px); color: var(--sub); margin-top: 18px; line-height: 1.75; }
+
+  p.body {
+    font-size: 14.5px; line-height: 1.8; color: var(--ink); margin-bottom: 14px;
+  }
+  p.body b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin-bottom: 14px; }
+  ul.arrows li {
+    font-size: 13.8px; line-height: 1.75; padding: 7px 0 7px 26px;
+    position: relative; color: var(--ink);
+    border-bottom: 1px solid #eef1f6;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before {
+    content: "►"; position: absolute; left: 2px; top: 8px;
+    color: var(--accent2); font-size: 11px;
+  }
+  ul.arrows b { color: var(--accent); }
+
+  .caveat {
+    background: #fbfbf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 11px 16px; font-size: 13px; color: var(--warn); line-height: 1.7;
+    margin-bottom: 12px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src { font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: var(--warn-bg); color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 12px 18px; font-size: 12px; color: var(--sub); line-height: 1.8;
+  }
+  .policy b { color: var(--accent); }
+
+  .lensbox {
+    background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 20px 26px; margin-bottom: 16px;
+    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+  }
+  .lensbox h3 { font-size: 16px; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14px; color: var(--ink); line-height: 1.85; margin-bottom: 10px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+  .lensbox .src { margin-top: 8px; }
+
+  .stats { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .stat {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px 22px; min-width: 190px; max-width: 270px; text-align: left;
+    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+  }
+  .stat .big { font-size: clamp(16px, 2vw, 21px); font-weight: 800; color: var(--accent); line-height: 1.35; }
+  .stat .lbl { font-size: 12.5px; color: var(--sub); margin-top: 8px; line-height: 1.55; font-weight: 700; letter-spacing: 0.5px; }
+
+  @media (max-width: 700px) {
+    .slide { padding: 36px 18px 52px; }
+    .stat { width: 100%; max-width: none; }
+  }
+
+  @media print {
+    .progress, .counter, .controls, nav, button,
+    [class*="hint"], [class*="btn"] { display: none !important; }
+    .slide {
+      page-break-after: always;
+      position: relative !important;
+      opacity: 1 !important;
+      display: flex !important;
+      width: 100vw; height: auto; min-height: 100vh;
+      overflow: visible;
+    }
+    @page { size: landscape; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="hint">← → 이동 · F 전체화면 · S 노트 · 긴 장은 스크롤</div>
+
+<!-- 1. 표지 -->
+<div class="slide center active" data-notes="DGIST CTL AI 활용 교수법 트렌드 리포트 2호의 슬라이드판입니다. 이번 호는 DGIST 학내 단일 사례 심층 분석 형식으로, 전민석 교수의 AI 수업자료 자동 생성 프레임워크를 다룹니다.">
+  <div class="a kicker">DGIST 교수학습센터 · AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 2 (May 2026)</div>
+  <h1 class="a">AI 파이프라인으로<br>수업자료를 자동 생성한다</h1>
+  <p class="a sub">DGIST 학내 단일 사례 심층 분석 — 교재 → 슬라이드 → 과제를 하나의 파이프라인으로.</p>
+</div>
+
+<!-- 2. 편집 방침 + 이번 호 요약 -->
+<div class="slide center" data-notes="이번 호의 편집 방침과 요약입니다. 핵심 접근은 3단계 AI 자동화 파이프라인, 도구 조합은 ChatGPT, Windsurf, Claude Code입니다.">
+  <h2 class="a">이번 호 요약</h2>
+  <div class="a stats" style="max-width:940px;">
+    <div class="stat"><div class="lbl">핵심 접근</div><div class="big">3단계 AI 자동화 파이프라인</div></div>
+    <div class="stat"><div class="lbl">도구 조합</div><div class="big">ChatGPT + Windsurf + Claude Code</div></div>
+    <div class="stat"><div class="lbl">생성 범위</div><div class="big">교재 → 슬라이드 → 과제 일괄</div></div>
+    <div class="stat"><div class="lbl">핵심 가치</div><div class="big">효율성 × 품질 × 확장성</div></div>
+  </div>
+  <div class="a wrap policy" style="max-width:760px; margin-top:22px;">
+    <b>편집 방침</b> 발행일 기준 12개월 이내 자료(이론 참조 별도) · 고등교육 현장 적용 가능성 · 원문 확인 가능 출처만 수록 · 본 호는 DGIST 학내 단일 사례 심층 분석 형식
+  </div>
+</div>
+
+<!-- 3. 아이템 1 -->
+<div class="slide" data-notes="DGIST 전기전자컴퓨터공학과 전민석 교수가 2025년 11월 원내 AI 활용 경진대회에서 발표해 아이디어상을 수상한 프레임워크입니다. 발표 슬라이드 자체도 이 프레임워크의 산출물이었습니다.">
+  <div class="wrap">
+    <div class="a kicker">🏫 DGIST 현장 사례 · In-house Case</div>
+    <div class="a"><span class="itemno">1</span>
+    <h2>AI가 교재·슬라이드·과제를 하나의 파이프라인으로 생성한다 — DGIST 교수의 실증 프레임워크</h2></div>
+    <p class="a body">DGIST 전기전자컴퓨터공학과 전민석 교수(PLX Lab)는 2025년 11월 4일 DGIST 원내 AI 활용 경진대회 교육·연구 부문에서 "AI를 활용한 수업자료 자동 생성 프레임워크"를 발표하고 아이디어상을 수상했다. 이 프레임워크는 ChatGPT, Windsurf, Claude Code를 순차적으로 연결해 수업의 기반 문헌(교재), 슬라이드, 과제를 하나의 자동화 파이프라인으로 생성한다. 전 교수는 자료구조(Data Structure) 과목을 실제 적용 사례로 발표했으며, <b>발표 슬라이드 자체도 이 프레임워크의 산출물이었다.</b></p>
+    <ul class="a arrows">
+      <li>수업 내용을 마크다운(.md)으로 구조화 → 이를 단일 소스로 슬라이드·과제 파생</li>
+      <li>단계별 최적 AI 도구 조합: 기반 문헌(ChatGPT+Windsurf) → 슬라이드(Claude Code+Beamer) → 과제(Claude Code)</li>
+      <li>생성 코드·과목 페이지를 GitHub에 전부 공개해 외부에서 재현 가능</li>
+    </ul>
+    <p class="a src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · <span class="bdg o">[언론]</span>DGIST DNA(학생신문), 2025.11.22</p>
+  </div>
+</div>
+
+<!-- 4. 아이템 2 -->
+<div class="slide" data-notes="1단계는 수업 전체를 마크다운 교재로 구조화하는 단계입니다. ChatGPT로 학습 로드맵을 만들고, Windsurf의 Cascade Code 에이전트로 단원별 세부 파일을 순차 생성합니다.">
+  <div class="wrap">
+    <div class="a kicker">⚙ 3단계 프레임워크 · Three-Stage Framework</div>
+    <div class="a"><span class="itemno">2</span>
+    <h2>1단계 — ChatGPT + Windsurf로 수업 전체를 마크다운 교재로 구조화한다</h2></div>
+    <p class="a body">1단계 목표는 수업에서 배울 내용 전체를 마크다운(.md) 문헌으로 생성하는 것이다. ChatGPT에 학습 로드맵을 마크다운 형식으로 요청해 수업 전체 구조(Roadmap.md)를 얻는다. 이어 AI 기반 개발 환경인 Windsurf에서 Cascade Code 에이전트로 단원별 세부 내용 파일을 순차 생성한다. 결과로 DataStructure/topics/ 폴더 아래 Arrays, Stacks, Trees 등 단원별 .md 파일이 완성된다.</p>
+    <ul class="a arrows">
+      <li>ChatGPT 프롬프트: "I want to learn what data structures are... Would you please create a Learning Roadmap for me? Please describe the Roadmap using markdown format."</li>
+      <li>Windsurf 프롬프트: "This is a learning roadmap. Create a list of markdown files for each topic. For each topic, write an introduction and list of knowledge points."</li>
+      <li>사용 도구: ChatGPT(대화형 AI, 로드맵 아이디어 발상) + Windsurf(AI 기반 개발 환경, 마크다운 파일 자동 작성)</li>
+    </ul>
+    <p class="a src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+  </div>
+</div>
+
+<!-- 5. 아이템 3 -->
+<div class="slide" data-notes="2단계는 마크다운 문헌을 기반으로 Beamer LaTeX 슬라이드를 코드로 생성하는 단계입니다. Claude Code를 프로젝트 루트에서 실행하고 /init으로 코드베이스를 이해시킨 뒤 슬라이드 생성을 지시합니다.">
+  <div class="wrap">
+    <div class="a kicker">⚙ 3단계 프레임워크 · Three-Stage Framework</div>
+    <div class="a"><span class="itemno">3</span>
+    <h2>2단계 — Claude Code + Beamer LaTeX으로 전문 수업 슬라이드를 코드로 생성한다</h2></div>
+    <p class="a body">2단계에서는 1단계의 마크다운 문헌을 기반으로 수업 슬라이드를 생성한다. 학술·전문 발표용 LaTeX 슬라이드 클래스인 Beamer(CleanEasy 템플릿)와 Claude Code를 조합했다. Claude Code를 프로젝트 루트(DataStructure/)에서 실행하고 /init 명령으로 전체 코드베이스를 이해시킨 뒤, 마크다운 내용과 Beamer 템플릿을 지정해 슬라이드(.tex) 생성을 지시했다. 결과물은 학술 발표 형식의 슬라이드 세트로, GitHub 저장소의 slides/ 폴더에서 .tex 소스와 함께 확인 가능하다.</p>
+    <ul class="a arrows">
+      <li>Claude Code 프롬프트 핵심: "topics/Stack.md 내용 기반으로, slides/BeamerTemplate 템플릿을 참조해 slides/Stack/stack.tex를 생성하라"</li>
+      <li>Beamer 기반으로 수식·코드 블록·다단 레이아웃 등 이공계 강의 형식에 최적화</li>
+      <li>작업 순서: slides/ 폴더 생성 → Beamer 템플릿 선택 → Claude Code 실행 → /init → 슬라이드 생성 프롬프트 입력</li>
+    </ul>
+    <p class="a src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+  </div>
+</div>
+
+<!-- 6. 아이템 4 -->
+<div class="slide" data-notes="3단계는 같은 마크다운 문헌과 슬라이드를 기반으로 과제를 생성하는 단계입니다. 결과물은 README, 구현 파일, 응용 파일, 테스트 파일 4개로 구성된 완성 과제 패키지입니다.">
+  <div class="wrap">
+    <div class="a kicker">⚙ 3단계 프레임워크 · Three-Stage Framework</div>
+    <div class="a"><span class="itemno">4</span>
+    <h2>3단계 — Claude Code로 구현 과제·응용 코드·테스트 코드를 자동 생성한다</h2></div>
+    <p class="a body">3단계에서는 동일한 마크다운 문헌과 슬라이드를 기반으로 과제를 생성한다. Claude Code에 "스택 자료구조의 핵심 함수를 구현하는 stack.py와 이를 활용하는 application.py를 생성하고, 이후 핵심 함수를 숨겨 학생 과제로 만들겠다"고 지시했다. 결과물은 README.md, stack.py, application.py, test_stack.py 4개 파일로 구성된 완성 과제 패키지다.</p>
+    <ul class="a arrows">
+      <li>Claude Code 프롬프트 핵심: "stack.py에 스택 핵심 함수를 구현하고, application.py에 이를 활용하는 코드를 작성하라. 핵심 함수를 나중에 숨겨 학생 과제로 사용할 것"</li>
+      <li>test_stack.py로 자동 채점 기반 마련, README.md에 과제 설명 자동 포함</li>
+      <li>문헌→슬라이드→과제가 동일 소스(마크다운)에서 파생되므로 구조 일관성 확보 (빈칸 채우기 과제의 인지 부하 적합성은 편집자 렌즈 Sweller 항목 참조)</li>
+    </ul>
+    <p class="a src">출처: MinseokJGit/DataStructure, GitHub, 2025 · 전민석, 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+  </div>
+</div>
+
+<!-- 7. 아이템 5 -->
+<div class="slide" data-notes="세 단계를 관통하는 공통 프롬프트 패턴입니다 — 맥락 우선, 구조 명시, 파일명 지정. 이 패턴은 자료구조 과목에 한정되지 않고 마크다운으로 구조화할 수 있는 어떤 과목에도 적용 가능합니다.">
+  <div class="wrap">
+    <div class="a kicker">💡 방법론과 설계 · Design Principles</div>
+    <div class="a"><span class="itemno">5</span>
+    <h2>세 단계를 관통하는 공통 프롬프트 패턴: "맥락 우선, 구조 명시, 파일명 지정"</h2></div>
+    <p class="a body">전 교수의 프롬프트에는 일관된 구조가 있다. ① 현재 가르치는 과목과 자료 위치를 먼저 설명하고, ② AI가 참조해야 할 파일·폴더 구조를 명시하며, ③ 원하는 결과물의 파일명과 저장 위치를 구체적으로 지정한다. 이 패턴은 AI에게 충분한 작업 맥락을 제공해 일관된 출력을 유도한다. Claude Code의 /init 명령으로 전체 프로젝트 맥락을 사전에 파악시키는 것이 핵심이다.</p>
+    <ul class="a arrows">
+      <li>공통 구조: "나는 현재 [과목]을 [소스 위치]를 기반으로 가르치고 있다 → [참조 파일]을 참조해서 → [결과 파일명]을 생성하라"</li>
+      <li>DataStructure/ 단일 루트에서 모든 산출물이 파생되는 단일 코드베이스 구조가 일관성의 핵심</li>
+      <li>이 패턴은 자료구조 과목에 한정되지 않고, 마크다운으로 내용을 구조화할 수 있는 어떤 과목에도 적용 가능</li>
+    </ul>
+    <p class="a src">출처: 전민석, AI를 활용한 수업자료 자동 생성 프레임워크, 2025.11.04 · 원문 PDF</p>
+  </div>
+</div>
+
+<!-- 8. 아이템 6 -->
+<div class="slide" data-notes="전 교수가 제시한 핵심 가치는 효율성, 품질, 확장성입니다. 다만 이는 자료 산출 차원의 평가이며, 학습 결과 데이터와 교수법 혁신 차원은 본 발표 범위 밖에 있습니다.">
+  <div class="wrap">
+    <div class="a kicker">💡 방법론과 설계 · Design Principles</div>
+    <div class="a"><span class="itemno">6</span>
+    <h2>효율성 × 품질 × 확장성: 이 프레임워크가 실제로 보여준 세 가지 가치</h2></div>
+    <p class="a body">전 교수가 제시한 핵심 가치는 효율성(시간 절감) × 품질(전문적 결과물) × 확장성(타 과목·형식 적용)이다. 프레임워크는 자료구조 과목에서 시범 적용됐으며, 생성된 과목 페이지와 코드가 GitHub에 공개돼 있다. 2026년에는 "Automated Lecture Notes and Slides Generation" 세미나와 "How to Learn Course Content Using AI" 세미나도 예정돼 있어, 교수·학생 양방향으로 확장하고 있다.</p>
+    <ul class="a arrows">
+      <li>효율성: 교재·슬라이드·과제를 별도 제작하던 반복 작업이 자동화 파이프라인으로 전환</li>
+      <li>품질: LaTeX/Beamer 전문 슬라이드, Python 과제 코드, 자동 채점용 테스트 코드까지 자동 생성</li>
+      <li>확장성: 발표자가 제시한 계획에 따르면 CSE307(프로그래밍 언어), IC637(프로그램 분석) 등 타 과목 및 학술 발표 자료까지 적용 확장 예정</li>
+    </ul>
+    <div class="a caveat"><b>단서</b> — 위 가치는 자료 산출 차원의 평가이며, 학습 결과 데이터(시험·전이·만족도)와 교수법 혁신 차원(능동학습·형성평가·자기조절학습)은 본 발표 범위 밖에 있다. 효율성·품질·확장성이 학습 효과로 전환되려면 절감된 시간이 학습 활동·피드백 설계에 재투입되어야 한다(상세는 편집자 렌즈 통합 평가 참조).</div>
+    <p class="a src">출처: 전민석, Data Structures (AI-generated course page), DGIST PLX Lab, 2025 · MinseokJGit/DataStructure, GitHub</p>
+  </div>
+</div>
+
+<!-- 9. 아이템 7 -->
+<div class="slide" data-notes="프레임워크는 2026년 PLX Lab 세미나로 공개됐고, Beamer와 Claude Code 경험 수준에 따라 3단계 학습 경로를 제공합니다.">
+  <div class="wrap">
+    <div class="a kicker">⚠ 확장과 한계 · Extension and Limits</div>
+    <div class="a"><span class="itemno">7</span>
+    <h2>프레임워크는 이미 3단계 세미나로 공개됐다 — 숙련도별 자기 주도 학습 경로 제공</h2></div>
+    <p class="a body">전 교수는 이 프레임워크를 2026년 PLX Lab 세미나 "Claude Code for Automated Lecture Notes and Slides Generation"으로 공개했다. 세미나는 Beamer·Claude Code 경험 수준에 따라 3단계 학습 경로를 제공하며, 설치 가이드부터 고급 적용까지 단계별로 접근할 수 있다. 발표 슬라이드 자체도 이 파이프라인으로 생성됐으며, 생성된 강의 코드와 과목 페이지도 공개돼 있다.</p>
+    <ul class="a arrows">
+      <li>Level 1 (초급): Claude Code 설치 직후 또는 Beamer 미경험자 → 단계별 가이드로 강의 노트·슬라이드 한 세트 생성</li>
+      <li>Level 2 (중급): Beamer 경험자 → 기존 Beamer 자료를 Claude Code와 결합해 자동 생성 흐름으로 전환</li>
+      <li>Level 3 (고급): Beamer·Claude Code·AI 에디터 현 사용자 → 전체 파이프라인 고급 활용 (ep9 외부 자료 연동)</li>
+    </ul>
+    <p class="a src">출처: Claude Code for Automated Lecture Notes and Slides Generation, PLX Lab, 2026</p>
+  </div>
+</div>
+
+<!-- 10. 아이템 8 -->
+<div class="slide" data-notes="이 프레임워크를 그대로 도입할 때 점검해야 할 세 가지 한계입니다 — 내용 정확성 검증 책임, LaTeX 진입 장벽, 라이선스와 비용. 이중 자동화 루프 가능성도 함께 짚습니다.">
+  <div class="wrap">
+    <div class="a kicker">⚠ 확장과 한계 · Extension and Limits</div>
+    <div class="a"><span class="itemno">8</span>
+    <h2>이 프레임워크를 그대로 도입할 때 점검해야 할 세 가지 한계</h2></div>
+    <p class="a body">이 프레임워크는 DGIST 이공계 특성에 최적화된 실증 사례이며, 범용 도입 전 다음을 점검해야 한다. 첫째, AI가 생성한 교재·슬라이드·과제의 <b>내용 정확성 검증 책임은 교수자에게 있다.</b> 둘째, Beamer + LaTeX 환경은 비숙련자에게 설치·설정 진입 장벽이 있을 수 있다. 셋째, Claude Code(유료)와 Windsurf 사용에 따른 라이선스 및 비용을 확인해야 한다.</p>
+    <ul class="a arrows">
+      <li>AI 생성 내용 오류 검증: 기술적 정확성·최신성·참고문헌 유무 확인 필수</li>
+      <li>LaTeX 비숙련자를 위한 대안 도구(Markdown+Marp, Google Slides 자동화 등) 검토 필요</li>
+      <li>DGIST 구성원을 위한 AI 도구 접근권·사용 비용 지원·데이터 보안 정책 확인 권장</li>
+      <li>적용 범위 제한: 본 사례는 코드 기반 이공계 과목(자료구조)에 LaTeX/Beamer 숙련 교수자가 적용한 실증이며, 인문사회·실험과학·예술 과목으로의 확장 가능성은 별도 검증 필요</li>
+      <li>이중 자동화 루프(교수자−AI−학생−AI) 발생 가능성 — AI 활용 허용 범위와 출처 표기 기준을 과제 지시문에 사전 명시 권장 (상세 분석은 편집자 렌즈 참조)</li>
+    </ul>
+    <p class="a src">출처: DGIST CTL 자체 검토 의견</p>
+  </div>
+</div>
+
+<!-- 11. 편집자 렌즈 1 -->
+<div class="slide" data-notes="편집자 렌즈입니다. 기준은 교수자 효율이 아니라 학습이 실제로 일어나는가이며, 핵심 진단은 Materials Generation에서 Teaching Innovation으로의 전환 조건입니다. Vygotsky와 Hattie 렌즈로 먼저 봅니다.">
+  <div class="wrap">
+    <div class="a kicker">🔎 편집자 렌즈 · Editorial Lens (1/3)</div>
+    <p class="a body">이 사례를 교육 이론 렌즈로 점검한다. 기준은 교수자 효율이 아니라 <b>학습이 실제로 일어나는가</b>이며, 본 호의 핵심 진단은 Materials Generation에서 Teaching Innovation으로의 전환 조건이다.</p>
+    <div class="a lensbox">
+      <h3>Vygotsky — 스캐폴딩과 인지 내면화</h3>
+      <p>자동생성 자료가 수업 중 교수자의 ZPD(근접발달영역) 스캐폴딩을 직접 대체하지는 않는다. 그러나 교수자가 자료를 직접 작성하는 과정은 콘텐츠를 내면화하는 인지 경험이기도 하다. 이 과정이 단축되면 수업 중 학생의 오개념을 포착하고 즉각 개입하는 역량도 함께 약화될 수 있다. <b>자료 준비와 수업 역량은 분리되지 않는다.</b></p>
+      <p class="src"><span class="bdg r">[연구]</span>Vygotsky, L. S. (1978). Mind in Society. Harvard University Press.</p>
+    </div>
+    <div class="a lensbox">
+      <h3>Hattie — 자료 품질과 학습 효과의 거리</h3>
+      <p>Hattie의 메타분석(2009)에서 교수 자료(instructional materials)의 effect size는 약 0.4다. 교수자 피드백(0.70)과 명시적 교수법(0.57)이 더 높다. <b>전문적 슬라이드는 학습 효과의 충분조건이 아니다.</b> 이 프레임워크로 절감된 시간이 수업 중 피드백과 상호작용에 재투자될 때 비로소 학습 효과가 실현될 수 있다.</p>
+      <p class="src"><span class="bdg r">[연구]</span>Hattie, J. (2009). Visible Learning. Routledge.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 12. 편집자 렌즈 2 -->
+<div class="slide" data-notes="Biggs의 구성적 정렬과 Sweller의 인지부하 이론 렌즈입니다. 구조적으로 일관된 자료가 학생이 무엇을 할 수 있어야 하는가라는 질문에 자동으로 답하지는 않으며, 자료의 형식적 완결성이 인지 최적화를 보장하지도 않습니다.">
+  <div class="wrap">
+    <div class="a kicker">🔎 편집자 렌즈 · Editorial Lens (2/3)</div>
+    <div class="a lensbox">
+      <h3>Biggs — 구성적 정렬 없는 자동화</h3>
+      <p>Biggs의 구성적 정렬(Constructive Alignment)은 학습 목표·학습 활동·평가 세 요소가 일관되게 연결돼야 한다고 요구한다. 이 프레임워크에서 ChatGPT가 생성한 '학습 로드맵'이 학습 목표를 대신하지만, 그것이 DGIST 교육과정의 실제 수행 목표와 정렬되는지는 확인되지 않는다. <b>구조적으로 일관된 자료가 학생이 무엇을 할 수 있어야 하는가라는 질문에 자동으로 답하지는 않는다.</b></p>
+      <p class="src"><span class="bdg r">[연구]</span>Biggs, J. (1996). Enhancing teaching through constructive alignment. Higher Education, 32(3), 347–364.</p>
+    </div>
+    <div class="a lensbox">
+      <h3>Sweller — 인지부하와 과제 설계</h3>
+      <p>Sweller의 인지부하 이론(Cognitive Load Theory)에서 효과적인 과제 설계는 완성 예시(worked example) → 점진적 빈칸 채우기 → 독립 문제해결 순서를 따른다. AI가 생성한 stack.py의 '핵심 함수 숨기기' 방식이 이 순서에서 어느 단계에 해당하는지, 학생의 선행 지식과 인지 수준에 맞게 조정됐는지는 자동화로 보장되지 않는다. <b>자료의 형식적 완결성이 인지 최적화를 보장하지는 않는다.</b></p>
+      <p class="src"><span class="bdg r">[연구]</span>Sweller, J. (1988). Cognitive load during problem solving. Cognitive Science, 12(2), 257–285.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 13. 편집자 렌즈 3 -->
+<div class="slide" data-notes="통합 평가와 학문적 진실성입니다. 본 프레임워크는 Teaching Materials Generation에 해당하며, Teaching Innovation으로 전환되려면 절감된 시간이 능동학습·형성평가·피드백 설계에 재투입되어야 합니다. AI가 만든 과제를 AI가 푸는 이중 루프도 짚습니다.">
+  <div class="wrap">
+    <div class="a kicker">🔎 편집자 렌즈 · Editorial Lens (3/3)</div>
+    <div class="a lensbox">
+      <h3>통합 평가 — TPACK · SAMR · Active Learning 종합</h3>
+      <p><b>TPACK</b> (Mishra &amp; Koehler · Technology · Pedagogy · Content) — 본 사례는 Technology Knowledge가 두드러지나, Pedagogical Knowledge 차원의 변화(능동학습 활동 설계, 형성평가, 자기조절학습 지원)는 자동화 범위 밖이다.</p>
+      <p><b>SAMR</b> (Puentedura · Substitution → Augmentation → Modification → Redefinition) — 본 사례는 자료 제작 노동의 Augmentation(향상) 단계에 해당하며, 학습 경험을 새로 정의하는 Redefinition(재정의) 단계로의 이행은 별도 설계가 필요하다.</p>
+      <p><b>Bloom 인지 수준</b> — 빈칸 채우기 과제가 적용(Apply) 수준에 집중되어, 분석·평가·창조 수준 활동은 별도 설계로 보완되어야 한다.</p>
+      <p>요컨대 본 프레임워크는 <b>Teaching Materials Generation</b>에 해당하며, <b>Teaching Innovation</b>으로 전환되려면 절감된 시간이 능동학습·형성평가·피드백 설계에 재투입되어야 한다.</p>
+      <p class="src"><span class="bdg r">[연구]</span>Mishra, P., &amp; Koehler, M. J. (2006). TPACK. Teachers College Record, 108(6) · Puentedura, R. R. (2006). SAMR Model · Anderson, L. W., &amp; Krathwohl, D. R. (2001). A Taxonomy for Learning, Teaching, and Assessing. Longman.</p>
+    </div>
+    <div class="a lensbox">
+      <h3>학문적 진실성 — AI가 만든 과제를 AI가 푸는 이중 루프</h3>
+      <p>이 프레임워크의 가장 즉각적인 교수법적 쟁점은 학문적 진실성이다. AI로 생성된 stack.py 과제(test_stack.py 자동 채점 포함)를 학생이 Copilot·ChatGPT 등 AI로 해결하면, <b>교수자−AI−학생−AI의 이중 자동화 루프</b>가 형성된다. 자동 채점은 이 루프를 차단하지 못한다. 전 교수의 발표에는 이 문제에 대한 명시적 언급이 없다. AI 생성 과제를 운영하는 교수자는 ① AI 활용 허용 범위, ② 학생 제출물 출처 표기 기준, ③ 채점 기준의 AI 친화성 여부를 과제 지시문에 사전 명시해야 한다.</p>
+      <p class="src"><span class="bdg o">[CTL 검토]</span>DGIST CTL 자체 검토 의견 · 참고: UNESCO (2023). ChatGPT and Artificial Intelligence in Higher Education: Quick Start Guide. UNESCO.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 14. 마무리 -->
+<div class="slide center" data-notes="마무리 장입니다. 참고 출처와 면책 문구까지 원문 푸터를 그대로 옮겼습니다.">
+  <div class="a kicker">DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 2 (May 2026)</div>
+  <h2 class="a" style="text-align:center;">AI 파이프라인으로 수업자료를 자동 생성한다</h2>
+  <p class="a sub" style="max-width:760px; text-align:center;">문의: 교수학습센터<br><br>
+  참고: 전민석(DGIST PLX Lab) · GitHub · DGIST DNA(학생신문)</p>
+  <p class="a src" style="max-width:720px; text-align:center; margin-top:20px;">본 리포트의 내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다.<br>인용 시 원출처를 명기하십시오.</p>
+</div>
+
+<script>
+// Slide navigation
+const slides = [...document.querySelectorAll('.slide')];
+let current = 0;
+
+function goTo(index) {
+  if (index < 0 || index >= slides.length) return;
+  slides[current].classList.remove('active');
+  slides[index].classList.add('active');
+  current = index;
+  slides[index].scrollTop = 0;
+  updateProgress();
+  updateCounter();
+  updateNotes();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  if (e.key.toLowerCase() === 'f') toggleFullscreen();
+  if (e.key.toLowerCase() === 's') toggleNotes();
+});
+
+// Touch/swipe (가로 스와이프만 — 세로 스크롤과 충돌 방지)
+let touchStartX = 0, touchStartY = 0;
+document.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+document.addEventListener('touchend', (e) => {
+  const dx = touchStartX - e.changedTouches[0].clientX;
+  const dy = touchStartY - e.changedTouches[0].clientY;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    dx > 0 ? goTo(current + 1) : goTo(current - 1);
+  }
+});
+
+function updateProgress() {
+  document.getElementById('progress').style.width =
+    (current / (slides.length - 1) * 100) + '%';
+}
+
+function updateCounter() {
+  document.getElementById('counter').textContent =
+    (current + 1) + ' / ' + slides.length;
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+let notesWindow = null;
+
+function toggleNotes() {
+  if (notesWindow && !notesWindow.closed) {
+    notesWindow.close();
+    notesWindow = null;
+    return;
+  }
+  notesWindow = window.open('', 'SpeakerNotes', 'width=520,height=420,top=80,left=80');
+  notesWindow.document.write(`<!DOCTYPE html>
+<html><head><style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+         background: #1a1a1a; color: #e0e0e0; padding: 24px; }
+  .slide-num { font-size: 12px; color: #888; margin-bottom: 12px; font-family: monospace; }
+  .label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+           color: #666; margin-bottom: 8px; }
+  .notes { font-size: 16px; line-height: 1.8; color: #ccc; }
+</style></head><body>
+  <div class="slide-num" id="sn"></div>
+  <div class="label">Speaker Notes</div>
+  <div class="notes" id="nt"></div>
+</body></html>`);
+  notesWindow.document.close();
+  updateNotes();
+}
+
+function updateNotes() {
+  if (!notesWindow || notesWindow.closed) return;
+  try {
+    const note = slides[current].dataset.notes || '(No notes)';
+    notesWindow.document.getElementById('nt').textContent = note;
+    notesWindow.document.getElementById('sn').textContent =
+      'Slide ' + (current + 1) + ' / ' + slides.length;
+  } catch(e) {}
+}
+
+updateProgress();
+updateCounter();
+</script>
+</body>
+</html>

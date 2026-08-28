@@ -5,522 +5,397 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 시대의 평가 혁신: AI 탐지에서 학습증거 설계로 (Vol. 1, No. 4)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
-    --bg: #f5f7fa;
-    --surface: #ffffff;
-    --ink: #1a1a2e;
-    --sub: #4a5568;
-    --muted: #718096;
-    --accent: #002D72;
-    --accent2: #1a4a9b;
-    --accent-soft: #D8E4F4;
-    --line: #dfe5ee;
-    --warn: #7d4e00;
-    --warn-bg: #fff3cd;
-    --good: #2d6a4f;
-    --good-bg: #d8f3dc;
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
   }
-  html, body { height: 100%; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    overflow: hidden;
-    word-break: keep-all;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
   }
 
-  .progress {
-    position: fixed; top: 0; left: 0; height: 3px;
-    background: var(--accent2);
-    z-index: 100; transition: width 0.3s ease;
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
   }
-  .counter {
-    position: fixed; bottom: 14px; right: 26px;
-    font-size: 12px; color: rgba(26,26,46,0.45);
-    font-family: monospace; z-index: 100;
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-  .hint {
-    position: fixed; bottom: 14px; left: 26px;
-    font-size: 12px; color: rgba(26,26,46,0.45); z-index: 100;
-  }
-
-  .slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center;
-    padding: 44px 60px 56px;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.3s ease;
-    overflow-y: auto;
-  }
-  .slide.center { justify-content: center; text-align: center; }
-  .slide.active { opacity: 1; pointer-events: auto; z-index: 2; }
-  .slide.active .a { opacity: 0; animation: fadeInUp 0.4s ease forwards; }
-  .a:nth-child(1) { animation-delay: 0.05s; }
-  .a:nth-child(2) { animation-delay: 0.1s; }
-  .a:nth-child(3) { animation-delay: 0.15s; }
-  .a:nth-child(4) { animation-delay: 0.2s; }
-  .a:nth-child(5) { animation-delay: 0.25s; }
-  .a:nth-child(6) { animation-delay: 0.3s; }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: translateY(0); }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+  .masthead a.slidebtn {
+    font-size: 12px; font-weight: 700; color: #fff; background: var(--accent);
+    border-radius: 999px; padding: 6px 14px; text-decoration: none; white-space: nowrap;
   }
 
-  .wrap { width: 100%; max-width: 900px; margin: 0 auto; text-align: left; }
-
-  .kicker {
-    font-size: 12.5px; letter-spacing: 2px;
-    color: var(--accent2); font-weight: 700; margin-bottom: 14px;
-    text-transform: uppercase;
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
   }
-  h1 { font-size: clamp(26px, 4.4vw, 46px); font-weight: 800; line-height: 1.35; }
-  h2 { font-size: clamp(19px, 2.6vw, 28px); font-weight: 800; margin-bottom: 16px; line-height: 1.4; color: var(--ink); }
-  .itemno {
-    display: inline-block; font-size: 14px; font-weight: 800; color: #fff;
-    background: var(--accent); border-radius: 8px; padding: 4px 13px; margin-bottom: 12px;
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
   }
-  .sub { font-size: clamp(14px, 1.7vw, 18px); color: var(--sub); margin-top: 18px; line-height: 1.75; }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
 
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px;
+  }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30초 요약 */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
   .hanmadi {
-    background: var(--accent-soft); border-radius: 10px; padding: 12px 18px;
-    font-size: 14.5px; font-weight: 700; color: var(--accent);
-    line-height: 1.65; margin-bottom: 16px;
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
   }
-  .hanmadi::before { content: "한마디 "; font-size: 11px; letter-spacing: 1px; opacity: 0.75; margin-right: 6px; }
+  .hanmadi::before { content: "한마디"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
 
-  p.body {
-    font-size: 14.5px; line-height: 1.8; color: var(--ink); margin-bottom: 14px;
-  }
-  p.body b { color: var(--accent); }
-
-  ul.arrows { list-style: none; margin-bottom: 14px; }
+  ul.arrows { list-style: none; margin: 0 0 16px; }
   ul.arrows li {
-    font-size: 13.8px; line-height: 1.75; padding: 7px 0 7px 26px;
-    position: relative; color: var(--ink);
-    border-bottom: 1px solid #eef1f6;
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
   }
   ul.arrows li:last-child { border-bottom: none; }
-  ul.arrows li::before {
-    content: "►"; position: absolute; left: 2px; top: 8px;
-    color: var(--accent2); font-size: 11px;
-  }
-  ul.arrows b { color: var(--accent); }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
 
   .caveat {
-    background: #fbfbf3; border: 1px solid #e8e4c9; border-radius: 10px;
-    padding: 11px 16px; font-size: 13px; color: var(--warn); line-height: 1.7;
-    margin-bottom: 12px;
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
   }
   .caveat b { font-weight: 800; }
 
-  .src { font-size: 11.5px; color: var(--muted); line-height: 1.7; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
   .bdg {
     display: inline-block; padding: 1px 6px; border-radius: 3px;
     font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
   }
   .bdg.r { background: var(--good-bg); color: var(--good); }
-  .bdg.p { background: var(--warn-bg); color: var(--warn); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
   .bdg.x { background: #fde8e8; color: #b03030; }
   .bdg.o { background: #f1f5f9; color: #4a5568; }
   .bdg.i { background: #dbeafe; color: #1a4a9b; }
 
-  .policy {
-    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
-    padding: 12px 18px; font-size: 12px; color: var(--sub); line-height: 1.8;
-  }
-  .policy b { color: var(--accent); }
-
-  table.box { border-collapse: collapse; width: 100%; background: var(--surface); border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(26,26,46,0.05); margin-bottom: 14px; }
-  table.box th {
-    background: var(--accent); color: #fff; font-size: 13px; padding: 10px 14px; text-align: left;
-  }
-  table.box td {
-    border-top: 1px solid var(--line); font-size: 13px; color: var(--ink);
-    padding: 10px 14px; text-align: left; line-height: 1.7; vertical-align: top;
-  }
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: left; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: top; }
   table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
   table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
 
   .lensbox {
-    background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--accent);
-    border-radius: 12px; padding: 20px 26px; margin-bottom: 16px;
-    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
   }
-  .lensbox h3 { font-size: 16px; color: var(--accent); margin-bottom: 10px; }
-  .lensbox p { font-size: 14px; color: var(--ink); line-height: 1.85; margin-bottom: 10px; }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
   .lensbox p:last-child { margin-bottom: 0; }
   .lensbox b { color: var(--accent); }
 
-  .stats { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
-  .stat {
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 18px 22px; min-width: 190px; max-width: 270px; text-align: left;
-    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
   }
-  .stat .big { font-size: clamp(20px, 2.6vw, 30px); font-weight: 800; color: var(--accent); line-height: 1.2; }
-  .stat .lbl { font-size: 13px; color: var(--sub); margin-top: 8px; line-height: 1.55; }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
 
-  @media (max-width: 700px) {
-    .slide { padding: 36px 18px 52px; }
-    .stat { width: 100%; max-width: none; }
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
   }
 
-  @media print {
-    .progress, .counter, .controls, nav, button,
-    [class*="hint"], [class*="btn"] { display: none !important; }
-    .slide {
-      page-break-after: always;
-      position: relative !important;
-      opacity: 1 !important;
-      display: flex !important;
-      width: 100vw; height: auto; min-height: 100vh;
-      overflow: visible;
-    }
-    @page { size: landscape; margin: 0; }
+  @media (max-width: 640px) {
+    .hero .inner { padding: 40px 18px 28px; }
+    .article { padding: 32px 16px 64px; }
   }
 </style>
 </head>
 <body>
 
-<div class="progress" id="progress"></div>
-<div class="counter" id="counter"></div>
-<div class="hint">← → 이동 · F 전체화면 · S 노트 · 긴 장은 스크롤</div>
-
-<!-- 1. 표지 -->
-<div class="slide center active" data-notes="DGIST CTL AI 활용 교수법 트렌드 리포트 4호의 슬라이드판입니다. 원문 리포트의 아이템 8개·실전 박스·편집자 렌즈를 원문 그대로 옮겼습니다. 긴 장은 슬라이드 안에서 스크롤됩니다.">
-  <div class="a kicker">DGIST 교수학습센터 · AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 4 (Jul. 2026)</div>
-  <h1 class="a">AI 시대의 평가 혁신:<br>AI 탐지에서 학습증거 설계로</h1>
-  <p class="a sub">AI 시대 평가의 핵심 질문은 "학생이 AI를 썼는가"가 아니라<br>"이 제출물이 학생의 학습을 증명하는가"다.</p>
-</div>
-
-<!-- 2. 편집 방침 -->
-<div class="slide center" data-notes="이 리포트의 편집 방침입니다. 발행일 기준 12개월 이내 자료, 원문 확인 가능 출처만 수록하며, 근거 강도는 연구, 기관보고서, 공개자료 순으로 읽습니다.">
-  <h2 class="a">편집 방침</h2>
-  <div class="a wrap policy" style="max-width:760px; font-size:13px;">
-    발행일 기준 12개월 이내 자료 · 고등교육 현장 적용 가능성 · 원문 확인 가능 출처만 수록 · 출처 유형 표기: <span class="bdg r">[연구]</span> <span class="bdg i">[기관보고서]</span> <span class="bdg o">[공개자료]</span> ([공개자료]=공개 라이선스로 배포된 실무 프레임·도구이며 효과 검증 연구가 아님) · 근거 강도는 [연구] &gt; [기관보고서] &gt; [공개자료] 순으로 읽으십시오 · 본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL <small>AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 4 (Jul. 2026)</small></div>
+    <a class="slidebtn" href="./slide/">슬라이드로 보기 →</a>
   </div>
 </div>
 
-<!-- 3. 30초 요약 -->
-<div class="slide" data-notes="바쁘면 이 한 장이면 됩니다. 원문의 30초 요약 네 문장을 그대로 옮겼습니다.">
-  <div class="wrap">
-    <div class="a kicker">⏱ 30초 요약 — 바쁘면 여기까지만</div>
-    <ul class="a arrows" style="font-size:15px;">
-      <li><b>1.</b> AI 시대 평가의 핵심 질문은 "학생이 AI를 썼는가"가 아니라 "이 제출물이 학생의 학습을 증명하는가"다.</li>
-      <li><b>2.</b> Science 2026 정책 논문은 미국 20개 연구중심 대학 학생 약&nbsp;95,000명(2023–2024학년도 설문) 자료에서 AI 활용·오용이 전공에 따라 크게 다르게 나타난다고 보고했다. 결론은 보편적 금지나 탐지가 아니라 전공·과목별 평가 재설계다.</li>
-      <li><b>3.</b> DGIST는 연구·실험·프로젝트 기반 수업이 많아 초안·수정·판단 근거·검증·성찰을 평가증거로 전환하기 좋은 조건을 갖고 있다.</li>
-      <li><b>4.</b> 다만 재설계가 학습성과를 실제로 높인다는 비교 검증은 아직 얇다. 전면 개편이 아니라 한 과목 파일럿이 이번 학기의 현실적 선택이다.</li>
-    </ul>
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report · 리포트</div>
+    <h1>AI 시대의 평가 혁신: AI 탐지에서 학습증거 설계로</h1>
+    <p class="lede">AI 시대 평가의 핵심 질문은 "학생이 AI를 썼는가"가 아니라 "이 제출물이 학생의 학습을 증명하는가"다.</p>
+    <div class="meta">
+      <b>AI 활용 교수법 트렌드 리포트</b> · Vol. 1, No. 4 (Jul. 2026)<br>
+      발행: DGIST 교수학습센터(CTL) · 문의: ctl@dgist.ac.kr
+    </div>
   </div>
 </div>
 
-<!-- 4. 읽는 법 -->
-<div class="slide center" data-notes="이번 호는 다섯 각도로 구성됩니다. 문제와 근거, 원칙과 설계, 실전 박스, 맥락, 편집자 렌즈 순입니다. 이 슬라이드도 같은 순서를 따릅니다.">
-  <h2 class="a">이번 호 읽는 법 — 평가 혁신을 다섯 각도로</h2>
-  <div class="a stats" style="max-width:940px;">
-    <div class="stat"><div class="big">①</div><div class="lbl"><b>문제·근거 (1–2)</b><br>왜 평가가 흔들리나</div></div>
-    <div class="stat"><div class="big">②</div><div class="lbl"><b>원칙·설계 (3–4)</b><br>무엇을 기준으로 바꾸나</div></div>
-    <div class="stat"><div class="big">③</div><div class="lbl"><b>실전 박스</b><br>교수자가 이번 학기에 할 수 있는 것</div></div>
-    <div class="stat"><div class="big">④</div><div class="lbl"><b>맥락 (5–8)</b><br>DGIST 적용·근거 강도</div></div>
-    <div class="stat"><div class="big">⑤</div><div class="lbl"><b>편집자 렌즈</b><br>DGIST 처방</div></div>
-  </div>
-</div>
+<div class="paper">
+<div class="article">
 
-<!-- 5. 아이템 1 -->
-<div class="slide" data-notes="평가 문제의 본질은 부정행위가 아니라 증거의 약화입니다. 평가 혁신의 출발점은 감시 강화가 아니라 학습증거의 재정의입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔍 문제 진단 · Why Assessment Is Shifting</div>
-    <div class="a"><span class="itemno">1</span>
-    <h2>평가 문제의 본질은 부정행위가 아니라 '증거의 약화'다</h2></div>
-    <div class="a hanmadi">AI가 과제를 대신할 수 있다는 사실보다 더 중요한 것은, 기존 제출물이 더 이상 학생 역량의 충분한 증거가 아닐 수 있다는 점이다.</div>
-    <p class="a body">생성형 AI는 학생이 글을 쓰고, 코드를 만들고, 자료를 요약하고, 문헌을 정리하는 방식을 바꾸었다. 이제 많은 과제는 "학생이 만들었는가"를 확인하기 어렵고, 더 나아가 "학생이 실제로 이해했는가"를 충분히 보여주지 못한다. <b>평가 혁신의 출발점은 감시 강화가 아니라 학습증거의 재정의다.</b></p>
-    <ul class="a arrows">
+  <div class="toc">
+    <a href="#sec1">① 문제·근거 (1–2)</a>
+    <a href="#sec2">② 원칙·설계 (3–4)</a>
+    <a href="#sec3">③ 실전 박스</a>
+    <a href="#sec4">④ 맥락 (5–8)</a>
+    <a href="#sec6">⑤ 편집자 렌즈</a>
+  </div>
+
+  <div class="policy">
+    <b>편집 방침</b> 발행일 기준 12개월 이내 자료 · 고등교육 현장 적용 가능성 · 원문 확인 가능 출처만 수록 · 출처 유형 표기: <span class="bdg r">[연구]</span> <span class="bdg i">[기관보고서]</span> <span class="bdg o">[공개자료]</span> ([공개자료]=공개 라이선스로 배포된 실무 프레임·도구이며 효과 검증 연구가 아님) · 근거 강도는 [연구] &gt; [기관보고서] &gt; [공개자료] 순으로 읽으십시오 · 본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.
+  </div>
+
+  <div class="sechead">⏱ 30초 요약 — 바쁘면 여기까지만</div>
+  <div class="summary">
+    <div class="itm"><span>AI 시대 평가의 핵심 질문은 <b>"학생이 AI를 썼는가"가 아니라 "이 제출물이 학생의 학습을 증명하는가"</b>다.</span></div>
+    <div class="itm"><span>Science 2026 정책 논문은 미국 20개 연구중심 대학 학생 약 95,000명(2023–2024학년도 설문) 자료에서 AI 활용·오용이 전공에 따라 크게 다르게 나타난다고 보고했다. 결론은 보편적 금지나 탐지가 아니라 전공·과목별 평가 재설계다.</span></div>
+    <div class="itm"><span>DGIST는 연구·실험·프로젝트 기반 수업이 많아 초안·수정·판단 근거·검증·성찰을 평가증거로 전환하기 좋은 조건을 갖고 있다.</span></div>
+    <div class="itm"><span>다만 재설계가 학습성과를 실제로 높인다는 비교 검증은 아직 얇다. <b>전면 개편이 아니라 한 과목 파일럿이 이번 학기의 현실적 선택이다.</b></span></div>
+  </div>
+
+  <div class="sechead" id="sec1">🔍 문제 진단 · Why Assessment Is Shifting</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>평가 문제의 본질은 부정행위가 아니라 '증거의 약화'다</h2>
+    <div class="hanmadi">AI가 과제를 대신할 수 있다는 사실보다 더 중요한 것은, 기존 제출물이 더 이상 학생 역량의 충분한 증거가 아닐 수 있다는 점이다.</div>
+    <p class="body">생성형 AI는 학생이 글을 쓰고, 코드를 만들고, 자료를 요약하고, 문헌을 정리하는 방식을 바꾸었다. 이제 많은 과제는 "학생이 만들었는가"를 확인하기 어렵고, 더 나아가 "학생이 실제로 이해했는가"를 충분히 보여주지 못한다. <b>평가 혁신의 출발점은 감시 강화가 아니라 학습증거의 재정의다.</b></p>
+    <ul class="arrows">
       <li>일반 리포트와 요약문은 AI가 초안을 빠르게 생성한다. 최종 제출물만 보면 학생의 읽기·판단·구성 과정을 알기 어렵다.</li>
       <li>단순 코딩 과제는 완성 코드만으로 학생의 문제해결 과정, 디버깅, 테스트 설계 능력을 확인하기 어렵다.</li>
       <li>AI 탐지기는 보조수단일 수 있지만, 오탐과 회피 가능성 때문에 평가 설계의 중심이 되기 어렵다.</li>
     </ul>
-    <p class="a src"><span class="bdg i">[기관보고서]</span>참고: EDUCAUSE, The Impact of AI on Learning Assessment (2026) — 고등교육 교수·직원 438명 설문(2026.3)</p>
+    <p class="src"><span class="bdg i">[기관보고서]</span>참고: EDUCAUSE, The Impact of AI on Learning Assessment (2026) — 고등교육 교수·직원 438명 설문(2026.3)</p>
   </div>
-</div>
 
-<!-- 6. 아이템 2 -->
-<div class="slide" data-notes="Science 2026 정책 논문은 약 95,000명 설문에서 사용률이 높은 분야와 오용률이 높은 분야가 일치하지 않음을 보고했습니다. 해법은 대학 전체 단일 규정보다 과목별 평가 설계에 가깝습니다.">
-  <div class="wrap">
-    <div class="a kicker">🔍 문제 진단 · Why Assessment Is Shifting</div>
-    <div class="a"><span class="itemno">2</span>
-    <h2>대규모 조사도 '일괄 금지'보다 과목별 재설계를 가리킨다</h2></div>
-    <div class="a hanmadi">AI 활용과 오용은 전공·과제 유형에 따라 다르게 나타난다. 그래서 해법도 대학 전체 단일 규정보다 과목별 평가 설계에 가깝다.</div>
-    <p class="a body">Science 2026 정책 논문(Policy Forum, Vol. 392, 818–820)은 미국 20개 연구중심 대학 학생 약&nbsp;95,000명 설문을 바탕으로, 학생의 약 3분의 1이 과제에 생성형 AI를 정기적으로 사용하고 약 9%가 부정행위 목적으로 사용했다고 보고했다. 주목할 점은 <b>사용률이 높은 분야와 오용률이 높은 분야가 일치하지 않는다</b>는 것이다. 정기 사용은 컴퓨터과학 62%로 높고 예술 24%로 낮았지만, 오용률은 경제학 17%·저널리즘 16%가 높은 축이고 생물학 5%가 낮은 축이었다. 이 결과는 "모든 과목에서 AI를 금지하자" 또는 "탐지 도구로 해결하자"는 단순 처방보다, 학습목표와 과제 유형에 맞춘 평가 재설계가 필요하다는 쪽에 무게를 둔다.</p>
-    <ul class="a arrows">
+  <div class="item">
+    <div class="no">2</div>
+    <h2>대규모 조사도 '일괄 금지'보다 과목별 재설계를 가리킨다</h2>
+    <div class="hanmadi">AI 활용과 오용은 전공·과제 유형에 따라 다르게 나타난다. 그래서 해법도 대학 전체 단일 규정보다 과목별 평가 설계에 가깝다.</div>
+    <p class="body">Science 2026 정책 논문(Policy Forum, Vol. 392, 818–820)은 미국 20개 연구중심 대학 학생 약 95,000명 설문을 바탕으로, 학생의 약 3분의 1이 과제에 생성형 AI를 정기적으로 사용하고 약 9%가 부정행위 목적으로 사용했다고 보고했다. 주목할 점은 <b>사용률이 높은 분야와 오용률이 높은 분야가 일치하지 않는다</b>는 것이다. 정기 사용은 컴퓨터과학 62%로 높고 예술 24%로 낮았지만, 오용률은 경제학 17%·저널리즘 16%가 높은 축이고 생물학 5%가 낮은 축이었다. 이 결과는 "모든 과목에서 AI를 금지하자" 또는 "탐지 도구로 해결하자"는 단순 처방보다, 학습목표와 과제 유형에 맞춘 평가 재설계가 필요하다는 쪽에 무게를 둔다.</p>
+    <ul class="arrows">
       <li>글쓰기·요약·문헌조사 과제는 AI 초안 생성의 영향을 크게 받는다. 이 과제들은 초안, 피드백 반영, 출처 검증, 구술 설명을 함께 요구해야 한다.</li>
       <li>코딩·데이터 과제는 최종 코드보다 테스트 설계, 오류 수정, 커밋 이력, 코드 리뷰가 더 강한 학습증거가 될 수 있다.</li>
       <li>실험·프로젝트 과제는 원자료, 실험노트, 의사결정 로그, 실패 분석을 포함할 때 AI 대체 가능성이 낮아진다.</li>
       <li>같은 조사에서 AI 사용률은 성별·인종 집단에 따라서도 차이가 있었다. 접근성·숙련도 격차를 전제하지 않은 평가 설계는 공정성 문제를 키운다.</li>
     </ul>
-    <div class="a caveat"><b>해석 한계</b> — 설문 자료는 2023–2024학년도 수집분이다. 이후 도구 성능과 사용률이 달라졌을 수 있어, 수치는 현재 수준의 하한선으로 읽는 편이 안전하다.</div>
-    <p class="a src"><span class="bdg r">[연구]</span>출처: Science 392, 818–820, Generative AI use and misuse call for assessment reform in higher education (2026)</p>
+    <div class="caveat"><b>해석 한계</b> — 설문 자료는 2023–2024학년도 수집분이다. 이후 도구 성능과 사용률이 달라졌을 수 있어, 수치는 현재 수준의 하한선으로 읽는 편이 안전하다.</div>
+    <p class="src"><span class="bdg r">[연구]</span>출처: Science 392, 818–820, Generative AI use and misuse call for assessment reform in higher education (2026)</p>
   </div>
-</div>
 
-<!-- 7. 아이템 3 -->
-<div class="slide" data-notes="평가 재설계의 5가지 점검 기준입니다. 타당성, 공정성, 투명성, 접근성, 정렬성. 이 프레임워크는 효과성 검증 연구가 아니라 실무 프레임워크입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚖ 설계 원칙 · Redesign Criteria</div>
-    <div class="a"><span class="itemno">3</span>
-    <h2>평가 재설계는 5가지 기준으로 점검한다</h2></div>
-    <div class="a hanmadi">좋은 평가는 AI를 금지하는 평가가 아니라, AI가 있어도 수업목표와 학습증거가 정렬되는 평가다.</div>
-    <p class="a body">GitHub에 공개된 2026 Assessment Redesign Framework는 효과성 검증 연구라기보다 교수자가 과제를 재설계할 때 사용할 수 있는 실무 프레임워크다. 본 호에서는 이를 DGIST 교수자용 점검 기준으로 압축했다.</p>
-    <ul class="a arrows">
-      <li><b>타당성:</b> 최종 산출물이 아니라 실제 학습성과를 재는가?</li>
-      <li><b>공정성:</b> AI 접근성, 숙련도, 언어 능력 차이를 고려하는가?</li>
-      <li><b>투명성:</b> 허용·제한·공개 기준이 과제 안내문에 명확한가?</li>
-      <li><b>접근성:</b> 진단 루브릭, 피드백 기회, 보완 제출 경로가 있는가?</li>
-      <li><b>정렬성:</b> 수업목표, 학습활동, 루브릭이 연결되는가?</li>
+  <div class="sechead" id="sec2">⚖ 설계 원칙 · Redesign Criteria</div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>평가 재설계는 5가지 기준으로 점검한다</h2>
+    <div class="hanmadi">좋은 평가는 AI를 금지하는 평가가 아니라, AI가 있어도 수업목표와 학습증거가 정렬되는 평가다.</div>
+    <p class="body">GitHub에 공개된 2026 Assessment Redesign Framework는 효과성 검증 연구라기보다 교수자가 과제를 재설계할 때 사용할 수 있는 실무 프레임워크다. 본 호에서는 이를 DGIST 교수자용 점검 기준으로 압축했다.</p>
+    <ul class="arrows">
+      <li><b>타당성</b>: 최종 산출물이 아니라 실제 학습성과를 재는가?</li>
+      <li><b>공정성</b>: AI 접근성, 숙련도, 언어 능력 차이를 고려하는가?</li>
+      <li><b>투명성</b>: 허용·제한·공개 기준이 과제 안내문에 명확한가?</li>
+      <li><b>접근성</b>: 진단 루브릭, 피드백 기회, 보완 제출 경로가 있는가?</li>
+      <li><b>정렬성</b>: 수업목표, 학습활동, 루브릭이 연결되는가?</li>
     </ul>
-    <p class="a src"><span class="bdg o">[공개자료]</span>출처: Hazel Farrell (SETU, GenAI:N3) 기획, 2026 Assessment Redesign Framework — CC BY-SA 4.0(사이트 구현 Ken McCarthy) — github.com/kenmccarthy/arf</p>
+    <p class="src"><span class="bdg o">[공개자료]</span>출처: Hazel Farrell (SETU, GenAI:N3) 기획, 2026 Assessment Redesign Framework — CC BY-SA 4.0(사이트 구현 Ken McCarthy) — github.com/kenmccarthy/arf</p>
   </div>
-</div>
 
-<!-- 8. 아이템 4 -->
-<div class="slide" data-notes="학생을 의심하기 전에 과제를 먼저 시험합니다. AI가 쉽게 B학점 수준 답안을 만들면 과제는 설계상 취약합니다. 4단계 스트레스 테스트 절차입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚖ 설계 원칙 · Redesign Criteria</div>
-    <div class="a"><span class="itemno">4</span>
-    <h2>AI 탐지보다 먼저 할 일은 '과제 스트레스 테스트'다</h2></div>
-    <div class="a hanmadi">학생을 의심하기 전에 과제를 먼저 시험한다. AI가 쉽게 B학점 수준 답안을 만들면, 과제는 설계상 취약하다.</div>
-    <p class="a body">교수자는 기존 과제 지시문을 AI에 그대로 입력해보고, AI 산출물이 제출 기준을 얼마나 충족하는지 확인할 수 있다. 이 절차는 부정행위 수사를 위한 것이 아니라, <b>과제가 학생 고유의 판단·검증·성찰을 충분히 요구하는지 점검하는 설계 진단</b>이다.</p>
-    <ul class="a arrows">
-      <li><b>1단계:</b> 과제 지시문을 그대로 AI에 입력한다.</li>
-      <li><b>2단계:</b> AI 산출물이 현재 루브릭을 어느 정도 충족하는지 본다.</li>
-      <li><b>3단계:</b> 학생 고유의 데이터, 실험 기록, 판단 근거, 구술 설명이 없으면 해결 불가능한 요소를 추가한다.</li>
-      <li><b>4단계:</b> 루브릭을 최종물 중심에서 과정·검증·성찰 중심으로 수정한다.</li>
+  <div class="item">
+    <div class="no">4</div>
+    <h2>AI 탐지보다 먼저 할 일은 '과제 스트레스 테스트'다</h2>
+    <div class="hanmadi">학생을 의심하기 전에 과제를 먼저 시험한다. AI가 쉽게 B학점 수준 답안을 만들면, 과제는 설계상 취약하다.</div>
+    <p class="body">교수자는 기존 과제 지시문을 AI에 그대로 입력해보고, AI 산출물이 제출 기준을 얼마나 충족하는지 확인할 수 있다. 이 절차는 부정행위 수사를 위한 것이 아니라, <b>과제가 학생 고유의 판단·검증·성찰을 충분히 요구하는지 점검하는 설계 진단이다.</b></p>
+    <ul class="arrows">
+      <li><b>1단계</b>: 과제 지시문을 그대로 AI에 입력한다.</li>
+      <li><b>2단계</b>: AI 산출물이 현재 루브릭을 어느 정도 충족하는지 본다.</li>
+      <li><b>3단계</b>: 학생 고유의 데이터, 실험 기록, 판단 근거, 구술 설명이 없으면 해결 불가능한 요소를 추가한다.</li>
+      <li><b>4단계</b>: 루브릭을 최종물 중심에서 과정·검증·성찰 중심으로 수정한다.</li>
     </ul>
-    <p class="a src"><span class="bdg o">[공개자료]</span>출처: michael-borck/ai-in-pedagogical-design-and-delivery</p>
+    <p class="src"><span class="bdg o">[공개자료]</span>출처: michael-borck/ai-in-pedagogical-design-and-delivery</p>
   </div>
-</div>
 
-<!-- 9. 실전 적용 박스 -->
-<div class="slide" data-notes="이번 학기에 바꿀 수 있는 최소 단위는 한 과제, 한 루브릭, 한 확인 절차입니다. 3주 실행 계획과 판단 기준, 주의사항까지 원문 그대로입니다.">
-  <div class="wrap">
-    <div class="a kicker">🛠 실전 적용 박스 · What Faculty Can Do Now</div>
-    <h2 class="a">이번 학기에 바꿀 수 있는 최소 단위:<br>한 과제, 한 루브릭, 한 확인 절차</h2>
-    <table class="a box">
+  <div class="sechead" id="sec3">🛠 실전 적용 박스 · What Faculty Can Do Now</div>
+  <div class="item">
+    <h2>이번 학기에 바꿀 수 있는 최소 단위:<br>한 과제, 한 루브릭, 한 확인 절차</h2>
+    <div class="tablewrap">
+    <table class="box">
       <tr><th>단계</th><th>실행</th><th>판단 기준</th></tr>
       <tr><td>1주</td><td>과제 1개를 AI로 스트레스 테스트</td><td>AI 산출물이 B학점 이상 가능한가?</td></tr>
       <tr><td>2주</td><td>과정증거 1개와 성찰문항 1개 추가</td><td>학생의 판단·수정 근거가 드러나는가?</td></tr>
       <tr><td>3주</td><td>구술 확인 또는 수업 내 미니 수행 추가</td><td>최종물과 학생 설명이 일치하는가?</td></tr>
     </table>
-    <div class="a caveat"><b>주의</b> — AI 탐지 점수만으로 부정행위를 단정하지 않는다. 과제 안내문에 AI 사용 기준을 모호하게 쓰지 않는다. 한 학기 전체 평가를 한 번에 바꾸지 않는다. 과정증거는 전수 채점 대신 표본 확인·체크형 배점으로 운영해 교수자와 학생 양쪽의 부담이 함께 늘지 않게 한다.</div>
+    </div>
+    <div class="caveat"><b>주의</b> — AI 탐지 점수만으로 부정행위를 단정하지 않는다. 과제 안내문에 AI 사용 기준을 모호하게 쓰지 않는다. 한 학기 전체 평가를 한 번에 바꾸지 않는다. 과정증거는 전수 채점 대신 표본 확인·체크형 배점으로 운영해 교수자와 학생 양쪽의 부담이 함께 늘지 않게 한다.</div>
   </div>
-</div>
 
-<!-- 10. 아이템 5 -->
-<div class="slide" data-notes="수업 유형별로 AI에 강한 과제를 다르게 설계합니다. AI에 강한 과제는 AI를 못 쓰게 만든 과제가 아니라, AI를 써도 학생의 선택·판단·검증·실패 분석이 남는 과제입니다.">
-  <div class="wrap">
-    <div class="a kicker">🎓 DGIST 적용 · Course Scenarios</div>
-    <div class="a"><span class="itemno">5</span>
-    <h2>수업 유형별로 'AI에 강한 과제'를 다르게 설계한다</h2></div>
-    <div class="a hanmadi">AI에 강한 과제는 AI를 못 쓰게 만든 과제가 아니라, AI를 써도 학생의 선택·판단·검증·실패 분석이 남는 과제다.</div>
-    <ul class="a arrows">
-      <li><b>코딩·AI 과목:</b> 최종 코드만 제출 → 테스트 설계, 디버깅 로그, 커밋 이력, 코드 리뷰 포함</li>
-      <li><b>실험 과목:</b> 완성 보고서 중심 → 원자료, 실험노트, 실패 원인, 설계 변경 근거 포함</li>
-      <li><b>세미나 과목:</b> 논문 요약 → 비판 질문, 논문 간 비교, 한계 분석, 구술 방어 포함</li>
-      <li><b>프로젝트 과목:</b> 최종 발표 중심 → 중간 산출물, 의사결정 로그, 피드백 반영 기록, 팀 기여도 포함</li>
-      <li><b>융합기초 과목:</b> 정답형 문제풀이 → 풀이 경로, 오개념 수정, 자기 설명, 다른 풀이 비교 포함</li>
+  <div class="sechead" id="sec4">🎓 DGIST 적용 · Course Scenarios</div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>수업 유형별로 'AI에 강한 과제'를 다르게 설계한다</h2>
+    <div class="hanmadi">AI에 강한 과제는 AI를 못 쓰게 만든 과제가 아니라, AI를 써도 학생의 선택·판단·검증·실패 분석이 남는 과제다.</div>
+    <ul class="arrows">
+      <li><b>코딩·AI 과목</b>: 최종 코드만 제출 → 테스트 설계, 디버깅 로그, 커밋 이력, 코드 리뷰 포함</li>
+      <li><b>실험 과목</b>: 완성 보고서 중심 → 원자료, 실험노트, 실패 원인, 설계 변경 근거 포함</li>
+      <li><b>세미나 과목</b>: 논문 요약 → 비판 질문, 논문 간 비교, 한계 분석, 구술 방어 포함</li>
+      <li><b>프로젝트 과목</b>: 최종 발표 중심 → 중간 산출물, 의사결정 로그, 피드백 반영 기록, 팀 기여도 포함</li>
+      <li><b>융합기초 과목</b>: 정답형 문제풀이 → 풀이 경로, 오개념 수정, 자기 설명, 다른 풀이 비교 포함</li>
     </ul>
-    <p class="a src"><span class="bdg o">[공개자료]</span>참고 도구(본문 설계안의 직접 근거는 아님): GitHub Classroom, Use autograding — 자동채점 공식 문서</p>
+    <p class="src"><span class="bdg o">[공개자료]</span>참고 도구(본문 설계안의 직접 근거는 아님): GitHub Classroom, Use autograding — 자동채점 공식 문서</p>
   </div>
-</div>
 
-<!-- 11. 아이템 6 -->
-<div class="slide" data-notes="PAIRR, AI Roleplay, Diagnostic Rubric은 도구가 아니라 평가증거 수집법입니다. 핵심은 학생이 AI 피드백을 어떻게 해석하고 자기 판단으로 고쳤는지 남기는 것입니다.">
-  <div class="wrap">
-    <div class="a kicker">🎓 DGIST 적용 · Course Scenarios</div>
-    <div class="a"><span class="itemno">6</span>
-    <h2>PAIRR·Roleplay·Diagnostic Rubric은 '도구'가 아니라<br>평가증거 수집법이다</h2></div>
-    <div class="a hanmadi">핵심은 새 도구 도입이 아니라, 학생이 AI 피드백을 어떻게 해석하고 자기 판단으로 고쳤는지 남기는 것이다.</div>
-    <ul class="a arrows">
-      <li><b>PAIRR:</b> 동료 피드백과 AI 피드백을 비교하고, 어떤 피드백을 반영했는지 성찰하게 한다.</li>
-      <li><b>AI Roleplay:</b> AI를 심사위원, 환자, 기업 담당자, 동료 연구자로 설정해 질의응답과 구술 방어를 연습하게 한다.</li>
-      <li><b>Diagnostic Rubric:</b> Beginning·Developing·Proficient 3단계로 선수지식과 수행 수준을 진단한다.</li>
-      <li><b>Repository-based Assessment:</b> 커밋, 이슈, 테스트, 코드리뷰 기록을 과정 중심 평가증거로 활용한다.</li>
+  <div class="item">
+    <div class="no">6</div>
+    <h2>PAIRR·Roleplay·Diagnostic Rubric은 '도구'가 아니라 평가증거 수집법이다</h2>
+    <div class="hanmadi">핵심은 새 도구 도입이 아니라, 학생이 AI 피드백을 어떻게 해석하고 자기 판단으로 고쳤는지 남기는 것이다.</div>
+    <ul class="arrows">
+      <li><b>PAIRR</b>: 동료 피드백과 AI 피드백을 비교하고, 어떤 피드백을 반영했는지 성찰하게 한다.</li>
+      <li><b>AI Roleplay</b>: AI를 심사위원, 환자, 기업 담당자, 동료 연구자로 설정해 질의응답과 구술 방어를 연습하게 한다.</li>
+      <li><b>Diagnostic Rubric</b>: Beginning·Developing·Proficient 3단계로 선수지식과 수행 수준을 진단한다.</li>
+      <li><b>Repository-based Assessment</b>: 커밋, 이슈, 테스트, 코드리뷰 기록을 과정 중심 평가증거로 활용한다.</li>
     </ul>
-    <p class="a src"><span class="bdg o">[공개자료]</span>출처: jkruckivey/education-toolkit · vgoehler/ai-lit-collab (AI 리터러시·학생-AI 협업 연구 데이터셋, SNAIL 척도)</p>
+    <p class="src"><span class="bdg o">[공개자료]</span>출처: jkruckivey/education-toolkit · vgoehler/ai-lit-collab (AI 리터러시·학생-AI 협업 연구 데이터셋, SNAIL 척도)</p>
   </div>
-</div>
 
-<!-- 12. 아이템 7 -->
-<div class="slide" data-notes="이번 호의 GitHub 자료는 현장 적용 아이디어로 쓰되, 학습 효과를 입증한 근거처럼 쓰면 안 됩니다. 근거를 A급, B급, C급으로 구분합니다.">
-  <div class="wrap">
-    <div class="a kicker">⚠ 대조 증거 · What Not to Overclaim</div>
-    <div class="a"><span class="itemno">7</span>
-    <h2>GitHub 자료는 '실무 아이디어'이지 효과 검증 논문이 아니다</h2></div>
-    <div class="a hanmadi">이번 호의 GitHub 자료는 현장 적용 아이디어로 쓰되, 학습 효과를 입증한 근거처럼 쓰면 안 된다.</div>
-    <p class="a body">3호가 동료심사 연구와 공개 데이터 중심으로 한 사례를 깊게 해부했다면, 4호의 GitHub 자료는 성격이 다르다. Assessment Redesign Framework, Education Toolkit, AI in Pedagogical Design and Delivery는 교수자 워크숍과 과제 설계에 유용하지만, 그 자체가 "이 방식이 학습효과를 높인다"는 검증 결과는 아니다.</p>
-    <ul class="a arrows">
-      <li><b>A급 근거:</b> Science 2026, EDUCAUSE 2026처럼 평가 위기가 실제 고등교육 의제임을 보여주는 자료</li>
-      <li><b>B급 프레임:</b> Assessment Redesign Framework, CO for Education처럼 평가 재설계 관점을 제공하는 자료</li>
-      <li><b>C급 실무 아이디어:</b> Education Toolkit, GitHub Classroom/CI 사례처럼 교수자가 변형해 쓸 수 있는 자료</li>
+  <div class="sechead" id="sec5">⚠ 대조 증거 · What Not to Overclaim</div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>GitHub 자료는 '실무 아이디어'이지 효과 검증 논문이 아니다</h2>
+    <div class="hanmadi">이번 호의 GitHub 자료는 현장 적용 아이디어로 쓰되, 학습 효과를 입증한 근거처럼 쓰면 안 된다.</div>
+    <p class="body">3호가 동료심사 연구와 공개 데이터 중심으로 한 사례를 깊게 해부했다면, 4호의 GitHub 자료는 성격이 다르다. Assessment Redesign Framework, Education Toolkit, AI in Pedagogical Design and Delivery는 교수자 워크숍과 과제 설계에 유용하지만, <b>그 자체가 "이 방식이 학습효과를 높인다"는 검증 결과는 아니다.</b></p>
+    <ul class="arrows">
+      <li><b>A급 근거</b>: Science 2026, EDUCAUSE 2026처럼 평가 위기가 실제 고등교육 의제임을 보여주는 자료</li>
+      <li><b>B급 프레임</b>: Assessment Redesign Framework, CO for Education처럼 평가 재설계 관점을 제공하는 자료</li>
+      <li><b>C급 실무 아이디어</b>: Education Toolkit, GitHub Classroom/CI 사례처럼 교수자가 변형해 쓸 수 있는 자료</li>
     </ul>
-    <p class="a src"><span class="bdg o">[공개자료]</span>참고: CO for Education · Awesome AI &amp; LLM for Education</p>
+    <p class="src"><span class="bdg o">[공개자료]</span>참고: CO for Education · Awesome AI &amp; LLM for Education</p>
   </div>
-</div>
 
-<!-- 13. 아이템 8 -->
-<div class="slide" data-notes="2026년 체계적 검토는 학계의 무게중심이 탐지에서 재설계로 옮겨간 것을 확인했지만, 학습성과를 비교한 효과 근거는 아직 부족하다고 지적합니다. 방향에 대한 합의와 효과에 대한 검증은 다른 문제입니다.">
-  <div class="wrap">
-    <div class="a kicker">⚠ 대조 증거 · What Not to Overclaim</div>
-    <div class="a"><span class="itemno">8</span>
-    <h2>재설계 방향은 모였지만, 학습성과로 검증된 근거는 아직 얇다</h2></div>
-    <div class="a hanmadi">이번 호의 권고를 포함해 평가 재설계 담론 전체가 아직 '효과가 검증된 처방'이 아니라 '합의된 방향' 단계에 있다.</div>
-    <p class="a body">동료심사 연구 54편과 국제 정책문서 6건을 종합한 2026년 체계적 검토는, 학계의 무게중심이 탐지 중심에서 재설계 중심으로 옮겨간 것을 확인했다. 그런데 같은 검토는 그 재설계 권고가 주로 개념적 논증, 교수자 설문, 초기 도입자의 경험에 기대고 있으며, <b>학생의 학습성과를 시간에 걸쳐 비교한 효과 근거는 아직 부족하다</b>고 지적한다. 방향에 대한 합의와 효과에 대한 검증은 다른 문제다.</p>
-    <ul class="a arrows">
+  <div class="item">
+    <div class="no">8</div>
+    <h2>재설계 방향은 모였지만, 학습성과로 검증된 근거는 아직 얇다</h2>
+    <div class="hanmadi">이번 호의 권고를 포함해 평가 재설계 담론 전체가 아직 '효과가 검증된 처방'이 아니라 '합의된 방향' 단계에 있다.</div>
+    <p class="body">동료심사 연구 54편과 국제 정책문서 6건을 종합한 2026년 체계적 검토는, 학계의 무게중심이 탐지 중심에서 재설계 중심으로 옮겨간 것을 확인했다. 그런데 같은 검토는 그 재설계 권고가 주로 개념적 논증, 교수자 설문, 초기 도입자의 경험에 기대고 있으며, 학생의 학습성과를 시간에 걸쳐 비교한 효과 근거는 아직 부족하다고 지적한다. <b>방향에 대한 합의와 효과에 대한 검증은 다른 문제다.</b></p>
+    <ul class="arrows">
       <li>문헌 전반이 공통으로 꼽는 재설계 형태는 구술시험(viva), 반복 포트폴리오, 수업 내 작성, 협업 프로젝트, AI 산출물의 비판적 분석이다. 이번 호 5·6번 항목과 방향이 같다.</li>
       <li>다만 "이 방식이 학습을 더 낫게 한다"를 비교 설계로 보인 연구는 드물다. 따라서 <b>전면 도입의 근거로는 아직 이르고, 파일럿과 관찰의 근거로는 충분하다.</b></li>
       <li>규모 문제에는 'viva-lite' 제안이 있다. 전 과제 구술이 아니라 선택된 과제에만 짧은 구술 확인을 붙이고, 표준 질문·녹음·채점자 간 확인으로 타당성을 보완하는 방식이다. 단 이 제안은 학술지 논평(Educational Researcher 55(5):339–340)이며 실증 자료는 아니다.</li>
       <li>우리에게는 기회이기도 하다. 한 과목 파일럿을 사전·사후 또는 대조 과목 설계로 구성하면, 수강 규모와 평가 관행이 다른 미국 대형 대학의 답을 빌려오는 대신 우리 수업에서 직접 답을 얻을 수 있다.</li>
     </ul>
-    <p class="a src"><span class="bdg r">[연구]</span>출처: Slimi, Z. (2026). A systematic critical review of generative AI's impact on authorship, pedagogy, and integrity (2023–2025). Frontiers in Education — 동료심사 연구 54편·정책문서 6건 종합(2026.4.29)</p>
+    <p class="src"><span class="bdg r">[연구]</span>출처: Slimi, Z. (2026). A systematic critical review of generative AI's impact on authorship, pedagogy, and integrity (2023–2025). Frontiers in Education — 동료심사 연구 54편·정책문서 6건 종합(2026.4.29)</p>
   </div>
-</div>
 
-<!-- 14. 편집자 렌즈 1 -->
-<div class="slide" data-notes="편집자 렌즈입니다. AI 시대의 좋은 평가는 AI를 중심에 두지 않습니다. Biggs의 구성적 정렬 관점에서, AI는 목표-활동-평가의 불일치를 더 빨리 드러냅니다.">
-  <div class="wrap">
-    <div class="a kicker">🔎 편집자 렌즈 · 평가 혁신이 DGIST에 묻는 것 (1/2)</div>
-    <div class="a lensbox">
-      <h3>역설 — AI 시대의 좋은 평가는 AI를 중심에 두지 않는다</h3>
-      <p>평가 혁신의 목표는 AI 사용을 잡아내는 것이 아니라 학습을 더 분명히 보는 것이다. 그래서 좋은 과제는 "AI를 못 쓰게 하는 과제"가 아니라 <b>"AI를 써도 학생이 이해하지 못하면 완성할 수 없는 과제"</b>다.</p>
-    </div>
-    <div class="a lensbox">
-      <h3>Biggs — 구성적 정렬의 재확인</h3>
-      <p>AI는 목표–활동–평가의 불일치를 더 빨리 드러낸다. 수업목표가 비판적 사고인데 과제는 요약문 제출이라면, AI는 그 취약성을 확대한다. 반대로 목표가 검증·설계·설명이라면 루브릭도 그 행동을 직접 요구해야 한다.</p>
-    </div>
+  <div class="sechead" id="sec6">🔎 편집자 렌즈 · 평가 혁신이 DGIST에 묻는 것</div>
+
+  <div class="lensbox">
+    <h3>역설 — AI 시대의 좋은 평가는 AI를 중심에 두지 않는다</h3>
+    <p>평가 혁신의 목표는 AI 사용을 잡아내는 것이 아니라 학습을 더 분명히 보는 것이다. 그래서 좋은 과제는 "AI를 못 쓰게 하는 과제"가 아니라 <b>"AI를 써도 학생이 이해하지 못하면 완성할 수 없는 과제"</b>다.</p>
   </div>
-</div>
 
-<!-- 15. 편집자 렌즈 2 -->
-<div class="slide" data-notes="DGIST 적용 조건 점검표 5항과 남은 불확실성 5가지입니다. 전면 개편보다 한 과목 한 과제 파일럿이 현실적입니다.">
-  <div class="wrap">
-    <div class="a kicker">🔎 편집자 렌즈 · 평가 혁신이 DGIST에 묻는 것 (2/2)</div>
-    <div class="a lensbox">
-      <h3>DGIST 적용 조건 점검표</h3>
-      <p>① 고위험 과제 1개 선정 ② AI 스트레스 테스트 ③ 과정증거 1개 추가 ④ 구술확인 또는 수업 내 미니 수행 추가 ⑤ 루브릭에 검증·한계 인식·성찰 항목 반영. <b>전면 개편보다 한 과목 한 과제 파일럿이 현실적이다.</b></p>
-    </div>
-    <div class="a lensbox">
-      <h3>남은 불확실성</h3>
-      <p>① AI 탐지 도구의 정확도와 공정성은 여전히 제한적이다. ② 과정증거 평가는 교수자 채점 부담을 늘릴 수 있다. ③ AI 접근성 차이는 공정성 문제로 남는다. ④ DGIST 소규모 고선발 수업에서 어떤 과제 유형이 가장 잘 전환되는지는 학내 파일럿으로 확인해야 한다. ⑤ 과정증거 요구는 학생에게도 제출 부담과 시행착오 노출 부담을 남긴다. 학생 관점의 수용도 확인 없이 확대하면 형식적 기록만 늘어날 수 있다.</p>
-    </div>
-    <p class="a src">※ 편집자 렌즈는 검증된 출처와 공개 실무 자료를 교육 이론 프레임으로 해석한 DGIST CTL의 편집 의견이며, 원출처 저자의 견해와 다를 수 있습니다.</p>
+  <div class="lensbox">
+    <h3>Biggs — 구성적 정렬의 재확인</h3>
+    <p>AI는 목표–활동–평가의 불일치를 더 빨리 드러낸다. 수업목표가 비판적 사고인데 과제는 요약문 제출이라면, AI는 그 취약성을 확대한다. 반대로 목표가 검증·설계·설명이라면 루브릭도 그 행동을 직접 요구해야 한다.</p>
   </div>
+
+  <div class="lensbox">
+    <h3>DGIST 적용 조건 점검표</h3>
+    <p>① 고위험 과제 1개 선정 ② AI 스트레스 테스트 ③ 과정증거 1개 추가 ④ 구술확인 또는 수업 내 미니 수행 추가 ⑤ 루브릭에 검증·한계 인식·성찰 항목 반영. <b>전면 개편보다 한 과목 한 과제 파일럿이 현실적이다.</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>남은 불확실성</h3>
+    <p>① AI 탐지 도구의 정확도와 공정성은 여전히 제한적이다. ② 과정증거 평가는 교수자 채점 부담을 늘릴 수 있다. ③ AI 접근성 차이는 공정성 문제로 남는다. ④ DGIST 소규모 고선발 수업에서 어떤 과제 유형이 가장 잘 전환되는지는 학내 파일럿으로 확인해야 한다. ⑤ 과정증거 요구는 학생에게도 제출 부담과 시행착오 노출 부담을 남긴다. 학생 관점의 수용도 확인 없이 확대하면 형식적 기록만 늘어날 수 있다.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ 편집자 렌즈는 검증된 출처와 공개 실무 자료를 교육 이론 프레임으로 해석한 DGIST CTL의 편집 의견이며, 원출처 저자의 견해와 다를 수 있습니다.</p>
+
+</div>
 </div>
 
-<!-- 16. 마무리 -->
-<div class="slide center" data-notes="마무리 장입니다. 참고 자료 목록과 면책 문구까지 원문 푸터를 그대로 옮겼습니다.">
-  <div class="a kicker">DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 4 (Jul. 2026)</div>
-  <h2 class="a" style="text-align:center;">AI 시대의 평가 혁신 — AI 탐지에서 학습증거 설계로</h2>
-  <p class="a sub" style="max-width:760px; text-align:center;">문의: 교수학습센터 (ctl@dgist.ac.kr)<br><br>
-  참고: Science · EDUCAUSE · Frontiers in Education · GitHub · Assessment Redesign Framework</p>
-  <p class="a src" style="max-width:720px; text-align:center; margin-top:20px;">본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.</p>
+<div class="footer">
+  <b>DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 4 (Jul. 2026)</b><br>
+  문의: 교수학습센터 (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | 주제: AI 시대의 평가 혁신 — AI 탐지에서 학습증거 설계로<br>
+  참고: Science · EDUCAUSE · Frontiers in Education · GitHub · Assessment Redesign Framework<br><br>
+  본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>
+  내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.<br><br>
+  <a href="../">← 전체 호 보기</a>
 </div>
 
-<script>
-// Slide navigation
-const slides = [...document.querySelectorAll('.slide')];
-let current = 0;
+<a class="totop" href="#" aria-label="맨 위로">↑</a>
 
-function goTo(index) {
-  if (index < 0 || index >= slides.length) return;
-  slides[current].classList.remove('active');
-  slides[index].classList.add('active');
-  current = index;
-  slides[index].scrollTop = 0;
-  updateProgress();
-  updateCounter();
-  updateNotes();
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
-  if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
-  if (e.key.toLowerCase() === 'f') toggleFullscreen();
-  if (e.key.toLowerCase() === 's') toggleNotes();
-});
-
-// Touch/swipe (가로 스와이프만 — 세로 스크롤과 충돌 방지)
-let touchStartX = 0, touchStartY = 0;
-document.addEventListener('touchstart', (e) => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-});
-document.addEventListener('touchend', (e) => {
-  const dx = touchStartX - e.changedTouches[0].clientX;
-  const dy = touchStartY - e.changedTouches[0].clientY;
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-    dx > 0 ? goTo(current + 1) : goTo(current - 1);
-  }
-});
-
-function updateProgress() {
-  document.getElementById('progress').style.width =
-    (current / (slides.length - 1) * 100) + '%';
-}
-
-function updateCounter() {
-  document.getElementById('counter').textContent =
-    (current + 1) + ' / ' + slides.length;
-}
-
-function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-}
-
-let notesWindow = null;
-
-function toggleNotes() {
-  if (notesWindow && !notesWindow.closed) {
-    notesWindow.close();
-    notesWindow = null;
-    return;
-  }
-  notesWindow = window.open('', 'SpeakerNotes', 'width=520,height=420,top=80,left=80');
-  notesWindow.document.write(`<!DOCTYPE html>
-<html><head><style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-         background: #1a1a1a; color: #e0e0e0; padding: 24px; }
-  .slide-num { font-size: 12px; color: #888; margin-bottom: 12px; font-family: monospace; }
-  .label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
-           color: #666; margin-bottom: 8px; }
-  .notes { font-size: 16px; line-height: 1.8; color: #ccc; }
-</style></head><body>
-  <div class="slide-num" id="sn"></div>
-  <div class="label">Speaker Notes</div>
-  <div class="notes" id="nt"></div>
-</body></html>`);
-  notesWindow.document.close();
-  updateNotes();
-}
-
-function updateNotes() {
-  if (!notesWindow || notesWindow.closed) return;
-  try {
-    const note = slides[current].dataset.notes || '(No notes)';
-    notesWindow.document.getElementById('nt').textContent = note;
-    notesWindow.document.getElementById('sn').textContent =
-      'Slide ' + (current + 1) + ' / ' + slides.length;
-  } catch(e) {}
-}
-
-updateProgress();
-updateCounter();
-</script>
 </body>
 </html>
