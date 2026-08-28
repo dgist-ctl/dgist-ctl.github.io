@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Teaching Trend Report Vol. 2 — Automating Course Materials with AI Pipelines (Vol. 1, No. 2)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
+  }
+
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px; }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 이번 호 요약 카드 */
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 20px 0 8px; }
+  .fact {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .fact .lbl { font-size: 11.5px; font-weight: 700; letter-spacing: 1px; color: var(--muted); margin-bottom: 6px; }
+  .fact .big { font-size: 15px; font-weight: 800; color: var(--accent); line-height: 1.45; }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+  .lensbox .src { margin-top: 8px; }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 40px 18px 30px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== 디자인 업그레이드 (2026-08-28) — 6개 글로벌 대학 발행물 비교 근거 ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* 마스트헤드: 얇게(THE 56px·Columbia 66px 수준), 아카이브 경로 */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* 기사 헤더 */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* 2단 그리드: 본문 + 우측 레일 */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: keep-all; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* 본문 타이포 */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* 시그니처: 여백에 걸린 명조 장부 숫자 */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* 말미(참고문헌·다른 호·구독) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* 좁은 화면: 레일 접고 칩 내비 sticky */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* 인쇄: 내비·레일·CTA 숨기고 링크 URL 노출 */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body data-vol="2">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI in Teaching Trend Report</div>
+    <div class="crumb"><a href="../">Archive</a><span>Vol. 1, No. 2 (May 2026)</span><a href="../../vol2/" style="margin-left:14px">한국어</a></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report</div>
+    <h1>AI in Teaching Trend Report Vol. 2 — Automating Course Materials with AI Pipelines</h1>
+    <p class="lede">This issue is an in-depth analysis of a single in-house DGIST case — notes → slides → assignments as one pipeline.</p>
+    <div class="meta">
+      <b>AI in Teaching Trend Report</b> · Vol. 1, No. 2 (May 2026)<br>
+      Published by DGIST Center for Teaching &amp; Learning (CTL) · Contact: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="Article guide">
+      <div class="rlabel">In this article</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">Evidence grades</div>
+        <div class="legend">
+          <div><span class="bdg r">[Research]</span>Peer-reviewed research</div>
+          <div><span class="bdg p">[Preprint]</span>Preprint</div>
+          <div><span class="bdg i" style="background:#dbeafe;color:#1a4a9b;">[Institutional Report]</span>Institutional report</div>
+          <div><span class="bdg o">[Open Resource]</span>Practical tools · benchmarks</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">Cite this article</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">Copy citation</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">🏫 DGIST In-House Case (1)</a>
+    <a href="#sec2">⚙ Three-Stage Framework (2–4)</a>
+    <a href="#sec3">💡 Methodology and Design (5–6)</a>
+    <a href="#sec4">⚠ Extension and Limits (7–8)</a>
+    <a href="#sec5">🔎 Editorial Lens</a>
+  </div>
+
+  <div class="policy">
+    <b>Editorial Policy</b> Materials within 12 months of publication date (theory references separate) · Applicable to higher education settings · Sources verifiable from originals only · This issue is an in-depth analysis of a single in-house DGIST case
+  </div>
+
+  <div class="sechead">This Issue at a Glance</div>
+  <div class="facts">
+    <div class="fact"><div class="lbl">Core Approach</div><div class="big">3-Stage AI Automation Pipeline</div></div>
+    <div class="fact"><div class="lbl">Tool Stack</div><div class="big">ChatGPT + Windsurf + Claude Code</div></div>
+    <div class="fact"><div class="lbl">Output Scope</div><div class="big">Notes → Slides → Assignments</div></div>
+    <div class="fact"><div class="lbl">Key Values</div><div class="big">Efficiency × Quality × Scalability</div></div>
+  </div>
+
+  <div class="sechead" id="sec1">🏫 DGIST In-House Case</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>AI Generates Lecture Notes, Slides, and Assignments through a Single Pipeline — A DGIST Faculty's Empirical Framework</h2>
+    <p class="body">Professor Minseok Jeon (PLX Lab, Department of Electrical Engineering and Computer Science) of DGIST presented <b>"A Framework for AI-Assisted Course Material Generation"</b> at the in-house AI utilization competition at DGIST on November 4, 2025, in the Education &amp; Research category, and received the Idea Award. The framework chains ChatGPT, Windsurf, and Claude Code in sequence to generate foundational text (lecture notes), slides, and assignments through a single automation pipeline. The Data Structures course served as the empirical application; the presentation slides themselves were also produced by this framework.</p>
+    <ul class="arrows">
+      <li>Course content structured as Markdown (.md) → used as a single source from which slides and assignments are derived</li>
+      <li>Stage-optimized AI tool combinations: foundational text (ChatGPT + Windsurf) → slides (Claude Code + Beamer) → assignments (Claude Code)</li>
+      <li>Generated code and course pages fully published on GitHub, externally reproducible</li>
+    </ul>
+    <p class="src">Source: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">Jeon, M., A Framework for AI-Assisted Course Material Generation, Nov 4, 2025</a> · <span class="bdg o">[Media]</span><a href="https://dgistdna.com/1021" target="_blank" rel="noopener">DGIST DNA (student newspaper), Nov 22, 2025</a></p>
+  </div>
+
+  <div class="sechead" id="sec2">⚙ Three-Stage Framework</div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>Stage 1 — Structure the Entire Course as a Markdown Knowledge Base with ChatGPT + Windsurf</h2>
+    <p class="body">The goal of Stage 1 is to generate the entire course content as Markdown (.md) documents. ChatGPT is prompted to produce a learning roadmap in Markdown format, yielding the overall course structure (Roadmap.md). Then, Windsurf — an AI-powered development environment — uses its Cascade Code agent to sequentially generate per-topic detail files. The result is a set of unit-level .md files (Arrays, Stacks, Trees, etc.) under the <b>DataStructure/topics/</b> folder.</p>
+    <ul class="arrows">
+      <li>ChatGPT prompt: "I want to learn what data structures are... Would you please create a Learning Roadmap for me? Please describe the Roadmap using markdown format."</li>
+      <li>Windsurf prompt: "This is a learning roadmap. Create a list of markdown files for each topic. For each topic, write an introduction and list of knowledge points."</li>
+      <li>Tools: ChatGPT (conversational AI for roadmap ideation) + Windsurf (AI-powered development environment for automated Markdown authoring)</li>
+    </ul>
+    <p class="src">Source: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">Jeon, M., A Framework for AI-Assisted Course Material Generation, Nov 4, 2025</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">Original PDF</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>Stage 2 — Generate Professional Lecture Slides as Code with Claude Code + Beamer LaTeX</h2>
+    <p class="body">In Stage 2, lecture slides are generated based on the Markdown knowledge base from Stage 1. The framework combines Beamer (a LaTeX slide class for academic and professional presentations, using the CleanEasy template) with Claude Code. Claude Code is launched at the project root (DataStructure/), and the /init command primes it on the entire codebase; the system then generates slide files (.tex) using the specified Markdown content and Beamer template. The output is a slide set in academic presentation format, available with .tex sources in the slides/ folder of the GitHub repository.</p>
+    <ul class="arrows">
+      <li>Core Claude Code prompt: "Based on the contents of topics/Stack.md, referencing the slides/BeamerTemplate, generate slides/Stack/stack.tex"</li>
+      <li>Beamer-based output optimized for STEM lecture formats: equations, code blocks, multi-column layouts</li>
+      <li>Workflow: create slides/ folder → choose Beamer template → launch Claude Code → /init → submit slide-generation prompt</li>
+    </ul>
+    <p class="src">Source: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">Jeon, M., A Framework for AI-Assisted Course Material Generation, Nov 4, 2025</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">Original PDF</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>Stage 3 — Auto-Generate Implementation Assignments, Application Code, and Tests with Claude Code</h2>
+    <p class="body">In Stage 3, assignments are generated from the same Markdown knowledge base and slides. Claude Code was instructed: "Generate stack.py implementing the core stack functions, and application.py that uses them; later, hide the core functions to turn this into a student assignment." The output is a complete assignment package consisting of four files: <b>README.md, stack.py, application.py, test_stack.py</b>.</p>
+    <ul class="arrows">
+      <li>Core Claude Code prompt: "Implement the core stack functions in stack.py, and write code in application.py that uses them. The core functions will later be hidden for use as a student assignment."</li>
+      <li>test_stack.py establishes the basis for automated grading; README.md auto-generates the assignment description</li>
+      <li>Notes → slides → assignments are derived from a single source (Markdown), ensuring structural consistency (cognitive load suitability of the fill-in-the-blank task is discussed in the Editorial Lens, Sweller item)</li>
+    </ul>
+    <p class="src">Source: <a href="https://github.com/MinseokJGit/DataStructure/" target="_blank" rel="noopener">MinseokJGit/DataStructure, GitHub, 2025</a> · <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">Jeon, M., Course Material Generation Framework, Nov 4, 2025</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">Original PDF</a></p>
+  </div>
+
+  <div class="sechead" id="sec3">💡 Methodology and Design Principles</div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>A Common Prompt Pattern Across All Three Stages: “Context First, Structure Explicit, File Names Specified”</h2>
+    <p class="body">Professor Jeon's prompts follow a consistent structure: ① first describe the course currently being taught and the source location, ② specify the file/folder structure the AI must reference, and ③ explicitly indicate the desired output's filename and storage path. This pattern provides sufficient context for the AI, eliciting consistent outputs. Priming the entire project context in advance via Claude Code's /init command is central.</p>
+    <ul class="arrows">
+      <li>Common structure: "I am currently teaching [course] based on [source location] → reference [files] → generate [output filename]"</li>
+      <li>A single-codebase structure where all artifacts derive from one root (DataStructure/) is the key to consistency</li>
+      <li>The pattern is not limited to Data Structures; it applies to any course whose content can be structured in Markdown</li>
+    </ul>
+    <p class="src">Source: <a href="https://dgistpl.github.io/talks/" target="_blank" rel="noopener">Jeon, M., A Framework for AI-Assisted Course Material Generation, Nov 4, 2025</a> · <a href="https://dgistpl.github.io/papers/AI_Usage_Presentation.pdf" target="_blank" rel="noopener">Original PDF</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>Efficiency × Quality × Scalability: Three Values This Framework Demonstrates</h2>
+    <p class="body">The core values presented by Professor Jeon are <b>Efficiency (time savings) × Quality (professional outputs) × Scalability (transferability to other courses and formats)</b>. The framework was piloted in Data Structures, with the generated course page and code published on GitHub. In 2026, the “Automated Lecture Notes and Slides Generation” seminar and the “How to Learn Course Content Using AI” seminar are also planned, expanding to both faculty and students.</p>
+    <ul class="arrows">
+      <li>Efficiency: repetitive tasks of separately producing notes/slides/assignments are converted into an automated pipeline</li>
+      <li>Quality: professional LaTeX/Beamer slides, Python assignment code, and even auto-grading test code are generated automatically</li>
+      <li>Scalability: per the presenter's plan, extension is planned to other courses (CSE307 Programming Languages, IC637 Program Analysis) and to academic presentation materials</li>
+    </ul>
+    <div class="caveat"><b>Caveat</b> — The above values are an evaluation at the <b>materials-output dimension</b>; learning-outcome data (exams, transfer, satisfaction) and the <b>pedagogical-innovation dimension</b> (active learning, formative assessment, self-regulated learning) lie outside the scope of this presentation. For Efficiency × Quality × Scalability to translate into learning effects, the time saved must be reinvested in learning-activity and feedback design (see the Integrated Assessment in the Editorial Lens for details).</div>
+    <p class="src">Source: <a href="https://dgistpl.github.io/courses/ai_ds/2025/" target="_blank" rel="noopener">Jeon, M., Data Structures (AI-generated course page), DGIST PLX Lab, 2025</a> · <a href="https://github.com/MinseokJGit/DataStructure/" target="_blank" rel="noopener">MinseokJGit/DataStructure, GitHub</a></p>
+  </div>
+
+  <div class="sechead" id="sec4">⚠ Extension and Limits</div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>The Framework Is Already Public as a Three-Tier Seminar — Self-Paced Learning Paths by Skill Level</h2>
+    <p class="body">Professor Jeon released this framework as the 2026 PLX Lab seminar <b>“Claude Code for Automated Lecture Notes and Slides Generation.”</b> The seminar offers a three-tier learning path based on Beamer/Claude Code experience, allowing step-by-step access from setup guides to advanced applications. The presentation slides themselves were generated through this pipeline, and the generated lecture code and course pages are also publicly available.</p>
+    <ul class="arrows">
+      <li>Level 1 (Beginner): newly installed Claude Code or Beamer-inexperienced → produce one set of lecture notes/slides via step-by-step guide</li>
+      <li><b>Level 2 (Intermediate)</b>: Beamer-experienced → combine existing Beamer materials with Claude Code, transitioning to an auto-generation workflow</li>
+      <li>Level 3 (Advanced): current users of Beamer/Claude Code/AI editors → advanced use of the full pipeline (linked with the ep9 external resource)</li>
+    </ul>
+    <p class="src">Source: <a href="https://dgistpl.github.io/courses/claude_code/2026/" target="_blank" rel="noopener">Claude Code for Automated Lecture Notes and Slides Generation, PLX Lab, 2026</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>Three Limits to Check Before Adopting This Framework As-Is</h2>
+    <p class="body">This framework is an empirical case optimized for DGIST's STEM context; the following must be checked before general adoption. First, <b>verifying the content accuracy</b> of AI-generated notes, slides, and assignments remains the instructor's responsibility. Second, the Beamer + LaTeX environment may pose installation/configuration entry barriers for non-experts. Third, licensing and cost implications of using Claude Code (paid) and Windsurf must be reviewed.</p>
+    <ul class="arrows">
+      <li>AI content error verification: technical accuracy, currency, and presence of references must be checked</li>
+      <li>Alternative tools for non-LaTeX users (Markdown+Marp, Google Slides automation, etc.) should be considered</li>
+      <li>For DGIST members, AI-tool access rights, cost-support policies, and data-security policies should be verified</li>
+      <li>Scope limitation: this case is an empirical application by a LaTeX/Beamer-skilled instructor in a code-based STEM course (Data Structures); transferability to humanities, social sciences, experimental sciences, or the arts requires separate validation</li>
+      <li>Possible double-automation loop (instructor−AI−student−AI) — AI-use scope and source-attribution standards should be specified in advance in assignment instructions (full analysis in the Editorial Lens)</li>
+    </ul>
+    <p class="src">Source: DGIST CTL internal review</p>
+  </div>
+
+  <div class="sechead" id="sec5">🔎 Editorial Lens</div>
+
+  <p class="src" style="font-size:14.5px; color:var(--ink); line-height:1.85; margin-top:16px;">We examine this case through educational-theory lenses. The criterion is not instructor efficiency but <b style="color:var(--accent);">whether learning actually takes place</b>. The core diagnosis of this issue is the <b style="color:var(--accent);">conditions for transitioning from Materials Generation to Teaching Innovation</b>.</p>
+
+  <div class="lensbox">
+    <h3>Vygotsky — Scaffolding and Cognitive Internalization</h3>
+    <p>Auto-generated materials do not directly replace the instructor's in-class scaffolding within the ZPD (Zone of Proximal Development). However, the act of an instructor authoring materials is itself a cognitive experience of internalizing the content. When that process is shortened, the capacity to detect and intervene on student misconceptions in real time may also weaken. <b>Materials preparation and teaching capability are not separable.</b></p>
+    <p class="src"><span class="bdg r">[Research]</span>Vygotsky, L. S. (1978). Mind in Society. Harvard University Press.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Hattie — The Distance Between Material Quality and Learning Effect</h3>
+    <p>In Hattie's meta-analysis (2009), the effect size of instructional materials is about 0.4. Teacher feedback (0.70) and explicit teaching (0.57) are higher. <b>Professional slides are not a sufficient condition for learning effects.</b> Only when the time saved by this framework is reinvested in in-class feedback and interaction can learning effects be realized.</p>
+    <p class="src"><span class="bdg r">[Research]</span>Hattie, J. (2009). Visible Learning. Routledge.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Biggs — Automation Without Constructive Alignment</h3>
+    <p>Biggs's Constructive Alignment requires that learning objectives, learning activities, and assessment be coherently linked. In this framework, the "learning roadmap" generated by ChatGPT substitutes for learning objectives, but whether it aligns with DGIST's actual curricular performance goals is unverified. <b>Structurally consistent materials do not automatically answer the question of what students must be able to do.</b></p>
+    <p class="src"><span class="bdg r">[Research]</span>Biggs, J. (1996). Enhancing teaching through constructive alignment. Higher Education, 32(3), 347–364.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Sweller — Cognitive Load and Task Design</h3>
+    <p>In Sweller's Cognitive Load Theory, effective task design follows the sequence: worked example → gradual fill-in-the-blank → independent problem solving. Whether the AI-generated stack.py "core function hiding" approach corresponds to a particular stage in this sequence — and whether it is calibrated to students' prior knowledge and cognitive level — is not guaranteed by automation. <b>Formal completeness of materials does not guarantee cognitive optimization.</b></p>
+    <p class="src"><span class="bdg r">[Research]</span>Sweller, J. (1988). Cognitive load during problem solving. Cognitive Science, 12(2), 257–285.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Integrated Assessment — TPACK · SAMR · Active Learning</h3>
+    <p><b>TPACK</b> (Mishra &amp; Koehler · Technology · Pedagogy · Content) — the case is strong in Technology Knowledge, but changes in the Pedagogical Knowledge dimension (designing active-learning activities, formative assessment, self-regulated-learning support) lie outside the scope of automation.</p>
+    <p><b>SAMR</b> (Puentedura · Substitution → Augmentation → Modification → Redefinition) — this case sits at the Augmentation stage of materials-production labor; transitioning to the Redefinition stage that newly defines the learning experience requires separate design.</p>
+    <p><b>Bloom Cognitive Levels</b> — fill-in-the-blank tasks concentrate at the Apply level; activities at the Analyze, Evaluate, and Create levels must be supplemented by separate design.</p>
+    <p><b>In sum, this framework constitutes Teaching Materials Generation; for it to translate into Teaching Innovation, the time saved must be reinvested in the design of active learning, formative assessment, and feedback.</b></p>
+    <p class="src"><span class="bdg r">[Research]</span>Mishra, P., &amp; Koehler, M. J. (2006). TPACK. Teachers College Record, 108(6) · Puentedura, R. R. (2006). SAMR Model · Anderson, L. W., &amp; Krathwohl, D. R. (2001). A Taxonomy for Learning, Teaching, and Assessing. Longman.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Academic Integrity — The Double Loop of AI-Made Tasks Solved by AI</h3>
+    <p>The most immediate pedagogical issue raised by this framework is academic integrity. If a student solves an AI-generated stack.py task (with test_stack.py auto-grading) using Copilot, ChatGPT, or similar tools, an <b>instructor−AI−student−AI double-automation loop</b> forms. Auto-grading does not block this loop, and the presentation does not explicitly address this issue. Instructors operating AI-generated tasks should specify in advance, in the assignment instructions, ① the permitted scope of AI use, ② standards for citing AI in student submissions, and ③ whether the grading criteria are AI-friendly.</p>
+    <p class="src"><span class="bdg o">[CTL Review]</span>DGIST CTL internal review · Reference: UNESCO (2023). ChatGPT and Artificial Intelligence in Higher Education: Quick Start Guide. UNESCO.</p>
+  </div>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL · AI in Teaching Trend Report · Vol. 1, No. 2 (May 2026)</b><br>
+  Inquiries: Center for Teaching &amp; Learning (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | Topic: Automating Course Materials with AI Pipelines<br>
+  References: Jeon, M. (DGIST PLX Lab) · GitHub · DGIST DNA (student newspaper)<br><br>
+  Views expressed in this report are those of the original sources and may differ from the official position of DGIST CTL.<br>Please cite original sources when quoting.<br><br>
+  <a href="../">← All issues</a>
+</div>
+
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (Apr. 2026)', 'What Global Universities Are Doing Right Now'],
+    [2, 'Vol. 1, No. 2 (May 2026)', 'Automating Course Materials with AI Pipelines'],
+    [3, 'Vol. 1, No. 3 (Jun. 2026)', "How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal"],
+    [4, 'Vol. 1, No. 4 (Jul. 2026)', 'Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  // 1) rail nav = clone of chip nav + active state
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  // 2) citation
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST Center for Teaching & Learning. (' + year + '). ' + title + '. AI in Teaching Trend Report, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = 'Copied'; setTimeout(function () { cb.textContent = 'Copy citation'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  // 3) end matter: references (collected from source links) · other issues
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = 'References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = 'Other issues';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = 'References'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>

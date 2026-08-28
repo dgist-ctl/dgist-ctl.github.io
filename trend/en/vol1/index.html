@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Teaching Trend Report — What Global Universities Are Doing Right Now (Vol. 1, No. 1)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
+  }
+
+  /* Masthead */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* Article header */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* Body container */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* In-page nav */
+  .toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px; }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* Section dividers */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* At-a-glance keyword cards */
+  .kcards { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0 8px; }
+  .kcard {
+    flex: 1 1 150px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 18px; min-width: 150px;
+  }
+  .kcard .klbl { font-size: 12px; color: var(--muted); font-weight: 700; margin-bottom: 6px; }
+  .kcard .kval { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); line-height: 1.4; }
+
+  /* Items */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .hanmadi {
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
+  }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+  .bdg.i { background: #dbeafe; color: #1a4a9b; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 40px 18px 30px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== Design upgrade (2026-08-28) — based on a comparison of six global university publications ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* Masthead: thin (THE 56px / Columbia 66px), archive breadcrumb */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* Article header */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* Two-column grid: body + right rail */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: keep-all; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* Body typography */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* Signature: serif ledger numerals hung in the margin */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* End matter (references, other issues) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* Narrow screens: collapse rail, sticky chip nav */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* Print: hide nav/rail, expose link URLs */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body data-vol="1">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI in Teaching Trend Report</div>
+    <div class="crumb"><a href="../">Archive</a><span>Vol. 1, No. 1 (Apr. 2026)</span><a href="../../vol1/" style="margin-left:14px">한국어</a></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report</div>
+    <h1>What Global Universities Are Doing Right Now</h1>
+    <div class="meta">
+      <b>AI in Teaching Trend Report</b> · Vol. 1, No. 1 (Apr. 2026)<br>
+      Published by DGIST Center for Teaching &amp; Learning (CTL) · Contact: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="Article guide">
+      <div class="rlabel">In this article</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">Evidence grades</div>
+        <div class="legend">
+          <div><span class="bdg r">[Research]</span>Peer-reviewed research</div>
+          <div><span class="bdg p">[Preprint]</span>Preprint</div>
+          <div><span class="bdg i" style="background:#dbeafe;color:#1a4a9b;">[Institutional Report]</span>Institutional report</div>
+          <div><span class="bdg o">[Open Resource]</span>Practical tools / benchmarks</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">Cite this article</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">Copy citation</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">🤖 Agentic AI (1–2)</a>
+    <a href="#sec2">🧠 Research (3)</a>
+    <a href="#sec3">📚 Curriculum &amp; Policy (4–6)</a>
+    <a href="#sec4">🎯 Assessment (7–8)</a>
+    <a href="#sec5">📡 Horizon &amp; CTL (9–10)</a>
+    <a href="#sec6">🔎 Editor's Lens</a>
+  </div>
+
+  <div class="policy">
+    <b>Editorial Policy</b> Materials within 12 months of publication date · Applicable to higher education settings · Sources verifiable from originals only · Source type labels: <span class="bdg r">[Research]</span> <span class="bdg p">[Preprint]</span> <span class="bdg i">[Inst. Report]</span> <span class="bdg o">[Media]</span>
+  </div>
+
+  <div class="sechead">This Issue at a Glance</div>
+  <div class="kcards">
+    <div class="kcard"><div class="klbl">2026 Key Trend</div><div class="kval">Agentic AI</div></div>
+    <div class="kcard"><div class="klbl">Notable Study</div><div class="kval">55% Drop in Brain Activity</div></div>
+    <div class="kcard"><div class="klbl">Policy Shift</div><div class="kval">Ban → 3-Tier Framework</div></div>
+    <div class="kcard"><div class="klbl">AI Degrees Surge</div><div class="kval">+114% in One Year</div></div>
+  </div>
+
+  <div class="sechead" id="sec1">🤖 The Rise of Agentic AI · Agentic AI</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>Agentic AI Completes Entire Courses — A Question That Challenges the Purpose of Higher Education</h2>
+    <p class="body">In February 2026, Inside Higher Ed reported that "AI agents can now complete entire coursework autonomously." Beyond simple ghostwriting, <b>an era where autonomous AI achieves all learning objectives</b> has arrived.</p>
+    <ul class="arrows">
+      <li>AI agents: autonomously set goals → gather information → complete tasks → submit work</li>
+      <li>Northeastern University + Anthropic partnership: officially integrating AI agents for student advising and support</li>
+      <li>Core question: <b>"What is the point of teaching what AI can already do?"</b></li>
+      <li>Canvas IgniteAI Agent (Mar 2026): An AI teaching agent embedded in the LMS used by 40% of North American higher education institutions — automates low-value instructor tasks like rubric generation and student engagement pattern analysis; now used by 30,000+ faculty</li>
+      <li>Vygotsky — Scaffolding vs. Substitution: When an AI agent completes an entire task without assessing a student's Zone of Proximal Development (ZPD), it constitutes substitution rather than support — if external assistance does not lead to internalization, independent competence cannot form; the goal of ZPD is to gradually withdraw support so the learner becomes self-sufficient</li>
+      <li>Dweck — Fixed Mindset reinforcement pathway: When AI repeatedly completes difficult tasks on behalf of students, it reinforces the belief that "hard things should be done by AI" — this structurally blocks <b>Productive Struggle</b>, the core experience through which Growth Mindset is formed (the belief that effort changes ability)</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Media]</span>Source: <a href="https://www.insidehighered.com/news/tech-innovation/artificial-intelligence/2026/02/26/agentic-ai-can-complete-whole-courses-now" target="_blank" rel="noopener">Inside Higher Ed, Feb 2026</a> · <a href="https://upcea.edu/transitioning-to-the-agentic-university-2026-27" target="_blank" rel="noopener">UPCEA Agentic University 2026–27</a> · <a href="https://www.insidehighered.com/news/tech-innovation/artificial-intelligence/2026/03/23/canvas-unrolls-ai-teaching-agent" target="_blank" rel="noopener">Canvas IgniteAI, Mar 2026</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>Learning Science Becomes the Empirical Standard for AI Instructional Design — What Separates "Effective AI" from the Rest</h2>
+    <p class="body">The most critical shift in AI pedagogy research in 2025–2026: the question is no longer which AI tool to use, but <b>which cognitive mechanisms it activates by design</b>. Core principles from Learning Science are now the benchmark for evaluating AI instructional design.</p>
+    <ul class="arrows">
+      <li>Retrieval Practice: When AI prompts students to recall rather than simply providing answers, learning effectiveness triples (Roediger cumulative studies)</li>
+      <li>Spaced Repetition: AI tutors that automatically adjust review timing based on the forgetting curve achieve 2× long-term retention compared to simple repetition</li>
+      <li>Elaborative Interrogation: AI designs that repeatedly ask "Why is that the case?" significantly deepen conceptual understanding</li>
+      <li>Hattie Visible Learning benchmark: Research is converging on the finding that high-impact strategies — feedback (d=0.70), metacognitive strategies (d=0.60), distributed practice (d=0.65) — maintain their effectiveness when implemented in AI design; conversely, <b>AI adoption without learning science principles may fall below the baseline effect size (d=0.40)</b> (Visible Learning: The Sequel, Routledge, 2023)</li>
+      <li>Hattie's key distinction: teachers must be "Activators" rather than "Facilitators" — AI tools that simply deliver information risk reducing teachers to facilitators; whether teachers maintain their role as activators who directly design and orchestrate learning strategies is the key determinant of AI adoption effectiveness</li>
+      <li>Dylan Wiliam — Feedback that moves learning forward: Whether AI feedback is "confirming a correct answer" or "forward-moving feedback that reveals where and why a student is stuck" is a critical distinction — deploying elaborative questioning alone without designing for forward-moving feedback causes question-fatigue backlash; Wiliam warns that feedback making learners dependent on feedback impedes learning</li>
+    </ul>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://visible-learning.org/" target="_blank" rel="noopener">Hattie — Visible Learning + AI</a> · <a href="https://www.retrievalpractice.org/" target="_blank" rel="noopener">Retrieval Practice Research</a></p>
+  </div>
+
+  <div class="sechead" id="sec2">🧠 Research Findings 2025</div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>MIT Cognitive Debt — AI Use Reduces Brain Connectivity by 55%</h2>
+    <p class="body">An EEG brainwave study published on arXiv by MIT Media Lab in June 2025 has been widely cited in the education community since its release. The group that used ChatGPT showed <b>neural network connectivity up to 55% lower</b> than the group that wrote independently.</p>
+    <div class="caveat">※ Published on arXiv and indexed on PMC/NIH (2025); peer review submission complete, under review — caution advised when interpreting results.</div>
+    <ul class="arrows">
+      <li>Study design: 54 participants wearing EEG devices, comparing AI group / search group / direct writing group</li>
+      <li>AI group: produced better writing — but could not quote their own text and showed the lowest sense of ownership</li>
+      <li>Notable finding: <b>Brain activity did not recover when students who started with AI then switched to writing independently</b></li>
+      <li>Research conclusion: "Introducing AI after sufficient self-directed cognitive effort maximizes learning outcomes"</li>
+      <li>Vygotsky — Internalization failure: The phenomenon where brain activity fails to recover after AI use can be interpreted as external support failing to convert into internal competence — in ZPD theory, the ultimate goal of scaffolding is for learners to perform independently through progressive "fading"; the MIT study suggests AI intervention may block this internalization pathway itself</li>
+      <li>Dweck — Cognitive debt and mindset: When accumulated experiences of avoiding cognitive effort through AI dependence pile up, students attribute their struggles with difficult tasks to "I was just never good at this," reinforcing a Fixed Mindset — Growth Mindset develops through failure and struggle, and when AI removes the struggle experience, mindset development itself is inhibited (note: preprint-stage study, interpret with caution)</li>
+    </ul>
+    <p class="src"><span class="bdg p">[Preprint]</span>Source: <a href="https://www.media.mit.edu/publications/your-brain-on-chatgpt/" target="_blank" rel="noopener">MIT Media Lab — Your Brain on ChatGPT</a> · <a href="https://doi.org/10.3399/bjgp25x743181" target="_blank" rel="noopener">PMC/NIH entry</a> · <a href="https://arxiv.org/abs/2506.08872" target="_blank" rel="noopener">arXiv 2506.08872</a></p>
+  </div>
+
+  <div class="sechead" id="sec3">📚 Curriculum &amp; Policy</div>
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>Ohio State: AI Fluency Mandatory for All Students — Not "Prohibited" but "Required"</h2>
+    <p class="body">In 2025, Ohio State University made <b>AI Fluency coursework mandatory for all enrolled students</b> regardless of major or year. It has become a landmark case representing a paradigm shift in U.S. higher education.</p>
+    <ul class="arrows">
+      <li>Core content: How to use AI tools + understanding limitations + responsible use + critical evaluation</li>
+      <li>Anthropic also launched 3 official AI Fluency courses for educators, students, and institutions (2025)</li>
+      <li>U.S. undergraduate AI degree programs: <b>90 in 2024 → 193 in 2025 (+114%)</b></li>
+      <li>From "AI literacy" to "AI fluency" — the standard has shifted from basic understanding to actual applied competency</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Media]</span>Source: <a href="https://fortune.com/2025/06/10/ohio-state-university-ai-fluency-requirement-all-students/" target="_blank" rel="noopener">Fortune, Jun 2025</a> · <a href="https://oaa.osu.edu/ai-fluency" target="_blank" rel="noopener">Ohio State AI Fluency</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>The Shift in AI Academic Integrity Policy — "Using AI Is Not the Violation; Hiding It Is"</h2>
+    <p class="body">As of October 2025, analysis of AI policies at the world's top 100 universities shows most have shifted from outright bans to a <b>three-tier regulatory framework</b>. Transparency — not detection technology — has become the standard.</p>
+    <ul class="arrows">
+      <li>Ideation/brainstorming phase: permitted / Editing/polishing phase: conditional / Drafting: restricted</li>
+      <li>Harvard, Oxford, Michigan: mandatory inclusion of "AI use disclosure language" in course syllabi</li>
+      <li>Declining reliance on AI detection tools — false positive problems leading to increased legal disputes</li>
+      <li>2026 alternative: shifting to <b>process-based assessment</b> using draft history, notes, and revision trails</li>
+      <li>HEPI Apr 2026: The "AI innovation vs. academic integrity" binary framing is itself a false setup — a new framework of transparency-based integration as mutually compatible is gaining traction</li>
+      <li>Dylan Wiliam — Root cause of the integrity crisis: The surge in academic integrity violations is fundamentally <b>a symptom of assessment design failure</b> — if an assignment is designed to reveal whether a student truly understands, AI ghostwriting becomes pointless; what must precede policy changes is "task design capable of measuring understanding even in the presence of AI" — without this, only the rules change</li>
+    </ul>
+    <p class="src"><span class="bdg i">[Inst. Report]</span>Source: <a href="https://www.thesify.ai/blog/gen-ai-policies-update-2025" target="_blank" rel="noopener">Generative AI Policies at Top Universities, Oct 2025</a> · <a href="https://www.hepi.ac.uk/2026/04/14/ai-in-higher-education-balancing-innovation-with-academic-integrity/" target="_blank" rel="noopener">HEPI, Apr 2026</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>OECD Digital Education Outlook 2026 — AI Education Inequality as the New Crisis</h2>
+    <p class="body">The OECD's 2026 Digital Education Outlook issues a warning: <b>AI educational opportunities are not being distributed equitably.</b> This could become the structural cause of the next generation's educational inequality.</p>
+    <ul class="arrows">
+      <li>Daily AI tool usage rate: Global North 24.7% vs. Global South 14.1% (Gallup, 2025)</li>
+      <li>Universities with AI guidelines: Europe/North America 70% vs. Latin America 45% (UNESCO, 2025)</li>
+      <li>Untrained faculty: fewer than half of instructors have received AI guidance from their institution</li>
+      <li>Korea/East Asia: among the world's fastest in AI technology adoption, but lagging behind Europe in developing instructional design integration guidelines — <b>the paradox of "fast adoption, slow design"</b> (UNESCO 2025)</li>
+      <li>The "AI fluency gap" is widening faster than the traditional digital divide</li>
+    </ul>
+    <p class="src"><span class="bdg i">[Inst. Report]</span>Source: <a href="https://www.oecd.org/en/publications/oecd-digital-education-outlook-2026_062a7394-en.html" target="_blank" rel="noopener">OECD Digital Education Outlook 2026</a></p>
+  </div>
+
+  <div class="sechead" id="sec4">🎯 Assessment Redesign 2025</div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>The 7 Waves of GenAI Assessment — "Which Wave Is Your Institution On?"</h2>
+    <p class="body">An October 2025 analysis from CUNY mapped two years of university assessment evolution post-GenAI into <b>7 distinct waves</b>. Institutional maturity diverges sharply from wave to wave.</p>
+    <ul class="arrows">
+      <li>Wave 1: Panic (banning) → Wave 2: Exploration (defining permitted use) → Wave 3: Experimentation (course-level rules)</li>
+      <li>Wave 4: Redesign (restructuring assignment formats) → Wave 5: Integration (internalizing AI as a learning tool)</li>
+      <li>Wave 6: Redefining competencies → Wave 7: Institutionalization (changing curriculum and accreditation standards)</li>
+      <li>Most universities are currently stuck at <b>waves 3–4</b> — wave 5 and beyond is limited to a small number of leading institutions</li>
+      <li>Hattie perspective: Student self-reported grades (d=1.44) is one of the highest-impact strategies in Visible Learning — the prerequisite for reaching wave 7 (institutionalization) is an assessment structure in which students accurately perceive their own learning level; if AI substitutes this metacognitive awareness, the effect may reverse</li>
+    </ul>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://assessatcuny.commons.gc.cuny.edu/2025/10/two-years-of-generative-artificial-intelligence-in-higher-education-the-seven-waves-of-assessment-and-genai/" target="_blank" rel="noopener">CUNY — Seven Waves of Assessment and GenAI, Oct 2025</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>"AI-Resistant Assignments Are a Myth" — The Shift to Process-Based and Performance-Based Assessment</h2>
+    <p class="body">eSchoolNews (Mar 2026): Assignment designs meant to block AI are doomed to fail. <b>Designing assessments that measure genuine human competency assuming AI exists</b> is now the only viable alternative.</p>
+    <ul class="arrows">
+      <li>"AI-resistant assignment" attempts: surveillance software and detection systems are all unreliable — the more productive question is "How do we measure learning even with AI present?"</li>
+      <li>Performance-based assessment: real-time problem-solving in authentic contexts — directly measuring competencies that emerge without AI assistance</li>
+      <li>Process portfolios: submissions including draft evolution, AI prompt logs, and revision rationale — <b>the process itself becomes the evidence</b></li>
+      <li>Competency-based shift: from "What must students know?" to "What must students be able to do?"</li>
+      <li>Wiggins &amp; McTighe — Evidence of Transfer: In Understanding by Design (UbD), genuine understanding is only confirmed when it independently transfers to new contexts — AI-generated work contains no transfer evidence, creating a <b>"task achievement ≠ understanding achievement"</b> split; the theoretical basis for performance-based assessment is precisely the direct collection of this transfer evidence</li>
+      <li>Dylan Wiliam — "Assessment IS the activity": Assessment must be a learning experience in itself, not merely a measurement tool — process portfolios are the most powerful implementation of this principle; even portfolios that transparently document AI-assisted work and include student self-reflection become direct implementations of formative assessment</li>
+    </ul>
+    <p class="src"><span class="bdg o">[Media]</span>Source: <a href="https://www.eschoolnews.com/digital-learning/2026/03/12/ai-classrooms-designing-assessment/" target="_blank" rel="noopener">eSchoolNews — AI-resistant classroom is a myth, Mar 2026</a> · <a href="https://doi.org/10.3390/educsci15020174" target="_blank" rel="noopener">MDPI — Redesigning Assessments, 2025</a></p>
+  </div>
+
+  <div class="sechead" id="sec5">📡 Horizon &amp; Teaching Centers</div>
+
+  <div class="item">
+    <div class="no">9</div>
+    <h2>EDUCAUSE 2026 — 86% of Students Use AI as Their Primary Research Tool, but Only 10% of Institutions Have Guidelines</h2>
+    <p class="body">Back-to-back EDUCAUSE reports in 2026 covering staff and students reveal a real gap. AI has already spread across higher education, yet <b>a massive divide exists between institutional readiness and the lived reality of members</b>.</p>
+    <ul class="arrows">
+      <li>Staff report (Jan 2026, n=1,960): 70%+ of higher education professionals use AI daily or weekly; 81% are enthusiastic or cautiously enthusiastic — yet more than half simultaneously worry about risks</li>
+      <li>Student report (Mar 2026, n=8,622): <b>86% of students use AI as their primary research and brainstorming partner</b> — text generation &gt; editing &gt; course material access</li>
+      <li>Institutional gap: only <b>10%</b> of schools and universities worldwide have AI guidelines (UNESCO, 2025)</li>
+      <li>EDUCAUSE Top 10 2026: "Human Connection" is the central issue amid uncertainty — balancing AI efficiency and educational relationships is the key challenge</li>
+    </ul>
+    <p class="src"><span class="bdg i">[Inst. Report]</span>Source: <a href="https://library.educause.edu/resources/2026/1/the-impact-of-ai-on-work-in-higher-education" target="_blank" rel="noopener">EDUCAUSE — Impact of AI on Work, Jan 2026</a> · <a href="https://library.educause.edu/resources/2026/3/2026-educause-students-and-technology-report-steady-through-change" target="_blank" rel="noopener">Students &amp; Technology Report, Mar 2026</a></p>
+  </div>
+
+  <div class="item">
+    <div class="no">10</div>
+    <h2>The CTL's Strategic Role Shift — From "Tool Introducer" to "Instructional Design Partner"</h2>
+    <p class="body">In 2026, the most effective CTLs are not the ones running AI workshops. They are the ones that have evolved into <b>partners who help faculty co-design "in what context, and in what sequence, students should use AI."</b></p>
+    <ul class="arrows">
+      <li>Columbia CTL Feb 2026: Hosted "Reimagining Teaching and Learning in the Age of AI" forum — institutionalized AI course design sessions for all faculty, expanding community-based practice</li>
+      <li>Washington University "AI Curriculum Corps": CTL-led initiative launched to formally support faculty in integrating AI into the curriculum</li>
+      <li>CU Boulder CTL: Biweekly AI community of practice meetings + 2-day AI Summer Design Studio — a sustained CTL-led learning system</li>
+      <li>Structural challenge: most CTLs are overloaded due to staffing and budget shortfalls — the structural tension between "expanded role expectations" and "resource support" is the biggest barrier (EDUCAUSE 2026)</li>
+      <li>Hattie — Collective Teacher Efficacy (d=1.57): The highest measured effect factor in Visible Learning to date — learning outcomes are maximized when instructors share common goals and strategies and cross-validate their practices; CTL-led communities of practice (CU Boulder) and the AI Curriculum Corps are structures that directly enact this mechanism, qualitatively different from simple AI workshops</li>
+    </ul>
+    <p class="src"><span class="bdg i">[Inst. Report]</span>Source: <a href="https://ctl.columbia.edu/about/2026-reimagining-teaching-learning/" target="_blank" rel="noopener">Columbia CTL 2026 Forum</a> · <a href="https://ctl.wustl.edu/ai-curriculum-corps/" target="_blank" rel="noopener">WashU AI Curriculum Corps</a> · <a href="https://www.colorado.edu/today/2026/02/27/ai-and-teaching-cu-boulder" target="_blank" rel="noopener">CU Boulder, Feb 2026</a></p>
+  </div>
+
+  <div class="sechead" id="sec6">🔎 Editor's Lens · This Issue through 5 Pedagogical Theories</div>
+
+  <div class="lensbox">
+    <h3>Hattie (Visible Learning)</h3>
+    <p>AI adoption without learning science principles falls below the baseline effect size (d=0.40) — it is not which tool is chosen but which cognitive mechanisms are activated that determines effectiveness</p>
+  </div>
+  <div class="lensbox">
+    <h3>Dylan Wiliam (Assessment for Learning)</h3>
+    <p>The integrity crisis is a symptom of assessment design failure — task design capable of measuring understanding even in the presence of AI must come first; feedback that moves learning forward and feedback that merely confirms answers are fundamentally different</p>
+  </div>
+  <div class="lensbox">
+    <h3>Carol Dweck (Growth Mindset)</h3>
+    <p>Repeated AI dependence reinforces the belief that "hard things should be done by AI" — this structurally blocks Productive Struggle, the core experience through which Growth Mindset develops</p>
+  </div>
+  <div class="lensbox">
+    <h3>Wiggins &amp; McTighe (Understanding by Design)</h3>
+    <p>AI can complete an "assignment" but cannot achieve "understanding" — genuine understanding is only confirmed by transfer to new contexts, and AI-generated work contains no transfer evidence</p>
+  </div>
+  <div class="lensbox">
+    <h3>Vygotsky (ZPD · Scaffolding)</h3>
+    <p>Whether AI provides scaffolding within a student's Zone of Proximal Development (ZPD), or skips the ZPD entirely to substitute the task — this distinction is the most fundamental question in AI instructional design</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ The perspectives above are editorial interpretations applying each theorist's core framework to the context of AI pedagogy. They may differ from the original context of each theorist's work.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL AI in Teaching Trend Report · Vol. 1, No. 1 (Apr. 2026)</b><br>
+  Contact: Center for Teaching &amp; Learning (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | Sources: EDUCAUSE · MIT Media Lab · Inside Higher Ed · OECD · CUNY<br><br>
+  The content of this report reflects the views of the original authors and may differ from the official position of DGIST CTL. Please cite original sources when referencing.<br><br>
+  <a href="../">← All issues</a>
+</div>
+
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (Apr. 2026)', 'What Global Universities Are Doing Right Now'],
+    [2, 'Vol. 1, No. 2 (May 2026)', 'Automating Course Materials with AI Pipelines'],
+    [3, 'Vol. 1, No. 3 (Jun. 2026)', "How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal"],
+    [4, 'Vol. 1, No. 4 (Jul. 2026)', 'Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  // 1) Rail nav = clone of chip nav + active state
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  // 2) Citation
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST Center for Teaching & Learning. (' + year + '). ' + title + '. AI in Teaching Trend Report, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = 'Copied'; setTimeout(function () { cb.textContent = 'Copy citation'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  // 3) End matter: references (collected from in-text source links) · other issues
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = 'References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = 'Other issues';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = 'References'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>
