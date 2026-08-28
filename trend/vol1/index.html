@@ -264,12 +264,16 @@
   @media (max-width: 1079px) {
     .paper .article { display: block; max-width: 780px; }
     .paper .article > .rail { display: none; }
-    .paper .article > .toc { display: flex; position: sticky; top: 46px; z-index: 40; background: rgba(255,255,255,0.96); padding: 10px 0; margin: 0 0 8px; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
     .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
   }
   @media (max-width: 640px) {
     .issues { grid-template-columns: 1fr; }
     .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
   }
 
   /* 인쇄: 내비·레일·CTA 숨기고 링크 URL 노출 */
