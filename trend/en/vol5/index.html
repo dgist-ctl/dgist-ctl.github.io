@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Semester With the AI Tutor On — What Remains as Learning (Vol. 1, No. 5)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: normal;
+    line-height: 1.85;
+  }
+
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px;
+  }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30초 요약 */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .hanmadi {
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
+  }
+  .hanmadi::before { content: "In one line"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; text-transform: uppercase; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: center; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: middle;  text-align: center; }
+  table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
+  table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 52px 18px 44px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== 디자인 업그레이드 (2026-08-28) — 6개 글로벌 대학 발행물 비교 근거 ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* 마스트헤드: 얇게(THE 56px·Columbia 66px 수준), 아카이브 경로 */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* 기사 헤더 */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* 2단 그리드: 본문 + 우측 레일 */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: normal; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* 본문 타이포 */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* 시그니처: 여백에 걸린 명조 장부 숫자 */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* 말미(참고문헌·다른 호·구독) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* 좁은 화면: 레일 접고 칩 내비 sticky */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* 인쇄: 내비·레일·CTA 숨기고 링크 URL 노출 */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body data-vol="5">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI in Teaching Trend Report</div>
+    <div class="crumb"><a href="../">Archive</a><span>Vol. 1, No. 5 (Sep. 2026)</span><a href="../../vol5/" style="margin-left:14px">한국어</a></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report</div>
+    <h1>A Semester With the AI Tutor On — What Remains as Learning</h1>
+    <p class="lede">Guardrails hold the floor; they do not raise the ceiling. What five randomized experiments and CTL's own check confirmed.</p>
+    <div class="meta">
+      <b>AI in Teaching Trend Report</b> · Vol. 1, No. 5 (Sep. 2026)<br>
+      Published by DGIST Center for Teaching &amp; Learning (CTL) · Contact: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="Article guide">
+      <div class="rlabel">In this article</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">Evidence grades</div>
+        <div class="legend">
+          <div><span class="bdg r">[Research]</span>Peer-reviewed research</div>
+          <div><span class="bdg p">[Preprint]</span>Preprint</div>
+          <div><span class="bdg i" style="background:#dbeafe;color:#1a4a9b;">[Institutional Report]</span>Report issued by an institution</div>
+          <div><span class="bdg o">[Open Resource]</span>Practical tools &amp; benchmarks</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">Cite this article</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">Copy citation</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">① Problem &amp; Evidence (1–3)</a>
+    <a href="#sec2">② Principles &amp; Design (4–5)</a>
+    <a href="#sec3">③ Practice Box</a>
+    <a href="#sec4">④ DGIST Application (6–7)</a>
+    <a href="#sec5">⑤ Contrasting Evidence (8–9)</a>
+    <a href="#sec6">⑥ Editor's Lens</a>
+  </div>
+
+  <div class="policy">
+    <b>Editorial policy</b> Applicable to higher-education practice · only sources with a verifiable original are included · every source is checked against the original before publication (bibliographic details, document type, data-collection period, retractions and corrections) · source types are labelled: <span class="bdg r">[Research]</span> <span class="bdg p">[Preprint]</span> <span class="bdg o">[Open Resource]</span> <span class="bdg x">[Retracted]</span> ([Open Resource] = a practical tool or benchmark released under an open licence, not an efficacy study) · read evidence strength as [Research] &gt; [Preprint] &gt; [Open Resource] · because of its topic, this issue includes key studies older than 12 months and states the publication date of each item · This report reflects the independent judgment of DGIST CTL and receives no external sponsorship.
+  </div>
+
+  <div class="sechead">⏱ 30-Second Summary — If You're Busy, Stop Here</div>
+  <div class="summary">
+    <div class="itm"><span>A better product is not the same as learning having happened. In an experiment with 117 university students, essay scores were higher in the AI condition, but no difference in knowledge transfer was detected (p = 0.996). A 275-student programming-course experiment found the same.</span></div>
+    <div class="itm"><span>That is why guardrails are needed. In a high-school mathematics experiment using the same GPT-4, the answer-giving condition lowered exam scores by 17% relative to the control once AI was removed, while the hints-only condition showed no such loss — but was not higher either. Practice scores rose sharply in both conditions, yet this issue does not treat that as a success indicator.</span></div>
+    <div class="itm"><span>That programming experiment goes one step further. Varying only the scaffolding, both AI conditions raised practice scores and lowered frustration, but no difference in learning gains was detected. Guardrails hold the floor; they do not raise the ceiling.</span></div>
+    <div class="itm"><span>In the experiment where gains did appear, the authors pointed to two things a classroom cannot do — self-pacing, and individual feedback at the moment of getting stuck. The goal for this semester is not higher grades but preventing harm while collecting observational data. DGIST is running a course AI tutor pilot in three courses in the fall 2026 semester.</span></div>
+  </div>
+
+  <div class="sechead">How to Read This Issue — Tutor Operation from Six Angles</div>
+  <ul class="arrows">
+    <li><b>① Problem &amp; Evidence (1–3)</b> what tutors move and what they do not</li>
+    <li><b>② Principles &amp; Design (4–5)</b> what prevents harm, what creates gain</li>
+    <li><b>③ Practice Box</b> what can be put in place this semester</li>
+    <li><b>④ DGIST Application (6–7)</b> what we confirmed under our conditions</li>
+    <li><b>⑤ Contrasting Evidence (8–9)</b> how to read evidence in this field</li>
+    <li><b>⑥ Editor's Lens</b> where this issue arrives and what remains uncertain</li>
+  </ul>
+
+  <div class="sechead" id="sec1">🔍 Problem Diagnosis · What Tutors Do and Do Not Move</div>
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>Evidence for AI tutors' learning effects is real — but conditional</h2>
+    <div class="hanmadi">Evidence that tutors help learning has accumulated along several lines. What matters is under which conditions that effect appeared.</div>
+    <p class="body">A randomized crossover study in Harvard's large introductory physics course (fall 2023; 194 of 233 enrolled students analysed) reported that the condition learning at home with an AI tutor scored higher on the post-test than the in-class active-learning condition. In quantile regression adjusting for ceiling effects, the effect size was in the range of <b>0.73–1.3 standard deviations</b>. Learning time was actually shorter: a median of 49 minutes in the AI condition versus 60 minutes face-to-face. Meta-analyses point the same way.</p>
+    <ul class="arrows">
+      <li>Meta-analysis of 32 programming-education studies: post-test g+ = 0.538, 95% CI [0.202, 0.873] · practical performance g+ = 0.650, 95% CI [0.330, 0.970]</li>
+      <li>Meta-analysis of 35 experimental studies (4,193 participants): g = 0.670, with no significant bias found in publication-bias tests</li>
+      <li>Still, a confidence interval whose lower bound is 0.202 means the effect could just as well be that small.</li>
+      <li>More important, these figures must not be read as "learning gains" as they stand. The 32-study meta-analysis reported two indicators separately, and the larger one (g+ = 0.650) is <b>practical performance carried out while using AI</b>. Even for the post-test (g+ = 0.538), whether the original studies blocked AI access during testing cannot be confirmed from the meta-analysis abstract or its list of moderators. When knowledge and transfer are measured separately after the help is removed, that gain is not confirmed — this is where the separation this issue deals with begins, and items 2 and 3 are its result.</li>
+      <li>There is also an independent study pointing the other way. In a study of 69 undergraduates in which an off-the-shelf tutor (Khanmigo) was deployed as is, there was no difference in learning gains between the two randomly assigned conditions (Khanmigo, n = 22, vs. Google search, n = 47) (t(67) = −0.649, p &gt; .05). When students who used paper materials only, having split off on their own during the experiment, were re-analysed as a third group, there was still no difference — but that three-group comparison is a quasi-experimental post-hoc analysis, not random assignment. <b>Installing a tool does not by itself bring an effect</b> — the contrast covered in Vol. 3, item 7.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The AI condition worked at home, individually and at its own pace; the control worked in class, as a group — place and mode of learning changed together with the presence of a tutor, so the whole effect size must not be attributed to the tutor. The study covered two topics (surface tension, fluid flow) over two weeks, and the items were at the understand–apply–analyse levels of Bloom's taxonomy. Randomization was by peer-instruction groups of two or three, not by individual. No preregistration record appears in the paper. It did not measure semester-level grades or retention.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1038/s41598-025-97652-6" target="_blank" rel="noopener">Kestin et al., Scientific Reports 15:17458 (2025. 6. 3.)</a> — Harvard IRB23-0797, randomized crossover design<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.22329/jtl.v19i4.10052" target="_blank" rel="noopener">Slijepcevic &amp; Yaylali, Journal of Teaching and Learning 19(4):155–178 (2025. 10. 22.)</a> — 69 undergraduates, two-condition random assignment + three-group quasi-experimental post-hoc analysis. No significant difference between conditions<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1177/07356331261424211" target="_blank" rel="noopener">Deng, Chen &amp; Dong, J. Educational Computing Research 64(5):1323–1359 (online 17 Feb. 2026 / July 2026 issue)</a> · <a href="https://doi.org/10.1057/s41599-026-07019-z" target="_blank" rel="noopener">Wu et al., Humanities and Social Sciences Communications 13(1):684 (2026. 3.)</a>
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>A better product is not the same as learning having happened</h2>
+    <div class="hanmadi">Within a single experiment, essay scores rose most in the AI condition. Yet the same students' knowledge transfer showed no detectable difference across the four groups.</div>
+    <p class="body">This study randomly assigned 117 university students to four conditions: control (30), ChatGPT (35), human expert (25), and a writing-analytics tool (27). After two hours of reading and essay writing, students revised their essays for one hour with the support of their assigned condition. The improvement in essay scores was significantly higher in the ChatGPT condition (F = 4.549, p = 0.005). Yet for the same students, the post-test of knowledge showed no difference between groups (F = 0.913, p = 0.438), and <b>the knowledge-transfer test showed no difference either (F = 0.019, p = 0.996)</b>.</p>
+    <ul class="arrows">
+      <li>The authors explain this as <b>metacognitive laziness</b>: as learners offload cognitive load onto the AI, they do less of the monitoring and regulation that learning actually requires.</li>
+      <li>Read in practical terms: <b>the quality of submitted work is a poor success indicator for introducing a tutor.</b> What the same student can do without help must be measured separately.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — A single task in a short-term experiment; 70% of the 117 participants were women. The authors themselves noted that instruments for measuring metacognitive laziness are not yet mature.</div>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1111/bjet.13544" target="_blank" rel="noopener">Fan et al., British Journal of Educational Technology 56(2):489–530</a> — online 10 Dec. 2024 / March 2025 issue</p>
+  </div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>The same separation appeared in a STEM classroom</h2>
+    <div class="hanmadi">Holding the model fixed and varying only the scaffolding changed scores and frustration — but not learning.</div>
+    <p class="body">This experiment randomly assigned 275 students in an introductory programming (CS1) course at the Technical University of Munich to three conditions. The study fixed the base model as GPT-4 and varied only the scaffolding constraints — ① Iris, a tutor aware of the course context (gives progressive hints and withholds complete solutions); ② ChatGPT, answering without restriction; ③ no AI, ordinary web resources. Students completed a 90-minute auto-graded task on Java concurrency; conceptual knowledge was measured by pre- and post-tests, and cognitive load, intrinsic motivation and frustration by validated questionnaires. The paper's title sums up the result — <b>less stress, better scores, same learning.</b></p>
+    <ul class="arrows">
+      <li>Both AI conditions scored higher on the practice task and reported lower frustration. Up to this point, the results read as a successful adoption.</li>
+      <li>But <b>in learning gains and code comprehension, no difference in improvement appeared among the three groups.</b></li>
+      <li>What stands out is that the Iris condition, which withheld complete solutions, was no different. Even with a design that does not hand over answers immediately, learning gains did not follow automatically.</li>
+      <li>This does not mean there was no difference at all. <b>Iris was the only condition in which intrinsic motivation rose</b>, and on that basis the authors recommend "scaffolded AI integration". In the answer-everything condition, by contrast, a <b>'comfort trap'</b> appeared, in which students' preferences diverged from educational benefit.</li>
+      <li>The separation seen in item 2 (writing) appeared in the same direction in a STEM lab course. The measures differ (a transfer test versus gains in conceptual knowledge), but they point the same way. The task type and student population are closer to DGIST's curriculum.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — A single 90-minute task, not a semester's grades; results from one university's CS1 course. This issue reads the result as "guardrails did not produce learning gains", but the authors' emphasis is "scaffold anyway" — we note that these are different readings of the same data.</div>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1016/j.caeai.2025.100537" target="_blank" rel="noopener">Bassner, Lenk-Ostendorf, Beinstingel, Wasner &amp; Krusche, Computers and Education: Artificial Intelligence 10:100537</a> — June 2026 issue (online 24 Dec. 2025), three-group randomized controlled experiment (n = 275)</p>
+  </div>
+
+  <div class="sechead" id="sec2">⚖ Design Principles · What Prevents Harm, What Creates Gain</div>
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>Guardrails prevent loss — same GPT-4, opposite exam results</h2>
+    <div class="hanmadi">An AI that gives answers and an AI that gives hints, even on the same model, sent exam scores in opposite directions.</div>
+    <p class="body">A randomized controlled experiment at a large high school in Turkey with about 1,000 students in grades 9–11, run in four 90-minute sessions. Three conditions were compared — ① textbook and notes only; ② a generic ChatGPT-style interface (GPT Base); ③ a tutor with guardrails (GPT Tutor). During the AI-assisted practice phase, both AI conditions did better than the control: GPT Base +48%, GPT Tutor +127% (both relative to the control mean). But <b>on the exam taken with AI removed, the GPT Base condition scored 17% lower than the control</b>, and the GPT Tutor condition was statistically indistinguishable from the control (point estimate −0.004, an absolute difference on a 1-point scale).</p>
+    <ul class="arrows">
+      <li>There were only two guardrails. ① An instruction to give hints rather than direct answers. ② Teacher-written, item-specific correct answers, common student errors, and how to give feedback on them, included in the prompt.</li>
+      <li>Both conditions used the same GPT-4. <b>What made the difference was not the model but the information the teacher put in.</b></li>
+      <li>The point to read carefully is that GPT Tutor's exam scores were not higher than the control's. <b>What the guardrails did was not raise scores but keep them from falling.</b></li>
+      <li>Judged by practice-phase scores alone, both conditions look like successes. Judging adoption by practice scores can lead to exactly the opposite conclusion.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — High-school mathematics, not higher education. A single school and short-term outcomes; the data were collected in the 2023–2024 school year and do not reflect later changes in model performance. The authors themselves wrote that the results are limited to a specific application context and that substantial follow-up research is needed to establish the nature and scope of the effect.</div>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1073/pnas.2422633122" target="_blank" rel="noopener">Bastani, Bastani, Sungu, Ge, Kabakcı &amp; Mariman, PNAS 122(26):e2422633122</a> — published 25 Jun. 2025, randomized controlled experiment. ※ Correction: PNAS 122(34), 20 Aug. 2025 — an author-affiliation error unrelated to the figures or conclusions</p>
+  </div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>Where gains appeared, something other than guardrails was present</h2>
+    <div class="hanmadi">Guardrails prevent loss. What created the gain was the condition the authors singled out separately: an arrangement in which students proceed at their own pace and get answers when they are stuck.</div>
+    <p class="body">Placing items 3 and 4 side by side makes the role of guardrails clear. Guardrails prevent the loss that occurs when AI does the learning in the student's place. But as the university programming experiment shows, that alone does not create learning gains. So why did gains appear in the Harvard experiment in item 1? The authors wrote that the results <b>"may have depended on" six things</b> — a heterogeneous student body learning at different speeds, high-quality lecture videos, a model that follows complex instructions accurately (in the authors' words, GPT-4), expert prompts written for each question by instructors with deep knowledge of the content, a structured scaffolding framework guiding student interaction, and learning content that fits that format. One of the six is model performance; <b>the other five are not about choosing a tool but about designing a course.</b> Meanwhile, a "do not give the answer right away" rule is not on this list — the system-prompt guidance the paper discloses appears only in the supplementary material.</p>
+    <ul class="arrows">
+      <li>So where are the guardrails? Not on this list but in item 4 — what the guardrails did was not create gain but prevent loss. <b>The list of gains and the loss-prevention device are different lists</b>, which is why this issue keeps them apart.</li>
+      <li>Benchmark research points the same way. A broad evaluation of open and closed models found that subject expertise, as shown by problem-solving ability, did not translate directly into good teaching ability; <b>the two were, if anything, in a trade-off.</b></li>
+      <li>The same study reported that tutoring becomes harder as conversations grow longer, and that simple questioning strategies begin to fail — a problem that bears directly on a course tutor that runs for a whole semester.</li>
+      <li>Separately from the list above, the authors set out seven pedagogical principles, (i)–(vii). Those they judged achievable in a classroom were (i)–(v); the ones they wrote a classroom cannot deliver were <b>(vi) timely, targeted feedback to individual students</b> and <b>(vii) self-pacing</b>. The authors believe the learning improvement is "largely due to" personalized feedback available on demand (original wording: "We believe … largely due to").</li>
+      <li>Take timely individual feedback and self-pacing as the axes, and the three experiments line up in a row. At Harvard, students paced themselves at home (median 49 minutes; 30% exceeded 60 minutes); at Munich it was a fixed 90-minute lab; in the high-school mathematics study, sessions were within class time. The latter two were arrangements in which self-pacing and timely individual feedback could hardly operate.</li>
+      <li>The criteria for an adoption decision do not change; they multiply. Model performance is one of the six conditions the authors named, not all of them — looking only at a benchmark table, and leaving performance out altogether, both fail to match this list. The other five are filled in by the instructor and the course design.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The benchmark study is a conference paper (EMNLP 2025 Main), not a journal article, and it evaluated models on mathematics dialogues; it is not an experiment measuring student learning outcomes.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://arxiv.org/abs/2502.18940" target="_blank" rel="noopener">Macina, Daheim, Hakimi, Kapur, Gurevych &amp; Sachan, MathTutorBench, EMNLP 2025 Main</a> — oral presentation<br>
+      <span class="bdg o">[Open Resource]</span>Reference tool: <a href="https://github.com/eth-lre/mathtutorbench" target="_blank" rel="noopener">eth-lre/mathtutorbench</a> — open benchmark from ETH LRE (licence not stated). Its evaluation items, which treat answer disclosure as a negative indicator, can serve as a reference
+    </p>
+  </div>
+
+  <div class="sechead" id="sec3">🛠 Practical Application Box · What Faculty Can Do This Semester</div>
+  <div class="item">
+    <h2>The smallest unit you can put in place this semester:<br>one rule, one set of error information, one check question</h2>
+    <div class="tablewrap">
+    <table class="box">
+      <tr><th>When</th><th>Action</th><th>Criterion</th></tr>
+      <tr><td>Week 1</td><td>Add a "do not give the answer right away" rule plus, for one assignment, the correct answers, common errors and how to give feedback<small>Where to put it — in ChatGPT, the 'Instructions' field of [Create a GPT]; in Claude, the 'Project instructions' field of a project; for the CTL course AI tutor, the course-registration step. Ready-to-paste prompt text is in Vol. 3, items 3 and 4.</small></td><td>When a student asks for the answer, does the tutor ask back?</td></tr>
+      <tr><td>Week 2</td><td>Have the tutor step back from questions outside the material with "this is covered in the lecture", and record where that happens<small>Do not confine the tutor to a fixed lab session — leave it open before and after assignments so students can use it at their own pace.</small></td><td>Does it leave what it does not know unanswered rather than making it up?</td></tr>
+      <tr><td>Week 3</td><td>Include one short check question, solved without AI, during class<small>Give the same question once in week 1 first — without a baseline, "maintained" cannot be judged.</small></td><td>Do the grades of students who use the tutor heavily hold up?</td></tr>
+    </table>
+    </div>
+    <div class="caveat"><b>Caution</b> — Higher practice scores and higher satisfaction are not success indicators — in the university experiment in item 3, both rose while no difference in learning gains was detected, and in the high-school experiment in item 4, the condition whose scores rose most fell furthest on the exam. There is no need to build a new tutor. Adding rules and error information to a tool already in use is the minimum measure this evidence points to. But the minimum measure goes only as far as preventing harm; anything beyond that comes from course design. It is better not to count the check question toward grades — if it counts, students hide their tutor use and the usage data itself becomes muddied. Look at usage records not per individual but as 'heavy-use group / light-use group' comparisons, and if you want to link individual usage to grades, announce it in the syllabus in advance and obtain student consent.</div>
+  </div>
+
+  <div class="sechead" id="sec4">🎓 DGIST Application · What We Found Here</div>
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>One line of prompt changed the output — a CTL self-check</h2>
+    <div class="hanmadi">Changing a single sentence that assigns the role changed the results on the same 32 slides.</div>
+    <p class="body">Preparing the fall 2026 course AI tutor, CTL reviewed the prompt that generates slide explanations. At first it used the role sentence "an instructor who answers questions" as is. But the task of writing explanations had no question to answer. With nothing to answer, the model took the slide itself as the object of explanation, and 31/32 (97%) of the summaries began with "This slide is …". Not a single response stepped back when it met content absent from the material. When the role was changed to tutor and the object of explanation set as "not the slide but what it is trying to teach", the results on the same 32 slides changed.</p>
+    <ul class="arrows">
+      <li>Share of summaries with the slide as the subject <b>97% → 10%</b> · share identifying where students get stuck <b>0% → 100%</b> · slides that stepped back as outside the material <b>0 → 2 slides (6%)</b></li>
+      <li>The two slides that stepped back were the cover and a picture quiz. On the picture quiz, it applied the rule on its own: "the answer is on a later slide, but pulling it forward would mean solving it for the student".</li>
+      <li>The direction matches items 4 and 5. <b>Without changing the model, only the sentence a person put in was changed, and the results changed.</b></li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — This is not a controlled experiment but a self-check during preparation for operation, observed on a single deck of 32 slides. What changed here is the explanation the AI produced, not students' submissions, and still less students' learning. What item 6 shows goes only as far as "changing the prompt changes the AI's behaviour".</div>
+    <p class="src"><span class="bdg p">[Preprint]</span>Reference design: <a href="https://arxiv.org/abs/2606.09845" target="_blank" rel="noopener">Li et al., Tutor, Not Solver: PeteChat (Purdue, 2026. 4.)</a> — a case presenting eight transferable design principles (assignment guardrails, debugging scaffolds, self-regulated-learning support, instructor-facing tuning tools, etc.), including a design that does not give direct solutions during assignments. A design study that does not report learning-outcome experiments</p>
+  </div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>What a small institution can verify</h2>
+    <div class="hanmadi">The question this field has yet to answer is "who retains learning, and when used how". Being small is an advantage for that question.</div>
+    <p class="body">The studies cited in this issue came from Harvard's large physics course, Munich's CS1 and a large Turkish high school. What they share is that <b>none looked at semester-level retention</b>. DGIST is small enough to observe the entire usage of a course. <b>The advantage of being small lies in observation, not in effect.</b> The fall 2026 course AI tutor starts as a three-course pilot.</p>
+    <ul class="arrows">
+      <li>The point at which the tutor steps back as outside the material serves two purposes. For the student it is an honest response that does not make things up; for the instructor it is a signal of material self-sufficiency — "what this passage teaches lies outside the material".</li>
+      <li>What the pilot must check is not the usage rate. It is the point items 3 and 4 identified — <b>whether students who use the tutor heavily hold the same level without help.</b></li>
+      <li>With three courses, a pre/post design can be attempted within each course. Building a between-course comparison, however, would require the cooperation of courses outside the pilot.</li>
+      <li><b>Remaining problem</b> — Small scale favours observation but works against statistical power. Rather than trying to judge an effect from a single semester, it is more realistic to record which usage patterns appear in which course types. That record is exactly the data this field lacks most.</li>
+    </ul>
+  </div>
+
+  <div class="sechead" id="sec5">⚠ Contrasting Evidence · How to Read Evidence in This Field</div>
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>The most-cited AI-in-education meta-analysis has been retracted</h2>
+    <div class="hanmadi">In a field where evidence accumulates quickly, citation counts are no proxy for reliability.</div>
+    <p class="body">A May 2025 Humanities and Social Sciences Communications meta-analysis of ChatGPT's learning effects was widely cited — as of just after retraction (April 2026), about 492,000 views, about 270 citations, Altmetric 1,025. <b>The paper was retracted on 22 April 2026.</b> The retraction notice cited concerns about inconsistencies in the meta-analysis and stated that the editors could no longer have confidence in the validity of the analysis and conclusions.</p>
+    <ul class="arrows">
+      <li>The concerns had been raised publicly 11 months before the retraction: no quality appraisal of the 51 included studies, and ChatGPT-group samples below 35 in 33 of them.</li>
+      <li>This report does not cite the figures claimed by the retracted paper. It is treated as a case only.</li>
+      <li>The practical implication is clear. Material presented as grounds for adopting a tool must be checked not only for its publication date but for retractions and corrections as well. <b>One DOI lookup is all it takes.</b></li>
+      <li>This case does not mean "AI tutors have no effect". The individual experiments remain valid regardless of the retraction. <b>What collapsed was not an individual study but a summary figure that pooled different studies together.</b> That is why this issue presents individual studies even within item 1, and then places items 2, 3 and 4 side by side.</li>
+    </ul>
+    <p class="src"><span class="bdg x">[Retracted]</span>Case: <a href="https://doi.org/10.1057/s41599-026-07310-z" target="_blank" rel="noopener">Retraction Note, Humanities and Social Sciences Communications 13(1):528</a> — original article 12(1):621 (published 6 May 2025), retracted 22 Apr. 2026</p>
+  </div>
+
+  <div class="item">
+    <div class="no">9</div>
+    <h2>The remaining evidence also rests on short-term, small-sample, self-report studies</h2>
+    <div class="hanmadi">The studies cited in this issue each carry their own limits. The directions converge, but it is too early for certainty.</div>
+    <p class="body">This issue has supported the direction "add guardrails, but do not stop there" with several pieces of evidence. Their strength is recorded here precisely. <b>All five studies measured short-term outcomes, and none of them compared how learning holds up over a semester.</b></p>
+    <ul class="arrows">
+      <li><b>'No difference' is not all of one kind</b> — The controls differ — for the high-school mathematics and Munich studies the control was self-study without AI, whereas at Harvard it was in-class active learning, a higher bar from the outset. Beating a stronger opponent and drawing with a weaker one are not evidence in opposite directions. What was measured also differs — performance after help was removed (high school), gains in conceptual knowledge from pre- to post-test (Munich), and a transfer test (BJET).</li>
+      <li><b>Harvard study</b> — Two topics over two weeks, at the understand–apply–analyse levels of Bloom's taxonomy. The AI condition worked individually at home while the control worked as a group in class, so place and mode changed together. The authors state that they do not assume superiority in every context requiring complex conceptual synthesis and higher-order critical thinking. No preregistration record.</li>
+      <li><b>PNAS study</b> — High-school mathematics at a single school. Transferability to higher education needs separate verification.</li>
+      <li><b>Munich study</b> — A single 90-minute task in a single course. "No difference was found" should be read as "not detected under these conditions", not as proof of "no effect".</li>
+      <li><b>Khanmigo study</b> — 69 undergraduates, brief exposure, a single topic (phases of the Moon). The two randomly assigned conditions had small samples of 22 and 47.</li>
+      <li><b>BJET study</b> — 117 participants, a single task, 70% women. The authors themselves noted the immaturity of the measurement instrument as a limitation.</li>
+      <li><b>The widely cited evidence on the other side is no different</b> — The 666-participant study often cited as evidence that reliance on AI lowers critical thinking is a survey- and interview-based correlational study, not a causal one. Measurement was self-report. A correction was issued in September 2025 (Table 4 duplicated Table 3), and the author stated that the conclusions were unaffected.</li>
+      <li><b>Taken together: the evidence is sufficient for a pilot and observation, and not yet sufficient for full-scale adoption.</b> That is the same place Vol. 4 arrived at on assessment redesign.</li>
+    </ul>
+    <p class="src"><span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.3390/soc15010006" target="_blank" rel="noopener">Gerlich, Societies 15(1):6 (2025. 1. 3.)</a> · <a href="https://doi.org/10.3390/soc15090252" target="_blank" rel="noopener">Correction, Societies 15(9):252 (10 Sep. 2025)</a> — 666 participants, mixed-methods correlational study (survey and interviews)</p>
+  </div>
+
+  <div class="sechead" id="sec6">🔎 Editor's Lens · What Running a Tutor Asks of DGIST</div>
+
+  <div class="lensbox">
+    <h3>Paradox — the kinder the tutor, the less students may learn</h3>
+    <p>A tutor that gives the answer the moment a student is stuck raises both satisfaction and practice scores. The problem is that this very moment is where learning happens. That both AI conditions with lower frustration in the Munich experiment failed to pull ahead in learning reads as a sign that reduced frustration cannot serve as a proxy for learning gains. <b>A good tutor is not one that lets students get stuck less, but one that makes being stuck bearable.</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Floor and ceiling — where this issue arrives</h3>
+    <p>Guardrails are a device that holds the floor. In the high-school mathematics experiment, the guardrail condition's exam scores were not higher than the control's, but not lower either. In the university programming experiment, even the condition with guardrails did not pull ahead in learning gains. In the Harvard experiment, where gains appeared, the authors wrote that the results may have depended on six things — instructor-written per-question prompts, a structured scaffolding framework, high-quality videos, content that fits the format, a student body learning at different speeds, and a model that follows complex instructions. <b>Four of the six are made by the instructor, one is the tool, and one is the student composition that is given.</b> This is why the adoption discussion has to move from "what to buy" to "what to put in", and why putting in does not end with a single rule.</p>
+    <p>But the metaphor fails to capture two things. One is time — what did not appear in 90-minute and two-week experiments does not mean it will not appear over a semester, and the evidence in this issue includes not a single semester-level comparison. The other is a dimension other than grades — at Munich, only the scaffolded condition saw intrinsic motivation rise. Between floor and ceiling there is a layer not yet named. In the end the two axes ask one question — <b>who does the cognitive work, and when.</b> Guardrails keep the AI from doing that work in the student's place; the arrangement gives the student the time and the responses to actually do it.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Relation to Vol. 3 and Vol. 4</h3>
+    <p>Vol. 3 read the same Harvard case for "how it was designed" and presented it as "roughly double the learning gain". Vol. 5 rereads the same material and corrects one thing — because the AI condition was individual at home and the control was a group in class, the entire effect size cannot be attributed to the tutor, and there is no preregistration record. <b>The direction stands, but the strength should be read down.</b> Vol. 3 also summarized the same success conditions but carried over only four; having rechecked the original, we correct that to six. What Vol. 5 newly does is to set those six against the experiments in which no gain appeared and separate them out.</p>
+    <p>If Vol. 4 asked how to look at submitted work, Vol. 5 asks what to put into the process that produces it. The prescriptions differ in direction, but one item overlaps — the oral check and in-class mini-performance on Vol. 4's checklist are the same device as Vol. 5's "check question without help".</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>DGIST readiness check</h3>
+    <p>① Does the tutor you use have a "do not give the answer right away" rule? ② Are the correct answers and common errors for each assignment loaded into the tutor? ③ Does the tutor step back rather than make up what it does not know? ④ Is there at least one check question per semester solved without AI? ⑤ Is the criterion of success not usage rate, satisfaction or practice scores but performance without help?</p>
+    <p><b>Meeting the first four means you have got as far as preventing harm; only by measuring the fifth can you tell whether there was a gain.</b> If you find yourself unable to decide on an item while using this checklist, let the Center for Teaching &amp; Learning know (ctl@dgist.ac.kr).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Then why use it at all?</h3>
+    <p>Reading this issue to the end leaves that objection standing — if no gain is confirmed, not turning it on does no harm either. We answer in two parts. First, this issue's prescription is directed not at whether to adopt but at <b>a state that is already switched on</b>. AI use on the students' side is already under way, so the first thing to verify is whether the option of switching it off actually works. Second, what the evidence leaves behind is not higher grades but two observations — students were less frustrated (Munich), and higher post-test scores came in less time (Harvard: AI median 49 minutes vs. 60 minutes face-to-face — the latter is the authors' assumed value, 75 minutes of class minus 15 minutes of testing). Neither can be counted as a gain as it stands — reduced frustration may be, as the paradox above says, a sign of a moment where learning did not happen, and the time comparison is confounded with home and self-pacing. So this issue's answer is not "turn it on and gain" but <b>"prevent harm, and measure with our own hands what remains"</b>.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>The decision this issue aims to change</h3>
+    <p><b>Decision</b> — Whether to expand the fall 2026 course AI tutor pilot, or to add more design and look again.<br>
+    <b>Owner</b> — DGIST Center for Teaching &amp; Learning.<br>
+    <b>Decided when</b> — After the end of the fall 2026 semester — judged not by usage rate or satisfaction but by performance on the check question without help.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Remaining uncertainties</h3>
+    <p>① Whether Munich's "no difference" is due to the 90-minute single-task condition or to the limits of the guardrail design has not yet been distinguished. ② A hints-only tutor may lower student satisfaction, which may show up as lower usage. ③ Having instructors enter per-question answers and error information is a real workload, and who bears that burden is the practical constraint on scaling. ④ Which students benefit more from the tutor (those with low or high prior knowledge) varies from study to study, so an equity effect cannot be asserted. ⑤ Reading the step-back signal as an indicator of material self-sufficiency is CTL's interpretation, not yet a validated measure.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ The Editor's Lens is DGIST CTL's editorial opinion, interpreting verified sources and open practical resources through educational-theory frameworks, and may differ from the views of the original authors.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL AI in Teaching Trend Report · Vol. 1, No. 5 (Sep. 2026)</b><br>
+  Inquiries: Center for Teaching &amp; Learning (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | Topic: A Semester With the AI Tutor On — What Remains as Learning<br>
+  References: PNAS · Scientific Reports · Computers and Education: AI · British Journal of Educational Technology · J. Educational Computing Research · Humanities and Social Sciences Communications · Journal of Teaching and Learning · Societies · EMNLP 2025 · arXiv · GitHub<br><br>
+  This report reflects the independent judgment of DGIST CTL and receives no external sponsorship.<br>
+  Its contents represent the views of the original authors and may differ from the official position of DGIST CTL. Please cite the original sources when quoting.<br><br>
+  <a href="../">← All issues</a>
+</div>
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (Apr. 2026)', 'What Global Universities Are Doing Right Now'],
+    [2, 'Vol. 1, No. 2 (May 2026)', 'Automating Course Materials with AI Pipelines'],
+    [3, 'Vol. 1, No. 3 (Jun. 2026)', "How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal"],
+    [4, 'Vol. 1, No. 4 (Jul. 2026)', 'Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning'],
+    [5, 'Vol. 1, No. 5 (Sep. 2026)', 'A Semester With the AI Tutor On — What Remains as Learning']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST Center for Teaching & Learning. (' + year + '). ' + title + '. AI in Teaching Trend Report, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = 'Copied'; setTimeout(function () { cb.textContent = 'Copy citation'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = 'References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = 'Other issues';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = 'References'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>
