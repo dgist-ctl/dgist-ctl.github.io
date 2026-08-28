@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 활용 교수법 트렌드 리포트 — 슬라이드 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f5f7fa; --surface: #ffffff; --ink: #1a1a2e; --sub: #4a5568;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+  }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--bg); color: var(--ink); word-break: keep-all;
+    min-height: 100vh; padding: 56px 20px;
+  }
+  .container { max-width: 760px; margin: 0 auto; }
+  .kicker {
+    font-size: 13px; letter-spacing: 2.5px; color: var(--accent2);
+    font-weight: 700; margin-bottom: 12px; text-align: center;
+  }
+  h1 {
+    font-size: clamp(24px, 4.5vw, 36px); font-weight: 800; line-height: 1.35;
+    text-align: center; margin-bottom: 10px; color: var(--accent);
+  }
+  .lede {
+    text-align: center; font-size: 14px; color: var(--sub); line-height: 1.7;
+    margin-bottom: 40px;
+  }
+  a.card {
+    display: flex; align-items: center; gap: 20px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 22px 26px; margin-bottom: 14px; text-decoration: none; color: var(--ink);
+    box-shadow: 0 2px 10px rgba(26,26,46,0.05);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  a.card:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,45,114,0.12); }
+  .no {
+    flex: 0 0 auto; width: 58px; height: 58px; border-radius: 12px;
+    background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 800;
+  }
+  a.card.latest .no { background: var(--accent); color: #fff; }
+  .meta { flex: 1 1 auto; }
+  .vol { font-size: 12px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .title { font-size: clamp(15px, 2.2vw, 18px); font-weight: 800; line-height: 1.45; }
+  .tag {
+    flex: 0 0 auto; font-size: 11px; font-weight: 700; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 4px 11px;
+  }
+  a.card.latest .tag { background: var(--accent); color: #fff; }
+  .arrow { flex: 0 0 auto; color: var(--accent2); font-size: 18px; font-weight: 800; }
+  .foot {
+    margin-top: 40px; text-align: center; font-size: 12px; color: #718096; line-height: 1.8;
+  }
+  .foot a { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="kicker">DGIST 교수학습센터 (CTL)</div>
+  <h1>AI 활용 교수법 트렌드 리포트</h1>
+  <p class="lede">호를 선택하면 슬라이드로 열립니다 — 방향키·화면 밀기로 넘기고, 휴대폰에서도 열립니다.</p>
+
+  <a class="card latest" href="./vol5/">
+    <div class="no">5</div>
+    <div class="meta">
+      <div class="vol">Vol. 1, No. 5 (Sep. 2026)</div>
+      <div class="title">AI 튜터를 켠 학기 — 무엇이 배움으로 남는가</div>
+    </div>
+    <div class="tag">최신호</div>
+    <div class="arrow">→</div>
+  </a>
+
+  <a class="card" href="./vol4/">
+    <div class="no">4</div>
+    <div class="meta">
+      <div class="vol">Vol. 1, No. 4 (Jul. 2026)</div>
+      <div class="title">AI 시대의 평가 혁신 — AI 탐지에서 학습증거 설계로</div>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <a class="card" href="./vol3/">
+    <div class="no">3</div>
+    <div class="meta">
+      <div class="vol">Vol. 1, No. 3 (Jul. 2026)</div>
+      <div class="title">AI 튜터를 어떻게 설계했나 — Harvard PS2 Pal 해부</div>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <a class="card" href="./vol2/">
+    <div class="no">2</div>
+    <div class="meta">
+      <div class="vol">Vol. 1, No. 2 (May 2026)</div>
+      <div class="title">AI 파이프라인으로 수업자료를 자동 생성한다</div>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <a class="card" href="./vol1/">
+    <div class="no">1</div>
+    <div class="meta">
+      <div class="vol">Vol. 1, No. 1 (Apr. 2026)</div>
+      <div class="title">글로벌 대학이 지금 하고 있는 것들 — 창간호</div>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <p class="foot">
+    본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>
+    내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.<br>
+    문의: <a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>
+  </p>
+</div>
+</body>
+</html>
