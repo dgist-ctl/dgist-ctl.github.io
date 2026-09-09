@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026학년도 2학기 튜터링 프로그램 — DGIST AI 학습튜터</title>
+<title>2026학년도 2학기 튜터링 프로그램 — DGIST 달구 튜터</title>
 <meta name="robots" content="noindex">
-<meta name="description" content="DGIST 교수학습센터 AI 학습튜터. 강의자료가 끊긴 자리에서 시작합니다.">
+<meta name="description" content="DGIST 교수학습센터 AI 학습튜터 「달구 튜터」. 강의자료가 끊긴 자리에서 시작합니다.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Enriqueta:wght@400;700&family=Titillium+Web:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -131,7 +131,6 @@ body {
 .enter-block { margin: clamp(30px, 6vh, 52px) 0 0; }
 .login { display: flex; gap: clamp(14px, 3vw, 26px); align-items: flex-end; flex-wrap: wrap; max-width: 42em; }
 .field { display: flex; flex-direction: column; gap: 7px; flex: 1 1 15em; min-width: 0; }
-.field-code { flex: 0 1 11em; }
 .field label {
   font-family: var(--f-mono); font-size: 10.5px; letter-spacing: .1em;
   text-transform: uppercase; color: var(--mute);
@@ -146,7 +145,6 @@ body {
 }
 .field input::placeholder { color: #C4BFB4; }
 .field input:focus { outline: none; border-bottom-color: var(--voice); }
-.field input.code { font-family: var(--f-mono); letter-spacing: .12em; text-transform: uppercase; }
 .go {
   font-family: var(--f-body);
   display: inline-flex; align-items: center; gap: 10px;
@@ -176,6 +174,9 @@ body {
 .steps .n { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--voice); margin-bottom: 10px; }
 .steps .t { display: block; font-size: clamp(15px, 3.3vw, 16.5px); color: var(--ink); font-weight: 600; }
 .steps .note { display: block; font-size: 13.5px; margin-top: 5px; }
+/* 원칙 절 — 이용 순서와 같은 양식, 번호 없이 두 단. */
+.rules { padding-top: 0; }
+@media (min-width: 800px) { .rules-list { grid-template-columns: repeat(2, 1fr); } }
 
 /* ---------- 경계 — 먹으로 눌러 끝맺는다 ---------- */
 .edge { background: var(--ink); color: rgba(255,253,247,.72); padding: clamp(38px, 7vh, 72px) 0; }
@@ -212,7 +213,7 @@ body {
 <header class="top">
   <div class="inner">
     <span><b class="kr">DGIST 교수학습센터</b><span class="en">Center for Teaching &amp; Learning</span></span>
-    <span class="term">AI 학습튜터 · 시범 운영</span>
+    <span class="term">달구 튜터 · 2026-2 튜터링 프로그램</span>
   </div>
 </header>
 
@@ -237,25 +238,22 @@ body {
     <div class="lede">
       <p>강의 슬라이드는 교수님의 설명을 전제로 합니다.</p>
       <p>그래서 혼자 보면 꼭 어딘가에서 끊깁니다.</p>
-      <p><span class="nb">AI 학습튜터</span>는 <b>그 자리를 먼저 짚습니다.</b></p>
+      <p><span class="nb">「달구 튜터」</span>는 <b>그 자리를 먼저 짚습니다.</b></p>
     </div>
 
     <div class="enter-block">
-      <div id="down" class="down">지금은 튜터 서버가 꺼져 있습니다. 시범 운영 시간에 다시 들어와 주세요.</div>
+      <div id="down" class="down">지금은 튜터 서버가 꺼져 있습니다. 잠시 후 다시 들어와 주세요.</div>
+      <!-- 운영계획 v4.1: 교수학습센터에 등록된 학교 이메일만으로 들어온다.
+           비밀번호도 접속 코드도 없다. -->
       <form id="login" class="login">
         <div class="field">
           <label for="email">학교 이메일</label>
           <input id="email" type="email" inputmode="email" autocomplete="email"
                  placeholder="이름@dgist.ac.kr" required>
         </div>
-        <div class="field field-code">
-          <label for="code">접속 코드</label>
-          <input id="code" class="code" type="text" inputmode="latin" spellcheck="false"
-                 autocomplete="one-time-code" placeholder="ABCD-2345" required>
-        </div>
         <button id="go" type="submit" class="go">들어가기 <span aria-hidden="true">→</span></button>
       </form>
-      <p class="hint">접속 코드는 교수학습센터가 수강생에게 따로 보내 드립니다.</p>
+      <p class="hint">교수학습센터에 등록된 학교 이메일로 들어갑니다. 비밀번호와 접속 코드는 없습니다.</p>
       <p id="msg" class="msg" hidden></p>
     </div>
   </div>
@@ -265,26 +263,44 @@ body {
   <div class="inner">
     <p class="sec-title">이용 순서</p>
     <ol class="steps">
-      <li><span class="n">01</span><span class="t">학교 이메일과 접속 코드</span>
-        <span class="note">코드는 교수학습센터가 따로 보내 드립니다.</span></li>
-      <li><span class="n">02</span><span class="t">내 과목에서 튜터링 신청</span>
-        <span class="note">한 번만 하면 다음부터는 바로 들어갑니다.</span></li>
-      <li><span class="n">03</span><span class="t">막히는 데서 그냥 물어보기</span>
-        <span class="note">왼쪽은 슬라이드, 오른쪽은 AI 튜터입니다.</span></li>
+      <li><span class="n">01</span><span class="t">강의자료를 보내 주세요</span>
+        <span class="note">PDF·PPTX 원본을 shlee@dgist.ac.kr 로.<br>제목은 <span class="nb">[달구자료] 과목번호 교과목명 · N주차</span></span></li>
+      <li><span class="n">02</span><span class="t">근무일 3일 안에 엽니다</span>
+        <span class="note">슬라이드마다 설명을 만들어 검수한 뒤, 열리면 전자우편으로 알려 드립니다.</span></li>
+      <li><span class="n">03</span><span class="t">학교 이메일로 들어와 막히는 데서 물어보기</span>
+        <span class="note">왼쪽은 슬라이드, 오른쪽은 달구 튜터입니다.</span></li>
     </ol>
+  </div>
+</section>
+
+<section class="how rules">
+  <div class="inner">
+    <p class="sec-title">원칙</p>
+    <ul class="steps rules-list">
+      <li><span class="t">답은 강의자료 안에서만</span>
+        <span class="note">자료에 없는 내용은 지어내지 않고, 강의에서 배울 내용이라고 말합니다.</span></li>
+      <li><span class="t">과제와 시험의 답은 대신 쓰지 않습니다</span>
+        <span class="note">막힌 자리에서 다음 한 걸음을 함께 갑니다.</span></li>
+      <li><span class="t">질문은 누구에게도 전달되지 않습니다</span>
+        <span class="note">담당 교수를 포함해 아무에게도 가지 않고, 성적과 평가에 반영되지 않습니다.</span></li>
+      <li><span class="t">자료는 로그인한 화면에만</span>
+        <span class="note">내려받기·인쇄·복제 기능이 없습니다. 이용이 끝나면 30일 안에 파기합니다.</span></li>
+      <li><span class="t">받지 않는 자료</span>
+        <span class="note">사진 촬영본·스캔본, 시판 교재 스캔, 기출문제와 답안, 평가 중인 과제물</span></li>
+    </ul>
   </div>
 </section>
 
 <section class="edge">
   <div class="inner">
-    <h2>튜터는<br>교수님이 아닙니다</h2>
+    <h2>달구 튜터는<br>교수님이 아닙니다</h2>
     <div>
       <!-- 이 블록은 한 줄에 한 문장이다. 두 문장을 붙이면 리듬이 끊긴다.
            앞 세 줄은 "안전한가", 뒤 세 줄은 "믿어도 되는가"에 답한다. -->
       <p>무엇을 가르칠지 정하는 사람은 교수님입니다.</p>
-      <p>튜터는 정하지도, 점수를 매기지도 않습니다.</p>
+      <p>달구 튜터는 정하지도, 점수를 매기지도 않습니다.</p>
       <p>그래서 <b>모른다고 말해도 점수에 영향이 없습니다.</b></p>
-      <p class="turn">튜터가 늘 맞는 것은 아닙니다.</p>
+      <p class="turn">달구 튜터가 늘 맞는 것은 아닙니다.</p>
       <p>설명 아래에 근거가 된 슬라이드를 함께 적어 둡니다.</p>
       <p>강의와 다르면 그 자리에서 알려 주세요.</p>
     </div>
@@ -294,7 +310,7 @@ body {
 <footer class="foot">
   <div class="inner">
     <div class="rule-row">
-      <span>DGIST 교수학습센터 · 시범 운영</span>
+      <span>DGIST 교수학습센터 · 2026학년도 2학기 튜터링 프로그램</span>
       <span id="updated"></span>
     </div>
   </div>
@@ -341,8 +357,7 @@ body {
     e.preventDefault();
     if (!base) return;
     const email = document.getElementById("email").value.trim();
-    const code = document.getElementById("code").value.trim();
-    if (!email || !code) return;
+    if (!email) return;
 
     go.disabled = true;
     say("확인하는 중…", true);
@@ -350,13 +365,12 @@ body {
       const res = await fetch(base + "/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code }),
+        body: JSON.stringify({ email }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         say(data.error || "들어가지 못했습니다.", false);
-        document.getElementById("code").value = "";
-        document.getElementById("code").focus();
+        document.getElementById("email").focus();
         return;
       }
       // 세션은 조각(#)으로 넘긴다 — 서버로 전송되지 않고 리퍼러에도 남지 않는다.
