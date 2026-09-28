@@ -5,116 +5,198 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <title>회의비, 출장비 접수</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
 <style>
 :root{
   color-scheme:light;
-  --ground:#f2f4f3; --paper:#ffffff; --ink:#18221f; --muted:#5b6965; --line:#d2dad7;
-  --accent:#1f5f55; --accent-ink:#ffffff; --accent-soft:#e1eeea;
-  --trip:#2c4f86; --trip-soft:#e3eaf6;
-  --bad:#a3322a; --bad-soft:#f8e6e3; --warn:#855600; --warn-soft:#fbf0d9; --ok:#246b3a;
+  --ground:#ECEFF3; --paper:#FFFFFF; --ink:#0F1B2D; --muted:#5B6878; --faint:#8A96A5; --line:#D8DEE6;
+  --accent:#1E3A6E; --accent-ink:#FFFFFF; --accent-soft:#E7EDF6;
+  --trip:#1E3A6E; --trip-soft:#E7EDF6;
+  --receipt:#FFFEF9; --receipt-ink:#26303D;
+  --seal:#C2362B;
+  --bad:#B42318; --bad-soft:#FDECEA; --warn:#8A5300; --warn-soft:#FDF3DC; --ok:#1F6B3A;
+  --shadow:0 1px 2px rgba(15,27,45,.05),0 8px 24px -12px rgba(15,27,45,.18);
+  --display:"Gowun Batang","Nanum Myeongjo","Batang",serif;
   --sans:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Consolas",monospace;
 }
 @media (prefers-color-scheme: dark){
   :root{
     color-scheme:dark;
-    --ground:#111715; --paper:#1a2220; --ink:#e3ebe8; --muted:#9aaba6; --line:#2e3a37;
-    --accent:#6cc2b1; --accent-ink:#0d1a17; --accent-soft:#1d322e;
-    --trip:#8fb0ea; --trip-soft:#1d2738;
-    --bad:#f08a80; --bad-soft:#3a1f1c; --warn:#e6b85c; --warn-soft:#352b17; --ok:#7fd199;
+    --ground:#0D1218; --paper:#151C25; --ink:#E7EDF4; --muted:#9AA7B6; --faint:#6F7C8C; --line:#263241;
+    --accent:#9DB8EA; --accent-ink:#0D1626; --accent-soft:#1A2638;
+    --trip:#9DB8EA; --trip-soft:#1A2638;
+    --receipt:#1B232E; --receipt-ink:#DDE4EC;
+    --seal:#E46B60;
+    --bad:#F28B82; --bad-soft:#3A1F1C; --warn:#E6B85C; --warn-soft:#342A16; --ok:#7FD199;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.6);
   }
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans);
-  padding:20px 16px calc(104px + env(safe-area-inset-bottom,0px))}
-.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
-.lead{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans);touch-action:manipulation;
+  padding:28px 16px calc(112px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.num,.mono{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono)}
+
+/* 머리 */
+header{padding:4px 2px 6px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+h1{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.25;letter-spacing:-.01em;margin:0;text-wrap:balance}
+.lead{margin:10px 0 0;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:46ch}
 
 /* 종류 고르기 */
-.kinds{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.kind{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px 14px 12px;border:2px solid var(--line);
-  border-radius:14px;background:var(--paper);cursor:pointer;min-height:84px}
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;background:var(--paper);border-radius:18px;box-shadow:var(--shadow)}
+.kind{position:relative;display:grid;grid-template-columns:auto 1fr;gap:2px 12px;align-items:center;padding:12px 14px;border-radius:13px;cursor:pointer;
+  transition:background-color .18s ease,color .18s ease}
 .kind input{position:absolute;opacity:0;pointer-events:none}
-.kind b{font-size:18px}
-.kind span{font-size:13px;color:var(--muted);line-height:1.4}
-.kind:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
-.kind.trip:has(input:checked){border-color:var(--trip);background:var(--trip-soft)}
+.kind svg{grid-row:span 2;width:30px;height:30px;color:var(--faint);transition:color .18s ease}
+.kind b{font-size:17px;font-weight:700;line-height:1.2}
+.kind span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.kind:has(input:checked){background:var(--ink);color:var(--paper)}
+.kind:has(input:checked) svg,.kind:has(input:checked) span{color:color-mix(in srgb,var(--paper) 72%,transparent)}
 .kind:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
 
 form{display:flex;flex-direction:column;gap:14px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:16px}
-.card h2{font-size:13px;font-weight:600;color:var(--muted);margin:0;letter-spacing:.02em}
-label,.field{display:flex;flex-direction:column;gap:6px;font-size:14.5px;font-weight:600;min-width:0}
+.card{background:var(--paper);border-radius:18px;padding:20px 18px;display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow)}
+.card h2{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--muted);margin:0}
+label,.field{display:flex;flex-direction:column;gap:7px;font-size:14.5px;font-weight:600;min-width:0}
 .field > .lab{font-size:14.5px;font-weight:600}
-.req::after{content:" *";color:var(--bad)}
-.hint{font-size:13px;font-weight:400;color:var(--muted);line-height:1.45}
-input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--line);
-  border-radius:10px;padding:10px 12px;min-height:48px;width:100%;min-width:0}
-textarea{resize:vertical;min-height:84px;line-height:1.5}
-input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.invalid{border-color:var(--bad);background:var(--bad-soft)}
+.req{white-space:nowrap}
+.req::after{content:"필수";margin-left:6px;font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--accent);
+  background:var(--accent-soft);padding:1px 6px;border-radius:5px;vertical-align:2px}
+.hint{font-size:13px;font-weight:400;color:var(--muted);line-height:1.5}
+input,select,textarea{font:inherit;font-size:16px;font-weight:400;color:var(--ink);background:var(--ground);border:1px solid transparent;
+  border-radius:12px;padding:11px 14px;min-height:50px;width:100%;min-width:0;
+  transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease}
+input::placeholder,textarea::placeholder{color:var(--faint)}
+input:hover,select:hover,textarea:hover{border-color:var(--line)}
+input:focus,select:focus,textarea:focus{outline:none;background:var(--paper);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{resize:vertical;min-height:88px;line-height:1.55}
+.invalid,.invalid:hover{border-color:var(--bad);background:var(--bad-soft)}
+.chips.invalid{background:none;border:0;box-shadow:inset 3px 0 0 var(--bad);padding-left:10px;border-radius:0}
 .err{font-size:13px;color:var(--bad);font-weight:500}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.num{font-variant-numeric:tabular-nums}
 
-/* 칩 선택 */
+/* 칩 */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;pointer-events:none}
-.chip span{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;
-  font-size:15px;font-weight:500;background:var(--paper);cursor:pointer}
-.chip input:checked + span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:9px 16px;border-radius:999px;font-size:15px;font-weight:500;
+  background:var(--ground);color:var(--ink);cursor:pointer;border:1px solid transparent;transition:background-color .15s ease,color .15s ease,border-color .15s ease}
+.chip span:hover{border-color:var(--line)}
+.chip input:checked + span{background:var(--ink);color:var(--paper)}
 .chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
 
-.pay{display:grid;grid-template-columns:6em 1fr;gap:10px;align-items:end}
+/* 결제건 */
+.pay{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:10px;align-items:end}
 .pay .wide{grid-column:1/-1}
-.pay + .pay{padding-top:14px;border-top:1px dashed var(--line)}
-.pay-head{display:flex;justify-content:space-between;align-items:center;grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:600}
+.pay + .pay{padding-top:16px;border-top:1px dashed var(--line)}
+.pay-head{display:flex;justify-content:space-between;align-items:center;grid-column:1/-1;font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:600}
 .pays:has(.pay:only-of-type) .pay-head{display:none}
-.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;padding:6px 2px;min-height:36px}
-.ghost{font:inherit;background:transparent;border:1px dashed var(--line);color:var(--ink);border-radius:10px;padding:10px 14px;min-height:46px;font-size:14.5px;cursor:pointer}
-.sum{font-size:15px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);display:flex;flex-wrap:wrap;gap:4px 14px}
-.sum.trip{background:var(--trip-soft)}
-.notice{font-size:14px;padding:10px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn)}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 2px;min-height:40px}
+.ghost{font:inherit;background:transparent;border:1px dashed var(--line);color:var(--ink);border-radius:12px;padding:11px 14px;min-height:48px;font-size:14.5px;cursor:pointer;
+  transition:border-color .15s ease,background-color .15s ease}
+.ghost:hover{border-color:var(--accent);background:var(--accent-soft)}
 
-details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0 16px}
-summary{cursor:pointer;padding:14px 0;font-weight:600;font-size:14.5px;min-height:48px;list-style-position:inside}
-details[open]{padding-bottom:16px}
-details .inner{display:flex;flex-direction:column;gap:16px}
+/* ── 대표 요소: 영수증 / 승차권 ── */
+.slip{position:relative;font-size:14px}
+.receipt{background:var(--receipt);color:var(--receipt-ink);padding:16px 18px 22px;border-radius:10px 10px 0 0;
+  box-shadow:0 1px 0 var(--line) inset,0 0 0 1px var(--line);margin-bottom:8px}
+.receipt::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;
+  background:linear-gradient(-45deg,transparent 5.6px,var(--receipt) 5.7px) 0 0/12px 8px repeat-x,
+             linear-gradient(45deg,transparent 5.6px,var(--receipt) 5.7px) 0 0/12px 8px repeat-x;
+  filter:drop-shadow(0 1px 0 var(--line))}
+.receipt .r-head{display:flex;justify-content:space-between;font-size:11.5px;letter-spacing:.14em;color:var(--faint);font-weight:600;
+  padding-bottom:10px;margin-bottom:8px;border-bottom:1px dashed color-mix(in srgb,var(--receipt-ink) 25%,transparent)}
+.receipt .line{display:flex;align-items:baseline;gap:8px;padding:3px 0}
+.receipt .line i{flex:1;border-bottom:1px dotted color-mix(in srgb,var(--receipt-ink) 35%,transparent);transform:translateY(-4px)}
+.receipt .line .mono{font-size:14.5px}
+.receipt .total{margin-top:6px;padding-top:9px;border-top:1px dashed color-mix(in srgb,var(--receipt-ink) 25%,transparent);font-weight:700}
+.receipt .total .mono{font-size:19px;font-weight:600}
+.receipt .sub{color:var(--muted);font-size:13px}
+.receipt .empty{color:var(--faint);font-size:13.5px;padding:6px 0}
 
-.bar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(6px);
-  border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
-.bar .in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:4px}
-.main{font:inherit;width:100%;background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:13px 18px;
-  font-size:17px;font-weight:700;min-height:52px;cursor:pointer}
-body[data-kind="trip"] .main{background:var(--trip)}
+.ticket{display:grid;grid-template-columns:1fr auto;background:var(--trip-soft);border-radius:14px;overflow:hidden;
+  --notch:var(--paper)}
+.ticket .tk-main{padding:16px 16px 14px;min-width:0}
+.ticket .tk-route{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:start}
+.ticket .tk-meta{display:flex;flex-wrap:wrap;gap:2px 10px}
+.ticket .tk-meta > *{white-space:nowrap}
+.ticket .tk-label{font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.ticket .tk-city{font-family:var(--display);font-weight:700;font-size:21px;line-height:1.2;word-break:keep-all}
+.ticket .tk-place{font-size:12.5px;color:var(--muted);margin-top:2px;word-break:keep-all;overflow-wrap:break-word}
+.ticket .tk-arrow{color:var(--faint);font-size:18px;padding-top:20px}
+.ticket .tk-to{text-align:right}
+.ticket .tk-meta{margin-top:10px;font-size:13px;color:var(--muted)}
+.ticket .tk-meta .mono{color:var(--ink);font-size:13.5px}
+.ticket .tk-stub{position:relative;padding:16px 16px 14px 18px;border-left:2px dashed color-mix(in srgb,var(--muted) 40%,transparent);
+  display:flex;flex-direction:column;gap:2px;min-width:88px;font-size:12px;color:var(--muted)}
+.ticket .tk-stub b{font-size:15px;color:var(--ink);font-weight:700;margin-bottom:6px}
+.ticket .tk-stub::before,.ticket .tk-stub::after{content:"";position:absolute;left:-10px;width:18px;height:18px;border-radius:50%;background:var(--notch)}
+.ticket .tk-stub::before{top:-9px}
+.ticket .tk-stub::after{bottom:-9px}
+.ticket .empty{color:var(--muted);font-size:13.5px}
+
+.notice{font-size:13.5px;line-height:1.55;padding:12px 14px;border-radius:12px;background:var(--warn-soft);color:var(--warn)}
+
+details{background:var(--paper);border-radius:18px;padding:0 18px;box-shadow:var(--shadow)}
+summary{cursor:pointer;padding:16px 0;font-weight:600;font-size:14.5px;min-height:52px;color:var(--muted);list-style:none;display:flex;align-items:center;justify-content:space-between}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";font-weight:400;color:var(--faint)}
+details[open] summary::after{content:"－"}
+details[open]{padding-bottom:18px}
+details .inner{display:flex;flex-direction:column;gap:18px}
+
+/* 하단 막대 */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:5;
+  background:color-mix(in srgb,var(--ground) 82%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);
+  border-top:1px solid color-mix(in srgb,var(--line) 70%,transparent);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.bar .in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:5px}
+.main{font:inherit;width:100%;background:var(--ink);color:var(--paper);border:0;border-radius:14px;padding:14px 18px;
+  font-size:17px;font-weight:700;letter-spacing:.01em;min-height:54px;cursor:pointer;transition:transform .12s ease,opacity .15s ease}
+.main:active{transform:scale(.985)}
+.main.off{opacity:.55}
 .bar small{font-size:12.5px;color:var(--muted);text-align:center}
 
-.done{background:var(--paper);border:2px solid var(--accent);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
-.done h2{font-size:18px;margin:0}
-.done p{margin:0;font-size:14.5px}
+/* 완료 */
+.done{position:relative;background:var(--paper);border-radius:18px;padding:22px 18px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);overflow:hidden}
+.done h2{font-family:var(--display);font-size:21px;margin:0;padding-right:92px;line-height:1.35}
+.done p{margin:0;font-size:14.5px;padding-right:4px}
+.seal{position:absolute;top:14px;right:14px;width:78px;height:78px;border-radius:50%;border:3px solid var(--seal);color:var(--seal);
+  display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:.08em;transform:rotate(-12deg);
+  box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--seal) 18%,transparent);opacity:.9}
+.seal::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1px solid color-mix(in srgb,var(--seal) 55%,transparent)}
+.done:not([hidden]) .seal{animation:stamp .42s cubic-bezier(.2,.9,.3,1.25) both}
+@keyframes stamp{from{opacity:0;transform:rotate(-12deg) scale(1.6)}to{opacity:.9;transform:rotate(-12deg) scale(1)}}
 .addr{font-weight:700;user-select:all;word-break:break-all}
-.row-btns{display:flex;flex-wrap:wrap;gap:8px}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .row-btns > *{flex:1 1 auto}
-.btn2{font:inherit;display:inline-flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--line);color:var(--ink);
-  border-radius:10px;padding:10px 14px;min-height:46px;font-size:14.5px;text-decoration:none;cursor:pointer}
+.btn2{font:inherit;display:inline-flex;align-items:center;justify-content:center;background:var(--ground);border:1px solid transparent;color:var(--ink);
+  border-radius:12px;padding:11px 14px;min-height:48px;font-size:14.5px;font-weight:500;text-decoration:none;cursor:pointer;transition:border-color .15s ease}
+.btn2:hover{border-color:var(--line)}
 .status{font-size:13.5px;color:var(--ok);min-height:1.2em}
-@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+@media (min-width:640px){ h1{font-size:34px} body{padding-top:44px} }
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body data-kind="meeting">
 <div class="wrap">
   <header>
+    <p class="eyebrow">DGIST 전기전자컴퓨터공학과</p>
     <h1>회의비, 출장비 접수</h1>
-    <p class="lead">필요한 값만 입력하면 담당자에게 메일이 작성됩니다. 담당자가 이 값으로 회의록과 포털 신청을 처리합니다.</p>
+    <p class="lead">필요한 값만 입력하면 담당자에게 보낼 메일이 만들어집니다. 회의록과 포털 신청은 행정 담당자가 이 값으로 처리합니다.</p>
   </header>
 
   <div class="kinds" role="radiogroup" aria-label="접수 종류">
-    <label class="kind"><input type="radio" name="kind" value="meeting" checked><b>회의비</b><span>회의 식비·다과<br>카드 결제 후</span></label>
-    <label class="kind trip"><input type="radio" name="kind" value="trip"><b>출장</b><span>출장신청<br>출발 전</span></label>
+    <label class="kind"><input type="radio" name="kind" value="meeting" checked><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h16v24l-2.7-1.8L18.7 28 16 26.2 13.3 28l-2.6-1.8L8 28z"/><path d="M12 11h8M12 15h8M12 19h5"/></svg><b>회의비</b><span>카드 결제 후</span></label>
+    <label class="kind trip"><input type="radio" name="kind" value="trip"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h24v4.5a2.5 2.5 0 0 0 0 5V23H4v-4.5a2.5 2.5 0 0 0 0-5z"/><path d="M20 9v14" stroke-dasharray="2 2.4"/><path d="M9 16h6"/></svg><b>출장비</b><span>출발 전 신청</span></label>
   </div>
 
   <form id="f" novalidate>
@@ -133,21 +215,40 @@ body[data-kind="trip"] .main{background:var(--trip)}
         <label for="m-purpose"><span class="req">회의 목적</span>
           <input id="m-purpose" type="text" enterkeyhint="next" placeholder="예) 튜터링 프로그램 운영 현황 점검"></label>
         <label for="m-att"><span class="req">참석자</span>
-          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수, 이영희(자이닉스)">
+          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)">
           <span class="hint">전원 실명을 쉼표로 ('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
         <label for="m-contents"><span class="req">회의 내용</span>
-          <textarea id="m-contents" rows="2" placeholder="한 줄에 한 항목, 1~2줄이면 충분합니다&#10;예) 2학기 튜터링 운영 현황을 점검함"></textarea></label>
+          <textarea id="m-contents" rows="3" placeholder="한 줄에 한 항목, 2줄 이상&#10;예) 공동연구 1차년도 진행 상황을 점검함&#10;예) 2차년도 실험 일정과 역할 분담을 협의함"></textarea>
+          <span class="hint">줄을 바꿔 두 항목 이상 적어 주세요. <b id="m-lines" class="num">0줄</b></span></label>
       </div>
 
-      <div class="card biz-card" data-prefix="m" data-kind="meeting">
-        <h2>지출 사업</h2>
-        <div class="field"><span class="lab req">어느 사업 예산으로 쓰나요</span>
+      <div class="card biz-card" data-prefix="m">
+        <h2>지출 예산</h2>
+        <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="m-biz"></div></div>
-        <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">사업명</span>
-          <input id="m-biz-other" type="text" placeholder="예) 첨단기술공학과 운영비 / 과제명"></label>
-        <div class="field" id="m-esti-wrap" hidden><span class="lab">세부내역 (회의비)</span>
-          <div class="chips" id="m-esti"></div>
-          <span class="hint">모르면 '모름'으로 두세요. 담당자가 정합니다.</span></div>
+        <div id="m-rnd" class="field" style="gap:14px" hidden>
+          <label for="m-prj"><span class="req">과제명</span>
+            <input id="m-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
+          <div class="two">
+            <label for="m-prjno">과제번호
+              <input id="m-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
+            <label for="m-pi">연구책임자
+              <input id="m-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
+          </div>
+          <span class="hint" id="m-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+        </div>
+        <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">예산명</span>
+          <input id="m-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
+        <div id="m-rnd-rules" class="field" hidden>
+          <span class="lab req">다른 기관 소속 참석자가 있나요</span>
+          <div class="chips" id="m-ext">
+            <label class="chip"><input type="radio" name="m-ext" value="Y"><span>있음</span></label>
+            <label class="chip"><input type="radio" name="m-ext" value="N"><span>없음 (과제 참여연구자만)</span></label>
+          </div>
+          <span class="hint">연구비 회의비 중 식비는 연구개발기관에 소속되지 않은 사람이 참석한 회의에만 쓸 수 있습니다.</span>
+          <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500;margin-top:4px">
+            <input id="m-pre" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 포털에서 회의비(식비) 사전신청을 했습니다</label>
+        </div>
       </div>
       <div class="card pays" id="pays">
         <h2>카드 결제</h2>
@@ -161,7 +262,7 @@ body[data-kind="trip"] .main{background:var(--trip)}
             <input class="p-amt num" inputmode="numeric" pattern="[0-9,]*" placeholder="예) 60,000" autocomplete="off"></label>
         </div>
         <button type="button" class="ghost" id="addPay">+ 결제 한 건 더 (식사·다과를 따로 결제한 경우)</button>
-        <div class="sum num" id="m-sum"></div>
+        <div class="slip receipt" id="m-sum" aria-live="polite"></div>
         <div class="notice" id="m-notice" hidden></div>
         <span class="hint">승인번호는 카드 결제 문자·영수증에 있습니다. 대중음식점 식대만 인정되고, 봉사료(호텔 등 기본 부과 업소 제외)와 유흥업소 결제는 인정되지 않습니다.</span>
         <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500">
@@ -229,7 +330,7 @@ body[data-kind="trip"] .main{background:var(--trip)}
             <label class="chip"><input type="radio" name="t-pay" value="N"><span>아니오</span></label>
           </div>
           <span class="hint">과외활동으로 인한 출장은 여비를 신청할 수 없습니다.</span></div>
-        <div id="t-exp" class="card" style="padding:14px;background:var(--trip-soft);border:0;gap:14px">
+        <div id="t-exp" class="card" style="padding:16px;background:var(--accent-soft);box-shadow:none;gap:16px;border-radius:14px">
           <div class="field"><span class="lab req">교통편</span>
             <div class="chips" id="t-trans">
               <label class="chip"><input type="radio" name="t-trans" value="KTX"><span>KTX</span></label>
@@ -252,19 +353,27 @@ body[data-kind="trip"] .main{background:var(--trip)}
             <input id="t-meals" class="num" inputmode="numeric" pattern="[0-9]*" placeholder="없으면 0">
             <span class="hint">행사·회의비로 식사가 나오면 식비를 끼니당 1/3씩 줄여 신청합니다.</span></label>
         </div>
-        <div class="sum trip num" id="t-sum"></div>
+        <div class="slip ticket" id="t-sum" aria-live="polite"></div>
         <div class="notice" id="t-notice" hidden></div>
       </div>
 
-      <div class="card biz-card" data-prefix="t" data-kind="trip">
-        <h2>지출 사업</h2>
-        <div class="field"><span class="lab req">어느 사업 예산으로 쓰나요</span>
+      <div class="card biz-card" data-prefix="t">
+        <h2>지출 예산</h2>
+        <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="t-biz"></div></div>
-        <label for="t-biz-other" id="t-biz-other-wrap" hidden><span class="req">사업명</span>
-          <input id="t-biz-other" type="text" placeholder="예) 첨단기술공학과 운영비 / 과제명"></label>
-        <div class="field" id="t-esti-wrap" hidden><span class="lab">세부내역 (여비)</span>
-          <div class="chips" id="t-esti"></div>
-          <span class="hint">모르면 '모름'으로 두세요. 담당자가 정합니다.</span></div>
+        <div id="t-rnd" class="field" style="gap:14px" hidden>
+          <label for="t-prj"><span class="req">과제명</span>
+            <input id="t-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
+          <div class="two">
+            <label for="t-prjno">과제번호
+              <input id="t-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
+            <label for="t-pi">연구책임자
+              <input id="t-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
+          </div>
+          <span class="hint" id="t-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+        </div>
+        <label for="t-biz-other" id="t-biz-other-wrap" hidden><span class="req">예산명</span>
+          <input id="t-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
       </div>
       <details>
         <summary>선택 입력 — 동반 출장자·출발지</summary>
@@ -281,6 +390,7 @@ body[data-kind="trip"] .main{background:var(--trip)}
     </section>
 
     <section class="done" id="done" hidden>
+      <div class="seal" aria-hidden="true">확인</div>
       <h2>메일 앱에서 [보내기]만 누르면 끝입니다</h2>
       <p>받는 사람 <span class="addr">shlee@dgist.ac.kr</span>. 본문 아래쪽 데이터는 고치지 말아 주세요.</p>
       <p class="hint">메일 앱이 안 열리면 [본문 복사] → 웹메일에 붙여 넣기. 제목: <span class="addr" id="subj"></span></p>
@@ -296,6 +406,7 @@ body[data-kind="trip"] .main{background:var(--trip)}
   </form>
 </div>
 
+<datalist id="prj-list"></datalist>
 <div class="bar"><div class="in">
   <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
   <small id="left" aria-live="polite"></small>
@@ -320,52 +431,63 @@ const yymmdd = s => s.slice(2, 4) + s.slice(5, 7) + s.slice(8, 10);
 const korDate = s => { const [y, m, d] = s.split("-").map(Number); return `${y}년 ${m}월 ${d}일`; };
 const splitNames = s => s.split(/[,，、\n]/).map(x => x.trim()).filter(Boolean);
 
-// ── 지출 사업 (2026 교수학습센터 예산 세부내역, 포털 예산배정 2026-08-24 기준)
-const BIZ = [
-  { no: "20260515", name: "교수학습지원사업",
-    meeting: [["191475", "튜터링프로그램"], ["191474", "교수법세미나"], ["191453", "혁신교수법 지원"], ["191477", "위원회운영"],
-              ["191479", "AI 코스웨어 활용"], ["191478", "온라인플랫폼강좌현황조사연구"], ["191476", "융복합콘텐츠개발지원"], ["191480", "신임 교원 멘토링 운영"]],
-    trip: [["191450", "국내여비"], ["191446", "혁신교수법지원(여비)"], ["191448", "교원교육연수지원(여비)"], ["191449", "온라인플랫폼강좌현황조사연구사업(여비)"]] },
-  { no: "20260514", name: "MOOC콘텐츠개발및강좌운영",
-    meeting: [["192285", "콘텐츠개발회의"], ["192286", "프로그램운영회의"]],
-    trip: [["192282", "콘텐츠개발관련여비지원"]] },
-  { no: "20260570", name: "교수학습센터(부서운영)", meeting: [["191348", "부서관리비"]], trip: [] },
-  { no: "", name: "기타", other: true },
-];
+// ── 지출 예산: 연구과제 / 학과 예산 / 기타 (교수마다 과제가 다르므로 목록 대신 입력 + 기기별 기억)
+const BUDGETS = [["rnd", "연구과제"], ["dept", "학과 예산"], ["other", "기타"]];
 function chip(name, value, text, checked) {
   const l = document.createElement("label"); l.className = "chip";
   l.innerHTML = `<input type="radio" name="${name}"><span></span>`;
   const i = l.querySelector("input"); i.value = value; i.checked = !!checked;
   l.querySelector("span").textContent = text; return l;
 }
-function buildBiz(p, kind) {
+const PRJ_KEY = "prj";
+function savedProjects() { try { return JSON.parse(store.get(PRJ_KEY) || "[]"); } catch (e) { return []; } }
+function rememberProject(b) {
+  if (!b || b.type !== "rnd" || !b.name) return;
+  const list = savedProjects().filter(x => x.name !== b.name);
+  list.unshift({ name: b.name, no: b.no, pi: b.pi });
+  store.set(PRJ_KEY, JSON.stringify(list.slice(0, 12))); fillProjectList();
+}
+function fillProjectList() {
+  const dl = $("prj-list"); dl.replaceChildren();
+  savedProjects().forEach(x => { const o = document.createElement("option"); o.value = x.name; if (x.no) o.label = `과제번호 ${x.no}`; dl.appendChild(o); });
+}
+function buildBiz(p) {
   const box = $(`${p}-biz`);
-  BIZ.forEach(b => box.appendChild(chip(`${p}-biz`, b.no || "other", b.other ? "기타 (직접 입력)" : b.name)));
-  box.addEventListener("change", () => fillEsti(p, kind));
+  BUDGETS.forEach(([v, t]) => box.appendChild(chip(`${p}-biz`, v, t)));
+  box.addEventListener("change", () => fillEsti(p));
+  // 기억해 둔 과제를 고르면 과제번호·연구책임자를 채운다
+  $(`${p}-prj`).addEventListener("change", () => {
+    const hit = savedProjects().find(x => x.name === $(`${p}-prj`).value.trim());
+    if (hit) { if (!$(`${p}-prjno`).value) $(`${p}-prjno`).value = hit.no || ""; if (!$(`${p}-pi`).value) $(`${p}-pi`).value = hit.pi || ""; render(); }
+  });
 }
-function fillEsti(p, kind) {
-  const b = BIZ.find(x => (x.no || "other") === radio(`${p}-biz`));
-  $(`${p}-biz-other-wrap`).hidden = !(b && b.other);
-  const list = b && !b.other ? b[kind] : [];
-  const box = $(`${p}-esti`); box.innerHTML = "";
-  $(`${p}-esti-wrap`).hidden = !list.length;
-  if (!list.length) return;
-  box.appendChild(chip(`${p}-esti`, "", "모름", true));
-  list.forEach(([code, nm]) => box.appendChild(chip(`${p}-esti`, code, nm)));
+function fillEsti(p) {
+  const v = radio(`${p}-biz`);
+  $(`${p}-rnd`).hidden = v !== "rnd";
+  $(`${p}-biz-other-wrap`).hidden = !(v === "dept" || v === "other");
+  $(`${p}-biz-other`).placeholder = v === "dept" ? "예) 학과 운영비…" : "예산 이름…";
+  if (p === "m") $("m-rnd-rules").hidden = v !== "rnd";
+  // 과제가 기억돼 있으면 가장 최근 과제를 미리 채워 둔다
+  if (v === "rnd" && !$(`${p}-prj`).value) {
+    const last = savedProjects()[0];
+    if (last) { $(`${p}-prj`).value = last.name; $(`${p}-prjno`).value = last.no || ""; $(`${p}-pi`).value = last.pi || ""; }
+  }
 }
-function readBiz(p, kind) {
+function readBiz(p) {
   const v = radio(`${p}-biz`);
   if (!v) return null;
-  if (v === "other") return { no: "", name: $(`${p}-biz-other`).value.trim(), other: true };
-  const b = BIZ.find(x => x.no === v), e = radio(`${p}-esti`);
-  const it = (b[kind] || []).find(x => x[0] === e);
-  return { no: b.no, name: b.name, esti: it ? it[0] : "", estiName: it ? it[1] : "" };
+  if (v === "rnd") return { type: "rnd", name: $(`${p}-prj`).value.trim(), no: $(`${p}-prjno`).value.replace(/\D/g, ""),
+                            pi: $(`${p}-pi`).value.trim() || $("me").value.trim() };
+  return { type: v, name: $(`${p}-biz-other`).value.trim() };
 }
-const bizText = b => b.other ? `${b.name} (기타)` : `${b.name}(${b.no})` + (b.esti ? ` › ${b.estiName}(${b.esti})` : " › 세부내역 모름");
+const bizText = b => !b ? "" : b.type === "rnd"
+  ? `연구과제 ${b.name}` + (b.no ? ` (과제번호 ${b.no})` : "") + ` · 연구책임자 ${b.pi}`
+  : `${b.type === "dept" ? "학과 예산" : "기타"} ${b.name}`;
 function bizProblems(p, kind, out) {
-  const b = readBiz(p, kind);
-  if (!b) out.push([$(`${p}-biz`), "지출 사업을 골라 주세요."]);
-  else if (b.other && !b.name) out.push([$(`${p}-biz-other`), "사업명을 적어 주세요."]);
+  const b = readBiz(p);
+  if (!b) out.push([$(`${p}-biz`), "어느 예산으로 쓰는지 골라 주세요."]);
+  else if (b.type === "rnd" && !b.name) out.push([$(`${p}-prj`), "과제명을 적어 주세요."]);
+  else if (b.type !== "rnd" && !b.name) out.push([$(`${p}-biz-other`), "예산명을 적어 주세요."]);
 }
 
 // ── 종류 전환
@@ -373,7 +495,7 @@ function setKind(k) {
   document.body.dataset.kind = k;
   $("sec-meeting").hidden = k !== "meeting";
   $("sec-trip").hidden = k !== "trip";
-  $("send").textContent = k === "meeting" ? "회의비 메일 보내기" : "출장 메일 보내기";
+  $("send").textContent = k === "meeting" ? "회의비 메일 보내기" : "출장비 메일 보내기";
   $("done").hidden = true; store.set("kind", k); render();
 }
 document.querySelectorAll("input[name=kind]").forEach(r => r.addEventListener("change", () => setKind(r.value)));
@@ -412,7 +534,7 @@ function readMeeting() {
   return { type: "meeting", me: $("me").value.trim(), date: $("m-date").value, purpose: $("m-purpose").value.trim(),
     attendees: splitNames($("m-att").value),
     contents: $("m-contents").value.split("\n").map(s => s.trim().replace(/^[-·•]\s*/, "")).filter(Boolean),
-    payments, amount, place: $("m-place").value.trim(), biz: readBiz("m", "meeting"),
+    payments, amount, place: $("m-place").value.trim(), biz: readBiz("m"), ext: radio("m-ext"), pre: $("m-pre").checked,
     night: $("m-night").checked, personalCard: $("m-personal").checked };
 }
 function readTrip() {
@@ -421,7 +543,7 @@ function readTrip() {
     dome, prov: dome === "국내" ? $("t-prov").value : "", place: dome === "국내" ? $("t-place").value.trim() : "",
     country: dome === "국외" ? $("t-country").value.trim() : "", city: dome === "국외" ? $("t-city").value.trim() : "",
     purpose: $("t-purpose").value.trim(), travelPay: radio("t-pay"),
-    companions: splitNames($("t-with").value), biz: readBiz("t", "trip"), transport: radio("t-trans"),
+    companions: splitNames($("t-with").value), biz: readBiz("t"), transport: radio("t-trans"),
     route: $("t-route").value.trim(), lodge: radio("t-lodge"), meals: toInt($("t-meals").value) || 0,
     origin: $("t-origin").value.trim() || "디지스트", lecture: $("t-lecture").checked };
 }
@@ -438,7 +560,7 @@ function problems() {
     if (!d.purpose) out.push([$("m-purpose"), "회의 목적을 적어 주세요."]);
     if (!d.attendees.length) out.push([$("m-att"), "참석자를 적어 주세요."]);
     else if (d.attendees.some(a => /외\s*\d+\s*(명|인)/.test(a))) out.push([$("m-att"), "'외 N명' 대신 전원의 이름을 적어 주세요."]);
-    if (!d.contents.length) out.push([$("m-contents"), "회의 내용을 한 줄 이상 적어 주세요."]);
+    if (d.contents.length < 2) out.push([$("m-contents"), d.contents.length ? "회의 내용을 한 줄 더 적어 주세요 (2줄 이상, 줄을 바꿔서)." : "회의 내용을 2줄 이상 적어 주세요."]);
     bizProblems("m", "meeting", out);
     document.querySelectorAll(".pay").forEach(r => {
       const c = r.querySelector(".p-card"), a = r.querySelector(".p-appr"), m = r.querySelector(".p-amt");
@@ -446,8 +568,10 @@ function problems() {
       if (!/^\d{8}$/.test(a.value)) out.push([a, "승인번호 8자리"]);
       if (!toInt(m.value)) out.push([m, "결제 금액"]);
     });
-    if (d.amount && d.attendees.length && d.amount / d.attendees.length > 50000)
-      out.push([$("m-att"), `1인 ${won(Math.round(d.amount / d.attendees.length))}원 — 1인 5만원을 넘습니다. 참석자를 모두 적었는지 확인해 주세요.`]);
+    if (d.biz && d.biz.type === "rnd") {
+      if (!d.ext) out.push([$("m-ext"), "다른 기관 소속 참석자가 있는지 골라 주세요."]);
+      else if (d.ext === "N") out.push([$("m-ext"), "과제 참여연구자만 참석한 회의에는 연구비로 식비를 쓸 수 없습니다. 예산을 바꾸거나 담당자와 상의해 주세요."]);
+    }
   } else {
     const t = readTrip();
     if (!t.tripType) out.push([$("t-type"), "출장 구분을 골라 주세요."]);
@@ -474,24 +598,65 @@ function problems() {
   return out;
 }
 
+// ── 대표 요소: 회의비 = 카드 영수증, 출장비 = 승차권
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function rline(label, value, cls) {
+  const r = el("div", "line" + (cls ? " " + cls : ""));
+  r.append(el("span", "", label), el("i"), el("span", "mono", value)); return r;
+}
+const WD = ["일", "월", "화", "수", "목", "금", "토"];
+const md = iso => { const t = new Date(iso + "T00:00:00"); return `${t.getMonth() + 1}.${t.getDate()}(${WD[t.getDay()]})`; };
+function drawReceipt(d, unit) {
+  const box = $("m-sum"); box.replaceChildren();
+  const head = el("div", "r-head"); head.append(el("span", "", "카드 결제 합계"), el("span", "mono", d.date ? md(d.date) : ""));
+  box.append(head);
+  const paid = d.payments.filter(p => p.amount);
+  if (!paid.length) { box.append(el("div", "empty", "결제 금액을 입력하면 여기에 합계가 계산됩니다.")); return; }
+  d.payments.forEach((p, i) => box.append(rline(`결제 ${i + 1}` + (p.card ? ` · 끝자리 ${p.card}` : ""), p.amount ? won(p.amount) : "—")));
+  box.append(rline("합계", d.amount ? won(d.amount) + "원" : "—", "total"));
+  box.append(rline(`참석 ${d.attendees.length}명 · 1인`, unit ? won(Math.round(unit)) + "원" : "—", "sub"));
+}
+function drawTicket(t, n) {
+  const box = $("t-sum"); box.replaceChildren();
+  const main = el("div", "tk-main"), route = el("div", "tk-route");
+  const short = x => (x || "").replace(/(특별자치시|특별자치도|광역시|특별시|도)$/, "");
+  const city = t.dome === "국내" ? short(t.prov) : t.country, place = t.dome === "국내" ? t.place : t.city;
+  const from = el("div"); from.append(el("div", "tk-label", "출발"), el("div", "tk-city", t.origin));
+  const to = el("div", "tk-to"); to.append(el("div", "tk-label", "도착"), el("div", "tk-city", city || "도착지"));
+  if (place) to.append(el("div", "tk-place", place));
+  route.append(from, el("div", "tk-arrow", "→"), to);
+  const meta = el("div", "tk-meta");
+  if (n && n > 0) meta.append(el("span", "mono", `${md(t.from)} – ${md(t.to)}`), el("span", "", `${n - 1}박 ${n}일 · ${t.dome}`));
+  else meta.textContent = "출발일과 복귀일을 고르면 기간이 계산됩니다.";
+  main.append(route, meta);
+  const stub = el("div", "tk-stub");
+  stub.append(el("span", "", "구분"), el("b", "", t.tripType || "—"), el("span", "", "여비"),
+              el("b", "", t.travelPay === "Y" ? (t.transport || "신청") : "안 함"));
+  box.append(main, stub);
+}
+
 function render() {
   const k = kind();
   if (k === "meeting") {
     const d = readMeeting();
     $("m-n").textContent = d.attendees.length + "명";
+    $("m-lines").textContent = d.contents.length + "줄";
     const unit = d.amount && d.attendees.length ? d.amount / d.attendees.length : null;
-    $("m-sum").innerHTML = "";
-    [["합계", d.amount ? won(d.amount) + "원" : "–"], ["참석", d.attendees.length + "명"],
-     ["1인", unit ? won(Math.round(unit)) + "원" : "–"]].forEach(([a, b]) => {
-      const s = document.createElement("span"); s.textContent = `${a} ${b}`; $("m-sum").appendChild(s); });
-    // 행정처 업무매뉴얼 p186 업무추진비류 유의사항
+    drawReceipt(d, unit);
     const notes = [];
     const dow = d.date ? new Date(d.date + "T00:00:00").getDay() : -1;
-    if (unit && unit > 30000 && unit <= 50000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
-    if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
-    if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
-    if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다. 회의록 간소화 처리가 되지 않습니다.");
-    if (d.personalCard) notes.push("개인카드 사용은 원칙적으로 금지입니다. 사유서와 일상감사·차상위자 결재가 필요하고, 회의록 간소화 처리가 되지 않습니다.");
+    if (d.biz && d.biz.type === "rnd") {
+      // DGIST 연구가이드 3. 회의비 / 국가연구개발혁신법 매뉴얼
+      if (!d.pre) notes.push("DGIST 연구가이드: 식비는 포털 [연구 › 연구수행 › 연구비사용관리 › 회의비(식비) 사전신청]을 회의 시작(또는 결제) 전에 올려 연구책임자 승인을 받아야 합니다.");
+      if (d.amount && d.amount <= 100000) notes.push("10만원 이하라 회의록 대신 목적·일시·장소·내용·참석자 명단 자료로 증빙할 수 있습니다.");
+    } else {
+      // 행정처 업무매뉴얼 p186 업무추진비류 유의사항 (교비)
+      if (unit && unit > 30000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
+      if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
+      if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
+      if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
+      if (d.personalCard) notes.push("개인카드 사용은 원칙적으로 금지입니다. 사유서와 일상감사·차상위자 결재가 필요합니다.");
+    }
     $("m-notice").hidden = !notes.length; $("m-notice").textContent = notes.join(" ");
   } else {
     const t = readTrip(), n = days(t);
@@ -502,7 +667,7 @@ function render() {
     $("t-lodge-wrap").hidden = !(n > 1);
     if (!$("t-route").value && t.dome === "국내" && t.prov && t.prov !== "대구광역시")
       $("t-route").placeholder = `예) 동대구↔${t.prov.replace(/(광역시|특별자치시|특별시|도)$/, "")}`;
-    $("t-sum").textContent = n && n > 0 ? `${n - 1}박 ${n}일 · ${t.dome}` + (destText(t) ? ` · ${destText(t)}` : "") : "출발일과 복귀일을 고르면 기간이 계산됩니다.";
+    drawTicket(t, n);
     const notes = [];
     if (t.dome === "국외") notes.push("국외 출장은 국외출장계획서를 첨부해야 합니다.");
     if (t.dome === "국외" && t.tripType === "학회") notes.push("국외 학회는 체크리스트·확약서 양식 첨부가 필수입니다.");
@@ -535,8 +700,9 @@ function compose() {
     data = { v: 1, type: "meeting", me: d.me, date: d.date, purpose: d.purpose, attendees: d.attendees,
              contents: d.contents, payments: d.payments, amount: d.amount };
     if (d.place) data.place = d.place;
+    data.dept = "전기전자컴퓨터공학과";
     data.biz = d.biz;
-    if (d.biz.esti) data.esti = d.biz.esti;
+    if (d.biz.type === "rnd") { data.externalAttendee = d.ext === "Y"; data.preApproved = d.pre; }
     if (d.night) data.night = true;
     if (d.personalCard) data.personalCard = true;
     lines = [`${d.me}입니다. 회의비 접수 내용을 보냅니다.`, "",
@@ -544,7 +710,8 @@ function compose() {
       `참석자: ${d.attendees.join(", ")} (총 ${d.attendees.length}명)`,
       "회의 내용:", ...d.contents.map(c => `  - ${c}`),
       "카드 결제:", ...d.payments.map(p => `  - 카드 ${p.card} / 승인번호 ${p.apprno} / ${won(p.amount)}원`),
-      `합계: ${won(d.amount)}원`, `지출 사업: ${bizText(d.biz)}`];
+      `합계: ${won(d.amount)}원`, `지출 예산: ${bizText(d.biz)}`];
+    if (d.biz.type === "rnd") lines.push(`외부 참석자: ${d.ext === "Y" ? "있음" : "없음"} · 식비 사전신청: ${d.pre ? "했음" : "안 했음"}`);
     if (d.place) lines.push(`장소: ${d.place}`);
   } else {
     const t = readTrip(), n = days(t);
@@ -566,7 +733,7 @@ function compose() {
       `출발: ${t.origin}`, `도착: ${t.dome} ${destText(t)}`, `목적: ${t.purpose}`,
       `여비 신청: ${t.travelPay === "Y" ? "예" : "아니오"}`,
       `출장자: ${[t.me, ...t.companions].join(", ")}`];
-    if (t.travelPay === "Y") lines.push(`여비 계정(지출 사업): ${bizText(t.biz)}`);
+    if (t.travelPay === "Y") lines.push(`여비 계정(지출 예산): ${bizText(t.biz)}`);
     if (t.travelPay === "Y") {
       lines.push(`교통편: ${t.transport}` + (t.transport !== "업무용차량" ? ` (${t.route})` : " — 일비 1/2"));
       if (n > 1) lines.push(`숙박: ${t.lodge}`);
@@ -590,6 +757,7 @@ $("f").addEventListener("submit", ev => {
     return;
   }
   store.set("me", $("me").value.trim());
+  rememberProject(kind() === "meeting" ? readBiz("m") : readBiz("t"));
   const c = document.querySelector(".p-card").value; if (/^\d{4}$/.test(c)) store.set("card", c);
   last = compose();
   $("subj").textContent = last.subject; $("bodyText").value = last.body; $("again").href = mailto(last);
@@ -609,7 +777,7 @@ $("newOne").addEventListener("click", () => {
   const k = kind(), me = $("me").value;
   $("f").reset(); $("me").value = me; tried = false;
   document.querySelectorAll(".pay").forEach((p, i) => { if (i) p.remove(); });
-  init(); fillEsti("m", "meeting"); fillEsti("t", "trip");
+  init(); fillEsti("m"); fillEsti("t");
   document.querySelector(`input[name=kind][value=${k}]`).checked = true; setKind(k);
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
@@ -625,7 +793,7 @@ function init() {
   document.querySelector(".p-card").value = store.get("card") || "";
 }
 bindPay(document.querySelector(".pay"));
-buildBiz("m", "meeting"); buildBiz("t", "trip");
+buildBiz("m"); buildBiz("t"); fillProjectList();
 init();
 const k0 = store.get("kind");
 if (k0 === "trip" || location.hash === "#trip") { document.querySelector("input[name=kind][value=trip]").checked = true; setKind("trip"); }
