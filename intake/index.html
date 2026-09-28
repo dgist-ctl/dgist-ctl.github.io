@@ -101,11 +101,15 @@ textarea{resize:vertical;min-height:88px;line-height:1.55}
 .chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
 
 /* 결제건 */
+details.sms{box-shadow:none;background:var(--ground);border-radius:12px;padding:0 14px}
+details.sms summary{min-height:46px;padding:12px 0;font-size:14px}
+details.sms[open]{padding-bottom:12px}
+details.sms textarea{background:var(--paper);min-height:76px;margin-bottom:6px}
 .pay{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:10px;align-items:end}
 .pay .wide{grid-column:1/-1}
 .pay + .pay{padding-top:16px;border-top:1px dashed var(--line)}
 .pay-head{display:flex;justify-content:space-between;align-items:center;grid-column:1/-1;font-size:12px;letter-spacing:.1em;color:var(--muted);font-weight:600}
-.pays:has(.pay:only-of-type) .pay-head{display:none}
+.pays.single .pay-head{display:none}
 .linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 2px;min-height:40px}
 .ghost{font:inherit;background:transparent;border:1px dashed var(--line);color:var(--ink);border-radius:12px;padding:11px 14px;min-height:48px;font-size:14.5px;cursor:pointer;
   transition:border-color .15s ease,background-color .15s ease}
@@ -216,6 +220,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
       <label for="me"><span class="req">내 이름</span>
         <input id="me" type="text" autocomplete="name" enterkeyhint="next" placeholder="홍길동">
         <span class="hint">다음에 열 때 기억해 둡니다 (이 기기에만 저장).</span></label>
+      <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500;font-size:14px">
+        <input id="shared" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 공용 PC입니다 — 이 기기에 아무것도 남기지 않기</label>
     </div>
 
     <!-- ───────── 회의비 ───────── -->
@@ -227,8 +233,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <label for="m-purpose"><span class="req">회의 목적</span>
           <input id="m-purpose" type="text" enterkeyhint="next" placeholder="예) 튜터링 프로그램 운영 현황 점검"></label>
         <label for="m-att"><span class="req">참석자</span>
-          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)">
-          <span class="hint">전원 실명을 쉼표로 ('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
+          <textarea id="m-att" rows="2" autocomplete="off" spellcheck="false" style="min-height:64px" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)…"></textarea>
+          <span class="hint">전원 실명을 쉼표·줄바꿈으로 구분합니다('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
         <label for="m-contents"><span class="req">회의 내용</span>
           <textarea id="m-contents" rows="3" placeholder="한 줄에 한 항목, 2줄 이상&#10;예) 공동연구 1차년도 진행 상황을 점검함&#10;예) 2차년도 실험 일정과 역할 분담을 협의함"></textarea>
           <span class="hint">줄을 바꿔 두 항목 이상 적어 주세요. <b id="m-lines" class="num">0줄</b></span></label>
@@ -264,6 +270,11 @@ details .inner{display:flex;flex-direction:column;gap:18px}
       </div>
       <div class="card pays" id="pays">
         <h2>카드 결제</h2>
+        <details class="sms">
+          <summary>카드 결제 문자로 채우기</summary>
+          <textarea id="sms" rows="3" placeholder="카드사 결제 문자를 그대로 붙여 넣으세요…&#10;예) [Web발신] 신한카드(3331)승인 홍*동 60,000원 일시불 09/24 12:31 ○○식당"></textarea>
+          <span class="hint" id="sms-out">카드 끝자리·금액·날짜를 찾아 첫 결제 칸에 채웁니다. 승인번호는 문자에 없으면 영수증에서 확인해 주세요.</span>
+        </details>
         <div class="pay">
           <div class="pay-head"><span class="pay-no">결제 1</span><button type="button" class="linkbtn del">삭제</button></div>
           <label><span class="req">카드 끝 4자리</span>
@@ -360,7 +371,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
               <label class="chip"><input type="radio" name="t-lodge" value="정액"><span>정액</span></label>
               <label class="chip"><input type="radio" name="t-lodge" value="실비"><span>실비 (영수증)</span></label>
               <label class="chip"><input type="radio" name="t-lodge" value="없음"><span>숙박비 없음</span></label>
-            </div></div>
+            </div>
+            <span class="hint">정액 = 영수증 없이 규정 금액을 받습니다. 실비 = 숙박 영수증 금액을 규정 한도 안에서 받습니다(영수증 필요). 숙소를 따로 안 쓰면 '숙박비 없음'.</span></div>
           <label for="t-meals">제공받는 식사 (끼니 수)
             <input id="t-meals" class="num" inputmode="numeric" pattern="[0-9]*" placeholder="없으면 0">
             <span class="hint">행사·회의비로 식사가 나오면 식비를 끼니당 1/3씩 줄여 신청합니다.</span></label>
@@ -403,7 +415,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 
     <section class="done" id="done" hidden>
       <div class="seal" aria-hidden="true">확인</div>
-      <h2>메일 앱에서 [보내기]만 누르면 끝입니다</h2>
+      <h2 id="doneTitle" tabindex="-1">메일 앱에서 [보내기]만 누르면 끝입니다</h2>
       <p>받는 사람 <span class="addr">shlee@dgist.ac.kr</span>. 보내기 전에 본문 맨 끝에 <b>'=== 끝 ==='</b> 줄이 있는지만 확인해 주세요. 그 위의 데이터는 고치지 말아 주세요.</p>
       <p class="hint">메일 앱이 안 열리면 [본문 복사] → 웹메일에 붙여 넣기. 제목: <span class="addr" id="subj"></span></p>
       <div class="row-btns">
@@ -423,7 +435,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 <datalist id="prj-list"></datalist>
 <div class="bar"><div class="in">
   <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
-  <small id="left" aria-live="polite"></small>
+  <small id="left" aria-live="polite" role="status"></small>
 </div></div>
 
 <script>
@@ -432,9 +444,11 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 const TO = "shlee@dgist.ac.kr";
 const $ = id => document.getElementById(id);
 const won = n => Number(n).toLocaleString("ko-KR");
+const SHARED_KEY = "ctl-intake:shared";
+const isShared = () => { try { return localStorage.getItem(SHARED_KEY) === "1"; } catch (e) { return false; } };
 const store = {
   get(k) { try { return localStorage.getItem("ctl-intake:" + k); } catch (e) { return null; } },
-  set(k, v) { try { localStorage.setItem("ctl-intake:" + k, v); } catch (e) {} },
+  set(k, v) { try { if (!isShared() || v === "") localStorage.setItem("ctl-intake:" + k, v); } catch (e) {} },
 };
 let tried = false;   // 첫 제출 시도 전에는 빨간 표시를 하지 않는다
 const kind = () => document.querySelector("input[name=kind]:checked").value;
@@ -443,7 +457,8 @@ const toInt = s => { const d = String(s || "").replace(/[^\d]/g, ""); return d ?
 const iso = d => { const t = new Date(d); t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); return t.toISOString().slice(0, 10); };
 const yymmdd = s => s.slice(2, 4) + s.slice(5, 7) + s.slice(8, 10);
 const korDate = s => { const [y, m, d] = s.split("-").map(Number); return `${y}년 ${m}월 ${d}일`; };
-const splitNames = s => s.split(/[,，、\n]/).map(x => x.trim()).filter(Boolean);
+// 괄호 안(소속)의 구분자는 자르지 않는다 — "김철수(KAIST/전기과)" 가 둘로 갈리지 않게
+const splitNames = s => (s.match(/(?:[^,，、\n/·;(]|\([^)]*\))+/g) || []).map(x => x.trim()).filter(Boolean);
 
 // ── 지출 예산: 연구과제 / 학과 예산 / 기타 (교수마다 과제가 다르므로 목록 대신 입력 + 기기별 기억)
 const BUDGETS = [["rnd", "연구과제"], ["dept", "학과 예산"], ["other", "기타"]];
@@ -509,6 +524,7 @@ function bizProblems(p, kind, out) {
   const b = readBiz(p);
   if (!b) out.push([$(`${p}-biz`), "어느 예산으로 쓰는지 골라 주세요."]);
   else if (b.type === "rnd" && !b.name) out.push([$(`${p}-prj`), "과제명을 적어 주세요."]);
+  else if (b.type === "rnd" && b.no && !/^\d{8}$/.test(b.no)) out.push([$(`${p}-prjno`), "과제번호는 8자리 숫자입니다(예: 20250857). 모르면 비워 두세요."]);
   else if (b.type !== "rnd" && !b.name) out.push([$(`${p}-biz-other`), "예산명을 적어 주세요."]);
 }
 
@@ -524,18 +540,46 @@ document.querySelectorAll("input[name=kind]").forEach(r => r.addEventListener("c
 
 // ── 결제건
 function renumber() {
-  document.querySelectorAll(".pay").forEach((p, i) => { p.querySelector(".pay-no").textContent = `결제 ${i + 1}`; });
+  const rows = document.querySelectorAll(".pay");
+  rows.forEach((p, i) => { p.querySelector(".pay-no").textContent = `결제 ${i + 1}`; });
+  $("pays").classList.toggle("single", rows.length === 1);   // :only-of-type 은 영수증·안내 div 때문에 안 맞는다
+}
+// 카드사 문자 → 끝 4자리·금액·날짜·(있으면) 승인번호
+function parseSms(t) {
+  const out = {};
+  const card = t.match(/(?:카드|체크)\D{0,6}\(?\*{0,4}(\d{4})\)?/) || t.match(/\((\d{4})\)/);
+  if (card) out.card = card[1];
+  const amt = t.match(/([\d,]{3,})\s*원/); if (amt) out.amount = toInt(amt[1]);
+  const md = t.match(/(\d{1,2})[\/.-](\d{1,2})\s+\d{1,2}:\d{2}/);
+  if (md) { const y = new Date().getFullYear(); out.date = `${y}-${md[1].padStart(2, "0")}-${md[2].padStart(2, "0")}`; }
+  const ap = t.match(/승인\s*번호\D{0,3}(\d{8})/); if (ap) out.apprno = ap[1];
+  return out;
 }
 function bindPay(el) {
   el.querySelector(".del").addEventListener("click", () => {
     if (document.querySelectorAll(".pay").length > 1) { el.remove(); renumber(); render(); }
   });
   const amt = el.querySelector(".p-amt");
+  // 칸에 붙여 넣은 값 정리: "****-****-****-3331" → 3331, "승인번호 12345678" → 12345678
+  el.querySelector(".p-card").addEventListener("paste", e => { const raw = e.clipboardData.getData("text"), d = (raw.match(/\d/g) || []).join("");
+    // 가린 카드번호(****-****-****-7788)는 숫자가 4개뿐이어도 '*'·'-' 가 섞여 있으니 숫자만 남긴다
+    if (d && raw.trim() !== d) { e.preventDefault(); e.target.value = d.slice(-4); e.target.dispatchEvent(new Event("input", { bubbles: true })); } });
+  el.querySelector(".p-appr").addEventListener("paste", e => { const m = e.clipboardData.getData("text").match(/\d{8}/);
+    if (m) { e.preventDefault(); e.target.value = m[0]; e.target.dispatchEvent(new Event("input", { bubbles: true })); } });
   amt.addEventListener("blur", () => { const n = toInt(amt.value); amt.value = n === null ? "" : won(n); });
   // 카드 끝 4자리를 치면 승인번호로, 승인번호 8자리를 치면 금액으로 넘어간다
   el.querySelector(".p-card").addEventListener("input", e => { if (e.target.value.length === 4) el.querySelector(".p-appr").focus(); });
   el.querySelector(".p-appr").addEventListener("input", e => { if (e.target.value.length === 8) amt.focus(); });
 }
+$("sms").addEventListener("input", () => {
+  const r = parseSms($("sms").value), row = document.querySelector(".pay"), got = [];
+  if (r.card) { row.querySelector(".p-card").value = r.card; got.push(`카드 끝자리 ${r.card}`); }
+  if (r.amount) { row.querySelector(".p-amt").value = won(r.amount); got.push(`금액 ${won(r.amount)}원`); }
+  if (r.apprno) { row.querySelector(".p-appr").value = r.apprno; got.push(`승인번호 ${r.apprno}`); }
+  if (r.date && r.date <= iso(new Date())) { $("m-date").value = r.date; got.push(`날짜 ${r.date}`); }
+  $("sms-out").textContent = got.length ? `채움: ${got.join(" · ")}` + (r.apprno ? "" : " — 승인번호는 영수증에서 확인해 주세요.") : "문자에서 카드 정보를 찾지 못했습니다. 직접 입력해 주세요.";
+  render();
+});
 $("addPay").addEventListener("click", () => {
   const first = document.querySelector(".pay"), el = first.cloneNode(true);
   el.querySelectorAll("input").forEach(i => { i.value = ""; i.classList.remove("invalid"); });
@@ -580,6 +624,7 @@ function problems() {
     const d = readMeeting();
     if (!d.date) out.push([$("m-date"), "회의 날짜를 골라 주세요."]);
     if (!d.purpose) out.push([$("m-purpose"), "회의 목적을 적어 주세요."]);
+    else if (d.purpose.replace(/\s/g, "").length < 6) out.push([$("m-purpose"), "회의 목적을 조금 더 구체적으로 적어 주세요. 예) 공동연구 1차년도 진행 점검"]);
     if (!d.attendees.length) out.push([$("m-att"), "참석자를 적어 주세요."]);
     else if (d.attendees.some(a => /외\s*\d+\s*(명|인)/.test(a))) out.push([$("m-att"), "'외 N명' 대신 전원의 이름을 적어 주세요."]);
     else {
@@ -622,6 +667,7 @@ function problems() {
       if (!t.city) out.push([$("t-city"), "도시·장소"]);
     }
     if (!t.purpose) out.push([$("t-purpose"), "출장 목적을 적어 주세요."]);
+    else if (t.purpose.replace(/\s/g, "").length < 6) out.push([$("t-purpose"), "출장 목적을 조금 더 구체적으로 적어 주세요. 예) 2026 공학교육학술대회 발표"]);
     if (t.travelPay === "Y") bizProblems("t", "trip", out);
     if (t.companions.length > 4) out.push([$("t-with"), "출장자는 본인 포함 최대 5명입니다."]);
     if (t.travelPay === "Y") {
@@ -801,13 +847,15 @@ $("f").addEventListener("submit", ev => {
   rememberProject(kind() === "meeting" ? readBiz("m") : readBiz("t"));
   const c = document.querySelector(".p-card").value; if (/^\d{4}$/.test(c)) store.set("card", c);
   last = compose();
+  clearTimeout(draftTimer);   // 직전 입력이 예약한 자동 저장이 지운 초안을 되살리지 않게
+  store.set(DRAFT, "");   // 보낸 뒤에는 승인번호·금액이 든 초안을 남기지 않는다(다시 보내기는 [메일 다시 열기])
   $("subj").textContent = last.subject; $("bodyText").value = last.body; $("again").href = mailto(last);
   $("done").hidden = false; $("status").textContent = "";
   // 한글은 메일 링크에서 한 글자가 9자로 늘어나 보통 접수도 2,500~3,500자다 — 아주 길 때만 따로 경고한다
   $("longMail").hidden = mailto(last).length < 8000;
   drawAttach();   // Outlook·일부 모바일 앱은 약 2,000자에서 자른다
   location.href = mailto(last);
-  setTimeout(() => $("done").scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+  setTimeout(() => { $("done").scrollIntoView({ behavior: "smooth", block: "start" }); $("doneTitle").focus({ preventScroll: true }); }, 200);
 });
 
 // 메일에 함께 붙일 파일 — 포털 출장신청서 첨부 칸(기타·국외출장계획서·학술행사 논문/발표·e-ticket)과 맞춘다
@@ -832,13 +880,22 @@ async function copy(text, what) {
   catch (e) { const t = $("bodyText"); t.hidden = false; t.value = text; t.focus(); t.select();
     $("status").textContent = "선택된 내용을 길게 눌러 복사해 주세요."; }
 }
+$("shared").checked = isShared();
+$("shared").addEventListener("change", () => {
+  try {
+    if ($("shared").checked) {   // 켜는 순간 지금까지 남은 이름·과제·초안을 지운다
+      Object.keys(localStorage).filter(k => k.startsWith("ctl-intake:")).forEach(k => localStorage.removeItem(k));
+      localStorage.setItem(SHARED_KEY, "1"); fillProjectList();
+    } else localStorage.removeItem(SHARED_KEY);
+  } catch (e) {}
+});
 $("clearDraft").addEventListener("click", () => { store.set(DRAFT, ""); location.reload(); });
 $("copy").addEventListener("click", () => last && copy(last.body, "본문"));
 $("copySubj").addEventListener("click", () => last && copy(last.subject, "제목"));
 $("newOne").addEventListener("click", () => {
   const k = kind(), me = $("me").value;
   $("f").reset(); $("me").value = me; tried = false; store.set(DRAFT, "");
-  document.querySelectorAll(".pay").forEach((p, i) => { if (i) p.remove(); });
+  document.querySelectorAll(".pay").forEach((p, i) => { if (i) p.remove(); }); renumber();
   init(); fillEsti("m"); fillEsti("t");
   document.querySelector(`input[name=kind][value=${k}]`).checked = true; setKind(k);
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -847,6 +904,7 @@ $("newOne").addEventListener("click", () => {
 // 작성 중 내용은 이 기기에 자동 저장한다 (창을 닫아도 남음, [새로 입력하기]로 지움)
 const DRAFT = "draft";
 function saveDraft() {
+  if (isShared()) return;
   const v = {}, r = {}, c = {};
   document.querySelectorAll("#f input[id]:not([type=radio]):not([type=checkbox]), #f select[id], #f textarea[id]").forEach(e => { if (e.id !== "bodyText") v[e.id] = e.value; });
   document.querySelectorAll("#f input[type=radio]:checked").forEach(e => { r[e.name] = e.value; });
@@ -892,7 +950,7 @@ function init() {
   $("me").value = $("me").value || store.get("me") || "";
   document.querySelector(".p-card").value = store.get("card") || "";
 }
-bindPay(document.querySelector(".pay"));
+bindPay(document.querySelector(".pay")); renumber();
 buildBiz("m"); buildBiz("t"); fillProjectList(); labelChipGroups();
 init();
 const restored = restoreDraft();
