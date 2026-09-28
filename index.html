@@ -325,8 +325,9 @@ body {
 
     <div class="enter-block">
       <div id="down" class="down">지금은 튜터 서버가 꺼져 있습니다. 잠시 후 다시 들어와 주세요.</div>
-      <!-- 운영계획 v4.1: 교수학습센터에 등록된 학교 이메일만으로 들어온다.
-           비밀번호도 접속 코드도 없다. -->
+      <!-- 2026-09-15 부터 서버는 명부가 아니라 학교 도메인(@dgist.ac.kr, 하위 도메인 포함)만 본다
+           (server.py _handle_login). "등록된" 이메일이라고 적으면 명부에 없는 학생이 되돌아 나간다 —
+           2026-09-28 문구를 서버 동작에 맞췄다. 비밀번호도 접속 코드도 없다. -->
       <form id="login" class="login">
         <div class="field">
           <label for="email">학교 이메일</label>
@@ -335,7 +336,7 @@ body {
         </div>
         <button id="go" type="submit" class="go">들어가기 <span aria-hidden="true">→</span></button>
       </form>
-      <p class="hint">교수학습센터에 등록된 학교 이메일로 들어갑니다. 비밀번호와 접속 코드는 없습니다.</p>
+      <p class="hint">DGIST 학교 이메일이면 누구나 바로 들어갈 수 있습니다. 비밀번호와 접속 코드는 없습니다.</p>
       <p id="msg" class="msg" hidden></p>
     </div>
   </div>
