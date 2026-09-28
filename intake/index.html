@@ -189,9 +189,9 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 <body data-kind="meeting">
 <div class="wrap">
   <header>
-    <p class="eyebrow">DGIST 교수학습센터</p>
+    <p class="eyebrow">DGIST 전기전자컴퓨터공학과</p>
     <h1>회의비, 출장비 접수</h1>
-    <p class="lead">필요한 값만 입력하면 담당자에게 보낼 메일이 만들어집니다. 회의록과 포털 신청은 담당자가 이 값으로 처리합니다.</p>
+    <p class="lead">필요한 값만 입력하면 담당자에게 보낼 메일이 만들어집니다. 회의록과 포털 신청은 행정 담당자가 이 값으로 처리합니다.</p>
   </header>
 
   <div class="kinds" role="radiogroup" aria-label="접수 종류">
@@ -215,21 +215,39 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <label for="m-purpose"><span class="req">회의 목적</span>
           <input id="m-purpose" type="text" enterkeyhint="next" placeholder="예) 튜터링 프로그램 운영 현황 점검"></label>
         <label for="m-att"><span class="req">참석자</span>
-          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수, 이영희(자이닉스)">
+          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)">
           <span class="hint">전원 실명을 쉼표로 ('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
         <label for="m-contents"><span class="req">회의 내용</span>
           <textarea id="m-contents" rows="2" placeholder="한 줄에 한 항목, 1~2줄이면 충분합니다&#10;예) 2학기 튜터링 운영 현황을 점검함"></textarea></label>
       </div>
 
-      <div class="card biz-card" data-prefix="m" data-kind="meeting">
-        <h2>지출 사업</h2>
-        <div class="field"><span class="lab req">어느 사업 예산으로 쓰나요</span>
+      <div class="card biz-card" data-prefix="m">
+        <h2>지출 예산</h2>
+        <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="m-biz"></div></div>
-        <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">사업명</span>
-          <input id="m-biz-other" type="text" placeholder="예) 첨단기술공학과 운영비 / 과제명"></label>
-        <div class="field" id="m-esti-wrap" hidden><span class="lab">세부내역 (회의비)</span>
-          <div class="chips" id="m-esti"></div>
-          <span class="hint">모르면 '모름'으로 두세요. 담당자가 정합니다.</span></div>
+        <div id="m-rnd" class="field" style="gap:14px" hidden>
+          <label for="m-prj"><span class="req">과제명</span>
+            <input id="m-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
+          <div class="two">
+            <label for="m-prjno">과제번호
+              <input id="m-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
+            <label for="m-pi">연구책임자
+              <input id="m-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
+          </div>
+          <span class="hint" id="m-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+        </div>
+        <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">예산명</span>
+          <input id="m-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
+        <div id="m-rnd-rules" class="field" hidden>
+          <span class="lab req">다른 기관 소속 참석자가 있나요</span>
+          <div class="chips" id="m-ext">
+            <label class="chip"><input type="radio" name="m-ext" value="Y"><span>있음</span></label>
+            <label class="chip"><input type="radio" name="m-ext" value="N"><span>없음 (과제 참여연구자만)</span></label>
+          </div>
+          <span class="hint">연구비 회의비 중 식비는 연구개발기관에 소속되지 않은 사람이 참석한 회의에만 쓸 수 있습니다.</span>
+          <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500;margin-top:4px">
+            <input id="m-pre" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 포털에서 회의비(식비) 사전신청을 했습니다</label>
+        </div>
       </div>
       <div class="card pays" id="pays">
         <h2>카드 결제</h2>
@@ -338,15 +356,23 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <div class="notice" id="t-notice" hidden></div>
       </div>
 
-      <div class="card biz-card" data-prefix="t" data-kind="trip">
-        <h2>지출 사업</h2>
-        <div class="field"><span class="lab req">어느 사업 예산으로 쓰나요</span>
+      <div class="card biz-card" data-prefix="t">
+        <h2>지출 예산</h2>
+        <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="t-biz"></div></div>
-        <label for="t-biz-other" id="t-biz-other-wrap" hidden><span class="req">사업명</span>
-          <input id="t-biz-other" type="text" placeholder="예) 첨단기술공학과 운영비 / 과제명"></label>
-        <div class="field" id="t-esti-wrap" hidden><span class="lab">세부내역 (여비)</span>
-          <div class="chips" id="t-esti"></div>
-          <span class="hint">모르면 '모름'으로 두세요. 담당자가 정합니다.</span></div>
+        <div id="t-rnd" class="field" style="gap:14px" hidden>
+          <label for="t-prj"><span class="req">과제명</span>
+            <input id="t-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
+          <div class="two">
+            <label for="t-prjno">과제번호
+              <input id="t-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
+            <label for="t-pi">연구책임자
+              <input id="t-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
+          </div>
+          <span class="hint" id="t-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+        </div>
+        <label for="t-biz-other" id="t-biz-other-wrap" hidden><span class="req">예산명</span>
+          <input id="t-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
       </div>
       <details>
         <summary>선택 입력 — 동반 출장자·출발지</summary>
@@ -379,6 +405,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
   </form>
 </div>
 
+<datalist id="prj-list"></datalist>
 <div class="bar"><div class="in">
   <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
   <small id="left" aria-live="polite"></small>
@@ -403,52 +430,63 @@ const yymmdd = s => s.slice(2, 4) + s.slice(5, 7) + s.slice(8, 10);
 const korDate = s => { const [y, m, d] = s.split("-").map(Number); return `${y}년 ${m}월 ${d}일`; };
 const splitNames = s => s.split(/[,，、\n]/).map(x => x.trim()).filter(Boolean);
 
-// ── 지출 사업 (2026 교수학습센터 예산 세부내역, 포털 예산배정 2026-08-24 기준)
-const BIZ = [
-  { no: "20260515", name: "교수학습지원사업",
-    meeting: [["191475", "튜터링프로그램"], ["191474", "교수법세미나"], ["191453", "혁신교수법 지원"], ["191477", "위원회운영"],
-              ["191479", "AI 코스웨어 활용"], ["191478", "온라인플랫폼강좌현황조사연구"], ["191476", "융복합콘텐츠개발지원"], ["191480", "신임 교원 멘토링 운영"]],
-    trip: [["191450", "국내여비"], ["191446", "혁신교수법지원(여비)"], ["191448", "교원교육연수지원(여비)"], ["191449", "온라인플랫폼강좌현황조사연구사업(여비)"]] },
-  { no: "20260514", name: "MOOC콘텐츠개발및강좌운영",
-    meeting: [["192285", "콘텐츠개발회의"], ["192286", "프로그램운영회의"]],
-    trip: [["192282", "콘텐츠개발관련여비지원"]] },
-  { no: "20260570", name: "교수학습센터(부서운영)", meeting: [["191348", "부서관리비"]], trip: [] },
-  { no: "", name: "기타", other: true },
-];
+// ── 지출 예산: 연구과제 / 학과 예산 / 기타 (교수마다 과제가 다르므로 목록 대신 입력 + 기기별 기억)
+const BUDGETS = [["rnd", "연구과제"], ["dept", "학과 예산"], ["other", "기타"]];
 function chip(name, value, text, checked) {
   const l = document.createElement("label"); l.className = "chip";
   l.innerHTML = `<input type="radio" name="${name}"><span></span>`;
   const i = l.querySelector("input"); i.value = value; i.checked = !!checked;
   l.querySelector("span").textContent = text; return l;
 }
-function buildBiz(p, kind) {
+const PRJ_KEY = "prj";
+function savedProjects() { try { return JSON.parse(store.get(PRJ_KEY) || "[]"); } catch (e) { return []; } }
+function rememberProject(b) {
+  if (!b || b.type !== "rnd" || !b.name) return;
+  const list = savedProjects().filter(x => x.name !== b.name);
+  list.unshift({ name: b.name, no: b.no, pi: b.pi });
+  store.set(PRJ_KEY, JSON.stringify(list.slice(0, 12))); fillProjectList();
+}
+function fillProjectList() {
+  const dl = $("prj-list"); dl.replaceChildren();
+  savedProjects().forEach(x => { const o = document.createElement("option"); o.value = x.name; if (x.no) o.label = `과제번호 ${x.no}`; dl.appendChild(o); });
+}
+function buildBiz(p) {
   const box = $(`${p}-biz`);
-  BIZ.forEach(b => box.appendChild(chip(`${p}-biz`, b.no || "other", b.other ? "기타 (직접 입력)" : b.name)));
-  box.addEventListener("change", () => fillEsti(p, kind));
+  BUDGETS.forEach(([v, t]) => box.appendChild(chip(`${p}-biz`, v, t)));
+  box.addEventListener("change", () => fillEsti(p));
+  // 기억해 둔 과제를 고르면 과제번호·연구책임자를 채운다
+  $(`${p}-prj`).addEventListener("change", () => {
+    const hit = savedProjects().find(x => x.name === $(`${p}-prj`).value.trim());
+    if (hit) { if (!$(`${p}-prjno`).value) $(`${p}-prjno`).value = hit.no || ""; if (!$(`${p}-pi`).value) $(`${p}-pi`).value = hit.pi || ""; render(); }
+  });
 }
-function fillEsti(p, kind) {
-  const b = BIZ.find(x => (x.no || "other") === radio(`${p}-biz`));
-  $(`${p}-biz-other-wrap`).hidden = !(b && b.other);
-  const list = b && !b.other ? b[kind] : [];
-  const box = $(`${p}-esti`); box.innerHTML = "";
-  $(`${p}-esti-wrap`).hidden = !list.length;
-  if (!list.length) return;
-  box.appendChild(chip(`${p}-esti`, "", "모름", true));
-  list.forEach(([code, nm]) => box.appendChild(chip(`${p}-esti`, code, nm)));
+function fillEsti(p) {
+  const v = radio(`${p}-biz`);
+  $(`${p}-rnd`).hidden = v !== "rnd";
+  $(`${p}-biz-other-wrap`).hidden = !(v === "dept" || v === "other");
+  $(`${p}-biz-other`).placeholder = v === "dept" ? "예) 학과 운영비…" : "예산 이름…";
+  if (p === "m") $("m-rnd-rules").hidden = v !== "rnd";
+  // 과제가 기억돼 있으면 가장 최근 과제를 미리 채워 둔다
+  if (v === "rnd" && !$(`${p}-prj`).value) {
+    const last = savedProjects()[0];
+    if (last) { $(`${p}-prj`).value = last.name; $(`${p}-prjno`).value = last.no || ""; $(`${p}-pi`).value = last.pi || ""; }
+  }
 }
-function readBiz(p, kind) {
+function readBiz(p) {
   const v = radio(`${p}-biz`);
   if (!v) return null;
-  if (v === "other") return { no: "", name: $(`${p}-biz-other`).value.trim(), other: true };
-  const b = BIZ.find(x => x.no === v), e = radio(`${p}-esti`);
-  const it = (b[kind] || []).find(x => x[0] === e);
-  return { no: b.no, name: b.name, esti: it ? it[0] : "", estiName: it ? it[1] : "" };
+  if (v === "rnd") return { type: "rnd", name: $(`${p}-prj`).value.trim(), no: $(`${p}-prjno`).value.replace(/\D/g, ""),
+                            pi: $(`${p}-pi`).value.trim() || $("me").value.trim() };
+  return { type: v, name: $(`${p}-biz-other`).value.trim() };
 }
-const bizText = b => b.other ? `${b.name} (기타)` : `${b.name}(${b.no})` + (b.esti ? ` › ${b.estiName}(${b.esti})` : " › 세부내역 모름");
+const bizText = b => !b ? "" : b.type === "rnd"
+  ? `연구과제 ${b.name}` + (b.no ? ` (과제번호 ${b.no})` : "") + ` · 연구책임자 ${b.pi}`
+  : `${b.type === "dept" ? "학과 예산" : "기타"} ${b.name}`;
 function bizProblems(p, kind, out) {
-  const b = readBiz(p, kind);
-  if (!b) out.push([$(`${p}-biz`), "지출 사업을 골라 주세요."]);
-  else if (b.other && !b.name) out.push([$(`${p}-biz-other`), "사업명을 적어 주세요."]);
+  const b = readBiz(p);
+  if (!b) out.push([$(`${p}-biz`), "어느 예산으로 쓰는지 골라 주세요."]);
+  else if (b.type === "rnd" && !b.name) out.push([$(`${p}-prj`), "과제명을 적어 주세요."]);
+  else if (b.type !== "rnd" && !b.name) out.push([$(`${p}-biz-other`), "예산명을 적어 주세요."]);
 }
 
 // ── 종류 전환
@@ -495,7 +533,7 @@ function readMeeting() {
   return { type: "meeting", me: $("me").value.trim(), date: $("m-date").value, purpose: $("m-purpose").value.trim(),
     attendees: splitNames($("m-att").value),
     contents: $("m-contents").value.split("\n").map(s => s.trim().replace(/^[-·•]\s*/, "")).filter(Boolean),
-    payments, amount, place: $("m-place").value.trim(), biz: readBiz("m", "meeting"),
+    payments, amount, place: $("m-place").value.trim(), biz: readBiz("m"), ext: radio("m-ext"), pre: $("m-pre").checked,
     night: $("m-night").checked, personalCard: $("m-personal").checked };
 }
 function readTrip() {
@@ -504,7 +542,7 @@ function readTrip() {
     dome, prov: dome === "국내" ? $("t-prov").value : "", place: dome === "국내" ? $("t-place").value.trim() : "",
     country: dome === "국외" ? $("t-country").value.trim() : "", city: dome === "국외" ? $("t-city").value.trim() : "",
     purpose: $("t-purpose").value.trim(), travelPay: radio("t-pay"),
-    companions: splitNames($("t-with").value), biz: readBiz("t", "trip"), transport: radio("t-trans"),
+    companions: splitNames($("t-with").value), biz: readBiz("t"), transport: radio("t-trans"),
     route: $("t-route").value.trim(), lodge: radio("t-lodge"), meals: toInt($("t-meals").value) || 0,
     origin: $("t-origin").value.trim() || "디지스트", lecture: $("t-lecture").checked };
 }
@@ -529,8 +567,10 @@ function problems() {
       if (!/^\d{8}$/.test(a.value)) out.push([a, "승인번호 8자리"]);
       if (!toInt(m.value)) out.push([m, "결제 금액"]);
     });
-    if (d.amount && d.attendees.length && d.amount / d.attendees.length > 50000)
-      out.push([$("m-att"), `1인 ${won(Math.round(d.amount / d.attendees.length))}원 — 1인 5만원을 넘습니다. 참석자를 모두 적었는지 확인해 주세요.`]);
+    if (d.biz && d.biz.type === "rnd") {
+      if (!d.ext) out.push([$("m-ext"), "다른 기관 소속 참석자가 있는지 골라 주세요."]);
+      else if (d.ext === "N") out.push([$("m-ext"), "과제 참여연구자만 참석한 회의에는 연구비로 식비를 쓸 수 없습니다. 예산을 바꾸거나 담당자와 상의해 주세요."]);
+    }
   } else {
     const t = readTrip();
     if (!t.tripType) out.push([$("t-type"), "출장 구분을 골라 주세요."]);
@@ -601,14 +641,20 @@ function render() {
     $("m-n").textContent = d.attendees.length + "명";
     const unit = d.amount && d.attendees.length ? d.amount / d.attendees.length : null;
     drawReceipt(d, unit);
-    // 행정처 업무매뉴얼 p186 업무추진비류 유의사항
     const notes = [];
     const dow = d.date ? new Date(d.date + "T00:00:00").getDay() : -1;
-    if (unit && unit > 30000 && unit <= 50000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
-    if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
-    if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
-    if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다. 회의록 간소화 처리가 되지 않습니다.");
-    if (d.personalCard) notes.push("개인카드 사용은 원칙적으로 금지입니다. 사유서와 일상감사·차상위자 결재가 필요하고, 회의록 간소화 처리가 되지 않습니다.");
+    if (d.biz && d.biz.type === "rnd") {
+      // DGIST 연구가이드 3. 회의비 / 국가연구개발혁신법 매뉴얼
+      if (!d.pre) notes.push("DGIST 연구가이드: 식비는 포털 [연구 › 연구수행 › 연구비사용관리 › 회의비(식비) 사전신청]을 회의 시작(또는 결제) 전에 올려 연구책임자 승인을 받아야 합니다.");
+      if (d.amount && d.amount <= 100000) notes.push("10만원 이하라 회의록 대신 목적·일시·장소·내용·참석자 명단 자료로 증빙할 수 있습니다.");
+    } else {
+      // 행정처 업무매뉴얼 p186 업무추진비류 유의사항 (교비)
+      if (unit && unit > 30000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
+      if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
+      if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
+      if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
+      if (d.personalCard) notes.push("개인카드 사용은 원칙적으로 금지입니다. 사유서와 일상감사·차상위자 결재가 필요합니다.");
+    }
     $("m-notice").hidden = !notes.length; $("m-notice").textContent = notes.join(" ");
   } else {
     const t = readTrip(), n = days(t);
@@ -652,8 +698,9 @@ function compose() {
     data = { v: 1, type: "meeting", me: d.me, date: d.date, purpose: d.purpose, attendees: d.attendees,
              contents: d.contents, payments: d.payments, amount: d.amount };
     if (d.place) data.place = d.place;
+    data.dept = "전기전자컴퓨터공학과";
     data.biz = d.biz;
-    if (d.biz.esti) data.esti = d.biz.esti;
+    if (d.biz.type === "rnd") { data.externalAttendee = d.ext === "Y"; data.preApproved = d.pre; }
     if (d.night) data.night = true;
     if (d.personalCard) data.personalCard = true;
     lines = [`${d.me}입니다. 회의비 접수 내용을 보냅니다.`, "",
@@ -661,7 +708,8 @@ function compose() {
       `참석자: ${d.attendees.join(", ")} (총 ${d.attendees.length}명)`,
       "회의 내용:", ...d.contents.map(c => `  - ${c}`),
       "카드 결제:", ...d.payments.map(p => `  - 카드 ${p.card} / 승인번호 ${p.apprno} / ${won(p.amount)}원`),
-      `합계: ${won(d.amount)}원`, `지출 사업: ${bizText(d.biz)}`];
+      `합계: ${won(d.amount)}원`, `지출 예산: ${bizText(d.biz)}`];
+    if (d.biz.type === "rnd") lines.push(`외부 참석자: ${d.ext === "Y" ? "있음" : "없음"} · 식비 사전신청: ${d.pre ? "했음" : "안 했음"}`);
     if (d.place) lines.push(`장소: ${d.place}`);
   } else {
     const t = readTrip(), n = days(t);
@@ -683,7 +731,7 @@ function compose() {
       `출발: ${t.origin}`, `도착: ${t.dome} ${destText(t)}`, `목적: ${t.purpose}`,
       `여비 신청: ${t.travelPay === "Y" ? "예" : "아니오"}`,
       `출장자: ${[t.me, ...t.companions].join(", ")}`];
-    if (t.travelPay === "Y") lines.push(`여비 계정(지출 사업): ${bizText(t.biz)}`);
+    if (t.travelPay === "Y") lines.push(`여비 계정(지출 예산): ${bizText(t.biz)}`);
     if (t.travelPay === "Y") {
       lines.push(`교통편: ${t.transport}` + (t.transport !== "업무용차량" ? ` (${t.route})` : " — 일비 1/2"));
       if (n > 1) lines.push(`숙박: ${t.lodge}`);
@@ -707,6 +755,7 @@ $("f").addEventListener("submit", ev => {
     return;
   }
   store.set("me", $("me").value.trim());
+  rememberProject(kind() === "meeting" ? readBiz("m") : readBiz("t"));
   const c = document.querySelector(".p-card").value; if (/^\d{4}$/.test(c)) store.set("card", c);
   last = compose();
   $("subj").textContent = last.subject; $("bodyText").value = last.body; $("again").href = mailto(last);
@@ -726,7 +775,7 @@ $("newOne").addEventListener("click", () => {
   const k = kind(), me = $("me").value;
   $("f").reset(); $("me").value = me; tried = false;
   document.querySelectorAll(".pay").forEach((p, i) => { if (i) p.remove(); });
-  init(); fillEsti("m", "meeting"); fillEsti("t", "trip");
+  init(); fillEsti("m"); fillEsti("t");
   document.querySelector(`input[name=kind][value=${k}]`).checked = true; setKind(k);
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
@@ -742,7 +791,7 @@ function init() {
   document.querySelector(".p-card").value = store.get("card") || "";
 }
 bindPay(document.querySelector(".pay"));
-buildBiz("m", "meeting"); buildBiz("t", "trip");
+buildBiz("m"); buildBiz("t"); fillProjectList();
 init();
 const k0 = store.get("kind");
 if (k0 === "trip" || location.hash === "#trip") { document.querySelector("input[name=kind][value=trip]").checked = true; setKind("trip"); }
