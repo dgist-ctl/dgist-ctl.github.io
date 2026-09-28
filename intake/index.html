@@ -218,7 +218,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
           <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)">
           <span class="hint">전원 실명을 쉼표로 ('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
         <label for="m-contents"><span class="req">회의 내용</span>
-          <textarea id="m-contents" rows="2" placeholder="한 줄에 한 항목, 1~2줄이면 충분합니다&#10;예) 2학기 튜터링 운영 현황을 점검함"></textarea></label>
+          <textarea id="m-contents" rows="3" placeholder="한 줄에 한 항목, 2줄 이상&#10;예) 공동연구 1차년도 진행 상황을 점검함&#10;예) 2차년도 실험 일정과 역할 분담을 협의함"></textarea>
+          <span class="hint">줄을 바꿔 두 항목 이상 적어 주세요. <b id="m-lines" class="num">0줄</b></span></label>
       </div>
 
       <div class="card biz-card" data-prefix="m">
@@ -559,7 +560,7 @@ function problems() {
     if (!d.purpose) out.push([$("m-purpose"), "회의 목적을 적어 주세요."]);
     if (!d.attendees.length) out.push([$("m-att"), "참석자를 적어 주세요."]);
     else if (d.attendees.some(a => /외\s*\d+\s*(명|인)/.test(a))) out.push([$("m-att"), "'외 N명' 대신 전원의 이름을 적어 주세요."]);
-    if (!d.contents.length) out.push([$("m-contents"), "회의 내용을 한 줄 이상 적어 주세요."]);
+    if (d.contents.length < 2) out.push([$("m-contents"), d.contents.length ? "회의 내용을 한 줄 더 적어 주세요 (2줄 이상, 줄을 바꿔서)." : "회의 내용을 2줄 이상 적어 주세요."]);
     bizProblems("m", "meeting", out);
     document.querySelectorAll(".pay").forEach(r => {
       const c = r.querySelector(".p-card"), a = r.querySelector(".p-appr"), m = r.querySelector(".p-amt");
@@ -639,6 +640,7 @@ function render() {
   if (k === "meeting") {
     const d = readMeeting();
     $("m-n").textContent = d.attendees.length + "명";
+    $("m-lines").textContent = d.contents.length + "줄";
     const unit = d.amount && d.attendees.length ? d.amount / d.attendees.length : null;
     drawReceipt(d, unit);
     const notes = [];
