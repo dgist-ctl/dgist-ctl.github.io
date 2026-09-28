@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>CTL 행정 접수</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f2f4f3; --paper:#ffffff; --ink:#18221f; --muted:#5b6965; --line:#d2dad7;
+  --accent:#1f5f55; --accent-ink:#ffffff; --accent-soft:#e1eeea;
+  --trip:#2c4f86; --trip-soft:#e3eaf6;
+  --bad:#a3322a; --bad-soft:#f8e6e3; --warn:#855600; --warn-soft:#fbf0d9; --ok:#246b3a;
+  --sans:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --ground:#111715; --paper:#1a2220; --ink:#e3ebe8; --muted:#9aaba6; --line:#2e3a37;
+    --accent:#6cc2b1; --accent-ink:#0d1a17; --accent-soft:#1d322e;
+    --trip:#8fb0ea; --trip-soft:#1d2738;
+    --bad:#f08a80; --bad-soft:#3a1f1c; --warn:#e6b85c; --warn-soft:#352b17; --ok:#7fd199;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans);
+  padding:20px 16px calc(104px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
+.lead{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+
+/* 종류 고르기 */
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kind{position:relative;display:flex;flex-direction:column;gap:2px;padding:14px 14px 12px;border:2px solid var(--line);
+  border-radius:14px;background:var(--paper);cursor:pointer;min-height:84px}
+.kind input{position:absolute;opacity:0;pointer-events:none}
+.kind b{font-size:18px}
+.kind span{font-size:13px;color:var(--muted);line-height:1.4}
+.kind:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.kind.trip:has(input:checked){border-color:var(--trip);background:var(--trip-soft)}
+.kind:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+
+form{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:16px}
+.card h2{font-size:13px;font-weight:600;color:var(--muted);margin:0;letter-spacing:.02em}
+label,.field{display:flex;flex-direction:column;gap:6px;font-size:14.5px;font-weight:600;min-width:0}
+.field > .lab{font-size:14.5px;font-weight:600}
+.req::after{content:" *";color:var(--bad)}
+.hint{font-size:13px;font-weight:400;color:var(--muted);line-height:1.45}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--paper);border:1px solid var(--line);
+  border-radius:10px;padding:10px 12px;min-height:48px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:84px;line-height:1.5}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.invalid{border-color:var(--bad);background:var(--bad-soft)}
+.err{font-size:13px;color:var(--bad);font-weight:500}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.num{font-variant-numeric:tabular-nums}
+
+/* 칩 선택 */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;
+  font-size:15px;font-weight:500;background:var(--paper);cursor:pointer}
+.chip input:checked + span{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+
+.pay{display:grid;grid-template-columns:6em 1fr;gap:10px;align-items:end}
+.pay .wide{grid-column:1/-1}
+.pay + .pay{padding-top:14px;border-top:1px dashed var(--line)}
+.pay-head{display:flex;justify-content:space-between;align-items:center;grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:600}
+.pays:has(.pay:only-of-type) .pay-head{display:none}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;padding:6px 2px;min-height:36px}
+.ghost{font:inherit;background:transparent;border:1px dashed var(--line);color:var(--ink);border-radius:10px;padding:10px 14px;min-height:46px;font-size:14.5px;cursor:pointer}
+.sum{font-size:15px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);display:flex;flex-wrap:wrap;gap:4px 14px}
+.sum.trip{background:var(--trip-soft)}
+.notice{font-size:14px;padding:10px 12px;border-radius:10px;background:var(--warn-soft);color:var(--warn)}
+
+details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:0 16px}
+summary{cursor:pointer;padding:14px 0;font-weight:600;font-size:14.5px;min-height:48px;list-style-position:inside}
+details[open]{padding-bottom:16px}
+details .inner{display:flex;flex-direction:column;gap:16px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(6px);
+  border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.bar .in{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:4px}
+.main{font:inherit;width:100%;background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:13px 18px;
+  font-size:17px;font-weight:700;min-height:52px;cursor:pointer}
+body[data-kind="trip"] .main{background:var(--trip)}
+.bar small{font-size:12.5px;color:var(--muted);text-align:center}
+
+.done{background:var(--paper);border:2px solid var(--accent);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.done h2{font-size:18px;margin:0}
+.done p{margin:0;font-size:14.5px}
+.addr{font-weight:700;user-select:all;word-break:break-all}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px}
+.row-btns > *{flex:1 1 auto}
+.btn2{font:inherit;display:inline-flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--line);color:var(--ink);
+  border-radius:10px;padding:10px 14px;min-height:46px;font-size:14.5px;text-decoration:none;cursor:pointer}
+.status{font-size:13.5px;color:var(--ok);min-height:1.2em}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+</head>
+<body data-kind="meeting">
+<div class="wrap">
+  <header>
+    <h1>CTL 행정 접수</h1>
+    <p class="lead">필요한 값만 입력하면 담당자에게 메일이 작성됩니다. 담당자가 이 값으로 회의록과 포털 신청을 처리합니다.</p>
+  </header>
+
+  <div class="kinds" role="radiogroup" aria-label="접수 종류">
+    <label class="kind"><input type="radio" name="kind" value="meeting" checked><b>회의비</b><span>회의 식비·다과<br>카드 결제 후</span></label>
+    <label class="kind trip"><input type="radio" name="kind" value="trip"><b>출장</b><span>출장신청<br>출발 전</span></label>
+  </div>
+
+  <form id="f" novalidate>
+    <div class="card">
+      <label for="me"><span class="req">내 이름</span>
+        <input id="me" type="text" autocomplete="name" enterkeyhint="next" placeholder="홍길동">
+        <span class="hint">다음에 열 때 기억해 둡니다 (이 기기에만 저장).</span></label>
+    </div>
+
+    <!-- ───────── 회의비 ───────── -->
+    <section id="sec-meeting" class="sec">
+      <div class="card">
+        <h2>회의</h2>
+        <label for="m-date"><span class="req">회의 날짜</span>
+          <input id="m-date" type="date"></label>
+        <label for="m-purpose"><span class="req">회의 목적</span>
+          <input id="m-purpose" type="text" enterkeyhint="next" placeholder="예) 튜터링 프로그램 운영 현황 점검"></label>
+        <label for="m-att"><span class="req">참석자</span>
+          <input id="m-att" type="text" autocomplete="off" enterkeyhint="next" placeholder="홍길동, 김철수, 이영희(자이닉스)">
+          <span class="hint">전원 실명을 쉼표로 ('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
+        <label for="m-contents"><span class="req">회의 내용</span>
+          <textarea id="m-contents" rows="2" placeholder="한 줄에 한 항목, 1~2줄이면 충분합니다&#10;예) 2학기 튜터링 운영 현황을 점검함"></textarea></label>
+      </div>
+
+      <div class="card pays" id="pays">
+        <h2>카드 결제</h2>
+        <div class="pay">
+          <div class="pay-head"><span class="pay-no">결제 1</span><button type="button" class="linkbtn del">삭제</button></div>
+          <label><span class="req">카드 끝 4자리</span>
+            <input class="p-card num" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off"></label>
+          <label><span class="req">승인번호</span>
+            <input class="p-appr num" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="8자리" autocomplete="off"></label>
+          <label class="wide"><span class="req">결제 금액(원)</span>
+            <input class="p-amt num" inputmode="numeric" pattern="[0-9,]*" placeholder="예) 60,000" autocomplete="off"></label>
+        </div>
+        <button type="button" class="ghost" id="addPay">+ 결제 한 건 더 (식사·다과를 따로 결제한 경우)</button>
+        <div class="sum num" id="m-sum"></div>
+        <div class="notice" id="m-notice" hidden></div>
+        <span class="hint">승인번호는 카드 결제 문자·영수증에 있습니다. 대중음식점 식대만 인정되고, 봉사료(호텔 등 기본 부과 업소 제외)와 유흥업소 결제는 인정되지 않습니다.</span>
+        <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500">
+          <input id="m-night" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 밤 10시 이후에 결제했습니다</label>
+        <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500">
+          <input id="m-personal" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 개인카드로 결제했습니다</label>
+      </div>
+
+      <details>
+        <summary>선택 입력 — 장소·사업</summary>
+        <div class="inner">
+          <label for="m-place">장소
+            <input id="m-place" type="text" placeholder="비우면 '원내 회의실 및 달성군 소재 식당'"></label>
+          <div class="field"><span class="lab">어느 사업의 회의인가요</span>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="m-biz" value="" checked><span>모름</span></label>
+              <label class="chip"><input type="radio" name="m-biz" value="191475"><span>튜터링</span></label>
+              <label class="chip"><input type="radio" name="m-biz" value="191474"><span>교수법 세미나</span></label>
+            </div></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ───────── 출장 ───────── -->
+    <section id="sec-trip" class="sec" hidden>
+      <div class="card">
+        <h2>출장 (포털 출장신청서 필수 항목)</h2>
+        <div class="field"><span class="lab req">출장 구분</span>
+          <div class="chips" id="t-type">
+            <label class="chip"><input type="radio" name="t-type" value="일반출장"><span>일반출장</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="학회"><span>학회</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="세미나"><span>세미나</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="회의"><span>회의</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="교육"><span>교육</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="연수"><span>연수</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="공무"><span>공무</span></label>
+            <label class="chip"><input type="radio" name="t-type" value="기타"><span>기타</span></label>
+          </div></div>
+        <div class="two">
+          <label for="t-from"><span class="req">출발일</span><input id="t-from" type="date"></label>
+          <label for="t-to"><span class="req">복귀일</span><input id="t-to" type="date"></label>
+        </div>
+        <div class="field"><span class="lab req">도착지</span>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="t-dome" value="국내" checked><span>국내</span></label>
+            <label class="chip"><input type="radio" name="t-dome" value="국외"><span>국외</span></label>
+          </div></div>
+        <div class="two" id="t-dome-in">
+          <label for="t-prov"><span class="req">시·도</span>
+            <select id="t-prov">
+              <option value="">선택</option>
+              <option>서울</option><option>경기도</option><option>인천광역시</option><option>강원도</option>
+              <option>충청남도</option><option>대전광역시</option><option>충청북도</option><option>세종특별자치시</option>
+              <option>부산광역시</option><option>울산광역시</option><option>대구광역시</option><option>경상북도</option>
+              <option>경상남도</option><option>전라남도</option><option>광주광역시</option><option>전라북도</option>
+            </select></label>
+          <label for="t-place"><span class="req">장소</span>
+            <input id="t-place" type="text" enterkeyhint="next" placeholder="예) 코엑스"></label>
+        </div>
+        <div class="two" id="t-dome-out" hidden>
+          <label for="t-country"><span class="req">국가</span>
+            <input id="t-country" type="text" placeholder="예) 미국"></label>
+          <label for="t-city"><span class="req">도시·장소</span>
+            <input id="t-city" type="text" placeholder="예) 보스턴 MIT"></label>
+        </div>
+        <label for="t-purpose"><span class="req">출장 목적</span>
+          <input id="t-purpose" type="text" enterkeyhint="next" placeholder="예) 2026 공학교육학술대회 발표"></label>
+        <div class="field"><span class="lab req">여비 신청</span>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="t-pay" value="Y" checked><span>예</span></label>
+            <label class="chip"><input type="radio" name="t-pay" value="N"><span>아니오</span></label>
+          </div>
+          <span class="hint">과외활동으로 인한 출장은 여비를 신청할 수 없습니다.</span></div>
+        <div id="t-exp" class="card" style="padding:14px;background:var(--trip-soft);border:0;gap:14px">
+          <div class="field"><span class="lab req">교통편</span>
+            <div class="chips" id="t-trans">
+              <label class="chip"><input type="radio" name="t-trans" value="KTX"><span>KTX</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="SRT"><span>SRT</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="고속버스"><span>고속버스</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="자가용"><span>자가용</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="업무용차량"><span>업무용차량</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="항공"><span>항공</span></label>
+            </div>
+            <span class="hint" id="t-trans-hint">포털이 교통편·구간으로 운임을 자동 계산합니다. 업무용차량을 쓰면 일비가 절반입니다.</span></div>
+          <label for="t-route" id="t-route-wrap"><span class="req">구간</span>
+            <input id="t-route" type="text" placeholder="예) 동대구↔부산"></label>
+          <div class="field" id="t-lodge-wrap"><span class="lab req">숙박</span>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="t-lodge" value="정액"><span>정액</span></label>
+              <label class="chip"><input type="radio" name="t-lodge" value="실비"><span>실비 (영수증)</span></label>
+              <label class="chip"><input type="radio" name="t-lodge" value="없음"><span>숙박비 없음</span></label>
+            </div></div>
+          <label for="t-meals">제공받는 식사 (끼니 수)
+            <input id="t-meals" class="num" inputmode="numeric" pattern="[0-9]*" placeholder="없으면 0">
+            <span class="hint">행사·회의비로 식사가 나오면 식비를 끼니당 1/3씩 줄여 신청합니다.</span></label>
+        </div>
+        <div class="sum trip num" id="t-sum"></div>
+        <div class="notice" id="t-notice" hidden></div>
+      </div>
+
+      <details>
+        <summary>선택 입력 — 동반 출장자·예산·출발지</summary>
+        <div class="inner">
+          <label for="t-with">함께 가는 교직원
+            <input id="t-with" type="text" autocomplete="off" placeholder="쉼표로 구분">
+            <span class="hint">본인 포함 최대 5명, 같은 부서·같은 여비 계정이 원칙입니다.</span></label>
+          <label for="t-budget">여비 예산(사업)
+            <input id="t-budget" type="text" placeholder="모르면 비워 두세요 — 담당자가 정합니다"></label>
+          <label for="t-origin">출발지
+            <input id="t-origin" type="text" placeholder="비우면 '디지스트'"></label>
+          <label class="field" style="flex-direction:row;align-items:center;gap:10px;font-weight:500">
+            <input id="t-lecture" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 이 출장에서 외부강의·회의(사례금)도 합니다</label>
+        </div>
+      </details>
+    </section>
+
+    <section class="done" id="done" hidden>
+      <h2>메일 앱에서 [보내기]만 누르면 끝입니다</h2>
+      <p>받는 사람 <span class="addr">shlee@dgist.ac.kr</span>. 본문 아래쪽 데이터는 고치지 말아 주세요.</p>
+      <p class="hint">메일 앱이 안 열리면 [본문 복사] → 웹메일에 붙여 넣기. 제목: <span class="addr" id="subj"></span></p>
+      <div class="row-btns">
+        <a class="btn2" id="again" href="#">메일 다시 열기</a>
+        <button type="button" class="btn2" id="copy">본문 복사</button>
+        <button type="button" class="btn2" id="copySubj">제목 복사</button>
+      </div>
+      <span class="status" id="status" aria-live="polite"></span>
+      <textarea id="bodyText" rows="8" readonly hidden></textarea>
+      <button type="button" class="linkbtn" id="newOne">새로 입력하기</button>
+    </section>
+  </form>
+</div>
+
+<div class="bar"><div class="in">
+  <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
+  <small id="left" aria-live="polite"></small>
+</div></div>
+
+<script>
+(() => {
+"use strict";
+const TO = "shlee@dgist.ac.kr";
+const $ = id => document.getElementById(id);
+const won = n => Number(n).toLocaleString("ko-KR");
+const store = {
+  get(k) { try { return localStorage.getItem("ctl-intake:" + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem("ctl-intake:" + k, v); } catch (e) {} },
+};
+let tried = false;   // 첫 제출 시도 전에는 빨간 표시를 하지 않는다
+const kind = () => document.querySelector("input[name=kind]:checked").value;
+const radio = name => (document.querySelector(`input[name="${name}"]:checked`) || {}).value || "";
+const toInt = s => { const d = String(s || "").replace(/[^\d]/g, ""); return d ? Number(d) : null; };
+const iso = d => { const t = new Date(d); t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); return t.toISOString().slice(0, 10); };
+const yymmdd = s => s.slice(2, 4) + s.slice(5, 7) + s.slice(8, 10);
+const korDate = s => { const [y, m, d] = s.split("-").map(Number); return `${y}년 ${m}월 ${d}일`; };
+const splitNames = s => s.split(/[,，、\n]/).map(x => x.trim()).filter(Boolean);
+
+// ── 종류 전환
+function setKind(k) {
+  document.body.dataset.kind = k;
+  $("sec-meeting").hidden = k !== "meeting";
+  $("sec-trip").hidden = k !== "trip";
+  $("send").textContent = k === "meeting" ? "회의비 메일 보내기" : "출장 메일 보내기";
+  $("done").hidden = true; store.set("kind", k); render();
+}
+document.querySelectorAll("input[name=kind]").forEach(r => r.addEventListener("change", () => setKind(r.value)));
+
+// ── 결제건
+function renumber() {
+  document.querySelectorAll(".pay").forEach((p, i) => { p.querySelector(".pay-no").textContent = `결제 ${i + 1}`; });
+}
+function bindPay(el) {
+  el.querySelector(".del").addEventListener("click", () => {
+    if (document.querySelectorAll(".pay").length > 1) { el.remove(); renumber(); render(); }
+  });
+  const amt = el.querySelector(".p-amt");
+  amt.addEventListener("blur", () => { const n = toInt(amt.value); amt.value = n === null ? "" : won(n); });
+  // 카드 끝 4자리를 치면 승인번호로, 승인번호 8자리를 치면 금액으로 넘어간다
+  el.querySelector(".p-card").addEventListener("input", e => { if (e.target.value.length === 4) el.querySelector(".p-appr").focus(); });
+  el.querySelector(".p-appr").addEventListener("input", e => { if (e.target.value.length === 8) amt.focus(); });
+}
+$("addPay").addEventListener("click", () => {
+  const first = document.querySelector(".pay"), el = first.cloneNode(true);
+  el.querySelectorAll("input").forEach(i => { i.value = ""; i.classList.remove("invalid"); });
+  el.querySelector(".p-card").value = first.querySelector(".p-card").value;
+  el.querySelectorAll(".err").forEach(e => e.remove());
+  $("addPay").before(el); bindPay(el); renumber(); render();
+  el.querySelector(".p-appr").focus();
+});
+
+// ── 읽기
+function readMeeting() {
+  const payments = [...document.querySelectorAll(".pay")].map(r => ({
+    card: r.querySelector(".p-card").value.replace(/\D/g, ""),
+    apprno: r.querySelector(".p-appr").value.replace(/\D/g, ""),
+    amount: toInt(r.querySelector(".p-amt").value),
+  }));
+  const amount = payments.every(p => p.amount) ? payments.reduce((a, p) => a + p.amount, 0) : null;
+  return { type: "meeting", me: $("me").value.trim(), date: $("m-date").value, purpose: $("m-purpose").value.trim(),
+    attendees: splitNames($("m-att").value),
+    contents: $("m-contents").value.split("\n").map(s => s.trim().replace(/^[-·•]\s*/, "")).filter(Boolean),
+    payments, amount, place: $("m-place").value.trim(), esti: radio("m-biz"),
+    night: $("m-night").checked, personalCard: $("m-personal").checked };
+}
+function readTrip() {
+  const dome = radio("t-dome");
+  return { type: "trip", me: $("me").value.trim(), tripType: radio("t-type"), from: $("t-from").value, to: $("t-to").value,
+    dome, prov: dome === "국내" ? $("t-prov").value : "", place: dome === "국내" ? $("t-place").value.trim() : "",
+    country: dome === "국외" ? $("t-country").value.trim() : "", city: dome === "국외" ? $("t-city").value.trim() : "",
+    purpose: $("t-purpose").value.trim(), travelPay: radio("t-pay"),
+    companions: splitNames($("t-with").value), budget: $("t-budget").value.trim(), transport: radio("t-trans"),
+    route: $("t-route").value.trim(), lodge: radio("t-lodge"), meals: toInt($("t-meals").value) || 0,
+    origin: $("t-origin").value.trim() || "디지스트", lecture: $("t-lecture").checked };
+}
+const destText = t => t.dome === "국내" ? [t.prov, t.place].filter(Boolean).join(" ") : [t.country, t.city].filter(Boolean).join(" ");
+const days = t => (t.from && t.to) ? Math.round((new Date(t.to) - new Date(t.from)) / 864e5) + 1 : null;
+
+// ── 검사: [요소, 메시지] 목록
+function problems() {
+  const out = [];
+  if (!$("me").value.trim()) out.push([$("me"), "이름을 적어 주세요."]);
+  if (kind() === "meeting") {
+    const d = readMeeting();
+    if (!d.date) out.push([$("m-date"), "회의 날짜를 골라 주세요."]);
+    if (!d.purpose) out.push([$("m-purpose"), "회의 목적을 적어 주세요."]);
+    if (!d.attendees.length) out.push([$("m-att"), "참석자를 적어 주세요."]);
+    else if (d.attendees.some(a => /외\s*\d+\s*(명|인)/.test(a))) out.push([$("m-att"), "'외 N명' 대신 전원의 이름을 적어 주세요."]);
+    if (!d.contents.length) out.push([$("m-contents"), "회의 내용을 한 줄 이상 적어 주세요."]);
+    document.querySelectorAll(".pay").forEach(r => {
+      const c = r.querySelector(".p-card"), a = r.querySelector(".p-appr"), m = r.querySelector(".p-amt");
+      if (!/^\d{4}$/.test(c.value)) out.push([c, "카드 끝 4자리"]);
+      if (!/^\d{8}$/.test(a.value)) out.push([a, "승인번호 8자리"]);
+      if (!toInt(m.value)) out.push([m, "결제 금액"]);
+    });
+    if (d.amount && d.attendees.length && d.amount / d.attendees.length > 50000)
+      out.push([$("m-att"), `1인 ${won(Math.round(d.amount / d.attendees.length))}원 — 1인 5만원을 넘습니다. 참석자를 모두 적었는지 확인해 주세요.`]);
+  } else {
+    const t = readTrip();
+    if (!t.tripType) out.push([$("t-type"), "출장 구분을 골라 주세요."]);
+    if (!t.from) out.push([$("t-from"), "출발일"]);
+    if (!t.to) out.push([$("t-to"), "복귀일"]);
+    if (t.from && t.to && t.to < t.from) out.push([$("t-to"), "복귀일이 출발일보다 빠릅니다."]);
+    if (t.dome === "국내") {
+      if (!t.prov) out.push([$("t-prov"), "시·도"]);
+      if (!t.place) out.push([$("t-place"), "장소"]);
+    } else {
+      if (!t.country) out.push([$("t-country"), "국가"]);
+      if (!t.city) out.push([$("t-city"), "도시·장소"]);
+    }
+    if (!t.purpose) out.push([$("t-purpose"), "출장 목적을 적어 주세요."]);
+    if (t.companions.length > 4) out.push([$("t-with"), "출장자는 본인 포함 최대 5명입니다."]);
+    if (t.travelPay === "Y") {
+      const n = days(t);
+      if (!t.transport) out.push([$("t-trans"), "교통편을 골라 주세요."]);
+      else if (t.transport !== "업무용차량" && !t.route) out.push([$("t-route"), "구간을 적어 주세요."]);
+      if (n > 1 && !t.lodge) out.push([$("t-lodge-wrap").querySelector(".chips"), "숙박 방식을 골라 주세요."]);
+    }
+  }
+  return out;
+}
+
+function render() {
+  const k = kind();
+  if (k === "meeting") {
+    const d = readMeeting();
+    $("m-n").textContent = d.attendees.length + "명";
+    const unit = d.amount && d.attendees.length ? d.amount / d.attendees.length : null;
+    $("m-sum").innerHTML = "";
+    [["합계", d.amount ? won(d.amount) + "원" : "–"], ["참석", d.attendees.length + "명"],
+     ["1인", unit ? won(Math.round(unit)) + "원" : "–"]].forEach(([a, b]) => {
+      const s = document.createElement("span"); s.textContent = `${a} ${b}`; $("m-sum").appendChild(s); });
+    // 행정처 업무매뉴얼 p186 업무추진비류 유의사항
+    const notes = [];
+    const dow = d.date ? new Date(d.date + "T00:00:00").getDay() : -1;
+    if (unit && unit > 30000 && unit <= 50000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
+    if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
+    if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
+    if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다. 회의록 간소화 처리가 되지 않습니다.");
+    if (d.personalCard) notes.push("개인카드 사용은 원칙적으로 금지입니다. 사유서와 일상감사·차상위자 결재가 필요하고, 회의록 간소화 처리가 되지 않습니다.");
+    $("m-notice").hidden = !notes.length; $("m-notice").textContent = notes.join(" ");
+  } else {
+    const t = readTrip(), n = days(t);
+    $("t-dome-in").hidden = t.dome !== "국내"; $("t-dome-out").hidden = t.dome !== "국외";
+    $("t-exp").hidden = t.travelPay !== "Y";
+    $("t-route-wrap").hidden = t.transport === "업무용차량";
+    $("t-lodge-wrap").hidden = !(n > 1);
+    if (!$("t-route").value && t.dome === "국내" && t.prov && t.prov !== "대구광역시")
+      $("t-route").placeholder = `예) 동대구↔${t.prov.replace(/(광역시|특별자치시|특별시|도)$/, "")}`;
+    $("t-sum").textContent = n && n > 0 ? `${n - 1}박 ${n}일 · ${t.dome}` + (destText(t) ? ` · ${destText(t)}` : "") : "출발일과 복귀일을 고르면 기간이 계산됩니다.";
+    const notes = [];
+    if (t.dome === "국외") notes.push("국외 출장은 국외출장계획서를 첨부해야 합니다.");
+    if (t.dome === "국외" && t.tripType === "학회") notes.push("국외 학회는 체크리스트·확약서 양식 첨부가 필수입니다.");
+    if (t.tripType === "학회") notes.push("학회 출장은 제출 논문·발표 자료를 첨부합니다. 메일에 파일을 함께 붙여 주세요.");
+    if (t.transport === "항공") notes.push("항공 이용 시 e-ticket을 첨부합니다.");
+    if (t.from && t.from < iso(new Date())) notes.push("출장신청 결재는 출발 전에 끝나야 합니다(원인행위). 이미 다녀온 출장이면 담당자에게 따로 알려 주세요.");
+    if (n >= 15) notes.push("15일 이상 출장은 업무대행자 협조가 필요합니다.");
+    if (n >= 7) notes.push("7일 이상 출장은 일상감사 대상입니다.");
+    if (t.lecture) notes.push("외부강의·회의를 겸하면 포털에서 '외부강의·회의&출장신청'으로 함께 신고해야 하고, 승인 후에는 추가할 수 없습니다.");
+    $("t-notice").hidden = !notes.length; $("t-notice").textContent = notes.join(" ");
+  }
+  // 오류 표시
+  document.querySelectorAll(".invalid").forEach(e => e.classList.remove("invalid"));
+  document.querySelectorAll("form .err").forEach(e => e.remove());
+  const probs = problems().filter(([el]) => !el.closest("[hidden]"));
+  if (tried) probs.forEach(([el, msg]) => {
+    el.classList.add("invalid");
+    if (el.id && !el.closest(".pay")) { const s = document.createElement("span"); s.className = "err"; s.textContent = msg; el.after(s); }
+  });
+  $("left").textContent = probs.length ? `남은 필수 항목 ${probs.length}개` : "모두 입력했습니다";
+  return probs;
+}
+
+// ── 메일
+function compose() {
+  const k = kind(); let subject, lines, data;
+  if (k === "meeting") {
+    const d = readMeeting();
+    subject = `[회의비] ${yymmdd(d.date)} ${d.purpose}`;
+    data = { v: 1, type: "meeting", me: d.me, date: d.date, purpose: d.purpose, attendees: d.attendees,
+             contents: d.contents, payments: d.payments, amount: d.amount };
+    if (d.place) data.place = d.place;
+    if (d.esti) data.esti = d.esti;
+    if (d.night) data.night = true;
+    if (d.personalCard) data.personalCard = true;
+    lines = [`${d.me}입니다. 회의비 접수 내용을 보냅니다.`, "",
+      `회의 날짜: ${korDate(d.date)}`, `회의 목적: ${d.purpose}`,
+      `참석자: ${d.attendees.join(", ")} (총 ${d.attendees.length}명)`,
+      "회의 내용:", ...d.contents.map(c => `  - ${c}`),
+      "카드 결제:", ...d.payments.map(p => `  - 카드 ${p.card} / 승인번호 ${p.apprno} / ${won(p.amount)}원`),
+      `합계: ${won(d.amount)}원`];
+    if (d.place) lines.push(`장소: ${d.place}`);
+  } else {
+    const t = readTrip(), n = days(t);
+    subject = `[출장] ${yymmdd(t.from)}~${yymmdd(t.to)} ${destText(t)} ${t.purpose}`;
+    data = { v: 2, type: "trip", me: t.me, tripType: t.tripType, from: t.from, to: t.to, nights: n - 1, days: n,
+             origin: t.origin, dome: t.dome, travelPay: t.travelPay, purpose: t.purpose, lecture: t.lecture };
+    if (t.dome === "국내") { data.prov = t.prov; data.place = t.place; } else { data.country = t.country; data.city = t.city; }
+    if (t.companions.length) data.companions = t.companions;
+    if (t.budget) data.budget = t.budget;
+    if (t.travelPay === "Y") {
+      data.transport = t.transport;
+      if (t.transport !== "업무용차량") data.route = t.route;
+      if (n > 1) data.lodge = t.lodge;
+      data.mealsProvided = t.meals;
+    }
+    lines = [`${t.me}입니다. 출장 접수 내용을 보냅니다.`, "",
+      `출장 구분: ${t.tripType}`,
+      `출장 기간: ${korDate(t.from)} ~ ${korDate(t.to)} (${n - 1}박 ${n}일)`,
+      `출발: ${t.origin}`, `도착: ${t.dome} ${destText(t)}`, `목적: ${t.purpose}`,
+      `여비 신청: ${t.travelPay === "Y" ? "예" : "아니오"}`,
+      `출장자: ${[t.me, ...t.companions].join(", ")}`];
+    if (t.budget) lines.push(`여비 예산: ${t.budget}`);
+    if (t.travelPay === "Y") {
+      lines.push(`교통편: ${t.transport}` + (t.transport !== "업무용차량" ? ` (${t.route})` : " — 일비 1/2"));
+      if (n > 1) lines.push(`숙박: ${t.lodge}`);
+      lines.push(`제공받는 식사: ${t.meals}끼`);
+    }
+    if (t.lecture) lines.push("외부강의·회의 겸함 (외부강의·회의&출장신청으로 신고)");
+  }
+  lines.push("", "=== 접수 데이터 (고치지 마세요) ===", JSON.stringify(data, null, 1), "=== 끝 ===");
+  return { subject, body: lines.join("\r\n") };
+}
+const mailto = m => `mailto:${TO}?subject=${encodeURIComponent(m.subject)}&body=${encodeURIComponent(m.body)}`;
+let last = null;
+
+$("f").addEventListener("submit", ev => {
+  ev.preventDefault();
+  tried = true;
+  const probs = render();
+  if (probs.length) {
+    const el = probs[0][0]; el.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (el.focus) setTimeout(() => el.focus({ preventScroll: true }), 300);
+    return;
+  }
+  store.set("me", $("me").value.trim());
+  const c = document.querySelector(".p-card").value; if (/^\d{4}$/.test(c)) store.set("card", c);
+  last = compose();
+  $("subj").textContent = last.subject; $("bodyText").value = last.body; $("again").href = mailto(last);
+  $("done").hidden = false; $("status").textContent = "";
+  location.href = mailto(last);
+  setTimeout(() => $("done").scrollIntoView({ behavior: "smooth", block: "start" }), 200);
+});
+
+async function copy(text, what) {
+  try { await navigator.clipboard.writeText(text); $("status").textContent = `${what}을 복사했습니다.`; }
+  catch (e) { const t = $("bodyText"); t.hidden = false; t.value = text; t.focus(); t.select();
+    $("status").textContent = "선택된 내용을 길게 눌러 복사해 주세요."; }
+}
+$("copy").addEventListener("click", () => last && copy(last.body, "본문"));
+$("copySubj").addEventListener("click", () => last && copy(last.subject, "제목"));
+$("newOne").addEventListener("click", () => {
+  const k = kind(), me = $("me").value;
+  $("f").reset(); $("me").value = me; tried = false;
+  document.querySelectorAll(".pay").forEach((p, i) => { if (i) p.remove(); });
+  init(); document.querySelector(`input[name=kind][value=${k}]`).checked = true; setKind(k);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+$("t-from").addEventListener("change", () => { if (!$("t-to").value || $("t-to").value < $("t-from").value) $("t-to").value = $("t-from").value; });
+$("f").addEventListener("input", render);
+$("f").addEventListener("change", render);
+
+function init() {
+  const today = iso(new Date());
+  $("m-date").value = today;
+  $("me").value = $("me").value || store.get("me") || "";
+  document.querySelector(".p-card").value = store.get("card") || "";
+}
+bindPay(document.querySelector(".pay"));
+init();
+const k0 = store.get("kind");
+if (k0 === "trip" || location.hash === "#trip") { document.querySelector("input[name=kind][value=trip]").checked = true; setKind("trip"); }
+else setKind("meeting");
+})();
+</script>
+</body>
+</html>
