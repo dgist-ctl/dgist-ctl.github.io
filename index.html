@@ -120,6 +120,74 @@ body {
 }
 @keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .voice-mark { font-size: 12px; font-weight: 700; color: var(--voice); margin: 0 0 8px; }
+
+/* ============================================================
+   달구 — 말하는 이. 주황 세로줄 왼쪽에 서서, 목소리가 들어오기 직전에 튀어 오른다.
+   그림은 새로 그리지 않는다(직접 그리면 너구리·호랑이로 읽혔다, student_tutor/static/img/README.md).
+   층마다 변환 하나씩: 등장 > 폴짝 > 둥실 > 기울기. 한 transform 에 애니메이션 둘을 걸면 서로 덮는다.
+   ============================================================ */
+.voice-row { display: flex; align-items: flex-start; gap: clamp(12px, 2.6vw, 22px); margin-top: clamp(20px, 4vh, 34px); }
+.voice-row .gap { margin-top: 0; flex: 1 1 auto; min-width: 0; }
+.dalgu {
+  --d: clamp(64px, 14vw, 88px);
+  position: relative; flex: 0 0 auto; width: var(--d); height: calc(var(--d) + 14px);
+  padding: 0; border: 0; background: none; cursor: pointer;
+  perspective: 400px; -webkit-tap-highlight-color: transparent;
+  animation: d-pop .75s cubic-bezier(.34, 1.56, .64, 1) 1.35s both;
+}
+.dalgu:focus-visible { outline: 3px solid var(--voice); outline-offset: 4px; border-radius: 50%; }
+@keyframes d-pop {
+  0%   { opacity: 0; transform: translateY(26px) scale(.55); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+.d-shadow {
+  position: absolute; left: 50%; bottom: 0; width: 64%; height: 9px; margin-left: -32%;
+  border-radius: 50%; background: radial-gradient(closest-side, rgba(18,22,31,.28), rgba(18,22,31,0));
+  animation: d-shadow 3.2s ease-in-out 2.1s infinite;
+}
+@keyframes d-shadow { 50% { transform: scaleX(.72); opacity: .55; } }
+.d-jump, .d-bob, .d-tilt { position: absolute; left: 0; top: 0; width: var(--d); height: var(--d); }
+.d-bob { animation: d-bob 3.2s ease-in-out 2.1s infinite; }
+@keyframes d-bob { 50% { transform: translateY(-7px); } }
+.d-jump.on { animation: d-jump .6s cubic-bezier(.3, .7, .4, 1); }
+@keyframes d-jump {
+  0%   { transform: none; }
+  18%  { transform: translateY(4px) scale(1.12, .84); }
+  48%  { transform: translateY(-22px) scale(.94, 1.08); }
+  78%  { transform: translateY(2px) scale(1.06, .95); }
+  100% { transform: none; }
+}
+.d-tilt {
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform .18s ease-out;
+  filter: drop-shadow(0 5px 5px rgba(18,22,31,.2));
+}
+.d-tilt.sway { animation: d-sway 5.5s ease-in-out 2.1s infinite; }   /* 포인터·기울기 센서가 없는 기기 */
+@keyframes d-sway { 25% { transform: rotateY(14deg) rotateX(4deg); } 75% { transform: rotateY(-14deg) rotateX(4deg); } }
+.d-tilt img { position: absolute; inset: 0; width: 100%; height: 100%; user-select: none; -webkit-user-drag: none; }
+/* 광택 — 얼굴 모양 안에만. 기울면 빛이 반대로 흐른다. */
+.d-gloss {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at var(--gx, 38%) var(--gy, 30%), rgba(255,255,255,.55), rgba(255,255,255,0) 42%);
+  -webkit-mask: url(dalgu/face.png) center / contain no-repeat;
+          mask: url(dalgu/face.png) center / contain no-repeat;
+  mix-blend-mode: screen;
+}
+/* 말풍선 — 튜터의 말이므로 주황. */
+.d-bubble {
+  /* 달구 머리 위 빈자리(코드 줄과의 여백, 실측 43~47px)에 띄운다 — 오른쪽에 두면 '여기서 자주 막혀요'를 가린다. */
+  position: absolute; left: 0; bottom: calc(100% + 2px); z-index: 2;
+  width: max-content; padding: 7px 12px;   /* 가장 긴 문구도 한 줄(≈250px) — 390px 휴대폰에 들어간다 */
+  background: var(--voice); color: #fff; font-family: var(--f-body);
+  font-size: 13px; font-weight: 700; line-height: 1.4; text-align: left;
+  border-radius: 12px 12px 12px 3px; white-space: nowrap; box-shadow: 0 6px 16px rgba(223,89,46,.28);
+  opacity: 0; transform: translateY(6px) scale(.9); transform-origin: 0 100%;
+  transition: opacity .18s ease, transform .22s cubic-bezier(.34, 1.56, .64, 1);
+  pointer-events: none;
+}
+.d-bubble.on { opacity: 1; transform: none; }
 .gap p { margin: 0 0 .28em; font-size: clamp(15px, 3.4vw, 19px); line-height: 1.75; color: var(--ink); max-width: 30em; }
 
 /* 한국어 설명은 코드 아래에서 조용히 받친다 */
@@ -205,6 +273,9 @@ body {
   .cutline .typed { width: 22ch; }
   .gap { opacity: 1; }
   .caret { opacity: 1; }
+  /* 무한 반복은 duration 을 줄이면 떨림이 된다 — 아예 끈다. */
+  .d-bob, .d-shadow, .d-tilt.sway { animation: none !important; }
+  .dalgu { opacity: 1; }
 }
 </style>
 </head>
@@ -225,7 +296,17 @@ body {
          출처 표기(CSE307 · LECTURE 4 · SLIDE 8 / 32)는 2026-09-09 사용자 지시로 뺐다. -->
     <p class="cutline"><span class="typed">let rec append l1 l2 =</span><span class="caret" aria-hidden="true"></span></p>
 
-    <!-- 끊긴 자리. 여기로 목소리가 들어온다. -->
+    <!-- 끊긴 자리. 여기로 목소리가 들어온다 — 말하는 이(달구)가 그 왼쪽에 선다. -->
+    <div class="voice-row">
+    <button type="button" class="dalgu" id="dalgu" aria-label="달구 튜터 — 눌러 보세요">
+      <span class="d-shadow" aria-hidden="true"></span>
+      <span class="d-jump" aria-hidden="true"><span class="d-bob"><span class="d-tilt">
+        <img src="dalgu/face.png" alt="" width="88" height="88" draggable="false">
+        <img src="dalgu/cap.png" alt="" width="88" height="88" draggable="false">
+        <span class="d-gloss"></span>
+      </span></span></span>
+      <span class="d-bubble" id="dalgu-say" role="status" aria-live="polite"></span>
+    </button>
     <div class="gap">
       <p class="voice-mark">여기서 자주 막혀요</p>
       <p>앞의 length에서는 리스트 하나를 <span class="nb">head와 tail</span>로 쪼개면 됐습니다.</p>
@@ -233,6 +314,7 @@ body {
       <!-- 30em(570px) 안에서 한 줄로 끝나야 한다. 앞의 두 줄이 한 줄이라
            이 줄만 접히면 목소리가 끊겨 보인다. 44자에서 두 자를 덜어 맞췄다. -->
       <p>어느 쪽을 쪼갤지, <span class="nb">base case</span>는 무엇으로 잡을지에서 대개 막힙니다.</p>
+    </div>
     </div>
 
     <div class="lede">
@@ -317,6 +399,68 @@ body {
   </div>
 </footer>
 
+<script>
+// 달구 — 입체 기울기 · 누르면 폴짝 + 말풍선.
+// 기울기는 CSS 변수(--rx·--ry·--gx·--gy)만 바꾼다. 모양은 전부 CSS 에 있다.
+(() => {
+  const btn = document.getElementById("dalgu");
+  if (!btn) return;
+  const tilt = btn.querySelector(".d-tilt");
+  const jump = btn.querySelector(".d-jump");
+  const say = document.getElementById("dalgu-say");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const MAX = 16;                                   // 최대 기울기(도)
+  const clamp = (v) => Math.max(-1, Math.min(1, v));
+
+  function lean(nx, ny) {                           // nx·ny: -1 ~ 1 (오른쪽·아래가 +)
+    tilt.style.setProperty("--ry", (nx * MAX).toFixed(1) + "deg");
+    tilt.style.setProperty("--rx", (-ny * MAX).toFixed(1) + "deg");
+    tilt.style.setProperty("--gx", (38 - nx * 22).toFixed(0) + "%");   // 빛은 반대로 흐른다
+    tilt.style.setProperty("--gy", (30 - ny * 18).toFixed(0) + "%");
+  }
+
+  if (!still) {
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      // 커서를 바라본다. 화면 반 폭 거리에서 최대로 기운다.
+      let raf = 0, px = 0, py = 0;
+      addEventListener("pointermove", (e) => {
+        px = e.clientX; py = e.clientY;
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = btn.getBoundingClientRect();
+          lean(clamp((px - (r.left + r.width / 2)) / (innerWidth / 2)),
+               clamp((py - (r.top + r.height / 2)) / (innerHeight / 2)));
+        });
+      }, { passive: true });
+      document.documentElement.addEventListener("pointerleave", () => lean(0, 0));
+    } else {
+      // 터치 기기 — 기울기 센서가 값을 주면 따르고, 아니면 천천히 흔든다.
+      tilt.classList.add("sway");
+      addEventListener("deviceorientation", (e) => {
+        if (e.gamma == null || e.beta == null) return;
+        tilt.classList.remove("sway");
+        lean(clamp(e.gamma / 30), clamp((e.beta - 45) / 30));
+      }, { passive: true });
+    }
+  }
+
+  const LINES = ["막히면 불러 주세요!", "슬라이드마다 설명을 준비해 뒀어요", "모른다고 말해도 괜찮아요"];
+  let i = 0, hide = 0;
+  btn.addEventListener("click", () => {
+    if (!still) {
+      jump.classList.remove("on");
+      void jump.offsetWidth;                        // 연달아 눌러도 처음부터 다시 뛴다
+      jump.classList.add("on");
+    }
+    say.textContent = LINES[i++ % LINES.length];
+    say.classList.add("on");
+    clearTimeout(hide);
+    hide = setTimeout(() => say.classList.remove("on"), 2400);
+  });
+  jump.addEventListener("animationend", () => jump.classList.remove("on"));
+})();
+</script>
 <script>
 // 터널 주소는 서버를 다시 띄울 때마다 바뀐다. 주소를 이 페이지에 박아 두면
 // 바뀔 때마다 페이지를 고쳐야 하므로 tunnel.json 한 파일로 분리했다.
