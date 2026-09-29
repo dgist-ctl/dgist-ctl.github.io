@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="description" content="전기전자컴퓨터공학과 회의비·출장비 접수 — 필수값만 입력하면 담당자에게 보낼 메일이 만들어집니다.">
+<meta name="description" content="회의비·출장비 신청 접수 — 필수값만 입력하면 담당자에게 보낼 메일이 만들어집니다.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="회의비, 출장비 접수">
-<meta property="og:description" content="DGIST 전기전자컴퓨터공학과 · 필수값만 입력하면 담당자에게 보낼 메일이 만들어집니다.">
+<meta property="og:title" content="회의비 출장비 신청 접수 (프로토타입)">
+<meta property="og:description" content="필수값만 입력하면 담당자에게 보낼 메일이 만들어집니다.">
 <meta name="theme-color" content="#ECEFF3" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0D1218" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F1B2D'/%3E%3Cpath d='M20 14h24v36l-4-2.7-4 2.7-4-2.7-4 2.7-4-2.7-4 2.7z' fill='none' stroke='%23fff' stroke-width='3.2' stroke-linejoin='round'/%3E%3Cpath d='M26 25h12M26 31h12M26 37h7' stroke='%23fff' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E">
-<title>회의비, 출장비 접수</title>
+<title>회의비 출장비 신청 접수 (프로토타입)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
@@ -52,7 +52,6 @@ body{margin:0;background:var(--ground);color:var(--ink);font:16px/1.6 var(--sans
 
 /* 머리 */
 header{padding:4px 2px 6px}
-.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
 h1{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.25;letter-spacing:-.01em;margin:0;text-wrap:balance}
 .lead{margin:10px 0 0;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:46ch}
 
@@ -92,6 +91,14 @@ textarea{resize:vertical;min-height:88px;line-height:1.55}
 
 /* 칩 */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
+.prj-pick{display:grid;gap:6px;margin-top:-4px}
+.prj-pick button{display:grid;gap:2px;text-align:left;font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);
+  border-radius:12px;padding:10px 14px;min-height:44px;cursor:pointer}
+.prj-pick button:hover{border-color:var(--accent)}
+.prj-pick button b{font-size:14.5px;font-weight:500;line-height:1.4}
+.prj-pick button small{font-size:12.5px;color:var(--muted)}
+.prj-pick button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.prj-pick button[aria-pressed="true"] small{color:inherit;opacity:.8}
 .chip{position:relative}
 .chip input{position:absolute;opacity:0;pointer-events:none}
 .chip span{display:inline-flex;align-items:center;min-height:44px;padding:9px 16px;border-radius:999px;font-size:15px;font-weight:500;
@@ -203,8 +210,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 <body data-kind="meeting">
 <div class="wrap">
   <header>
-    <p class="eyebrow">DGIST 전기전자컴퓨터공학과</p>
-    <h1>회의비, 출장비 접수</h1>
+    <h1>회의비 출장비 신청 접수 (프로토타입)</h1>
     <p class="lead">필요한 값만 입력하면 담당자에게 보낼 메일이 만들어집니다. 회의록과 포털 신청은 행정 담당자가 이 값으로 처리합니다.</p>
   </header>
 
@@ -245,15 +251,14 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="m-biz"></div></div>
         <div id="m-rnd" class="field" style="gap:14px" hidden>
+          <label for="m-pi">연구책임자
+            <input id="m-pi" type="text" autocomplete="off" enterkeyhint="next" placeholder="비우면 내 이름"></label>
+          <span class="hint" id="m-prj-hint" aria-live="polite">연구책임자 이름으로 진행 중인 과제를 불러옵니다. 없으면 직접 적어 주세요 — 한 번 적은 과제는 이 기기에 기억됩니다.</span>
+          <div class="prj-pick" id="m-prj-pick" role="list" hidden></div>
           <label for="m-prj"><span class="req">과제명</span>
             <input id="m-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
-          <div class="two">
-            <label for="m-prjno">과제번호
-              <input id="m-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
-            <label for="m-pi">연구책임자
-              <input id="m-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
-          </div>
-          <span class="hint" id="m-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+          <label for="m-prjno">과제번호
+            <input id="m-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
         </div>
         <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">예산명</span>
           <input id="m-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
@@ -386,15 +391,14 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <div class="field"><span class="lab req">어느 예산으로 쓰나요</span>
           <div class="chips" id="t-biz"></div></div>
         <div id="t-rnd" class="field" style="gap:14px" hidden>
+          <label for="t-pi">연구책임자
+            <input id="t-pi" type="text" autocomplete="off" enterkeyhint="next" placeholder="비우면 내 이름"></label>
+          <span class="hint" id="t-prj-hint" aria-live="polite">연구책임자 이름으로 진행 중인 과제를 불러옵니다. 없으면 직접 적어 주세요 — 한 번 적은 과제는 이 기기에 기억됩니다.</span>
+          <div class="prj-pick" id="t-prj-pick" role="list" hidden></div>
           <label for="t-prj"><span class="req">과제명</span>
             <input id="t-prj" type="text" list="prj-list" autocomplete="off" enterkeyhint="next" placeholder="과제명 또는 약칭…"></label>
-          <div class="two">
-            <label for="t-prjno">과제번호
-              <input id="t-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
-            <label for="t-pi">연구책임자
-              <input id="t-pi" type="text" autocomplete="off" placeholder="비우면 내 이름"></label>
-          </div>
-          <span class="hint" id="t-prj-hint">한 번 적은 과제는 이 기기에 기억해 두고, 다음부터 과제명 칸에서 고를 수 있습니다.</span>
+          <label for="t-prjno">과제번호
+            <input id="t-prjno" class="num" inputmode="numeric" pattern="[0-9]*" autocomplete="off" placeholder="모르면 비움"></label>
         </div>
         <label for="t-biz-other" id="t-biz-other-wrap" hidden><span class="req">예산명</span>
           <input id="t-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
@@ -486,17 +490,74 @@ function rememberProject(b) {
 }
 function fillProjectList() {
   const dl = $("prj-list"); dl.replaceChildren();
-  savedProjects().forEach(x => { const o = document.createElement("option"); o.value = x.name; if (x.no) o.label = `과제번호 ${x.no}`; dl.appendChild(o); });
+  const add = (v, lab) => { const o = document.createElement("option"); o.value = v; if (lab) o.label = lab; dl.appendChild(o); };
+  profPrj.forEach(x => add(x.name, `과제번호 ${x.no} · ~${x.end}` + (x.st ? ` · ${x.st}` : "")));
+  savedProjects().filter(x => !profPrj.some(y => y.name === x.name)).forEach(x => add(x.name, x.no ? `과제번호 ${x.no}` : ""));
 }
+// ── 교수별 진행 과제: 과제목록_갱신.py 가 넣는다. 교수 이름을 열쇠로 잠가 두어 소스에 과제명이 드러나지 않는다.
+const PRJ_LOCK = /*PRJ_DATA*/{"s":"kHSapbnhL0+gjQGQLn+fvQ==","n":200000,"basis":"2026-09-10","d":[["YZzf/VXRr5MWTeJp","NRx59H1ZqymKez+idD+ADAvQsA6vtUx+Y4gWpl/pkbU1v3/RxWi6CgrrSWyQqr/fZSBlnfV6VSj0wlojIgPIeVbtedihdNcayF5o7hGeWRJUsP3hSor1ky0aKJ7KAzcWR4s1MdT347YnAUp7DNqA5Bisfy5TIA2BioB0n8AFoj2+ix5SpPX/a7vvJFA5Sm+IfG7gRvO5+ODZpeny6L+Q8X5mtkKrCZBfprlD+snNwjpWlR+ljh/qDDCt0I5tQpvU1aNxG/x6FuIpE8ZrUABQ//dQ116maKaZ8dia2EFUFHKiYMiJYPbAc1UZZgQz/F1teNg1QSsEAbi/l1d+Ry5yzcyZwMehMlpDEJTZHev4x1nsFvu3odeKZ91jo54s470K8tG90L/DEw1gTRFYzzbBqY3nNXLmj+BxQPadSKb1fkUMM1fn+iqMC9xcDsyNddcsZ8iTLduR9m6xVYiRM2lf++X+YV3J16pOZ1TKqnO7Azx1+WbgN8kHdPn1pEByw+wntrYLMeNAZ2DZL5udjXL9AyMG6n2gkGtZrmSTNHc8ETMl5FL0AeXpP2oJ26FrDXZa7xmgJJCIOBUjW+yJH4+UWGvYRo05j/XJRmNqouAsglR7TTPlTW17VIY19r+4UPsdz1N88E/ill6V1gGcJlbatbS+JFUP"],["d18YoXsVJfnmmyjN","dY1/KsBtopnl5c2bbyxsEwlrn4vdbTZ6YaKnWqgMS0+CBEYv/XsNyi19sfcmQZyZoQwATvF0ttnlNXGkd0//Y73zqfq03Tyy4fyqUBUT+cYC8clBWuS062X6xKFE8pvR55cc+AWEo74R8AlOoHNzwXuy5VnIuy24S9S69wSI4LkWh0kYF7n0foNQAMWW4WX2pQDkqRnpeL9BR0sZMupsaOPENHeh3udfhaM8Acn7yMSo4erYa5rfMJQzd05DGhXtTbst8T5G3mHBK5oI+4umQCP9bGEbYd+7PFBM6ZKzGvsoc40s7//3O2ZWMGPrPg4qviyiJAVGN6ESgd3oot0mF/KGoKb19WL5XkvcXFUnV5rYXqpQfVmTSF6oYebCbjhulhYQ+rjDvY4NaljHwDCp6MU5ii6Grt6VYhuEUcijyrBj15YMBC2KflNuSe+C1z95XiZGFu0B1jBNfjg5F8k/Pl0YHP0wEOCNMlDTK3nc6qwUUvaQ4DTT2AFnavWMFXG9ESQg89Hp4rewrmB2fLU9PhLtWJIRpVl862nSjIA38VTGJz+F/yUiVuQ+/dV2lQnVB26NabximqwbfctEtt7upWoudROhwX3ts7Z5nhRj8VqeRJwvcq53yBT80OF5qs5bDNqxmCOR39nsh4DYle/DYhXK8czTHEI/OfkXtpQSglp3iIR8E6M7hOMdEiOFyQ=="],["HQGEWib37Qn4v0cx","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"],["8kHrd6iRNBV7fCDD","LYzODodEwiYtGfJE5U1QBnXtPsEOWCOX3sjC65ZRlqlva4KqXqJKZUIO0kx/Ml659ok3OheTt8g3dhJNLBWixwOt5q/yPBZJaio8UEpOfGMF53VoCo+QjNAlfrq4NXwtea5ex6xHxC8RTPyRPnDUmRb+sxrvrTKirDFlgCVBXq3+PyxXGlCVXMeimjrHx0w53Wa786qdQHknF+GwELcM9ItiVz//8EZ2yU4r6OYBbDOiFvl5gkEwwnIyKOqjhgE+vNQaJO//LFZVbKlAD6xhGr+upDqMJw9w514iLegGsmTzhNikR9hol9pzi33vmZ7Bt/VSQax64IhMrh0djVPVSonGcEvVn1xtBQU3RwZ8fW8RGno+ryq+mffqjHftGepbLXE5cNFl8RZ1RgkEddEHgfaujfmADD6xKcZoJfOi65MBBPvue4b67Q9H9vi5jC6rfekq"],["NoMkbuUb8av9mNl6","AFmx/d3ZyZTO5yHOBvM5YoiDU2goJXPTXf4oW/nyNUlCd8ElKrglRC9QXY5/EXHqEuHvHPCEZPxU5NtZZ/7khjooSZzMKKzyx1qURVxciiByBf2P9lMIAUJbGBxoqoRGko8MlIrr/+1ij0fXPJUtIh6cdZa6xjpkBwFkQWrwttTXpoVInOH8cvtjUvbx67LavHzM0f08mq1AfxtyZBNGtsAohb8EKdH8EGSKtAxPHgbrnlzylPBiR8urFHj8Lkukz6FZ+m9+ms7uN93UCqJpsy2Ie0R0QMV6tmVCaluU/obEfEZPVxgRMATU2/RiOWwZNeV6MHlRoSyYZCBsEwPXdJL9ASD/HIDIZqooZE7j5H9B7+hjl7BRjsmfNCGBXzUUivgJf4lnLAhujkb92tOBvbaDGMan6Aea+5EDlQgneCmIPlqGW2w5OVvAVbxmX4OLtxPhVVNBT3kUfHE5xVKwpa3jQEX9j9zw9wHzeHBg4c/kZpkECwH799/IwFfmtkXKb8h9Rdu/D1UUP8a0vbu2sKHUU7nNO9DeepVREUhDbp8PnP98rwWN9CiSerbvX2o7AZKaHdb65Xr3ob5yDMxP9qY04tFxDcDyK19tMxflA32C2dLUTTI1MPcwflgB5639Ds6fUbhV2lXl1Kqv6lSeqYkBC8+Yh+RgYk84VO/rtCvx2qI3uQ=="],["rkb2CcMk2gFtKXXz","ADCd1AeZXFfVapLso217KLJX/B+5f+dHr5t3Vewu9xbs5pnOJ1sM03gpvSkqPziScKm7Xfc58fuI+q22d3JjcN6nNs6TNmf15bY55MUdy2tOzoazlDxcd2+yhRo+kF81IG/jtCRyU3voecD4LHG59VKjDGRlXMnknHzRw22hNl68GaYwcGA/1pkspnaWyVZtCHHVu1mZq6oBW0nf6JgbPYNnUbpw/2RkueytF0snjn65CmeAOOz7vZyLcXTKKF76ctoAZEy54DvLRZNMMYE/1eLZTpsngfXjd0tJhmFfmqBO8kJiPgbYDL6vOu1gMy05eM3V9sFLffCfbNqs/SiMsCWNs3P4F/T7epTubYc+4CRw6w2WQoek0F2iGTWbZwG4ScevK7iYgUW5JHkwNCaPEeN8EUYNvsFD71KGB3yew0TK0gDa7Ad9or3XJ5ow/oO7NkKH8hxW60UARR46462BE3li9FgndHQHs/6FotTOogHt4okyundwijrLLdQoBR1YHXBDzzhwtSvv8eR8Kdh7DlYor/umIm8CNvwRMeZW4xumqs1z8lxCthGYcwzTBYmkY5sNtTQjsWQh6idmvV+Cp2VFi8IVdyu6XGFEvhYHhfL81ns8UdIRiLDsHqZh4fzFqjEFTAutScikxmyRg2yAplMbuVrjXO/YOhMKUC8x3ASuweSi/MCJaPfUISKH9ZSdgqSLTRy+77Wg/2SztGcR9NLvO71v0WpWpPw5vIjej9l6JTTCDFYkk1hYP4f3fwb1DvXGzctGUaM1GMwPPrDM0qsFyIfZ7rur37AMwP8uK1yWA+k9uQZ134Pj2UNuyQ=="],["hw7uUhwbE/Dezg4N","ulo8zDZ65E2FPZz363ljM4JdGHc+qPnrln1IXlgJRFjtfyzrslXfSd9FxPwiGU25YpegvC84WXJeKFBWrSgLgs7PIQHLXDVkHggmlcmMGKUof8D4LDnZ0X004bbEWWccxo1DNGZaZjJzVSZkrZnZOiQYrnNjLnaWmivGjd+iAPWMoLu1BIjXeBkV+ejFAeO3EAjSDctvyEas6I6/P3xZb6I6t228Wsu2NtvZ91QtkMDQXmkUjZKfrKgirtURrpJ8l/yfubtOUIDpfrp7vNKr52O3pbQg9rgUUTTWa0c8LhT3z1zceOKrgQBYJmsKsDsJtAKtIUQEr84LlJVU+3MBk72rcn0+xGc/1VOcBV4gH5csEZN9kkIoGMu1q3velEyiox5oRvRGUzrWfEjVS6f+/cmHevIf/NdAZj6/nmJtrN5/PgC4LuzRwq0Gz0YMPueu8IY5wK8CixuucfVmp0+6SLSaOrw8YEx8Ft3/8ByPBsc0jJfYovTG12wLadn51NtO7XAuXkZ+TpHJmxSVAsnTS21iUxzU4cx4iTXMdr+RIwPULy/V7u8zxc4TJkGl4FR67PgbC1HmBzZbIAAjRVk+xDeNzRZML/tdQtLALwP5VQ=="],["FaBXGjOlzzWsgUDA","tOXDJ/dSVxkmCHTqkE/lJdInnjyJfrSkhZsM9pWpKkpjd2V4x3/ATJx6w6tbwlrcFFUnBR7V819YMZ8yNIH98TtsR+R6aer6YQiHpLSoeel58oc1GQhVUEjGL3FBkAHF7VFF5GCalTC/2ytryS3w6PFl3Q23ykT9ZhQRON1Et/IiryrJBkWhGu/TGuFukWT4HoCVhr6bebx0dJOxZF3D1d0Qcms5vHSajEMWuxEZGK4yIQLSGHXXNhc/MCI5q9A5qpNm7cE857e+TK+TmXlaxDiXe6OG6pe/cwZ3cDYacJXCwXk2bKTgh94YfonwDgYvx24jNn+fg6NuPzt+48z5RYH1XkDoHpcmCxa2XSDKwCReuqS45AHboQIyzy1YS/4o4g4RT6Uga713vDBOenWDE14="],["j8BpjIE1wYYNeAwx","1NBL/uf7DIj5u+asxAwkq8Gokg7OIU2kAf3n61BtnOsd6LLSnejTbp5ZRO+lGOvoI0qOWhwSXWSGyiB2hyabO1IaSZaZzTArIUn+gMb7O+5Xjf2QGQAm7f2+TRp+0pBfTTD8Lylffky/hdG/XV0rwdPexaGVDMFpetLfOrOwHwp3R7LWms8gsM2s9Gf1cOwUAq6pz+BSHr6BSZGd/msFySTDJewKyWkY5VgcnZvJqIIcm46BxbvC0u+IeS6/+QdxOaH3Sx4uWqa2jFXX/+/4mTj9YdX2lLUVJpWTH9lL6CMw9RNsby89KnvIU/RfPU0jJqIyiYWuOYSHWgPp0mMzel09oPxENF2LuAqJehAfOjlLGMNzHgJo/8KJOHKiunhujMQLlY7NtS8tc6dLXOswGf28d2W9aKg+wCEkRZIm9f8PCVqMZxbSP0cx3/C4s1xj3KdPPFnO7708LaIxcEj432iu8ZK86DGY8+KSRaMyuYK5LtKfpXEwr4zjUNplyhUti871bZ5MPAaZB6jj1g0W7Gx7smwnxRjDE8swPFTiN/7dqgBUnQ+lEMbtdrxoeMMjivBjlTohvhF5FrXSLIsuObpPbHIbU5k4KNuOc6WsmvqFbbJnePSQ7y/JyRi9Q/fYp6slultOZfGt+PyJ1IDF2bhkVnUgNm4Ig2t4wCl1tp3/ftp6Fev97uqX+G5wJNQnfHa+sjjxgWIVzs5m3lfu"],["tR7Iun8AoZz0YVGX","2gzYy7cZPNuwvfHC/Mi96Ma83rXCKKv/sYuS0g/yDG1RTOWArOxG5iIaaWh73ojCegzk4gCtMi5IJJ9tz6GfrYv709oKYWCR4ThYJdnQpxSp7nu3RHx1/5KBxHVVutTI+dJ9qBiUyWcqjgoW5hBEDbChOL+DO7IWQk+4pc/iZanQWOpqcwVuL0sb555pXOXrCkOUGTDxZZSkL37YjdL64KRocmEx6hsp/+RUjHwOFcdey4SIlgyy7xR2oS2HSl/ZYE9JzwKL5dfiexqrnPo3w6BjGyz+TZu+4iSto/viyrmg9Wyc06FyUeFDJrMxqQE2637Rxji5YJ4r8GM4u2NWhw7HwAQLTxlLzW24kk0fxcD7J1Ymvkft7CnqLiVK5UyKXAGcPctHi22UaQxUnip5qxm9gz9e0NiseteE0e7/5jX86xnWQyk6YdRdyq/s9r0nHZEng2m8vbqVVo+waMEhnOzhhA6yWQym6z55gsVP4u7eHlPBcRg5hEZEmZx15zv9J3HmNLLUniHs3uBEvwwMcq3Bq7lOsDNjgu0GSJH5ybbgVHXg9O8LTd4piZ8O7GDS2bc767XBCyy8RT77K48yjyA0rGtU6BaJZAZbOJl7/gjTLHhjjaGmDH48s+6ltpc+mi/VJbnE+TE7NyNIGaJfbgC9P4AX+3dTimsDmQa/EqfjOAfn6b4IoSI/vBF9KqTgI4QvmiMDw9tfwUzCnZLAXV7yNCkdxPuBw4CknxpaEqO8fFCiLHJHB0XvxMzdPlDSFvn90sIjyHshc1d5bcvT/2xzFaqBdCSvqBvlRdpqI3DSNeWxw7fPB1RbJ4/eHlTRGCJEukFiZo7JIpYnLFsttg7EpdD5S4RTxigSvVgudY9k+cRY0fsnlYABZ8rRrP47PU+95NydjBgF3cgt5cpy3FpEd/xEmPGQc5CKOKB81ApSSOrXnJz51Iz6MVM4eDG6wInqAl/k1MAWylc5wuJE4xLb+1im3sCi5wzlkbvsOaRwJfjMDg=="],["fjQzUsWPSExDw39o","qnFyjB14U5uls20XQ2zCFnx7rb5oytRz/9H5ioEC+fqiudjYGorEndQggLvXpQhyAenfDVuIBNjTaQWtqu6Yz5rEiLvHlrJIvtcY3Kf1aDlxX1EsAQLPHmoTzRO8Qdu+lU9sX/Dw4prPlThd+c+B9ake9XkVHZrE7lo3h9RfVhVJiaTXcTH4jv8crKzg9VW89myuDtsN2ufl0edt0QlGS1eGO/WmOE7A8HC0XEw06Yk9OVFlXoI0us0z1IXUGhnYI6RxQH9KtLTgxik1kd4xLK7bEEEfvYBGHV9CmGzz/pyzxmX1o0U19HiVp5Kx+dAY9/HIpqttcDu4Mi5CUZEwNO0Yqaxh0Mm5v2HycBNesC3X57eve9vCW0we3I7w9fXqZeZlfD8eGQ6tmtUw9fytNQdwx0QscHh99JffPYMt0QsZMVUmxCRjjqtgI1+A+vNqlNw="]]}/*END*/;
+const normName = s => String(s || "").replace(/\s+/g, "").replace(/(교수님|교수)$/, "");
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const prjCache = new Map();
+let profPrj = [], profName = "", lookSeq = 0;
+async function unlockProjects(name) {
+  const n = normName(name);
+  if (!n || !PRJ_LOCK.d.length || !(window.crypto && crypto.subtle)) return null;
+  if (prjCache.has(n)) return prjCache.get(n);
+  const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(n), "PBKDF2", false, ["deriveKey"]);
+  const key = await crypto.subtle.deriveKey({ name: "PBKDF2", hash: "SHA-256", salt: b64(PRJ_LOCK.s), iterations: PRJ_LOCK.n },
+                                            base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  let hit = null;
+  for (const [iv, ct] of PRJ_LOCK.d) {
+    try { hit = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(iv) }, key, b64(ct)))); break; }
+    catch (e) { /* 다른 교수의 목록 */ }
+  }
+  prjCache.set(n, hit); return hit;
+}
+const HINT0 = "연구책임자 이름으로 진행 중인 과제를 불러옵니다. 없으면 직접 적어 주세요 — 한 번 적은 과제는 이 기기에 기억됩니다.";
+async function lookupProjects(p) {
+  const name = $(`${p}-pi`).value.trim() || $("me").value.trim(), seq = ++lookSeq;
+  let hit = null;
+  try { hit = await unlockProjects(name); } catch (e) { hit = null; }
+  if (seq !== lookSeq) return;
+  profPrj = hit ? hit.prj : []; profName = hit ? hit.pi : "";
+  fillProjectList(); ["m", "t"].forEach(drawPick);
+  ["m", "t"].forEach(x => { $(`${x}-prj-hint`).textContent = hit
+    ? `${hit.pi} 교수 진행 과제 ${hit.prj.length}건을 불러왔습니다 (${PRJ_LOCK.basis} 기준). 아래에서 눌러 고르세요.` : HINT0; });
+}
+// 과제를 눌러 고르는 목록 — datalist 는 데스크톱에서 한 번 눌러서는 펼쳐지지 않아 늘 보이게 둔다
+function drawPick(p) {
+  const box = $(`${p}-prj-pick`), cur = $(`${p}-prj`).value.trim();
+  box.replaceChildren(); box.hidden = !profPrj.length;
+  profPrj.forEach(x => {
+    const bt = document.createElement("button"); bt.type = "button"; bt.setAttribute("role", "listitem");
+    bt.setAttribute("aria-pressed", String(x.name === cur));
+    bt.innerHTML = "<b></b><small></small>";
+    bt.querySelector("b").textContent = x.name;
+    bt.querySelector("small").textContent = `과제번호 ${x.no} · ~${x.end}` + (x.st ? ` · ${x.st}` : "");
+    bt.addEventListener("click", () => {
+      $(`${p}-prj`).value = x.name; $(`${p}-prjno`).value = x.no;
+      if (!$(`${p}-pi`).value.trim()) $(`${p}-pi`).value = profName;
+      drawPick(p); render(); saveDraft();
+    });
+    box.appendChild(bt);
+  });
+}
+let lookTimer = 0;
+const lookupSoon = p => { clearTimeout(lookTimer); lookTimer = setTimeout(() => lookupProjects(p), 350); };
 function buildBiz(p) {
   const box = $(`${p}-biz`);
   BUDGETS.forEach(([v, t]) => box.appendChild(chip(`${p}-biz`, v, t)));
   box.addEventListener("change", () => fillEsti(p));
-  // 기억해 둔 과제를 고르면 과제번호·연구책임자를 채운다
+  // 교수 과제·기억해 둔 과제를 고르면 과제번호·연구책임자를 채운다
   $(`${p}-prj`).addEventListener("change", () => {
-    const hit = savedProjects().find(x => x.name === $(`${p}-prj`).value.trim());
+    const v = $(`${p}-prj`).value.trim(), own = profPrj.find(x => x.name === v);
+    if (own) { $(`${p}-prjno`).value = own.no; if (!$(`${p}-pi`).value) $(`${p}-pi`).value = profName; drawPick(p); render(); return; }
+    const hit = savedProjects().find(x => x.name === v);
     if (hit) { if (!$(`${p}-prjno`).value) $(`${p}-prjno`).value = hit.no || ""; if (!$(`${p}-pi`).value) $(`${p}-pi`).value = hit.pi || ""; render(); }
   });
+  $(`${p}-pi`).addEventListener("input", () => lookupSoon(p));
+  $(`${p}-prj`).addEventListener("input", () => drawPick(p));
 }
 function fillEsti(p) {
   const v = radio(`${p}-biz`);
@@ -504,6 +565,7 @@ function fillEsti(p) {
   $(`${p}-biz-other-wrap`).hidden = !(v === "dept" || v === "other");
   $(`${p}-biz-other`).placeholder = v === "dept" ? "예) 학과 운영비…" : "예산 이름…";
   if (p === "m") $("m-rnd-rules").hidden = v !== "rnd";
+  if (v === "rnd") lookupProjects(p);
   // 과제가 기억돼 있으면 가장 최근 과제를 미리 채워 둔다
   if (v === "rnd" && !$(`${p}-prj`).value) {
     const last = savedProjects()[0];
@@ -647,6 +709,8 @@ function problems() {
       if (!amt) out.push([m, "결제 금액"]);
       else if (amt > 3000000) out.push([m, "결제 금액이 300만원을 넘습니다. 금액을 다시 확인해 주세요."]);
     });
+    if (d.amount && d.attendees.length && d.amount / d.attendees.length > 50000)
+      out.push([$("m-att"), `1인 ${won(Math.round(d.amount / d.attendees.length))}원 — 회의비는 1인 5만원을 넘으면 접수할 수 없습니다.`]);
     if (d.date && d.date > iso(new Date())) out.push([$("m-date"), "회의비는 결제한 뒤에 접수합니다. 회의 날짜가 오늘 이후입니다."]);
     if (d.biz && d.biz.type === "rnd") {
       if (!d.ext) out.push([$("m-ext"), "다른 기관 소속 참석자가 있는지 골라 주세요."]);
@@ -735,7 +799,6 @@ function render() {
       if (d.amount && d.amount <= 100000) notes.push("10만원 이하라 회의록 대신 목적·일시·장소·내용·참석자 명단 자료로 증빙할 수 있습니다.");
     } else {
       // 행정처 업무매뉴얼 p186 업무추진비류 유의사항 (교비)
-      if (unit && unit > 30000) notes.push(`1인 ${won(Math.round(unit))}원 — 행정처 매뉴얼은 1인 3만원을 기준으로 안내합니다. 담당자가 확인합니다.`);
       if (d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 원칙입니다.");
       if (dow === 0 || dow === 6) notes.push("주말·공휴일 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
       if (d.night) notes.push("밤 10시 이후 사용은 사전결재가 있어야 하고, 사후기안이면 일상감사·차상위자 결재가 필요합니다.");
@@ -952,6 +1015,7 @@ function init() {
 }
 bindPay(document.querySelector(".pay")); renumber();
 buildBiz("m"); buildBiz("t"); fillProjectList(); labelChipGroups();
+$("me").addEventListener("input", () => { const p = kind() === "meeting" ? "m" : "t"; if (radio(`${p}-biz`) === "rnd" && !$(`${p}-pi`).value.trim()) lookupSoon(p); });
 init();
 const restored = restoreDraft();
 const k0 = typeof restored === "string" ? restored : store.get("kind");
