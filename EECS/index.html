@@ -182,6 +182,9 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 .main:active{transform:scale(.985)}
 .main.off{opacity:.55}
 .bar small{font-size:12.5px;color:var(--muted);text-align:center}
+.bar .amt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:13.5px;color:var(--muted);padding:0 4px}
+.bar .amt b{font-size:18px;color:var(--ink);font-weight:700}
+.bar .amt b small{font-size:12px;color:var(--muted);font-weight:500;margin-left:4px}
 
 /* 완료 */
 .done{position:relative;background:var(--paper);border-radius:18px;padding:22px 18px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);overflow:hidden}
@@ -392,6 +395,12 @@ details .inner{display:flex;flex-direction:column;gap:18px}
           <label for="t-meals">제공받는 식사 (끼니 수)
             <input id="t-meals" class="num" inputmode="numeric" pattern="[0-9]*" placeholder="없으면 0">
             <span class="hint">행사·회의비로 식사가 나오면 식비를 끼니당 1/3씩 줄여 신청합니다.</span></label>
+          <div class="field" id="t-rank-wrap" hidden><span class="lab">직급 (여비 기준)</span>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="t-rank" value="A"><span>교수·부교수</span></label>
+              <label class="chip"><input type="radio" name="t-rank" value="B"><span>조교수 이하</span></label>
+            </div>
+            <span class="hint">이름으로 직급을 찾지 못했습니다. 고르면 여비를 계산합니다(교수·부교수 = KTX 특실, 조교수 이하 = 일반실).</span></div>
           <div class="slip receipt" id="t-calc" aria-live="polite"></div>
         </div>
         <div class="slip ticket" id="t-sum" aria-live="polite"></div>
@@ -439,6 +448,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <button type="button" class="btn2" id="copy">본문 복사</button>
         <button type="button" class="btn2" id="copySubj">제목 복사</button>
       </div>
+      <div class="slip receipt" id="doneCalc" hidden></div>
       <div class="attach" id="attach"></div>
       <p class="notice" id="longMail" hidden>본문이 길어 일부 메일 앱에서 끝부분이 잘릴 수 있습니다. 메일에 '=== 끝 ===' 줄이 보이지 않으면 [본문 복사]로 붙여 넣어 주세요.</p>
       <span class="status" id="status" aria-live="polite"></span>
@@ -450,6 +460,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 
 <datalist id="prj-list-m"></datalist><datalist id="prj-list-t"></datalist>
 <div class="bar"><div class="in">
+  <div class="amt" id="amt" hidden aria-live="polite"><span>여비 신청액</span><b class="mono" id="amtVal"></b></div>
   <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
   <small id="left" aria-live="polite" role="status"></small>
 </div></div>
@@ -899,7 +910,7 @@ function drawTicket(t, n) {
   main.append(route, meta);
   const stub = el("div", "tk-stub");
   stub.append(el("span", "", "구분"), el("b", "", t.tripType || "—"), el("span", "", "여비"),
-              el("b", "", t.travelPay === "Y" ? (t.transport || "신청") : "안 함"));
+              el("b", "", t.travelPay !== "Y" ? "안 함" : trip.calc && trip.calc.items.length ? won(trip.calc.total) + "원" : (t.transport || "신청")));
   box.append(main, stub);
 }
 
@@ -911,10 +922,19 @@ async function lookupRank() {
   try { hit = await unlockProjects($("me").value); } catch (e) { hit = null; }
   if (seq !== trip.seq) return;
   trip.role = hit ? hit.role : ""; trip.rank = hit && hit.role === "교수" ? hit.rank || null : null;
-  if (!$("t-cls-wrap").dataset.touched) {   // 좌석 등급 기본값 = 직급 (직접 고르면 그대로 둔다)
-    const c = document.querySelector(`input[name="t-cls"][value="${trip.rank === "A" ? "특실" : "일반실"}"]`); if (c) c.checked = true;
-  }
-  render();
+  seatDefault(); render();
+}
+// 계산에 쓰는 직급과 출처 — 주소록 자동(auto) / 대학원생 잠정(student) / 직접 고름(chosen)
+function tripRank() {
+  if (trip.rank) return { rank: trip.rank, src: "auto" };
+  if (trip.role === "학생") return { rank: "B", src: "student" };
+  const c = radio("t-rank");
+  return c ? { rank: c, src: "chosen" } : { rank: null, src: "" };
+}
+// 좌석 등급 기본값 = 직급 (직접 고르면 그대로 둔다)
+function seatDefault() {
+  if ($("t-cls-wrap").dataset.touched) return;
+  const c = document.querySelector(`input[name="t-cls"][value="${tripRank().rank === "A" ? "특실" : "일반실"}"]`); if (c) c.checked = true;
 }
 const rankSoon = () => { clearTimeout(trip.timer); trip.timer = setTimeout(lookupRank, 350); };
 // 교통편별 구간 목록 — 도착 시·도 이름이 든 구간을 위로
@@ -935,15 +955,15 @@ function fillRoutes(t) {
 }
 function drawCalc(t) {
   const box = $("t-calc"); box.replaceChildren();
-  const head = el("div", "r-head"); head.append(el("span", "", "예상 여비"), el("span", "mono", trip.rank ? (trip.rank === "A" ? "교수·부교수 기준" : "조교수 기준") : ""));
+  const R = tripRank();
+  const head = el("div", "r-head"); head.append(el("span", "", "예상 여비"), el("span", "mono", R.rank ? (R.rank === "A" ? "교수·부교수 기준" : "조교수 이하 기준") : ""));
   box.append(head);
-  const c = calcTravel({ ...t, rank: trip.rank }, FARES);
+  const c = calcTravel({ ...t, rank: R.rank }, FARES);
   if (!c.items.length) {
-    const why = c.notes[0] && !/^여비 금액은/.test(c.notes[0]) ? c.notes[0]
-      : trip.role === "학생" ? "대학원생 출장 여비는 포털에서 계산합니다 — 교통편·구간만 적어 주세요."
-      : $("me").value.trim() ? "직급을 확인하지 못해 여비는 포털에서 계산합니다." : "이름을 넣으면 직급에 맞춰 여비를 계산합니다.";
+    const why = c.notes[0] && !/^여비 금액은/.test(c.notes[0]) ? c.notes[0] : "위에서 직급을 고르면 여비를 계산합니다.";
     box.append(el("div", "empty", n0(t) ? why : "출발일과 복귀일을 고르면 계산됩니다.")); return c;
   }
+  if (R.src === "student") c.notes.push("대학원생은 여비규정에 따로 정한 기준이 없어 조교수 이하 기준으로 잠정 계산했습니다(연구지원팀 확인 전).");
   c.items.forEach(i => { box.append(rline(i.k, i.amt == null ? "—" : won(i.amt) + "원")); box.append(el("div", "sub", i.basis)); });
   box.append(rline(c.partial ? "합계 (정산 항목 제외)" : "합계", won(c.total) + "원", "total"));
   c.notes.forEach(x => box.append(el("div", "sub", x)));
@@ -951,6 +971,18 @@ function drawCalc(t) {
   return c;
 }
 const n0 = t => days(t) > 0;
+
+// 접수 완료 화면에 신청한 여비액을 남긴다 — 포털 여비 단계의 '계'처럼 신청자가 금액을 확인하도록
+function drawDoneCalc() {
+  const box = $("doneCalc"), c = kind() !== "meeting" && trip.calc && trip.calc.items.length ? trip.calc : null;
+  box.replaceChildren(); box.hidden = !c;
+  if (!c) return;
+  const head = el("div", "r-head"); head.append(el("span", "", "신청 여비액"), el("span", "mono", `운임표 ${FARES.basis}`));
+  box.append(head);
+  c.items.forEach(i => box.append(rline(`${i.k}  ${i.basis}`, i.amt == null ? "포털 계산" : won(i.amt) + "원")));
+  box.append(rline(c.partial ? "계 (정산 항목 제외)" : "계", won(c.total) + "원", "total"));
+  box.append(el("div", "sub", "포털 출장신청의 여비 금액과 다르면 포털 금액으로 지급됩니다."));
+}
 
 function render() {
   const k = kind();
@@ -990,9 +1022,10 @@ function render() {
     $("t-lodge-wrap").hidden = !(n > 1);
     if (!$("t-route").value && t.dome === "국내" && t.prov && t.prov !== "대구광역시")
       $("t-route").placeholder = `예) 동대구↔${t.prov.replace(/(광역시|특별자치시|특별시|도)$/, "")}`;
-    drawTicket(t, n);
     $("t-calc").hidden = t.travelPay !== "Y";
-    if (t.travelPay === "Y") drawCalc(t);
+    $("t-rank-wrap").hidden = !!trip.rank || trip.role === "학생" || t.dome === "국외" || t.prov === "대구광역시";
+    trip.calc = t.travelPay === "Y" ? drawCalc(t) : null;
+    drawTicket(t, n);
     const notes = [];
     if (t.dome === "국외") notes.push("국외 출장은 국외출장계획서를 첨부해야 합니다.");
     if (t.dome === "국외" && t.tripType === "학회") notes.push("국외 학회는 체크리스트·확약서 양식 첨부가 필수입니다.");
@@ -1015,6 +1048,9 @@ function render() {
     if (el.id && !el.closest(".pay")) { el.after(s); el.setAttribute("aria-describedby", s.id); }
     else if (el.closest(".pay")) { el.closest(".pay").appendChild(s); el.setAttribute("aria-describedby", s.id); }
   });
+  const c = k !== "meeting" && trip.calc && trip.calc.items.length ? trip.calc : null;
+  $("amt").hidden = !c;
+  if (c) { $("amtVal").textContent = won(c.total) + "원"; if (c.partial) $("amtVal").append(el("small", "", "+ 정산")); }
   $("left").textContent = probs.length ? `남은 필수 항목 ${probs.length}개` : "모두 입력했습니다";
   return probs;
 }
@@ -1055,8 +1091,8 @@ function compose() {
       if (!$("t-cls-wrap").hidden && t.cls) data.cls = t.cls;
       if (n > 1) data.lodge = t.lodge;
       data.mealsProvided = t.meals;
-      const c = calcTravel({ ...t, rank: trip.rank }, FARES);
-      if (c.items.length) data.calc = { rank: trip.rank, items: c.items, total: c.total, partial: c.partial, fareDate: FARES.basis };
+      const R = tripRank(), c = calcTravel({ ...t, rank: R.rank }, FARES);
+      if (c.items.length) data.calc = { rank: R.rank, rankSrc: R.src, items: c.items, total: c.total, partial: c.partial, fareDate: FARES.basis };
     }
     lines = [`${t.me}입니다. 출장 접수 내용을 보냅니다.`, "",
       `출장 구분: ${t.tripType}`,
@@ -1099,6 +1135,7 @@ $("f").addEventListener("submit", ev => {
   store.set(DRAFT, "");   // 보낸 뒤에는 승인번호·금액이 든 초안을 남기지 않는다(다시 보내기는 [메일 다시 열기])
   $("subj").textContent = last.subject; $("bodyText").value = last.body; $("again").href = mailto(last);
   $("done").hidden = false; $("status").textContent = "";
+  drawDoneCalc();
   // 한글은 메일 링크에서 한 글자가 9자로 늘어나 보통 접수도 2,500~3,500자다 — 아주 길 때만 따로 경고한다
   $("longMail").hidden = mailto(last).length < 8000;
   drawAttach();   // Outlook·일부 모바일 앱은 약 2,000자에서 자른다
@@ -1213,6 +1250,7 @@ $("t-route-sel").addEventListener("change", () => {
   $("t-route").value = v === OTHER ? "" : v;
   if (v === OTHER) setTimeout(() => $("t-route").focus(), 0);
 });
+document.querySelectorAll('input[name="t-rank"]').forEach(r => r.addEventListener("change", seatDefault));
 document.querySelectorAll('input[name="t-cls"]').forEach(r => r.addEventListener("change", () => { $("t-cls-wrap").dataset.touched = "1"; }));
 init();
 const restored = restoreDraft();
