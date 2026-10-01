@@ -246,8 +246,12 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <h2>회의</h2>
         <label for="m-date"><span class="req">회의 날짜</span>
           <input id="m-date" type="date"></label>
+        <label for="m-time">회의 시간 <small>(선택 — 회의록에 들어갑니다)</small>
+          <input id="m-time" type="text" inputmode="numeric" autocomplete="off" placeholder="예) 12:30~14:00"></label>
         <label for="m-purpose"><span class="req">회의 목적</span>
           <input id="m-purpose" type="text" enterkeyhint="next" placeholder="예) 튜터링 프로그램 운영 현황 점검"></label>
+        <label for="m-place"><span class="req">장소</span>
+          <input id="m-place" type="text" enterkeyhint="next" placeholder="예) E3 회의실 · 현풍 ○○식당"></label>
         <label for="m-att"><span class="req">참석자</span>
           <textarea id="m-att" rows="2" autocomplete="off" spellcheck="false" style="min-height:64px" placeholder="홍길동, 김철수(KAIST), 이영희(삼성전자)…"></textarea>
           <span class="hint">전원 실명을 쉼표·줄바꿈으로 구분합니다('○○○ 외 2명'은 인정되지 않음). 외부 인사는 소속을 괄호로. <b id="m-n" class="num">0명</b></span></label>
@@ -307,13 +311,6 @@ details .inner{display:flex;flex-direction:column;gap:18px}
           <input id="m-personal" type="checkbox" style="width:22px;height:22px;min-height:0;flex:0 0 auto"> 개인카드로 결제했습니다</label>
       </div>
 
-      <details>
-        <summary>선택 입력 — 장소</summary>
-        <div class="inner">
-          <label for="m-place">장소
-            <input id="m-place" type="text" placeholder="비우면 '원내 회의실 및 달성군 소재 식당'"></label>
-        </div>
-      </details>
     </section>
 
     <!-- ───────── 출장 ───────── -->
@@ -445,7 +442,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
     <section class="done" id="done" hidden>
       <div class="seal" aria-hidden="true">확인</div>
       <h2 id="doneTitle" tabindex="-1">메일 앱에서 [보내기]만 누르면 끝입니다</h2>
-      <p id="formInfo" hidden>행정실이 접수 목록에서 바로 확인합니다. 영수증·승차권·학회 논문 등 증빙은 아래 [증빙 메일 보내기]로 보내 주세요 — 제목에 접수번호가 들어갑니다.</p>
+      <p id="formInfo" hidden>행정실 접수함에 저장되었습니다. 영수증·승차권·학회 논문 등 증빙은 아래 [증빙 메일 보내기]로 보내 주세요 — 제목에 접수번호가 들어갑니다.</p>
       <p id="mailInfo">받는 사람 <span class="addr" id="toAddr">shlee@dgist.ac.kr</span>. 보내기 전에 본문 맨 끝에 <b>'=== 끝 ==='</b> 줄이 있는지만 확인해 주세요. 그 위의 데이터는 고치지 말아 주세요.</p>
       <p class="hint">메일 앱이 안 열리면 [본문 복사] → 웹메일에 붙여 넣기. 제목: <span class="addr" id="subj"></span></p>
       <div class="row-btns">
@@ -474,8 +471,9 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 (() => {
 "use strict";
 const TO = "shlee@dgist.ac.kr";   // 받는 주소는 여기 한 곳 — 완료 화면 문구도 이 값으로 채운다
-// 신청 접수 = 숨은 구글 폼(응답 시트 → 엑셀 → 처리기). postUrl 이 비어 있으면 메일로 접수한다. 값은 구글폼_설정_반영.py 가 넣는다
-const FORM = /*FORM_DATA*/{"postUrl":"","entries":{}}/*END*/;
+// 신청 접수 = 교수학습센터 NAS(AI 학습튜터 서버 /api/intake)에 저장 → 행정실 처리기가 SMB 로 읽는다.
+// 서버 주소는 튜터와 같은 tunnel.json(감시자가 터널이 바뀔 때마다 고친다). 끄려면 on 을 false — 예전처럼 메일 접수
+const INTAKE = { on: true, tunnel: "https://dgist-ctl.github.io/tunnel.json", path: "/api/intake", timeout: 12000 };
 const $ = id => document.getElementById(id);
 $("toAddr").textContent = TO;
 const won = n => Number(n).toLocaleString("ko-KR");
@@ -749,7 +747,7 @@ function readMeeting() {
     amount: toInt(r.querySelector(".p-amt").value),
   }));
   const amount = payments.every(p => p.amount) ? payments.reduce((a, p) => a + p.amount, 0) : null;
-  return { type: "meeting", me: cleanMe($("me").value), date: $("m-date").value, purpose: $("m-purpose").value.trim(),
+  return { type: "meeting", me: cleanMe($("me").value), date: $("m-date").value, time: $("m-time").value.trim().replace(/\s*[~∼-]\s*/, " ~ "), purpose: $("m-purpose").value.trim(),
     attendees: splitNames($("m-att").value),
     contents: $("m-contents").value.split("\n").map(s => s.trim().replace(/^[-·•]\s*/, "")).filter(Boolean),
     payments, amount, place: $("m-place").value.trim(), biz: readBiz("m"), ext: radio("m-ext"),
@@ -828,6 +826,7 @@ function problems() {
   if (kind() === "meeting") {
     const d = readMeeting();
     if (!d.date) out.push([$("m-date"), "회의 날짜를 골라 주세요."]);
+    if (!d.place) out.push([$("m-place"), "회의 장소를 적어 주세요(회의록에 그대로 들어갑니다). 예) E3 회의실 · 현풍 ○○식당"]);
     if (!d.purpose) out.push([$("m-purpose"), "회의 목적을 적어 주세요."]);
     else if (d.purpose.replace(/\s/g, "").length < 6) out.push([$("m-purpose"), "회의 목적을 조금 더 구체적으로 적어 주세요. 예) 공동연구 1차년도 진행 점검"]);
     if (!d.attendees.length) out.push([$("m-att"), "참석자를 적어 주세요."]);
@@ -860,7 +859,6 @@ function problems() {
     if (d.date && d.date > iso(new Date())) out.push([$("m-date"), "회의비는 결제한 뒤에 접수합니다. 회의 날짜가 오늘 이후입니다."]);
     if (d.biz && d.biz.type === "rnd") {
       if (!d.ext) out.push([$("m-ext"), "다른 기관 소속 참석자가 있는지 골라 주세요."]);
-      else if (d.ext === "N") out.push([$("m-ext"), "과제 참여연구자만 참석한 회의에는 연구비로 식비를 쓸 수 없습니다. 예산을 바꾸거나 담당자와 상의해 주세요."]);
     }
   } else {
     const t = readTrip();
@@ -1015,6 +1013,9 @@ function render() {
       notes.push(`참석자에 본인(${d.me})이 없습니다. 결제한 분이 참석했다면 함께 적어 주세요.`);
     if (d.biz && d.biz.type === "rnd") {
       // DGIST 연구가이드 3. 회의비 / 국가연구개발혁신법 매뉴얼
+      // 2026-10-01 사용자 결정: 차단 → 경고. 같은 과제(전략연구사업) 연구실 단독 회의가 실제로 지급신청·승인된 선례가 있어 과제 지침에 맡긴다
+      if (d.ext === "N") notes.push("과제 참여연구자만 참석한 회의입니다. 연구비 식비 인정 여부는 과제 지침에 따라 다르니 행정실이 확인합니다.");
+      if (d.amount && d.amount >= 500000) notes.push("50만원 이상 회의비는 사전품의(감사기안)가 필요한지 행정실이 확인합니다.");
       if (d.amount && d.amount <= 100000) notes.push("10만원 이하라 회의록 대신 목적·일시·장소·내용·참석자 명단 자료로 증빙할 수 있습니다.");
     } else {
       // 행정처 업무매뉴얼 p186 업무추진비류 유의사항 (교비)
@@ -1082,6 +1083,7 @@ function compose() {
     data = { v: 1, type: "meeting", me: d.me, date: d.date, purpose: d.purpose, attendees: d.attendees,
              contents: d.contents, payments: d.payments, amount: d.amount };
     if (d.place) data.place = d.place;
+    if (d.time) data.time = d.time;
     data.dept = "전기전자컴퓨터공학과";
     data.biz = d.biz;
     if (d.biz.type === "rnd") { data.externalAttendee = d.ext === "Y"; }
@@ -1089,7 +1091,7 @@ function compose() {
     if (d.night) data.night = true;
     if (d.personalCard) data.personalCard = true;
     lines = [`${d.me}입니다. 회의비 접수 내용을 보냅니다.`, "",
-      `회의 날짜: ${korDate(d.date)}`, `회의 목적: ${d.purpose}`,
+      `회의 날짜: ${korDate(d.date)}${d.time ? " " + d.time : ""}`, `회의 목적: ${d.purpose}`,
       `참석자: ${d.attendees.join(", ")} (총 ${d.attendees.length}명)`,
       "회의 내용:", ...d.contents.map(c => `  - ${c}`),
       "카드 결제:", ...d.payments.map(p => `  - 카드 ${p.card} / 승인번호 ${p.apprno || "미입력"} / ${won(p.amount)}원`),
@@ -1143,20 +1145,20 @@ let last = null, RID = "";
 // 접수번호 EECS-YYMMDD-XXXX (기기에서 만든다 — 헷갈리는 0·O·1·I 는 뺀다)
 const newRid = () => "EECS-" + yymmdd(iso(new Date())) + "-" +
   Array.from(crypto.getRandomValues(new Uint8Array(4)), b => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[b % 32]).join("");
-// 구글 폼 칸 값 — 문항 이름은 구글폼_만들기.gs · 접수메일_처리.py 와 같다
-function formFields(m) {
-  const d = m.data, b = d.biz || {};
-  const amt = d.type === "meeting" ? d.amount : (d.calc ? d.calc.total : "");
-  return { "접수번호": d.rid, "종류": d.type === "meeting" ? "회의비" : "출장", "신청자": d.me, "신분": d.role || "",
-    "날짜": d.type === "meeting" ? d.date : `${d.from}~${d.to}`, "금액": amt == null ? "" : String(amt),
-    "과제명": b.name || "", "사업번호": b.no || "", "요약": m.summary, "데이터": JSON.stringify(d) };
-}
-// 자동 시험 브라우저는 구글에 실제로 보내지 않는다(ui_loop11 은 __formTest 를 켜고 요청을 가로챈다)
-const formOn = () => !!FORM.postUrl && (!navigator.webdriver || window.__formTest === true);
+// 자동 시험 브라우저는 실제 서버로 보내지 않는다(ui_loop11 은 __formTest 를 켜고 요청을 가로챈다)
+const formOn = () => INTAKE.on && (!navigator.webdriver || window.__formTest === true);
+// NAS 저장 — 서버가 {"ok":true} 로 답해야 접수로 본다(안 되면 메일로 넘긴다)
 async function submitForm(m) {
-  const body = new URLSearchParams();
-  Object.entries(formFields(m)).forEach(([k, v]) => { if (FORM.entries[k]) body.set(FORM.entries[k], v); });
-  await fetch(FORM.postUrl, { method: "POST", mode: "no-cors", body });   // 응답은 못 읽는다(no-cors) — 네트워크 오류만 실패
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), INTAKE.timeout);
+  try {
+    const t = await (await fetch(INTAKE.tunnel + "?t=" + Date.now(), { cache: "no-store", signal: ctl.signal })).json();
+    if (!t.url) throw new Error("서버 주소 없음");
+    const r = await fetch(t.url.replace(/\/$/, "") + INTAKE.path, { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rid: m.data.rid, summary: m.summary, data: m.data }), signal: ctl.signal });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || `HTTP ${r.status}`);
+    return j;
+  } finally { clearTimeout(timer); }
 }
 
 $("f").addEventListener("submit", ev => {
@@ -1193,7 +1195,7 @@ $("f").addEventListener("submit", ev => {
   if (!navigator.webdriver) location.href = mailto(last);
   focusDone();
 });
-// 완료 화면 — form(구글 폼 접수) · fail(전송 실패 → 메일) · mail(설정 없음, 예전 방식) · sending
+// 완료 화면 — form(NAS 접수) · fail(전송 실패 → 메일) · mail(설정 없음, 예전 방식) · sending
 function doneMode(mode) {
   const t = { form: `접수되었습니다 · 접수번호 ${RID}`, fail: "접수가 전송되지 않았습니다 — [메일로 보내기]로 보내 주세요",
               mail: "메일 앱에서 [보내기]만 누르면 끝입니다", sending: "접수 중입니다…" }[mode];
