@@ -373,6 +373,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
               <label class="chip"><input type="radio" name="t-trans" value="새마을"><span>새마을</span></label>
               <label class="chip"><input type="radio" name="t-trans" value="우등고속"><span>고속버스</span></label>
               <label class="chip"><input type="radio" name="t-trans" value="시외버스"><span>시외버스</span></label>
+              <label class="chip"><input type="radio" name="t-trans" value="선박"><span>선박</span></label>
               <label class="chip"><input type="radio" name="t-trans" value="자가차량"><span>자가차량</span></label>
               <label class="chip"><input type="radio" name="t-trans" value="업무용차량"><span>업무용차량</span></label>
               <label class="chip"><input type="radio" name="t-trans" value="항공"><span>항공</span></label>
@@ -444,7 +445,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
     <section class="done" id="done" hidden>
       <div class="seal" aria-hidden="true">확인</div>
       <h2 id="doneTitle" tabindex="-1">메일 앱에서 [보내기]만 누르면 끝입니다</h2>
-      <p>받는 사람 <span class="addr" id="toAddr">shlee@dgist.ac.kr</span>. 보내기 전에 본문 맨 끝에 <b>'=== 끝 ==='</b> 줄이 있는지만 확인해 주세요. 그 위의 데이터는 고치지 말아 주세요.</p>
+      <p id="formInfo" hidden>행정실이 접수 목록에서 바로 확인합니다. 영수증·승차권·학회 논문 등 증빙은 아래 [증빙 메일 보내기]로 보내 주세요 — 제목에 접수번호가 들어갑니다.</p>
+      <p id="mailInfo">받는 사람 <span class="addr" id="toAddr">shlee@dgist.ac.kr</span>. 보내기 전에 본문 맨 끝에 <b>'=== 끝 ==='</b> 줄이 있는지만 확인해 주세요. 그 위의 데이터는 고치지 말아 주세요.</p>
       <p class="hint">메일 앱이 안 열리면 [본문 복사] → 웹메일에 붙여 넣기. 제목: <span class="addr" id="subj"></span></p>
       <div class="row-btns">
         <a class="btn2" id="again" href="#">메일 다시 열기</a>
@@ -464,7 +466,7 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 <datalist id="prj-list-m"></datalist><datalist id="prj-list-t"></datalist>
 <div class="bar"><div class="in">
   <div class="amt" id="amt" hidden aria-live="polite"><span>여비 신청액</span><b class="mono" id="amtVal"></b></div>
-  <button type="submit" form="f" class="main" id="send">회의비 메일 보내기</button>
+  <button type="submit" form="f" class="main" id="send">회의비 신청 접수</button>
   <small id="left" aria-live="polite" role="status"></small>
 </div></div>
 
@@ -472,6 +474,8 @@ details .inner{display:flex;flex-direction:column;gap:18px}
 (() => {
 "use strict";
 const TO = "shlee@dgist.ac.kr";   // 받는 주소는 여기 한 곳 — 완료 화면 문구도 이 값으로 채운다
+// 신청 접수 = 숨은 구글 폼(응답 시트 → 엑셀 → 처리기). postUrl 이 비어 있으면 메일로 접수한다. 값은 구글폼_설정_반영.py 가 넣는다
+const FORM = /*FORM_DATA*/{"postUrl":"","entries":{}}/*END*/;
 const $ = id => document.getElementById(id);
 $("toAddr").textContent = TO;
 const won = n => Number(n).toLocaleString("ko-KR");
@@ -680,7 +684,7 @@ function setKind(k) {
   document.body.dataset.kind = k;
   $("sec-meeting").hidden = k !== "meeting";
   $("sec-trip").hidden = k !== "trip";
-  $("send").textContent = k === "meeting" ? "회의비 메일 보내기" : "출장비 메일 보내기";
+  $("send").textContent = k === "meeting" ? "회의비 신청 접수" : "출장비 신청 접수";
   $("done").hidden = true; store.set("kind", k); render();
 }
 document.querySelectorAll("input[name=kind]").forEach(r => r.addEventListener("change", () => setKind(r.value)));
@@ -785,6 +789,8 @@ function calcTravel(t, fares) {
   // 운임 (제16조·제17조) — 포털은 늘 편도 × 2
   if (car) add("운임", 0, "업무용차량 — 운임 없음");
   else if (t.transport === "자가차량") { add("운임", 0, "실비정산 — 유류비·통행료·주차료 영수증"); out.partial = true; }
+  // 포털 선박 = 목포·부산·울릉도·인천 × 1등·2등 정액, 2026-10-01 조회 때 금액이 비어 있어 포털 계산에 맡긴다
+  else if (t.transport === "선박") { add("운임", null, "포털 계산 — 선박 1등·2등 정액(목포·부산·울릉도·인천)"); out.partial = true; }
   else if (TABLE.includes(t.transport)) {
     const f = ((fares.t || {})[t.transport] || {})[t.route];
     if (!f) { add("운임", null, "포털 계산 — 운임표에 없는 구간"); out.partial = true; }
@@ -1126,11 +1132,32 @@ function compose() {
     }
     if (t.lecture) lines.push("외부강의·회의 겸함 (외부강의·회의&출장신청으로 신고)");
   }
+  data.rid = RID;
+  subject += ` (접수 ${RID})`;
+  const summary = lines.join("\r\n");
   lines.push("", "=== 접수 데이터 (고치지 마세요) ===", JSON.stringify(data), "=== 끝 ===");
-  return { subject, body: lines.join("\r\n") };
+  return { subject, body: lines.join("\r\n"), data, summary };
 }
 const mailto = m => `mailto:${TO}?subject=${encodeURIComponent(m.subject)}&body=${encodeURIComponent(m.body)}`;
-let last = null;
+let last = null, RID = "";
+// 접수번호 EECS-YYMMDD-XXXX (기기에서 만든다 — 헷갈리는 0·O·1·I 는 뺀다)
+const newRid = () => "EECS-" + yymmdd(iso(new Date())) + "-" +
+  Array.from(crypto.getRandomValues(new Uint8Array(4)), b => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[b % 32]).join("");
+// 구글 폼 칸 값 — 문항 이름은 구글폼_만들기.gs · 접수메일_처리.py 와 같다
+function formFields(m) {
+  const d = m.data, b = d.biz || {};
+  const amt = d.type === "meeting" ? d.amount : (d.calc ? d.calc.total : "");
+  return { "접수번호": d.rid, "종류": d.type === "meeting" ? "회의비" : "출장", "신청자": d.me, "신분": d.role || "",
+    "날짜": d.type === "meeting" ? d.date : `${d.from}~${d.to}`, "금액": amt == null ? "" : String(amt),
+    "과제명": b.name || "", "사업번호": b.no || "", "요약": m.summary, "데이터": JSON.stringify(d) };
+}
+// 자동 시험 브라우저는 구글에 실제로 보내지 않는다(ui_loop11 은 __formTest 를 켜고 요청을 가로챈다)
+const formOn = () => !!FORM.postUrl && (!navigator.webdriver || window.__formTest === true);
+async function submitForm(m) {
+  const body = new URLSearchParams();
+  Object.entries(formFields(m)).forEach(([k, v]) => { if (FORM.entries[k]) body.set(FORM.entries[k], v); });
+  await fetch(FORM.postUrl, { method: "POST", mode: "no-cors", body });   // 응답은 못 읽는다(no-cors) — 네트워크 오류만 실패
+}
 
 $("f").addEventListener("submit", ev => {
   ev.preventDefault();
@@ -1145,6 +1172,7 @@ $("f").addEventListener("submit", ev => {
   store.set("me", $("me").value.trim());
   rememberProject(kind() === "meeting" ? readBiz("m") : readBiz("t"));
   const c = document.querySelector(".p-card").value; if (/^\d{4}$/.test(c)) store.set("card", c);
+  RID = newRid();
   last = compose();
   clearTimeout(draftTimer);   // 직전 입력이 예약한 자동 저장이 지운 초안을 되살리지 않게
   store.set(DRAFT, "");   // 보낸 뒤에는 승인번호·금액이 든 초안을 남기지 않는다(다시 보내기는 [메일 다시 열기])
@@ -1154,10 +1182,27 @@ $("f").addEventListener("submit", ev => {
   // 한글은 메일 링크에서 한 글자가 9자로 늘어나 보통 접수도 2,500~3,500자다 — 아주 길 때만 따로 경고한다
   $("longMail").hidden = mailto(last).length < 8000;
   drawAttach();   // Outlook·일부 모바일 앱은 약 2,000자에서 자른다
+  const focusDone = () => setTimeout(() => { $("done").scrollIntoView({ behavior: "smooth", block: "start" }); $("doneTitle").focus({ preventScroll: true }); }, 200);
+  if (formOn()) {
+    doneMode("sending"); $("send").disabled = true;
+    submitForm(last).then(() => doneMode("form"), () => doneMode("fail")).finally(() => { $("send").disabled = false; focusDone(); });
+    return;
+  }
+  doneMode("mail");
   // 자동 시험 브라우저(Playwright)에서는 메일 앱을 열지 않는다 — 열면 Windows 가 새 Outlook 을 띄운다
   if (!navigator.webdriver) location.href = mailto(last);
-  setTimeout(() => { $("done").scrollIntoView({ behavior: "smooth", block: "start" }); $("doneTitle").focus({ preventScroll: true }); }, 200);
+  focusDone();
 });
+// 완료 화면 — form(구글 폼 접수) · fail(전송 실패 → 메일) · mail(설정 없음, 예전 방식) · sending
+function doneMode(mode) {
+  const t = { form: `접수되었습니다 · 접수번호 ${RID}`, fail: "접수가 전송되지 않았습니다 — [메일로 보내기]로 보내 주세요",
+              mail: "메일 앱에서 [보내기]만 누르면 끝입니다", sending: "접수 중입니다…" }[mode];
+  $("doneTitle").textContent = t;
+  $("mailInfo").hidden = mode === "form" || mode === "sending";
+  $("formInfo").hidden = mode !== "form";
+  $("again").textContent = { form: "증빙 메일 보내기", fail: "메일로 보내기", mail: "메일 다시 열기", sending: "메일로 보내기" }[mode];
+  $("done").dataset.mode = mode;
+}
 
 // 메일에 함께 붙일 파일 — 포털 출장신청서 첨부 칸(기타·국외출장계획서·학술행사 논문/발표·e-ticket)과 맞춘다
 function drawAttach() {
