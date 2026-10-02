@@ -277,11 +277,11 @@ details .inner{display:flex;flex-direction:column;gap:18px}
         <label for="m-biz-other" id="m-biz-other-wrap" hidden><span class="req">예산명</span>
           <input id="m-biz-other" type="text" placeholder="예) 학과 운영비…"></label>
         <div id="m-rnd-rules" class="field" hidden>
-          <span class="lab req">다른 기관 소속 참석자가 있나요</span>
+          <span class="lab req">회의 참석자 구성</span>
           <div class="chips" id="m-ext">
-            <label class="chip"><input type="radio" name="m-ext" value="Y"><span>있음</span></label>
-            <label class="chip"><input type="radio" name="m-ext" value="D"><span>없음 (과제참여연구자 외 DGIST 소속 참석자 있음)</span></label>
-            <label class="chip"><input type="radio" name="m-ext" value="N"><span>없음 (과제 참여연구자만)</span></label>
+            <label class="chip"><input type="radio" name="m-ext" value="Y"><span>다른 기관 소속 포함</span></label>
+            <label class="chip"><input type="radio" name="m-ext" value="D"><span>DGIST 소속만 (과제참여연구자 외 포함)</span></label>
+            <label class="chip"><input type="radio" name="m-ext" value="N"><span>과제 참여연구자만</span></label>
           </div>
           <span class="hint">혁신법 개정으로 다른 기관 소속 참석자는 연구비 회의비(식비)의 필수 조건이 아닙니다. 참석 구분은 행정실 확인용입니다. 2026년 5월 6일부터 연구비 회의비 사전내부결재(포털 사전신청)는 없어져 따로 올리지 않아도 됩니다.</span>
         </div>
@@ -491,7 +491,7 @@ const fmtTime = s => { const d = s.replace(/\D/g, "").slice(0, 8);
   return [d.slice(0, 2), d.slice(2, 4), d.slice(4, 6), d.slice(6, 8)].reduce((o, x, i) => !x ? o : o + (i === 1 || i === 3 ? ":" : i === 2 ? " ~ " : "") + x, ""); };
 const normTime = v => { v = v.trim(); return /^(\d{4}|\d{8})$/.test(v) ? fmtTime(v) : v.replace(/\s*[~∼]\s*/, " ~ "); };
 // 연구비 회의 참석 구분 — 혁신법 개정으로 다른 기관 참석자는 식비 필수 조건이 아님(2026-10-02)
-const EXT_TEXT = { Y: "다른 기관 참석자 있음", D: "다른 기관 참석자 없음 (과제참여연구자 외 DGIST 소속 참석)", N: "다른 기관 참석자 없음 (과제 참여연구자만)" };
+const EXT_TEXT = { Y: "다른 기관 소속 포함", D: "DGIST 소속만 (과제참여연구자 외 포함)", N: "과제 참여연구자만" };
 const radio = name =>(document.querySelector(`input[name="${name}"]:checked`) || {}).value || "";
 const toInt = s => { const d = String(s || "").replace(/[^\d]/g, ""); return d ? Number(d) : null; };
 const iso = d => { const t = new Date(d); t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); return t.toISOString().slice(0, 10); };
@@ -864,7 +864,7 @@ function problems() {
       out.push([$("m-att"), `1인 ${won(Math.round(d.amount / d.attendees.length))}원 — 회의비는 1인 5만원을 넘으면 접수할 수 없습니다.`]);
     if (d.date && d.date > iso(new Date())) out.push([$("m-date"), "회의비는 결제한 뒤에 접수합니다. 회의 날짜가 오늘 이후입니다."]);
     if (d.biz && d.biz.type === "rnd") {
-      if (!d.ext) out.push([$("m-ext"), "다른 기관 소속 참석자가 있는지 골라 주세요."]);
+      if (!d.ext) out.push([$("m-ext"), "회의 참석자 구성을 골라 주세요."]);
     }
   } else {
     const t = readTrip();
