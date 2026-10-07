@@ -359,6 +359,7 @@ h1.eyebrow { margin-top: 0; }
         <div class="field">
           <label for="email">학교 이메일</label>
           <input id="email" type="email" inputmode="email" autocomplete="email"
+                 autocapitalize="off" spellcheck="false"
                  placeholder="이름@dgist.ac.kr" required>
         </div>
         <button id="go" type="submit" class="go">들어가기 <span aria-hidden="true">→</span></button>
@@ -599,6 +600,12 @@ if (layer) (async () => {
     form.querySelectorAll("input").forEach(el => el.disabled = true);
   }
 
+  try {
+    const remembered = localStorage.getItem("dalgu:email");
+    const box = document.getElementById("email");
+    if (remembered && !box.value) box.value = remembered;
+  } catch (e) { /* 막힌 창 */ }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!base) return;
@@ -619,6 +626,8 @@ if (layer) (async () => {
         document.getElementById("email").focus();
         return;
       }
+      // 다음에 미리 채워 둔다 — 이 브라우저에만 남는다(2026-10-07)
+      try { localStorage.setItem("dalgu:email", email); } catch (e) { /* 막힌 창 */ }
       // 세션은 조각(#)으로 넘긴다 — 서버로 전송되지 않고 리퍼러에도 남지 않는다.
       window.location.href = base + "/#s=" + encodeURIComponent(data.session);
     } catch (err) {
