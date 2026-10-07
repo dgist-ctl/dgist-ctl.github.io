@@ -600,11 +600,9 @@ if (layer) (async () => {
     form.querySelectorAll("input").forEach(el => el.disabled = true);
   }
 
-  try {
-    const remembered = localStorage.getItem("dalgu:email");
-    const box = document.getElementById("email");
-    if (remembered && !box.value) box.value = remembered;
-  } catch (e) { /* 막힌 창 */ }
+  // 이메일을 기억해 미리 채우지 않는다 — 로그인이 이메일 하나뿐이라, 공용 PC 에서는 다음 사람이
+  // 앞사람으로 들어가게 된다(2026-10-07 디자인 루프 61회차에 넣었다가 62회차에 뺐다).
+  try { localStorage.removeItem("dalgu:email"); } catch (e) { /* 막힌 창 */ }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -626,8 +624,6 @@ if (layer) (async () => {
         document.getElementById("email").focus();
         return;
       }
-      // 다음에 미리 채워 둔다 — 이 브라우저에만 남는다(2026-10-07)
-      try { localStorage.setItem("dalgu:email", email); } catch (e) { /* 막힌 창 */ }
       // 세션은 조각(#)으로 넘긴다 — 서버로 전송되지 않고 리퍼러에도 남지 않는다.
       window.location.href = base + "/#s=" + encodeURIComponent(data.session);
     } catch (err) {
