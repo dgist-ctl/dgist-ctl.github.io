@@ -387,7 +387,7 @@ export async function mountDalgu(box, opt = {}) {
   if (!(probe.getContext("webgl2") || probe.getContext("webgl"))) return null;
   let renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power", preserveDrawingBuffer: !!opt.ortho });
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power", preserveDrawingBuffer: !!(opt.ortho || opt.snapshot) });
   } catch (e) { return null; }
   if (!renderer.getContext()) return null;
   renderer.setPixelRatio(opt.ortho ? 1 : Math.min(2, window.devicePixelRatio || 1));
@@ -516,4 +516,16 @@ export async function mountDalgu(box, opt = {}) {
       cancelAnimationFrame(raf); renderer.dispose(); renderer.forceContextLoss(); canvas.remove();
     },
   };
+}
+
+// 한 장 사진 — 같은 그림을 여러 곳(과목 목록 '주차 열기' 수십 개)에 쓸 때.
+// 버튼마다 3D 를 띄우면 브라우저 WebGL 한도(보통 16)를 넘는다. 한 번 그려 data URL 로 나눠 쓴다.
+export async function snapshotDalgu(opt = {}) {
+  const box = document.createElement("div");
+  const d = await mountDalgu(box, { ...opt, still: true, snapshot: true });
+  if (!d) return null;
+  if (opt.mood) d.set(opt.mood);
+  const url = d.canvas.toDataURL("image/png");
+  d.dispose();
+  return url;
 }
