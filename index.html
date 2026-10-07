@@ -34,6 +34,7 @@
   /* 주황은 튜터가 말할 때만 쓴다. 머리 문구는 튜터의 말이 아니라 프로그램
      표지이므로 다른 색을 쓴다 — 이 구분이 있어야 주황이 목소리로 읽힌다. */
   --program: #103C7A;  /* 진한 파랑 */
+  --voice-text: #B8441C; /* 작은 주황 글씨용 — #DF592E 는 대비 3.7:1(2026-10-07) */
 
   --f-display: Enriqueta, Constantia, Cambria, Georgia, serif;
   --f-body: "Titillium Web", "Malgun Gothic", "맑은 고딕", Dotum, sans-serif;
@@ -119,7 +120,7 @@ body {
   opacity: 0; animation: enter .6s ease-out 1.55s forwards;
 }
 @keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.voice-mark { font-size: 12px; font-weight: 700; color: var(--voice); margin: 0 0 8px; }
+.voice-mark { font-size: 12px; font-weight: 700; color: var(--voice-text); margin: 0 0 8px; }
 
 /* ============================================================
    달구 — 말하는 이. 주황 세로줄 왼쪽에 서서, 목소리가 들어오기 직전에 튀어 오른다.
@@ -226,7 +227,7 @@ body {
 .go:focus-visible { outline: 3px solid var(--voice); outline-offset: 3px; }
 .go:disabled { background: var(--mute); cursor: not-allowed; }
 .hint { font-size: 12.5px; color: var(--mute); margin: 14px 0 0; }
-.msg { margin: 10px 0 0; font-size: 14px; color: var(--voice); font-weight: 600; }
+.msg { margin: 10px 0 0; font-size: 14px; color: var(--voice-text); font-weight: 600; }
 .msg.ok { color: var(--body); font-weight: 400; }
 .down {
   display: none; border-left: 3px solid var(--voice);
@@ -240,7 +241,7 @@ body {
 .steps { list-style: none; margin: 0; padding: 0; display: grid; }
 @media (min-width: 800px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0 clamp(20px, 3vw, 40px); } }
 .steps li { padding: 20px 0; border-top: 1px solid var(--rule); }
-.steps .n { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--voice); margin-bottom: 10px; }
+.steps .n { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--voice-text); margin-bottom: 10px; }
 .steps .t { display: block; font-size: clamp(15px, 3.3vw, 16.5px); color: var(--ink); font-weight: 600; }
 .steps .note { display: block; font-size: 13.5px; margin-top: 5px; }
 /* 원칙 절 — 이용 순서와 같은 양식, 번호 없이 두 단. */
