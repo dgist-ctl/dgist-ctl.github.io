@@ -582,7 +582,9 @@ if (layer) (async () => {
   };
 
   if (new URLSearchParams(location.search).get("e") === "expired") {
-    say("로그인이 만료되었습니다. 다시 들어와 주세요.", true);
+    say("한동안 쉬어서 로그인이 풀렸어요. 학교 이메일만 다시 넣으면 돼요.", true);
+    // 데스크톱은 바로 이메일 칸으로 — 휴대폰은 키보드가 갑자기 뜨지 않게 두지 않는다(2026-10-07)
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) document.getElementById("email").focus({ preventScroll: true });
     history.replaceState(null, "", location.pathname);
   }
 
