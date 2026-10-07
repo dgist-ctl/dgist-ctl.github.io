@@ -148,6 +148,7 @@ body {
 }
 @keyframes d-shadow { 50% { transform: scaleX(.72); opacity: .55; } }
 .d-jump, .d-bob, .d-tilt { position: absolute; left: 0; top: 0; width: var(--d); height: var(--d); }
+.d-3d { position: absolute; left: 0; top: 0; width: var(--d); height: var(--d); }   /* 3D 캔버스(2026-10-07) */
 .d-bob { animation: d-bob 3.2s ease-in-out 2.1s infinite; }
 @keyframes d-bob { 50% { transform: translateY(-7px); } }
 .d-jump.on { animation: d-jump .6s cubic-bezier(.3, .7, .4, 1); }
@@ -400,6 +401,40 @@ body {
   </div>
 </footer>
 
+<script type="module">
+// 달구 3D(2026-10-07) — 3D 가 첫 프레임을 그리면 PNG 기울기 층(.d-jump)을 3D 캔버스로 바꾼다.
+// WebGL 이 없거나 불러오기에 실패하면 아래 PNG 기울기·폴짝이 그대로 일한다.
+// 말풍선·문구는 아래 스크립트가 계속 맡는다 — 여기서는 몸짓만 바꾼다.
+const btn = document.getElementById("dalgu");
+const layer = btn && btn.querySelector(".d-jump");
+if (layer) (async () => {
+  try {
+    const { mountDalgu } = await import("./dalgu/3d/dalgu3d.js");
+    const box = document.createElement("span");
+    box.className = "d-3d";
+    box.setAttribute("aria-hidden", "true");
+    const size = layer.offsetWidth || 88;              // offsetWidth 는 등장 애니메이션의 scale 을 타지 않는다
+    const d = await mountDalgu(box, { size, framing: "full" });
+    if (!d) return;
+    layer.replaceWith(box);
+    btn.addEventListener("click", () => d.set("hop"));
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      let raf = 0, px = 0, py = 0;                     // 커서를 바라본다 — 화면 반 폭에서 최대
+      addEventListener("pointermove", (e) => {
+        px = e.clientX; py = e.clientY;
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          const r = btn.getBoundingClientRect(), c = (v) => Math.max(-1, Math.min(1, v));
+          d.lookAt(c((px - r.left - r.width / 2) / (innerWidth / 2)), c((py - r.top - r.height / 2) / (innerHeight / 2)));
+        });
+      }, { passive: true });
+      document.documentElement.addEventListener("pointerleave", () => d.lookAt(0, 0));
+    }
+    setTimeout(() => d.set("wave"), 2200);             // 등장(1.35s + .75s) 끝나면 손 인사 — 공식 '안녕!'
+  } catch (e) { /* 3D 는 꾸밈이다 — 실패하면 PNG 그대로 */ }
+})();
+</script>
 <script>
 // 달구 — 입체 기울기 · 누르면 폴짝 + 말풍선.
 // 기울기는 CSS 변수(--rx·--ry·--gx·--gy)만 바꾼다. 모양은 전부 CSS 에 있다.
