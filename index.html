@@ -442,7 +442,15 @@ if (layer) (async () => {
     const d = await mountDalgu(box, { size, framing: "full" });
     if (!d) return;
     layer.replaceWith(box);
-    btn.addEventListener("click", () => d.set("hop"));
+    // 말풍선이 'DNA' 를 말하면 폴짝 대신 정말 잔머리를 꼰다(2초) — 말과 몸짓이 맞게(2026-10-07).
+    // 문구는 아래 스크립트가 클릭 때 채우므로, 채워진 뒤(마이크로태스크)에 읽는다.
+    const say = document.getElementById("dalgu-say");
+    let undo = 0;
+    btn.addEventListener("click", () => queueMicrotask(() => {
+      clearTimeout(undo);
+      if (say && say.textContent.includes("DNA")) { d.set("think"); undo = setTimeout(() => d.set("idle"), 2200); }
+      else d.set("hop");
+    }));
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
       let raf = 0, px = 0, py = 0;                     // 커서를 바라본다 — 화면 반 폭에서 최대
       addEventListener("pointermove", (e) => {
