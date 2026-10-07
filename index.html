@@ -293,6 +293,12 @@ body {
 h1.eyebrow { margin-top: 0; }
 /* 키보드 포커스 — 어디서나 같은 먹 테(2026-10-07) */
 :where(button, a, input):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+/* 휴대폰 머리 한 줄 — 국문·영문 기관명·프로그램 표기가 세 줄로 접혔다. 영문은 빼고,
+   프로그램 표기는 바로 아래 h1 이 같은 말을 하므로 뺀다(2026-10-07). */
+@media (max-width: 640px) {
+  .top .en, .top .term { display: none; }
+  .top .inner { padding-top: 16px; padding-bottom: 16px; }
+}
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 </style>
 </head>
