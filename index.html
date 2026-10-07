@@ -253,7 +253,8 @@ body {
 .steps { list-style: none; margin: 0; padding: 0; display: grid; }
 @media (min-width: 800px) { .steps { grid-template-columns: repeat(3, 1fr); gap: 0 clamp(20px, 3vw, 40px); } }
 .steps li { padding: 20px 0; border-top: 1px solid var(--rule); }
-.steps .n { display: block; font-family: var(--f-mono); font-size: 12px; color: var(--voice-text); margin-bottom: 10px; }
+/* 순서 번호는 튜터의 말이 아니다 — 주황 대신 프로그램 표지색(원칙: 주황은 튜터가 말할 때만, 2026-10-07) */
+.steps .n { display: block; font-family: var(--f-mono); font-size: 12px; color: var(--program); margin-bottom: 10px; }
 .steps .t { display: block; font-size: clamp(15px, 3.3vw, 16.5px); color: var(--ink); font-weight: 600; }
 .steps .note { display: block; font-size: 13.5px; margin-top: 5px; }
 /* 원칙 절 — 이용 순서와 같은 양식, 번호 없이 두 단. */
