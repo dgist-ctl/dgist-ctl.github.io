@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션1 온라인 강좌 운영 방안과 미래</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1f3a; --gold:#1f5fbf; --gold-soft:#9fb8df; --cream:#ffffff; --sand:#f3f5f8;
+  --line:#d5dae1; --ink:#1b2230; --muted:#5f6673; --red:#0b1f3a; --green:#1f5fbf; --grey:#9aa1ab;
+  --sans:'Noto Sans KR','Pretendard','Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+  --serif:'Noto Serif KR','Nanum Myeongjo','Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#e9e6df;color:var(--ink);font-family:var(--sans);font-size:9.3pt;line-height:1.52;
+  word-break:keep-all;overflow-wrap:break-word;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.page{width:297mm;height:210mm;margin:8mm auto;background:var(--cream);position:relative;overflow:hidden;
+  padding:11mm 15mm 15mm;display:flex;flex-direction:column;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+@media print{html,body{background:var(--cream)}.page{margin:0;box-shadow:none;page-break-after:always;break-after:page}}
+b,strong{font-weight:700}
+/* 머리·꼬리 */
+.hd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:1.8mm;margin-bottom:3.6mm;flex:none}
+.hd .sess{font-size:7.6pt;letter-spacing:.3em;color:var(--gold);font-weight:700}
+.hd .sess b{letter-spacing:.02em;color:var(--navy);font-weight:500;margin-left:2.5mm}
+.hd .when{font-size:7.6pt;color:var(--muted)}
+.ft{position:absolute;left:15mm;right:15mm;bottom:6mm;display:flex;justify-content:space-between;font-size:7.2pt;color:#6a6d77;border-top:1px solid var(--line);padding-top:1.4mm}
+h2{font-family:var(--serif);font-weight:600;font-size:16.5pt;line-height:1.32;color:var(--navy);margin-bottom:1.6mm;flex:none}
+.lead{font-size:9.8pt;color:#3a4050;margin-bottom:3.6mm;flex:none}
+.kicker{font-size:7.6pt;letter-spacing:.22em;color:var(--gold);font-weight:700;margin-bottom:1mm}
+.src{margin-top:auto;padding-top:2mm;font-size:7.1pt;line-height:1.45;color:var(--muted);flex:none}
+.src b{color:#4a4f5c}
+.body{flex:1;min-height:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:6mm}
+.g2w{display:grid;grid-template-columns:1.2fr 1fr;gap:6mm}
+.g2n{display:grid;grid-template-columns:1fr 1.2fr;gap:6mm}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:4.5mm}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
+.col{display:flex;flex-direction:column;gap:3.2mm}
+.card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);padding:3mm 3.8mm}
+.card.navy{border-top-color:var(--navy)} .card.green{border-top-color:var(--green)} .card.red{border-top-color:var(--red)}
+.card h3{font-size:10pt;color:var(--navy);margin-bottom:1.2mm;line-height:1.38}
+.card p,.card li{font-size:8.8pt;color:#343a48}
+.card p+p{margin-top:1mm}
+ul.dot{list-style:none}
+ul.dot li{padding-left:3mm;position:relative;margin-bottom:.8mm;font-size:8.8pt;color:#343a48}
+ul.dot li::before{content:"";position:absolute;left:0;top:.6em;width:1.3mm;height:1.3mm;background:var(--gold-soft)}
+.tag{display:inline-block;font-size:7pt;font-weight:700;letter-spacing:.03em;padding:.1mm 1.4mm;border:1px solid var(--gold-soft);color:var(--gold);background:#fffaf0;vertical-align:middle;white-space:nowrap;line-height:1.5}
+.tag.ev{border-color:#9fb3a8;color:var(--green);background:#f3f8f5}
+.tag.pp{border-color:#c8b6d6;color:#6a4c86;background:#f8f4fb}
+.tag.ob{border-color:#b8c4d8;color:#3d557f;background:#f3f6fb}
+.big{font-family:var(--serif);font-weight:700;font-size:21pt;line-height:1.1;color:var(--navy)}
+.big small{font-size:10pt;font-weight:600}
+.big.red{color:var(--red)} .big.green{color:var(--green)} .big.gold{color:var(--gold)}
+.cap{font-size:7.9pt;color:var(--muted);margin-top:.8mm;line-height:1.42}
+.kpi{background:#fff;border:1px solid var(--line);padding:2.6mm 3.4mm}
+.note{background:var(--sand);border-left:3px solid var(--gold);padding:2.4mm 3.8mm;font-size:8.8pt;color:#3a4050}
+.note b{color:var(--navy)}
+.note.navy{border-left-color:var(--navy)} .note.red{border-left-color:var(--red);background:#f8ece8}
+.quote{font-family:var(--serif);font-size:10pt;color:var(--navy);border-left:2px solid var(--gold);padding:1mm 0 1mm 3.5mm}
+.num{display:inline-flex;align-items:center;justify-content:center;width:5.6mm;height:5.6mm;border-radius:50%;background:var(--navy);color:#fff;font-size:8pt;font-weight:700;margin-right:1.8mm;flex:none}
+table{border-collapse:collapse;width:100%}
+.tbl th{background:var(--navy);color:#fff;font-size:8pt;font-weight:500;padding:1.4mm 2mm;text-align:center;line-height:1.35}
+.tbl td{border-bottom:1px solid var(--line);padding:1.35mm 2mm;font-size:8.4pt;vertical-align:middle;background:#fff;line-height:1.42}
+.tbl td.c{text-align:center;white-space:nowrap} .tbl td.r{text-align:right;font-variant-numeric:tabular-nums}
+.tbl td.k{font-weight:700;color:var(--navy);background:#fbf8f1}
+.tbl tr.hl td{background:#fff3dc}
+.tbl tr.sum td{font-weight:700;background:#f6f1e6}
+.tbl td.h{color:var(--gold);font-weight:700}
+.tbl.sm td{font-size:7.9pt;padding:1.1mm 1.8mm} .tbl.sm th{font-size:7.6pt;padding:1.1mm 1.8mm}
+.arrow{color:var(--gold);font-weight:700;padding:0 .5mm}
+.sub{font-size:9.4pt;font-weight:700;color:var(--navy);margin:0 0 1.4mm}
+/* 표지 */
+.cover{padding:13mm 18mm}
+.cover .top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:3mm}
+.cover .top img{height:9mm}
+.cover .yr{letter-spacing:.6em;color:var(--gold);font-size:9pt}
+.cover .mid{text-align:center;margin-top:10mm}
+.cover .mid img{height:12mm;margin-bottom:4mm}
+.cover .t1{font-family:var(--serif);font-size:14pt;color:#3a4050;letter-spacing:.06em}
+.cover h1.t2{font-weight:600;}
+.cover .t2{font-family:var(--serif);font-size:34pt;font-weight:600;color:var(--navy);margin:2mm 0 3mm;letter-spacing:.02em}
+.cover .bar{width:42mm;height:1.2mm;background:var(--gold);margin:0 auto 4mm}
+.cover .t3{font-size:10.5pt;color:#3a4050}
+.cover .sess3{display:grid;grid-template-columns:repeat(3,1fr);gap:6mm;margin:11mm 4mm 0}
+.cover .s{background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);padding:4mm 5mm;text-align:left}
+.cover .s .k{font-size:7.5pt;letter-spacing:.3em;color:var(--gold);font-weight:700}
+.cover .s .n{font-family:var(--serif);font-size:12.5pt;color:var(--navy);margin:1.5mm 0 2mm;line-height:1.4;min-height:11mm}
+.cover .s .w{font-size:8.4pt;color:var(--muted)}
+.cover .bot{position:absolute;left:18mm;right:18mm;bottom:11mm;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:3mm;font-size:9pt;color:#3a4050}
+.cover .bot b{color:var(--navy)}
+/* 세션 여는 쪽 */
+.opener{padding:0;flex-direction:row}
+.opener .band{width:92mm;background:var(--navy);color:#fff;padding:16mm 11mm;display:flex;flex-direction:column}
+.opener .band .k{font-size:8pt;letter-spacing:.4em;color:var(--gold-soft);font-weight:700}
+.opener .band .t{font-family:var(--serif);font-size:21pt;line-height:1.38;margin:5mm 0 6mm;font-weight:600}
+.opener .band .w{font-size:9pt;opacity:.85;line-height:1.7}
+.opener .band .toc{margin-top:auto;font-size:8.3pt;line-height:1.85;opacity:.92}
+.opener .band .toc span{color:var(--gold-soft);display:inline-block;width:9mm}
+.opener .main{flex:1;padding:16mm 14mm 16mm 12mm;display:flex;flex-direction:column}
+.opener .main h2{font-size:15pt;margin-bottom:4mm}
+.opener .ft{left:104mm}
+.msg{display:flex;gap:3.5mm;margin-bottom:3.2mm;align-items:flex-start}
+.msg .mt{font-size:9.6pt;color:var(--ink);line-height:1.5}
+.msg .mt b{color:var(--navy)}
+/* 일정 */
+.day{background:#fff;border:1px solid var(--line)}
+.day .dh{background:var(--navy);color:#fff;padding:2mm 4mm;font-size:9.2pt;font-weight:700;letter-spacing:.08em;display:flex;justify-content:space-between}
+.day .dh span{font-weight:400;font-size:8pt;letter-spacing:0;opacity:.8}
+.day table td{padding:1.25mm 3.4mm;font-size:8.5pt;border-bottom:1px solid #eee6d6}
+.day td.t{width:26mm;color:var(--muted);white-space:nowrap}
+.day tr.s td{background:var(--sand)}
+.day tr.s td.x{font-family:var(--serif);color:var(--navy);font-weight:600}
+.day tr.me td{background:#fff3dc}
+.day tr.me td.x{font-weight:700;color:var(--gold)}
+.pill{display:inline-block;background:var(--gold);color:#fff;font-size:7pt;font-weight:700;padding:.1mm 1.8mm;border-radius:2mm;margin-left:1.5mm}
+.toc2 td{padding:1.2mm 2mm;font-size:8.6pt;border-bottom:1px dotted var(--line)}
+.toc2 td.p{text-align:right;color:var(--gold);font-weight:700;width:10mm}
+.toc2 tr.h td{font-weight:700;color:var(--navy);border-bottom:1px solid var(--navy);padding-top:2.4mm}
+/* 흐름 */
+.flow{display:flex;align-items:stretch}
+.flow .st{flex:1;background:#fff;border:1px solid var(--line);padding:2mm 2.3mm;font-size:8.1pt;line-height:1.38}
+.flow .st b{display:block;color:var(--navy);font-size:8.6pt;margin-bottom:.4mm}
+.flow .st.p{background:#fff3dc;border-color:var(--gold-soft)}
+.flow .st.p b{color:var(--gold)}
+.flow .ar{width:3.6mm;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700}
+.case{background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy);padding:3mm 3.8mm;display:flex;flex-direction:column;gap:1.6mm}
+.case .ct{font-size:7.4pt;letter-spacing:.2em;color:var(--gold);font-weight:700}
+.case h3{font-size:10.4pt;color:var(--navy);line-height:1.35}
+.case .was{font-size:8.2pt;color:var(--muted)}
+.case dl{display:grid;grid-template-columns:15mm 1fr;gap:1mm 2.5mm;font-size:8.3pt}
+.case dt{font-weight:700;color:var(--gold)}
+.case dd{color:#343a48}
+.case dt.p{color:var(--red)}
+/* 차선 */
+.lane{border:1px solid var(--line);background:#fff;padding:2.6mm 4mm;margin-bottom:2.6mm}
+.lane .lh{font-size:7.2pt;letter-spacing:.2em;font-weight:700;color:var(--green)}
+.lane.sec .lh{color:var(--navy)}
+.lane .lt{font-size:10pt;font-weight:700;color:var(--ink);margin:.6mm 0}
+.lane p{font-size:8.6pt;color:#3a4050}
+.lane.open{border-left:4px solid var(--green)} .lane.sec{border-left:4px solid var(--navy)}
+.refs{columns:2;column-gap:8mm;font-size:7.2pt;line-height:1.45;color:#3a4050}
+.refs p{break-inside:avoid;margin-bottom:1mm;padding-left:4.5mm;text-indent:-4.5mm}
+.refs h4{font-size:8pt;color:var(--navy);margin:1.4mm 0 .8mm;break-after:avoid}
+.cover .t0{font-size:9pt;letter-spacing:.45em;color:var(--gold);font-weight:700;margin-top:3mm}
+.cover .t2.sess{font-size:27pt;line-height:1.3;margin:2mm auto 3mm;max-width:230mm}
+.cover .t4{margin-top:5mm;font-size:12pt;font-weight:700;color:var(--navy);letter-spacing:.08em}
+.cover .s.on{border-top-color:var(--navy);background:#fffaf0}
+.cover .s .n{min-height:0}
+.note.green{border-left-color:var(--green);background:#eef5f0}
+.take{background:#fff;border:1px solid #9fb3a8;border-left:4px solid var(--green);padding:2.2mm 3.4mm;font-size:8.5pt;color:#2f3a35}
+.take b{color:var(--green)}
+.diff{background:#fff;border:1px dashed var(--line);border-left:4px solid var(--muted);padding:2.2mm 3.4mm;font-size:8.3pt;color:#4a4f5c}
+.diff b{color:#4a4f5c}
+.case h3{margin-bottom:.6mm}
+.case .who{font-size:7.6pt;color:var(--muted);letter-spacing:.04em}
+.chk{list-style:none}
+.chk li{padding-left:5mm;position:relative;margin-bottom:1mm;font-size:8.7pt;color:#343a48}
+.chk li::before{content:"□";position:absolute;left:0;top:0;color:var(--green);font-weight:700}
+/* ===== 맥킨지식 보고서 스타일 (v1.2) ===== */
+html,body{background:#e8eaee}
+.page{background:#fff;padding:9mm 14mm 13mm}
+h2{font-family:var(--sans);font-weight:700;font-size:15.2pt;line-height:1.36;color:var(--navy);margin-bottom:1.2mm;letter-spacing:-.01em}
+.lead{font-size:9.2pt;color:var(--muted);margin-bottom:3mm}
+.hd{border-bottom:1.5px solid var(--navy);padding-bottom:1.4mm;margin-bottom:3.2mm}
+.trk{display:flex;gap:0;font-size:7.4pt;color:var(--grey)}
+.trk i{font-style:normal;padding:0 2.4mm;border-right:1px solid var(--line)}
+.trk i:first-child{padding-left:0}
+.trk i:last-child{border-right:0}
+.trk i.on{color:var(--navy);font-weight:700}
+.hd .when{font-size:7.4pt;color:var(--grey);letter-spacing:.12em}
+.src{font-size:7pt;color:var(--muted);border-top:1px solid var(--line);padding-top:1.4mm;margin-top:auto}
+.src b{color:var(--navy)}
+.ft{left:14mm;right:14mm;border-top:0;color:var(--grey);font-size:7pt;bottom:5mm}
+.card{border:1px solid var(--line);border-top:2px solid var(--navy);background:#fff}
+.card.gold,.card.green{border-top-color:var(--gold)}
+.note{background:var(--sand);border-left:3px solid var(--navy);color:var(--ink)}
+.note.navy,.note.red{border-left-color:var(--navy);background:var(--sand)}
+.take{border:1px solid var(--gold-soft);border-left:4px solid var(--gold);background:#f2f6fc;color:var(--ink)}
+.take b{color:var(--gold)}
+.diff{border:1px dashed #c4c9d0;border-left:4px solid var(--grey);background:#fff;color:#4b515c}
+.tbl th{background:var(--navy);font-weight:500}
+.tbl td.k{background:#f7f8fa;color:var(--navy)}
+.tbl tr.hl td{background:#eaf1fb}
+.tbl tr.sum td{background:#f3f5f8}
+.tag{border-color:#c4c9d0;color:#4b515c;background:#f7f8fa}
+.tag.ev{border-color:var(--gold-soft);color:var(--gold);background:#f2f6fc}
+.tag.ob,.tag.pp{border-color:#c4c9d0;color:#4b515c;background:#fff}
+.kicker{color:var(--gold)}
+.big{font-family:var(--sans);color:var(--navy)}
+.big.gold,.big.green{color:var(--gold)} .big.red{color:var(--navy)}
+.cover{background:#fff}
+.cover .top{border-bottom:1.5px solid var(--navy)}
+.cover .t1{font-family:var(--sans);font-size:12.5pt;color:var(--muted)}
+.cover .t2,.cover .t2.sess{font-family:var(--sans);font-weight:700;color:var(--navy)}
+.cover .bar{background:var(--gold)}
+.cover .s{border-top:2px solid #c4c9d0}
+.cover .s.on{border-top-color:var(--gold);background:#f2f6fc}
+.cover .s .n{font-family:var(--sans);font-size:11pt}
+.flow .st{border-color:var(--line)} .flow .st.p{background:#eaf1fb;border-color:var(--gold-soft)} .flow .st.p b{color:var(--gold)}
+.day tr.me td{background:#eaf1fb} .day tr.me td.x{color:var(--gold)} .day tr.s td{background:var(--sand)}
+.toc2 td.p{color:var(--gold)}
+/* 핵심 요약 */
+.es{display:grid;grid-template-columns:62mm 1fr;gap:6mm;flex:1;min-height:0}
+.es .ans{background:var(--navy);color:#fff;padding:6mm 5.5mm;display:flex;flex-direction:column}
+.es .ans .k{font-size:7.4pt;letter-spacing:.3em;color:#9fb8df;font-weight:700}
+.es .ans .t{font-size:12.6pt;font-weight:700;line-height:1.5;margin-top:3mm}
+.es .ans .w{font-size:8.3pt;line-height:1.6;opacity:.9;margin-top:auto}
+.es .pts{display:flex;flex-direction:column;gap:2.6mm}
+.es .pt{display:grid;grid-template-columns:8mm 1fr 16mm;gap:3mm;border-bottom:1px solid var(--line);padding-bottom:2.4mm}
+.es .pt .n{font-size:15pt;font-weight:700;color:var(--gold);line-height:1}
+.es .pt h3{font-size:10.2pt;color:var(--navy);line-height:1.42;margin-bottom:.8mm}
+.es .pt p,.es .pt li{font-size:8.5pt;color:#3b4250}
+.es .pt .pg{font-size:7.4pt;color:var(--grey);text-align:right}
+/* 막대 */
+.bar2{display:grid;grid-template-columns:38mm 1fr 16mm;align-items:center;gap:2mm;font-size:8.3pt;margin-bottom:1.6mm}
+.bar2 .b{height:5mm;background:#c9ced6}
+.bar2 .b.on{background:var(--gold)}
+.bar2 .v{font-weight:700;color:var(--navy);font-variant-numeric:tabular-nums}
+/* 2x2 */
+.m22{display:grid;grid-template-columns:14mm 1fr 1fr;grid-template-rows:auto 1fr 1fr;gap:1.6mm}
+.m22 .ax{font-size:7.6pt;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center}
+.m22 .q{border:1px solid var(--line);padding:2.4mm 3mm;font-size:8.3pt;background:#fff}
+.m22 .q b{display:block;color:var(--navy);font-size:9pt;margin-bottom:.6mm}
+.m22 .q.on{background:#eaf1fb;border-color:var(--gold-soft)}
+.m22 .q.on b{color:var(--gold)}
+</style>
+</head>
+<body>
+<section class="page cover" data-id="cover">
+  <div class="top"><img src="data:image/png;base64,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" alt="DGIST"><span class="yr">2026</span></div>
+  <div class="mid">
+    <img src="data:image/png;base64,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" alt="STAR-MOOC">
+    <div class="t1">2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가</div>
+    <div class="t0">SESSION 1</div>
+    <h1 class="t2 sess">온라인 강좌 운영 방안과 미래</h1>
+    <div class="bar"></div>
+    <div class="t3">2026. 10. 15.(목) &nbsp;|&nbsp; DGIST R1 연구행정동 301호 대회의실</div>
+    <div class="t4">발표기관 : DGIST</div>
+  </div>
+  <div class="sess3"><div class="s on"><div class="k">SESSION 1</div><div class="n">온라인 강좌 운영 방안과 미래</div><div class="w">2026. 10. 15.(목) · 이 자료</div></div><div class="s"><div class="k">SESSION 2</div><div class="n">AI 적용 업무 추진 현황과 계획</div><div class="w">2026. 10. 15.(목)</div></div><div class="s"><div class="k">SESSION 3</div><div class="n">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</div><div class="w">2026. 10. 16.(금)</div></div></div>
+  <div class="bot"><span><b>발표기관 : DGIST</b> · 워크숍 주관 DGIST 교수학습센터</span><span>ctl@dgist.ac.kr · 053-785-5172</span></div>
+</section>
+<section class="page" data-id="program">
+  <div class="hd"><span class="sess">PROGRAM<b>이 세션의 진행과 자료 구성</b></span><span class="when">교수학습센터-665(2026. 9. 14.) 붙임 프로그램 기준</span></div>
+  <h2>세션 1은 사전자료 검토 → 기관별 요약 발표 → 전원 토의 순서로 진행됩니다</h2>
+  <p class="lead">이 자료는 해외 대학·기관이 같은 문제를 실제로 어떻게 다루는지를 모아, 각 기관 실무자가 자기 사정에 맞게 고를 수 있는 선택지로 정리한 것입니다. 사례마다 <b>무엇을 하는가 → 어떻게 하는가 → 실무자가 가져갈 점 · 우리와 다른 전제</b> 순서로 적었습니다.</p>
+  <div class="body" style="display:grid;grid-template-columns:1fr 1fr;gap:6mm">
+    <div class="col">
+      <div class="day">
+        <div class="dh">SESSION 1 &nbsp; 2026. 10. 15.(목)<span>진행 순서</span></div>
+        <table><tr><td class="t">1</td><td class="x">사전자료 검토</td></tr><tr class="me"><td class="t">2</td><td class="x">기관별 요약 발표(기관당 5분)</td></tr><tr><td class="t">3</td><td class="x">휴식</td></tr><tr><td class="t">4</td><td class="x">토의 · 참석자 전원</td></tr></table>
+      </div>
+      <div class="note">발표 뒤 질의는 받지 않고 다음 기관으로 넘어갑니다. 질문과 의견은 토의 시간에 함께 나눕니다. 자료집은 10.&nbsp;12.(월) 전자문서로 배포되며, 토의 때는 노트북으로 자료를 함께 봅니다. 당일에는 합의문을 확정하지 않고, 논의 결과는 10월 말 초안 회람 → 11월 기관 확인을 거쳐 확정합니다.</div>
+      <p class="cap"><b>읽는 법</b> — 사례마다 출처와 확인 시점을 쪽 아래에 적었습니다. 근거 수준 표시: <span class="tag ev">RCT · 동료심사</span> <span class="tag ob">관찰 · 설문</span> <span class="tag pp">프리프린트</span> <span class="tag">기관 · 언론</span>. 다른 기관에 자료 제출이나 조치를 요청하는 내용은 없습니다.</p>
+    </div>
+    <div>
+      <table class="toc2"><tr class="h"><td>이 자료의 구성</td><td class="p">쪽</td></tr><tr><td>핵심 요약</td><td class="p">3</td></tr><tr><td>Ⅰ 공통 맥락 — STAR-MOOC 플랫폼 숫자</td><td class="p">4</td></tr><tr><td>Ⅱ 공동 운영체 11곳 — 인력·재원·기여 의무</td><td class="p">5</td></tr><tr><td>Ⅱ 누구를 위한 것인가 — 얹는 층과 채우는 주체</td><td class="p">6</td></tr><tr><td>Ⅲ 제작 조직 — TU Delft · MIT OpenCourseWare</td><td class="p">7</td></tr><tr><td>Ⅲ 강좌 구성 — 사전기획 · 제출 중심 · 단위 안 활동</td><td class="p">8</td></tr><tr><td>Ⅳ 이수 인정 — NPTEL · SWAYAM · vhb · 분모</td><td class="p">9</td></tr><tr><td>시사점 ① 강좌 계획서 점검 질문 8개</td><td class="p">10</td></tr><tr><td>시사점 ② 공동 플랫폼 선택지와 실무 다음 단계</td><td class="p">11</td></tr><tr><td>토의 질문 — 정할 수 있는 것과 미룰 것</td><td class="p">12</td></tr><tr><td>출처</td><td class="p">13</td></tr></table>
+    </div>
+  </div>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>2 / 13</span></div>
+</section>
+<section class="page" data-id="s1" data-toc="핵심 요약">
+  <div class="hd"><span class="trk"><i class="on">요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>공동 온라인 강좌가 오래 가는지는 플랫폼이 아니라 「대상·범위」, 「찍기 전 기획」, 「이수 확인 방식」 세 가지 운영 결정에서 갈렸습니다</h2>
+  <p class="lead">핵심 요약 — 해외 대학·기관 사례에서 확인한 결론과 근거 셋</p>
+  <div class="es body">
+    <div class="ans">
+      <div class="k">ANSWER</div>
+      <div class="t">「얼마나 더 만들까」보다 「누구를 위해, 어떤 절차로 만들고, 어떻게 이수를 확인할까」를 먼저 정한 곳이 남았습니다.</div>
+      <div class="w">STAR-MOOC 플랫폼의 기준선(4쪽)은 대부분 기입·설정 문제라, 이 세 결정과 무관하게 먼저 고칠 수 있습니다.</div>
+    </div>
+    <div class="pts">
+      <div class="pt"><div class="n">1</div><div><h3>대상과 범위 — 오래간 7곳은 「재학생 · 좁은 범위」, 무너진 4곳은 「대중 · 넓은 범위」였습니다</h3><p>사무국은 어디나 작았고(캠퍼스별 코디네이터 1인 · 상근 COO 1인), 갱신 의무는 개발비를 주는 곳(vhb)에서만 성립했습니다.</p></div><div class="pg">5~6쪽</div></div>
+      <div class="pt"><div class="n">2</div><div><h3>제작과 구성 — 결과는 촬영보다 사전기획에서 갈렸습니다</h3><p>TU Delft는 스토리보드와 1주 분량 파일럿을 제작 전 산출물로 두고, MIT OCW는 출판·영상·지식재산 전담 직군이 교수 자료를 받아 공개합니다. 사전기획 없이 기존 강의를 잘라 붙인 강좌는 영상 직후 문항 시도율이 41%로 사전기획 강좌(55%)보다 낮았습니다.</p></div><div class="pg">7~8쪽</div></div>
+      <div class="pt"><div class="n">3</div><div><h3>이수 인정 — 「누가 어디서 확인하는가」를 정한 곳만 학점과 연결했습니다</h3><p>인도 NPTEL은 수강은 무료, 인증은 유료 대면 감독 시험(과제 25% · 시험 75%)으로 나눴고, SWAYAM은 규정으로 학기 과목의 40%까지 온라인 학점을 허용합니다. 이수율은 분모에 따라 3.13%도 46%도 됩니다.</p></div><div class="pg">9쪽</div></div>
+      <div class="pt"><div class="n">→</div><div><h3>실무자에게 — 공동 결정 없이도 지금 시작할 수 있는 일이 세 가지 있습니다</h3><p>자기 기관 강좌의 기입 점검, 신규 제작 계약에 「촬영 전 확인」 두 줄, 보고 지표에 분모 정의 한 줄. 함께 정할 것은 「어느 층까지 얹을 것인가」와 「무엇을 셀 것인가」입니다.</p></div><div class="pg">10~12쪽</div></div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 이 세션 각 쪽의 출처(공동 운영체 11건 공개 문서 2026. 9. 4. · TU Delft Online Learning Hub · MIT OCW · Guo, Kim &amp; Rubin 2014 · NPTEL · UGC 2021 · Reich &amp; Ruipérez-Valiente 2019, 확인 2026. 9. 4.~10. 6.).</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>3 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1ctx" data-toc="Ⅰ 공통 맥락 — STAR-MOOC 플랫폼 숫자">
+  <div class="hd"><span class="trk"><i>요약</i><i class="on">공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>STAR-MOOC 플랫폼의 결함 대부분은 강좌가 아니라 기입과 설정에 있어, 다시 찍지 않고 고칠 수 있습니다</h2>
+  <p class="lead">해외 사례를 견줄 기준선으로, 플랫폼 전체를 기관 구분 없이 셌습니다. 「성격」 열이 기입·설정인 항목은 재촬영 없이 바뀝니다.</p>
+  <div class="body g2">
+    <div class="col">
+      <table class="tbl sm">
+        <tr><th>항목</th><th>플랫폼 전체 값</th><th>성격</th></tr>
+        <tr><td class="k">공개 강좌</td><td>158건 · 그중 82%(130건)가 2024년 등록, 129건은 사흘에 몰린 이관분</td><td class="c">현황</td></tr>
+        <tr><td class="k">이관 이후 신규</td><td>21.5개월 29건 — 연 약 16건, 2025·2026년 속도가 거의 같음</td><td class="c">현황</td></tr>
+        <tr><td class="k">이수증 표기</td><td>18건(11.4%)</td><td class="c">기입</td></tr>
+        <tr><td class="k">태그</td><td>102건에 없음 — 사이트 검색은 제목과 태그만 봄</td><td class="c">기입</td></tr>
+        <tr><td class="k">연작 묶음 · 강의계획서</td><td>연작 후보 34건(15묶음) 묶음 0건 · 강의계획서 0건</td><td class="c">기입</td></tr>
+        <tr><td class="k">분야 라벨</td><td>22종으로 갈림 · 13건은 없음</td><td class="c">기입</td></tr>
+        <tr><td class="k">목록 도달</td><td>목록이 24건에서 멈춰 눌러서 닿지 않는 강좌 45건(28%)</td><td class="c">설정</td></tr>
+        <tr><td class="k">폐강 노출</td><td>폐강인데 학습자 화면에 남은 강좌 7건</td><td class="c">기입</td></tr>
+        <tr><td class="k">분량</td><td>총 학습시간 중앙값 14시간 · 45시간 이상 39건</td><td class="c">설계</td></tr>
+        <tr><td class="k">수강</td><td>플랫폼 안에서 수강하는 96건의 강좌당 수강 등록 중앙값 29.5명</td><td class="c">현황</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="card navy">
+        <h3>아무것도 정하지 않으면 — 단순 외삽</h3>
+        <p>연 16건이 그대로 이어지면 2029년 206건 중 130건(63%)이 2024년 이관분이고, 그 강좌들은 5년 차가 된다. 신규가 절반이면 73%, 두 배여도 53%다. 예측이 아니라 가정을 드러내기 위한 계산이다.</p>
+      </div>
+      <div class="card">
+        <h3>국내 비교 기준 하나</h3>
+        <p>K-MOOC은 이공계 전공심화 301건 중 지금 들을 수 있는 것이 46건(15%)이다(2026. 9. 4., 회차제라 학기마다 달라짐). STAR-MOOC은 158건 중 151건(95.6%)이 상시 수강이다. 다만 「상시」가 강점이 되려면 내용이 최신이어야 한다.</p>
+      </div>
+      <div class="take"><b>실무자가 가져갈 점</b> — 이 표의 「기입」 항목은 각 기관이 자기 강좌만 열어 보아도 확인할 수 있습니다. 해외 사례 쪽에서는 이 칸들을 어떤 조직과 절차로 채우는지를 봅니다.</div>
+      <div class="diff"><b>밝혀 둘 것</b> — 2024년 등록분이 이관이라는 판단은 등록일 분포의 정황이며, 이관을 기록한 1차 문서는 찾지 못했다. 수강 등록은 학습이 아니며, 강좌별 이수율과 수강자 구성(재학생인지 일반 학습자인지)은 공개 자료에 없다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> STAR-MOOC 공개 강좌 목록 전수 158건(등록일·이수증·태그·분야·수강 등록 필드)과 화면 도달성 실측, 2026. 9. 4. 조회. K-MOOC 분류 교차 조회(2026. 9. 4., 3회 재조회 동일). 원자료와 재계산 스크립트는 DGIST 교수학습센터가 보관.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>4 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1con" data-toc="Ⅱ 공동 운영체 11곳 — 인력·재원·기여 의무">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i class="on">공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>오래간 곳은 플랫폼보다 범위와 사람을 먼저 정했고, 무너진 곳은 무엇에 특화했는지 한 문장으로 말하지 못했습니다</h2>
+  <p class="lead">여러 대학이 함께 운영하는 온라인 강좌 사례 11건의 인력·재원·기여 의무를 공개 문서로 확인했습니다. 사무국은 어디나 작고, 갱신을 문서로 강제하는 곳은 한 군데뿐입니다.</p>
+  <div class="body g2w">
+    <div class="col">
+      <table class="tbl sm">
+        <tr><th>사례</th><th>규모</th><th>확인된 인력</th><th>재원</th><th>문서화된 기여 의무</th></tr>
+        <tr><td class="k">BTAA CourseShare<br><span class="cap">미국 · 30년+</span></td><td>Big Ten 대학</td><td>캠퍼스별 코디네이터 1인</td><td>기관 간 정산 없음 · 학생 추가 수수료 없음</td><td>없음 — 2009년 「덜 가르치는 언어」로 범위를 좁혀 대신함. 누적 500강좌+</td></tr>
+        <tr><td class="k">FITech<br><span class="cap">핀란드 · 2017~</span></td><td>9개 공대</td><td>이사회 11인 + COO 1인</td><td>교육문화부 1,200만€ + 회원대학 600만€</td><td>없음 — 지원금이 학생이 이수한 학점에 연동</td></tr>
+        <tr><td class="k">vhb<br><span class="cap">독일 · 2000~</span></td><td>32개교 · 연 수강 약 20만</td><td>강사 600명+</td><td>바이에른 주정부</td><td><b>있음</b> — 최소 10학기 운영 의무, 대가로 강좌당 개발비 최대 3만€</td></tr>
+        <tr><td class="k">EuroTeQ<br><span class="cap">EU · 2020~</span></td><td>6개 공대</td><td>확인 못 함</td><td>Erasmus+ 4년 1,280만€</td><td>학생이 소속 대학 계정으로 파트너 강좌 등록 · 별도 지원 절차 없음</td></tr>
+        <tr><td class="k">NPTEL<br><span class="cap">인도 · 2003~</span></td><td>7 IIT + IISc</td><td>확인 못 함</td><td>정부 재원 + 인증시험 유료</td><td>다른 대학이 Local Chapter로 지정</td></tr>
+        <tr><td class="k">JMOOC<br><span class="cap">일본 · 2013~</span></td><td>인증 779강좌 · 등록 165만</td><td>확인 못 함</td><td>회비(정회원 10만엔/구좌)</td><td>없음 — 플랫폼은 공인사업자</td></tr>
+      </table>
+      <table class="tbl sm">
+        <tr><th>무너진 곳</th><th>무엇에 특화했다고 말했나</th><th>무슨 일이 있었나</th></tr>
+        <tr><td class="k">Semester Online <span class="cap">미국 2013~14</span></td><td>「명문대들의 학점 인정 강좌」 — 회원 자격만 말함</td><td>약 18개월 만에 해산. Duke는 교수회 투표로 탈퇴</td></tr>
+        <tr><td class="k">2U · edX <span class="cap">미국 2024</span></td><td>「모두를 위한 온라인 학위·강좌」</td><td>edX를 8억 달러에 인수한 뒤 2024. 7. 파산보호 신청</td></tr>
+        <tr><td class="k">KOCW <span class="cap">한국 2026</span></td><td>「대학 공개강의 아카이브」</td><td>2026. 6. 강의 이관 및 일부 서비스 종료 공지</td></tr>
+        <tr><td class="k">K-MOOC <span class="cap">한국 현재</span></td><td>「누구나 어디서나 최고의 강의」</td><td>등록 8,774건 중 진행 중 22%</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="card navy">
+        <h3>어떻게 굴러가는가 — 읽어야 할 것 넷</h3>
+        <ul class="dot">
+          <li><b>사무국은 어디나 작다.</b> BTAA가 30년 유지한 최소 단위는 캠퍼스별 코디네이터 1인이고, FITech을 9년 굴린 것은 상근 COO 1인이었다.</li>
+          <li><b>갱신 의무는 돈과 짝이다.</b> 10학기 운영 의무를 강제하는 곳은 vhb 하나이고, 강좌당 개발비를 주기 때문에 성립한다.</li>
+          <li><b>창구는 이미 있을 수 있다.</b> EuroTeQ이 4년 1,280만 유로로 만드는 「소속 계정으로 파트너 강좌를 별도 절차 없이 듣는 창구」는 공동 플랫폼이 이미 가진 형태다.</li>
+          <li><b>줄어드는 것을 전제한다.</b> FITech도 프로젝트 종료로 일부 강좌가 빠진다. 목표는 「계속 늘린다」가 아니라 「줄어들어도 죽지 않는 구조」다.</li>
+        </ul>
+      </div>
+      <div class="take"><b>실무자가 가져갈 점</b> — 우리 기관 담당자의 일을 한 줄로 적어 볼 수 있습니다: 「무엇을 언제 확인하고 누구에게 보고하는가」. BTAA·FITech의 공통점은 사람 수가 아니라 이 한 줄이 정해져 있다는 것입니다.</div>
+      <div class="diff"><b>우리와 다른 전제</b> — vhb·FITech·EuroTeQ은 정부·EU 재원이 있고, BTAA는 총장 수준 협의체다. 재원과 결정 단위가 다르면 같은 장치(의무·정산)를 그대로 옮길 수 없다. 학점까지 넓히면 Semester Online처럼 교수회 결정이 변수가 된다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 2026. 9. 4. 공개 문서 조사: FITech(fitech.io · Aalto 공지), vhb(안내서 · 바이에른주 보도), BTAA(btaa.org), JMOOC(jmooc.jp 입회 안내), EuroTeQ, NPTEL(nptel.ac.in), Semester Online 해산 보도(2014), 2U 파산보호 신청(2024. 7. 25.), KOCW 서비스 종료 공지(2026. 6.), K-MOOC 실측(2026. 9. 4.).</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>5 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1tgt" data-toc="Ⅱ 누구를 위한 것인가 — 얹는 층과 채우는 주체">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i class="on">공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>가르는 선은 「누구를 위한 것인가」였습니다 — 대중을 향한 넓은 무료 카탈로그는 무너졌고, 재학생을 향한 좁은 이수 경로는 남았습니다</h2>
+  <p class="lead">같은 11건을 대상과 범위로 다시 놓았습니다. 그리고 「모아 놓은 것 위에 무엇을 얹는가」와 「누가 채우는가」를 두 축으로 나누면 선택지가 보입니다.</p>
+  <div class="body g2">
+    <div class="col">
+      <div class="g2" style="gap:3mm">
+        <table class="tbl sm">
+          <tr><th colspan="3">무너진 넷 — 대중 · 넓음</th></tr>
+          <tr><td class="k">Semester Online</td><td class="c">대중</td><td>18개월 해산</td></tr>
+          <tr><td class="k">2U · edX</td><td class="c">대중</td><td>파산보호</td></tr>
+          <tr><td class="k">KOCW</td><td class="c">대중</td><td>2026. 6. 종료</td></tr>
+          <tr><td class="k">K-MOOC</td><td class="c">대중</td><td>진행 중 22%</td></tr>
+        </table>
+        <table class="tbl sm">
+          <tr><th colspan="3">남은 일곱 — 재학생 · 좁음</th></tr>
+          <tr><td class="k">BTAA</td><td>덜 가르치는 언어</td><td class="r">30년+</td></tr>
+          <tr><td class="k">vhb</td><td>주 내 대학</td><td class="r">26년</td></tr>
+          <tr><td class="k">NPTEL</td><td>이공계</td><td class="r">23년</td></tr>
+          <tr><td class="k">JMOOC</td><td>인증 강좌만</td><td class="r">13년</td></tr>
+          <tr><td class="k">FITech</td><td>공학</td><td class="r">9년</td></tr>
+          <tr><td class="k">Acadeum×CIC</td><td>사전 승인 목록</td><td class="r">8년</td></tr>
+          <tr><td class="k">EuroTeQ</td><td>6개 공대</td><td class="r">6년</td></tr>
+        </table>
+      </div>
+      <div class="note navy">같은 숫자가 칸에 따라 다르게 읽힌다. STAR-MOOC 강좌당 수강 중앙값 29.5명은 대중 MOOC으로는 작은 숫자이지만, 한 반(class)으로는 충분한 숫자다. 어느 칸에 설지를 정해야 숫자의 뜻이 정해진다.</div>
+      <div class="diff"><b>반대 근거도 강합니다</b> — STAR-MOOC은 「과학기술 분야 온라인 공개강좌 서비스」로 개통했다. 대상을 재학생으로 좁히면 공개라는 설립 취지와 부딪치고 상위기관 협의가 필요할 수 있다. 수강자가 재학생인지 일반 학습자인지 공개 자료로는 알 수 없다.</div>
+    </div>
+    <div class="col">
+      <div class="card navy">
+        <h3>축 1 · 모아 놓은 것 위에 무엇을 얹는가</h3>
+        <div class="flow" style="margin-top:1.5mm">
+          <div class="st"><b>L1</b>카탈로그</div><div class="ar">›</div>
+          <div class="st"><b>L2</b>+ 발견 규칙<br>태그·분류·검색</div><div class="ar">›</div>
+          <div class="st"><b>L3</b>+ 인증<br>이수증·이수 기준</div><div class="ar">›</div>
+          <div class="st p"><b>L4</b>+ 운영<br>수강·성적·플랫폼</div><div class="ar">›</div>
+          <div class="st"><b>L5</b>+ 학점</div>
+        </div>
+      </div>
+      <div class="card navy">
+        <h3>축 2 · 누가 채우는가</h3>
+        <div class="flow" style="margin-top:1.5mm">
+          <div class="st p"><b>자발 등록</b>STAR-MOOC 지금</div><div class="ar">›</div>
+          <div class="st"><b>연 최소 기여 약정</b></div><div class="ar">›</div>
+          <div class="st"><b>공동 개발 예산</b>vhb형</div>
+        </div>
+      </div>
+      <div class="note red">지속한 다섯 곳은 L1~L3에 머물렀고, 무너진 곳(Semester Online · 2U/edX)은 L4~L5까지 갔다. 얹는 층(축 1)과 채우는 의무(축 2)는 서로 독립이라, 하나만 정하면 나머지가 그 결정을 무너뜨린다.</div>
+      <div class="take"><b>실무자가 가져갈 점</b> — 우리 기관이 공동 플랫폼에 기대하는 층이 L1~L5 중 어디인지, 그 층을 유지하려면 축 2에서 무엇을 약속해야 하는지를 한 줄씩 적어 오면 토의가 빨라집니다. 예산 분담·학점 인정처럼 기관 내부 절차가 필요한 것은 이 자리에서 정하지 않습니다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 사례 11건의 대상·범위는 각 기관 공개 문서 기준(2026. 9. 4. 조사). 「대상」은 그 서비스가 스스로 밝힌 주 이용자다. 축 1·2 구분은 이 사례들에서 도출한 정리 틀이다.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>6 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1prd" data-toc="Ⅲ 제작 조직 — TU Delft · MIT OpenCourseWare">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i class="on">제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>TU Delft와 MIT OpenCourseWare는 교수 한 사람이 아니라 역할이 나뉜 팀이 정해진 단계를 밟아 강좌를 만들고 공개합니다</h2>
+  <p class="lead">두 곳 모두 교수는 내용 전문가로 남고, 설계·제작·권리 확인은 전담 인력이 맡습니다. 제작에 들어가기 전에 확인하는 산출물이 정해져 있습니다.</p>
+  <div class="body g2">
+    <div class="col">
+      <div class="sub">TU Delft Extension School — 4단계와 「제작 전」 산출물</div>
+      <div class="flow">
+        <div class="st p"><b>Plan</b>팀 구성 · 설계</div><div class="ar">›</div>
+        <div class="st"><b>Produce</b>제작</div><div class="ar">›</div>
+        <div class="st"><b>Run</b>운영</div><div class="ar">›</div>
+        <div class="st"><b>Evaluate</b>평가</div>
+      </div>
+      <table class="tbl sm">
+        <tr><th>Plan 단계에서 끝내는 것</th><th>실무 의미</th></tr>
+        <tr><td class="k">강좌 팀</td><td>코디네이터 · 내용 전문가 · 러닝 디벨로퍼 · 조교. 러닝 디벨로퍼는 전 과정을 함께한다</td></tr>
+        <tr><td class="k">강좌 소개 페이지</td><td>모집 전에 학습자에게 보일 설명을 먼저 쓴다</td></tr>
+        <tr><td class="k">전체 설계(스토리보드)</td><td>모든 주차의 학습목표 · 활동 · 자료 · 평가를 미리 적는다</td></tr>
+        <tr class="hl"><td class="k">1주 분량 제작 파일럿</td><td>한 주를 먼저 만들어 검토한 뒤 나머지를 찍는다</td></tr>
+        <tr><td class="k">홍보 계획</td><td>등록은 개강 최소 100일 전에 연다</td></tr>
+      </table>
+      <p class="cap">설계 기준은 자체 「Online Learning Experience(OLE)」 모델이며, 착수 전 온보딩 · 킥오프(러닝 디벨로퍼 · 제품 관리 · 홍보 담당) · 설계 워크숍 · 팀 교육을 거친다.</p>
+    </div>
+    <div class="col">
+      <div class="sub">MIT OpenCourseWare — 공개 출판 조직</div>
+      <table class="tbl sm">
+        <tr><th>항목</th><th>공개된 내용</th></tr>
+        <tr><td class="k">규모</td><td>2001년 시작 · MIT 과목 2,500개+ 공개</td></tr>
+        <tr><td class="k">재원</td><td>예산의 약 절반은 MIT, 나머지는 기부(기부 중앙값 25달러)</td></tr>
+        <tr><td class="k">전담 직군</td><td>디지털 출판 전문가 · 영상 편집자 · 지식재산(IP) 코디네이터</td></tr>
+        <tr><td class="k">이용 조건</td><td>Creative Commons — 출처를 밝히면 수정 · 재사용 가능</td></tr>
+        <tr><td class="k">이용</td><td>누적 방문 5억 회+ · 유튜브 구독 600만+</td></tr>
+      </table>
+      <div class="take"><b>실무자가 가져갈 점</b> — ① 제작 계약이나 내부 계획서에 「스토리보드」와 「1주 파일럿 검토」를 촬영 전 납품물로 넣을 수 있습니다. ② 교수 자료의 저작권 · 초상 확인을 별도 역할(IP 확인)로 떼어 두면 공개 직전에 멈추는 일을 줄입니다.</div>
+      <div class="diff"><b>우리와 다른 전제</b> — 두 곳은 전담 인력이 있는 대학 단위 조직이다. 인력이 없는 기관은 역할을 사람이 아니라 「단계별 확인 항목」으로 나눠 외부 제작사 계약에 넣는 방식이 현실적이다. OCW는 강의 자료 공개(수강 · 이수 없음) 모델이라 MOOC 운영과는 목적이 다르다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> TU Delft Online Learning Hub, 「Plan」(onlinelearninghub.tudelft.nl/plan, 2026. 10. 6. 확인) · MIT OpenCourseWare, 「About」(ocw.mit.edu/about, 2026. 10. 6. 확인).</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>7 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1dsg" data-toc="Ⅲ 강좌 구성 — 사전기획 · 제출 중심 · 단위 안 활동">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i class="on">제작과 구성</i><i>이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>잘 쓰이는 강좌는 영상 길이보다 사전기획, 제출로 끝나는 주차, 학습 단위 안의 활동으로 설계되어 있습니다</h2>
+  <p class="lead">edX 시청 데이터와 세계 상위 강좌의 공개 구성을 대조했습니다. 「6분 규칙」보다 큰 차이를 만든 것은 찍기 전 계획이었습니다.</p>
+  <div class="body g2n">
+    <div class="col">
+      <div class="sub">영상 직후 문항 시도율 — 촬영 방식은 같고 사전기획만 달랐던 두 강좌</div>
+      <div class="bar2"><span>사전기획 있음 (Berkeley CS188.1x)</span><div class="b on" style="width:100%"></div><span class="v">55%</span></div>
+      <div class="bar2"><span>기존 강의 녹화 재활용 (MIT 3.091x)</span><div class="b" style="width:74.5%"></div><span class="v">41%</span></div>
+      <p class="cap">2012년 가을 edX 4개 강좌 · 시청 세션 690만 건. 두 강좌는 과목 · 대학이 달라 무작위 실험은 아니다(저자들은 「자연실험」으로 부름).</p>
+      <div class="card navy">
+        <h3>영상 길이 — 6분은 목표가 아니라 상한</h3>
+        <p>총 길이와 무관하게 중앙 시청시간이 6분을 넘지 않았고, 9분을 넘으면 절반도 못 보는 경우가 흔했다. 자르는 이유는 완시청이 아니라 다음에 돌아올 자리(재진입 지점)를 만드는 데 있다.</p>
+      </div>
+      <div class="diff"><b>주의</b> — 이 수치들은 참여도이지 학습 성과가 아니다. 원저자도 「참여는 학습의 필요조건이지 충분조건이 아니다」라고 적었다.</div>
+    </div>
+    <div class="col">
+      <table class="tbl sm">
+        <tr><th>사례</th><th>공개된 구성</th><th>설계 포인트</th></tr>
+        <tr><td class="k">Learning How to Learn<br><span class="cap">Coursera · 등록 418만</span></td><td>4모듈 · 15시간 · 영상 57편 451분(평균 약 8분) · 평가 과제 11 · 동료평가 2</td><td>영상 외 시간을 「나머지」로 두지 않고 설계 대상으로 잡음(공시 기준 대략 절반)</td></tr>
+        <tr><td class="k">CS50x<br><span class="cap">HarvardX</span></td><td>11주 · 문제집 10 + 최종 프로젝트 · 제출 문항마다 70% 이상이면 인증</td><td>주차 사이 마감은 없애고 강좌 완료 마감(2026판 2027. 6. 30.)만 둠. 주차의 필수 끝을 「보기」가 아니라 「제출」에 둠</td></tr>
+        <tr><td class="k">FutureLearn<br><span class="cap">Open University 계열</span></td><td>기본 단위가 영상 · 주차가 아니라 「스텝」 · 스텝마다 토론</td><td>토론을 별도 게시판이 아니라 학습 단위 안에 둠(효과 크기 자료는 없음)</td></tr>
+      </table>
+      <div class="take"><b>실무자가 가져갈 점</b> — ① 제작 일정에 「사전기획 산출물 확인」을 촬영 착수 조건으로 둘 수 있습니다. ② 주차마다 필수 항목의 끝을 제출(퀴즈 · 과제)로 정하고, 영상 아래에 한 줄 질문을 붙이는 것은 플랫폼 개발 없이 됩니다.</div>
+      <div class="diff"><b>우리와 다른 전제</b> — CS50x의 「마감 없음 + 70% 기준」은 자동 채점 인프라와 대규모 조교 커뮤니티가 있어 성립한다. 옮길 수 있는 것은 마감 방식이 아니라 「필수의 끝을 제출에 둔 것」이다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> Guo, P. J., Kim, J. &amp; Rubin, R. (2014). How video production affects student engagement. ACM L@S '14, 41–50(원문 대조) · Coursera 「Learning How to Learn」 공개 페이지 · CS50x 2026 공식 사이트(cs50.harvard.edu/x) · FutureLearn 「Why it works」 — 2026. 9. 6. 확인. 평균 영상 길이는 451분 ÷ 57편 계산값.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>8 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1crd" data-toc="Ⅳ 이수 인정 — NPTEL · SWAYAM · vhb · 분모">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i class="on">이수 인정</i><i>시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>학점과 연결한 곳은 수강과 인증을 나누고, 인증은 감독되는 자리에서 확인했습니다 — 이수율은 그 분모를 정한 뒤에야 비교됩니다</h2>
+  <p class="lead">수강은 열어 두고, 학점·인증에 쓰이는 확인만 별도 절차로 둔 것이 공통점입니다. 국내 「1차시 25분」 기준은 법령이 아니라 대학 학칙이 정할 사안입니다.</p>
+  <div class="body g2w">
+    <div class="col">
+      <table class="tbl sm">
+        <tr><th>기관 · 제도</th><th>수강</th><th>인증 · 학점 확인</th><th>제도 근거</th></tr>
+        <tr><td class="k">NPTEL<br><span class="cap">인도 IIT·IISc</span></td><td>무료</td><td>유료 대면 감독 시험(인도 200여 개 도시) · 최종 점수 = 과제 25% + 시험 75% · 연 2회(1~6월 · 7~12월)</td><td>학생 혜택으로 「학점 이전」을 명시 · 다른 대학을 Local Chapter로 지정</td></tr>
+        <tr class="hl"><td class="k">SWAYAM<br><span class="cap">인도 정부 플랫폼</span></td><td>무료</td><td>학점은 소속 대학이 인정</td><td>UGC 규정(2021. 3. 30. 고시): 학기 과목의 40%까지 SWAYAM 온라인 과목으로 운영 가능(종전 20%)</td></tr>
+        <tr><td class="k">vhb<br><span class="cap">독일 바이에른 32개교</span></td><td>소속 대학 학생</td><td>학점은 각 대학 학칙</td><td>강좌당 개발비 최대 3만€ 대신 최소 10학기 운영 의무</td></tr>
+        <tr><td class="k">FITech<br><span class="cap">핀란드 9개 공대</span></td><td>무료</td><td>학생이 이수한 학점을 셈</td><td>지원금이 이수 학점에 연동</td></tr>
+      </table>
+      <div class="note navy"><b>국내 전제</b> — 「대학 등의 원격수업 운영에 관한 훈령」(교육부훈령 제463호, 2023. 12. 5.)에는 콘텐츠 분량 하한(25분 · 50분)이 없다. 이 값은 2018년 교육부 행정지침에서 비롯되어 각 대학이 학칙에 받아들인 것이고, 훈령 제4조가 이수 기준을 학칙에 위임한다. 다만 K-MOOC 사업에 참여하면 재정지원 조건으로 다시 적용된다.</div>
+    </div>
+    <div class="col">
+      <div class="sub">같은 데이터, 분모만 다르게 — MIT·하버드 edX 2017-18년 이수율</div>
+      <div class="bar2"><span>강의를 연 학습자 전체</span><div class="b" style="width:6.8%"></div><span class="v">3.13%</span></div>
+      <div class="bar2"><span>등록 때 완주 의사를 밝힌 학습자</span><div class="b" style="width:33.5%"></div><span class="v">15.42%</span></div>
+      <div class="bar2"><span>유료 인증(verified) 학습자</span><div class="b on" style="width:100%"></div><span class="v">46.02%</span></div>
+      <p class="cap">세 값 모두 분모는 「강의 진입자」다. 전체 등록 건수를 분모로 하면 맨 위는 약 1.5%가 된다. 2014-15년 약 6%에서 낮아졌고, 저자들은 6년간 개선되지 않았다고 보고했다.</p>
+      <div class="take"><b>실무자가 가져갈 점</b> — ① 내부 보고에서 이수율을 쓸 때 분모(등록자 · 진입자 · 의사 표명자)를 한 줄 함께 적을 수 있습니다. ② 학점과 연결하려면 「누가 · 어디서 · 어떻게 본인을 확인하는가」를 먼저 정해야 하며, 이것은 교무 부서 소관입니다.</div>
+      <div class="diff"><b>우리와 다른 전제</b> — NPTEL · SWAYAM은 국가 규정과 시험 운영 조직이 있다. 우리 기관들 사이에는 같은 규정이 없으므로, 옮길 수 있는 것은 제도가 아니라 「수강과 인증을 나누는 구조」다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> NPTEL 「Online Certification」(nptel.ac.in/semester, 2026. 10. 6. 확인) · UGC Credit Framework for Online Learning Courses through SWAYAM Regulations 2021(Careers360 보도 기준, 2026. 10. 6. 확인) · vhb · FITech 공개 문서(2026. 9. 4.) · Reich, J. &amp; Ruipérez-Valiente, J. A. (2019). The MOOC pivot. Science 363(6423) — 저자 공개 Table_S3(30,650 ÷ 980,589 등) · 교육부훈령 제463호(국가법령정보센터 조문 대조, 2026. 9. 8.).</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>9 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1chk" data-toc="시사점 ① 강좌 계획서 점검 질문 8개">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i class="on">시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>해외 사례에서 뽑은 여덟 가지 질문으로, 새 강좌 계획서를 촬영 전에 점검할 수 있습니다</h2>
+  <p class="lead">체크리스트가 아니라 판단 질문입니다. 「예외」 칸이 있는 것은 조건에 따라 달리 판단하고, 예외가 없는 두 줄은 먼저 지킬 항목입니다.</p>
+  <div class="body col">
+    <table class="tbl sm">
+      <tr><th>단계</th><th>판단 질문</th><th>근거 사례</th><th>예외 · 조건</th></tr>
+      <tr><td class="k">착수</td><td>이 강좌가 학습자와 맺는 약속이 무엇인가 — 필요한 부분에 닿게 하는 것(접근), 남에게 보일 증명(자격), 할 수 없던 것을 하게 하는 것(변화) 중 주된 하나와, 그 때문에 포기할 지표를 적었는가</td><td>CS50x · Google 자격 과정 · FutureLearn</td><td>둘을 원하면 층을 나눠 운영(개방 층 / 인증 층)</td></tr>
+      <tr class="hl"><td class="k">기획</td><td>스토리보드와 1주 분량 파일럿이 촬영 전에 있는가</td><td>TU Delft · edX 55% 대 41%</td><td><b>없음 — 먼저 지킬 항목</b></td></tr>
+      <tr><td class="k">골격</td><td>행정 요건(예: 학칙의 차시 분량)과 설계 목표(예: 영상 분절)를 계획서에 다른 행으로 적었는가</td><td>교육부훈령 제463호 · Guo 2014</td><td>K-MOOC 사업 참여 시 재정지원 조건이 우선</td></tr>
+      <tr><td class="k">영상</td><td>9분을 넘는 영상이 몇 편인가, 넘는다면 재진입 지점(구간 표시)을 두었는가</td><td>Guo 2014 · Learning How to Learn</td><td>튜토리얼 · 실습 시연은 길게 두고 구간 표시로 대체</td></tr>
+      <tr class="hl"><td class="k">실습</td><td>학습목표마다 학습자가 직접 해 보는 활동이 몇 번인지 숫자로 적었는가</td><td>CS50x 제출 중심 주차</td><td><b>없음 — 먼저 지킬 항목</b></td></tr>
+      <tr><td class="k">평가</td><td>통과 기준(자동 채점)과 개선 피드백(사람 · 동료 · AI)을 다른 채널로 두었는가</td><td>CS50x 70% 기준 · 동료평가 2건</td><td>소규모 강좌는 한 채널로 충분할 수 있음</td></tr>
+      <tr><td class="k">이수</td><td>이수증을 누가 어디서 확인하는지, 본인 확인을 하는지 정했는가</td><td>NPTEL 감독 시험</td><td>학점과 연결하지 않으면 학습 이력 증명으로 충분</td></tr>
+      <tr><td class="k">측정</td><td>이수율 하나로 보고하지 않고, 분모를 밝힌 지표를 함께 쓰는가</td><td>Reich 2019(3.13% · 15.42% · 46.02%)</td><td>대외 보고 양식이 정해져 있으면 분모 정의를 각주로</td></tr>
+    </table>
+    <div class="g2" style="gap:4mm">
+      <div class="take"><b>실무자가 가져갈 점</b> — 이 표는 외부 제작사 과업지시서의 「납품 전 확인 항목」으로 옮겨 쓸 수 있습니다. 「기획」과 「실습」 두 줄만 먼저 넣어도 계획서의 성격이 달라집니다.</div>
+      <div class="diff"><b>한계</b> — 이 기준은 초보 학습자를 전제한다. 선행지식이 높은 대학원 강좌에서는 잘게 나눈 안내가 오히려 방해가 될 수 있다(전문성 역전 효과). 「약속 세 가지」 분류는 문헌의 확립된 틀이 아니라 사례를 정리한 틀이다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 이 세션 7~9쪽의 사례 · DGIST 교수학습센터 「글로벌 온라인 강좌 구성 심층 분석」 v1.1(2026. 9. 8., 원문 대조 검증본)의 설계 기준표를 실무 질문으로 바꿔 씀 · Kalyuga, S. (2007). Expertise reversal effect. Educational Psychology Review 19.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>10 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1imp" data-toc="시사점 ② 공동 플랫폼 선택지와 실무 다음 단계">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i class="on">시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>공동 플랫폼이 고를 길은 네 갈래이고, 어느 길이든 실무자는 기입 정비 · 제작 기준 · 지표 정의 세 가지를 지금 바로 시작할 수 있습니다</h2>
+  <p class="lead">왼쪽은 여섯 기관이 함께 정할 선택지, 오른쪽은 각 기관 실무자가 자기 사정에 맞게 고를 수 있는 다음 단계입니다. 예산 분담 · 학점 인정은 이 자리에서 정하지 않습니다.</p>
+  <div class="body g2">
+    <div class="col">
+      <div class="sub">함께 정할 것 — 모아 놓은 것 위에 어디까지 얹을 것인가</div>
+      <table class="tbl sm">
+        <tr><th>선택지</th><th>요구하는 것</th><th>포기하는 것</th><th>해외 유사 사례</th></tr>
+        <tr><td class="k">① L2 카탈로그 + 발견</td><td>태그 · 분류 공통 규칙만. 유지비 최소</td><td>플랫폼 안 수강 · 이수증 · 수강 데이터</td><td>JMOOC(인증 목록)</td></tr>
+        <tr><td class="k">② L3 + 공동 인증</td><td>공통 이수 기준 합의, 인증 확인 주체 지정</td><td>운영은 각 기관 플랫폼으로</td><td>NPTEL(수강 · 인증 분리)</td></tr>
+        <tr><td class="k">③ L4 유지 + 기여 약정</td><td>기관별 연 최소 등록을 예산 · 인력으로 담보</td><td>담보 못 하면 아무것도 바뀌지 않음</td><td>vhb(개발비 + 운영 의무)</td></tr>
+        <tr class="hl"><td class="k">④ 정하지 않음</td><td>올해 부담 없음</td><td>2029년 이관분 63%인 상태에서 같은 논의</td><td>K-MOOC(진행 중 22%)</td></tr>
+      </table>
+      <div class="note navy">어느 선택지든 함께 정해야 할 것은 셋이다 — <b>무엇을 세는가</b>(개발 강좌 수 대신 상시 가용 강좌 · 이수 건수 · 기입 충족률), <b>누가 언제까지 채우는가</b>, <b>누가 분기마다 점검해 보고하는가</b>.</div>
+    </div>
+    <div class="col">
+      <div class="sub">각 기관 실무자가 고를 수 있는 다음 단계</div>
+      <table class="tbl sm">
+        <tr><th>무엇을</th><th>누가 · 필요한 것</th><th>전제 · 판가름</th></tr>
+        <tr><td class="k">A. 자기 기관 강좌의 기입 점검</td><td>STAR-MOOC 담당자 · 강좌별 이수증 표시 · 태그 · 분야 · 연작 · 폐강 여부 확인. 설명문 · 강의계획서 보강은 교수 확인 필요</td><td>재촬영 불필요. 공통 기입 기준이 정해지면 그 기준에 맞춤</td></tr>
+        <tr><td class="k">B. 신규 제작에 「촬영 전 확인」 두 줄</td><td>제작 담당자 · 스토리보드와 1주 파일럿 검토를 과업지시서 납품물에 추가</td><td>다음 제작 계약 시점. 업체 일정에 1~2주 여유 필요</td></tr>
+        <tr><td class="k">C. 보고 지표에 분모 정의</td><td>담당자 · 이수율 옆에 분모(등록자 · 진입자 · 의사 표명자)를 한 줄</td><td>기관 보고 양식이 허용하는 범위에서. 비용 없음</td></tr>
+      </table>
+      <div class="take"><b>상급자 보고용 세 줄</b> — ① 해외 공동 운영체는 범위 · 대상을 먼저 좁힌 곳이 남았다. ② 결과는 촬영보다 사전기획에서 갈리며, 이는 계약 항목으로 반영할 수 있다. ③ STAR-MOOC 결함 대부분은 기입 문제라 재촬영 없이 고칠 수 있다.</div>
+      <div class="diff"><b>판단이 갈리는 조건</b> — 수강자 대부분이 재학생이 아니라 외부 일반 학습자라면 ②의 인증 층보다 ①의 발견 층이 우선이다. 이 비율은 각 기관 내부 자료에만 있다.</div>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 선택지 구분은 이 세션의 해외 사례 11건이 어디까지 얹었는지를 정리한 틀 · 2029년 63%는 4쪽의 단순 외삽.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>11 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1dis" data-toc="토의 질문 — 정할 수 있는 것과 미룰 것">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i class="on">시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>토의에서는 예산 없이 정할 수 있는 세 가지를 먼저 다루고, 기관 내부 절차가 필요한 것은 담당과 회신 시점만 정하는 것이 현실적입니다</h2>
+  <p class="lead">답을 정해 오지 않았습니다. 각 기관 실무자가 현장에서 바로 답할 수 있는 수준으로 질문을 나눴습니다.</p>
+  <div class="body g2w">
+    <div class="col">
+      <table class="tbl">
+        <tr><th>#</th><th>이 자리에서 이야기할 수 있는 것</th><th>관련 쪽</th></tr>
+        <tr><td class="c">1</td><td><b>공통 기입 기준을 둘 것인가</b> — 이수증 표시 · 분야 · 연작 · 태그 네 칸. 예산이나 기관 승인 없이 정할 수 있는 항목이다</td><td class="c">4</td></tr>
+        <tr><td class="c">2</td><td><b>어느 층까지 얹을 것인가</b> — 네 갈래 중 우리 기관이 기대하는 것은 어디에 가까운가</td><td class="c">6 · 11</td></tr>
+        <tr><td class="c">3</td><td><b>무엇을 셀 것인가</b> — 「개발 강좌 수」를 계속 쓸지, 상시 가용 강좌 · 이수 건수 · 기입 충족률로 바꿀지, 분모를 어떻게 적을지</td><td class="c">9</td></tr>
+        <tr><td class="c">4</td><td><b>제작에서 함께 쓸 수 있는 것은 무엇인가</b> — 스토리보드 양식 · 촬영 전 확인 항목 · 납품 검수 질문</td><td class="c">7 · 10</td></tr>
+        <tr><td class="c">5</td><td><b>수강자는 누구인가</b> — 아는 범위에서 재학생과 일반 학습자의 비중. 이 답에 따라 2번의 방향이 달라진다</td><td class="c">6</td></tr>
+      </table>
+    </div>
+    <div class="col">
+      <div class="card navy">
+        <h3>미룰 것 — 「누가 언제까지 확인」으로 적는다</h3>
+        <table class="tbl sm">
+          <tr><th>안건</th><th>미루는 까닭</th></tr>
+          <tr><td>예산 분담 비율</td><td>기관 내부 절차 필요</td></tr>
+          <tr><td>학점 인정 · 소단위 전공과정</td><td>교무 부서 소관</td></tr>
+          <tr><td>공동 인증 확인 주체</td><td>얹는 층이 먼저 정해져야 함</td></tr>
+        </table>
+      </div>
+      <div class="diff"><b>이 자료가 확인하지 못한 것</b> — STAR-MOOC 강좌별 이수율과 수강자 구성 · 2024년 이관 때 수강 이력이 넘어왔는지 · 목록이 24건에서 멈추는 것이 설정인지 결함인지 · 해외 사례 대부분의 운영 인건비.</div>
+      <p class="cap">세션 1 끝 — 휴식 뒤 세션 2가 이어지고, 세션 2 뒤 정리 시간에 세션 1·2 요지를 함께 확인합니다.</p>
+    </div>
+  </div>
+  <p class="src"><b>Source:</b> 이 세션 각 쪽. 토의 진행은 교수학습센터-665 붙임 프로그램(토의 55분) 기준.</p>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>12 / 13</span></div>
+</section>
+
+<section class="page" data-id="s1ref" data-toc="출처">
+  <div class="hd"><span class="trk"><i>요약</i><i>공통 맥락</i><i>공동 운영체</i><i>제작과 구성</i><i>이수 인정</i><i class="on">시사점</i></span><span class="when">SESSION 1</span></div>
+  <h2>출처 — 모든 사례는 공개 문서와 원문으로 확인했고, 확인 시점을 함께 적었습니다</h2>
+  <div class="refs body">
+    <h4>공동 운영체 · 플랫폼</h4>
+    <p>· FITech — fitech.io 및 Aalto University 공지 · vhb(Virtuelle Hochschule Bayern) 안내서 및 바이에른주 보도 · BTAA CourseShare — btaa.org · EuroTeQ Engineering University 공개 자료 · JMOOC — jmooc.jp 입회 안내 · Acadeum × CIC 공개 자료. 〔기관〕 2026. 9. 4. 확인</p>
+    <p>· NPTEL — Online Certification, nptel.ac.in/semester(수강 무료 · 유료 감독 시험 · 과제 25% / 시험 75% · 연 2회 · 200여 개 도시). 〔기관〕 2026. 10. 6. 확인</p>
+    <p>· UGC (2021-03-30). Credit Framework for Online Learning Courses through SWAYAM Regulations, 2021(학기 과목 40%, 종전 20%) — Careers360 보도 기준. 〔언론〕 2026. 10. 6. 확인</p>
+    <p>· Semester Online 해산 보도(2014) · 2U, Inc. 파산보호 신청(2024-07-25) · KOCW 서비스 종료 공지(2026. 6.) · K-MOOC 분류 교차 조회(2026. 9. 4., 진행 중 1,937 / 8,774). 〔기관 · 언론〕</p>
+    <h4>제작 조직과 강좌 구성</h4>
+    <p>· TU Delft Online Learning Hub — Plan(onlinelearninghub.tudelft.nl/plan): Plan · Produce · Run · Evaluate, 강좌 팀 구성, 스토리보드 · 1주 파일럿, 개강 100일 전 등록. 〔기관〕 2026. 10. 6. 확인</p>
+    <p>· MIT OpenCourseWare — About(ocw.mit.edu/about): 2001년 · 2,500개+ 과목 · 예산 절반 MIT · 기부 중앙값 25달러 · 전담 직군 · Creative Commons. 〔기관〕 2026. 10. 6. 확인</p>
+    <p>· Guo, P. J., Kim, J. &amp; Rubin, R. (2014). How video production affects student engagement: An empirical study of MOOC videos. ACM L@S '14, 41–50. doi.org/10.1145/2556325.2566239 〔동료심사, 원문 10쪽 대조〕</p>
+    <p>· Coursera, Learning How to Learn 강좌 페이지 · HarvardX CS50x 2026 공식 사이트(cs50.harvard.edu/x) 및 2023 실러버스 · FutureLearn, Why it works. 〔기관〕 2026. 9. 6. 확인</p>
+    <p>· Kalyuga, S. (2007). Expertise reversal effect and its implications for learner-tailored instruction. Educational Psychology Review 19, 509–539. 〔동료심사〕</p>
+    <h4>이수율과 국내 기준</h4>
+    <p>· Reich, J. &amp; Ruipérez-Valiente, J. A. (2019). The MOOC pivot. Science 363(6423), 130–131. doi.org/10.1126/science.aav7958 — 저자 공개 저장소 Table_S3(2017-18년 강의 진입자 980,589명 중 완주 30,650명 등). 〔동료심사 · 원자료〕</p>
+    <p>· 교육부훈령 제463호 「대학 등의 원격수업 운영에 관한 훈령」(2023. 12. 5. 시행) — 국가법령정보센터 조문 전문 대조(2026. 9. 8.). 〔법령〕</p>
+    <h4>STAR-MOOC 플랫폼 수치</h4>
+    <p>· STAR-MOOC 공개 강좌 목록 전수 158건과 화면 도달성 실측(2026. 9. 4. 조회). 기관별 값은 이 자료에 싣지 않았다. 원자료와 재계산 스크립트는 DGIST 교수학습센터가 보관한다.</p>
+    <h4>쓰지 않은 것</h4>
+    <p>· 업계 블로그 출처의 완주율(15% · 40~50% · 85~95%), SWAYAM 완주율 15~20%, Class Central 집계는 원출처를 확인하지 못해 쓰지 않았다.</p>
+  </div>
+  <div class="ft"><span>2026년도 STAR-MOOC 공동 워크숍 세션 자료 — 해외 대학·기관은 어떻게 하는가 · 세션 1 · 발표기관 DGIST</span><span>13 / 13</span></div>
+</section>
+<script>
+/* 쪽마다 남는 높이에 맞춰 본문(.body)을 최대 1.3배까지 키운다. 인쇄에도 같은 크기가 적용된다 */
+function fillPages(){
+  document.querySelectorAll('.page').forEach(function(p){
+    var b=p.querySelector('.body'), ft=p.querySelector('.ft'); if(!b||!ft) return;
+    b.style.zoom='';
+    function lastText(){var last=0;p.querySelectorAll('*').forEach(function(e){if(e.closest('.src')||e.closest('.ft'))return;
+      if(![].some.call(e.childNodes,function(n){return n.nodeType===3&&n.textContent.trim()}))return;
+      var r=e.getBoundingClientRect(); if(r.bottom>last)last=r.bottom;}); return last;}
+    function limit(){var s=p.querySelector('.src');return (s?s.getBoundingClientRect().top:ft.getBoundingClientRect().top)-4;}
+    var br=b.getBoundingClientRect(), gap=limit()-lastText(), used=lastText()-br.top;
+    if(gap<30||used<=0) return;
+    var z=Math.min(1.3,1+gap/used*0.95);
+    while(z>1.005){ b.style.zoom=z; if(lastText()<=limit() && b.scrollWidth<=b.clientWidth+1) break; z-=0.01; }
+    if(z<=1.005) b.style.zoom='';
+  });
+}
+(function(){
+  function fit(){
+    var mm=document.createElement('div');mm.style.width='297mm';document.body.appendChild(mm);
+    var w=mm.getBoundingClientRect().width;document.body.removeChild(mm);
+    var s=Math.min(1,(window.innerWidth-24)/w);
+    document.querySelectorAll('.page').forEach(function(p){p.style.zoom=(s<1)?s:'';});
+  }
+  window.addEventListener('resize',fit);
+  (document.fonts?document.fonts.ready:Promise.resolve()).then(function(){fillPages();fit();});
+  window.addEventListener('beforeprint',function(){document.querySelectorAll('.page').forEach(function(p){p.style.zoom='';});});
+  window.addEventListener('afterprint',fit);
+})();
+</script>
+</body>
+</html>
+</html>
