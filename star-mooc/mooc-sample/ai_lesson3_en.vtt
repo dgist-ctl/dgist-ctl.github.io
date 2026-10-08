@@ -1,0 +1,281 @@
+WEBVTT
+
+00:00:09.640 --> 00:00:12.780
+So, let's move on to inference rules.
+
+00:00:12.960 --> 00:00:20.000
+In programming languages, I think we always use inference rules to define sets.
+
+00:00:20.260 --> 00:00:27.060
+I mean, all the programming languages you are using right now — you can find inference rules in your textbooks.
+
+00:00:27.920 --> 00:00:30.660
+Python, C — their books are all written this way.
+
+00:00:31.180 --> 00:00:35.190
+Since everyone defines things this way, let me explain inference rules.
+
+00:00:35.240 --> 00:00:42.650
+An inference rule has this form, like a fraction, but it is not a fraction; you should read it differently.
+
+00:00:42.700 --> 00:00:47.820
+For example, in this form, we call A the hypothesis
+
+00:00:48.800 --> 00:00:55.920
+and B the conclusion, and we read this fraction-like form as:
+
+00:00:57.180 --> 00:01:02.950
+"If A is true, then B is also true."
+
+00:01:03.000 --> 00:01:10.840
+And if there is no A part, like this, it is an axiom, and B is always true without any conditions.
+
+00:01:11.920 --> 00:01:16.570
+And of course, an inference rule can have multiple hypotheses, like this,
+
+00:01:16.620 --> 00:01:19.710
+and this rule can be read as
+
+00:01:19.760 --> 00:01:23.780
+"If A and B are both true, then C is true."
+
+00:01:25.540 --> 00:01:32.580
+With this inductive definition, we can define multiples of 3 naturally. For example, let me do this.
+
+00:01:34.780 --> 00:01:36.840
+0 is in the set S,
+
+00:01:39.560 --> 00:01:48.730
+and if n is in the set S, then n + 3 is in the set S. With inference rules, we can
+
+00:01:48.780 --> 00:01:51.970
+define the same multiples of 3
+
+00:01:52.020 --> 00:01:53.020
+like this.
+
+00:01:55.480 --> 00:02:02.200
+And here, we don't need the term "smallest." For example, we can...
+
+00:02:03.560 --> 00:02:06.720
+For example, here it is.
+
+00:02:08.540 --> 00:02:15.940
+So, this is the definition of multiples of 3. First, you need to describe the base case.
+
+00:02:16.320 --> 00:02:17.720
+Zero is in the set S.
+
+00:02:18.120 --> 00:02:23.800
+And if n is in the set S, n + 3 is also in the set S.
+
+00:02:24.700 --> 00:02:27.770
+This is interpreted as:
+
+00:02:27.820 --> 00:02:37.690
+a natural number n is in the set S if and only if it can be derived from the
+
+00:02:37.740 --> 00:02:41.460
+axiom by applying the inference rules finitely many times.
+
+00:02:43.580 --> 00:02:44.800
+Does this terminology make sense?
+
+00:02:49.600 --> 00:02:55.050
+Only what is inferred by this rule,
+
+00:02:57.140 --> 00:03:02.940
+It says only numbers inferred by this rule are elements of S. That's what's written here.
+
+00:03:08.540 --> 00:03:13.660
+So only things inferred by the rules are called elements of the set.
+
+00:03:14.600 --> 00:03:17.460
+So, here is an example of a derivation tree.
+
+00:03:19.000 --> 00:03:22.650
+Let's say you want to prove 3 is in the set S.
+
+00:03:22.700 --> 00:03:26.110
+First, we have the axiom: 0 is in the set S.
+
+00:03:26.160 --> 00:03:34.550
+Then we apply this rule: 0 is in S, so 0 + 3, I mean 3,
+
+00:03:34.600 --> 00:03:41.350
+is in the set S. We've proved 3 is in the set S, but we cannot prove other numbers,
+
+00:03:41.400 --> 00:03:48.630
+not multiples of 3, like 1, 2, or 4. They cannot be derived
+
+00:03:48.680 --> 00:03:51.650
+from the inference rules, so they are not in the set.
+
+00:03:51.700 --> 00:03:54.940
+That's how an inference rule defines a set.
+
+00:04:01.500 --> 00:04:09.780
+To explain more in Korean: this part is easy, but say we have some Python program.
+
+00:04:14.460 --> 00:04:19.780
+The Python language is also written this way. So when we say "a Python program,"
+
+00:04:20.220 --> 00:04:23.000
+it means a program expressed by these rules,
+
+00:04:23.580 --> 00:04:25.340
+one of the programs in that set.
+
+00:04:26.520 --> 00:04:30.020
+Python, C, and the like are defined this way.
+
+00:04:30.140 --> 00:04:31.140
+We'll learn this in depth later.
+
+00:04:33.420 --> 00:04:35.520
+So, this is an exercise.
+
+00:04:35.820 --> 00:04:41.620
+Please work through it by hand. I'll give you 15 minutes.
+
+00:04:42.040 --> 00:04:43.040
+Go!
+
+00:04:50.160 --> 00:04:53.320
+Let's do it together.
+
+00:04:53.680 --> 00:04:58.480
+What's the set defined by this inference rule?
+
+00:04:59.440 --> 00:05:03.760
+I think multiples of 3, not including 0.
+
+00:05:05.020 --> 00:05:06.080
+Am I correct?
+
+00:05:06.600 --> 00:05:09.840
+Good. What's the set defined by this one?
+
+00:05:11.180 --> 00:05:16.250
+I think it's the set of parentheses correctly paired.
+
+00:05:16.300 --> 00:05:21.500
+Left parentheses have exactly the same number as right parentheses,
+
+00:05:22.600 --> 00:05:23.600
+right?
+
+00:05:23.700 --> 00:05:24.700
+Am I correct?
+
+00:05:26.720 --> 00:05:28.130
+Then what's the inference rule defining this set?
+
+00:05:28.180 --> 00:05:37.120
+I think we need these two axioms and this inference rule.
+
+00:05:40.460 --> 00:05:41.820
+Do I need more rules?
+
+00:05:42.580 --> 00:05:44.040
+Is this enough?
+
+00:05:44.400 --> 00:05:45.480
+I guess so.
+
+00:05:46.300 --> 00:05:48.140
+Who did this one?
+
+00:05:48.720 --> 00:05:51.540
+Who knows the inference rule defining this set?
+
+00:05:52.280 --> 00:05:53.280
+Who did number 4?
+
+00:05:56.040 --> 00:05:57.040
+Oh.
+
+00:05:57.540 --> 00:05:58.540
+Yes.
+
+00:06:02.680 --> 00:06:04.120
+An axiom, of course.
+
+00:06:04.280 --> 00:06:05.280
+Yeah.
+
+00:06:05.720 --> 00:06:08.220
+Axiom: y.
+
+00:06:12.120 --> 00:06:18.240
+Yes. Then x S y?
+
+00:06:19.380 --> 00:06:20.380
+That's correct.
+
+00:06:20.600 --> 00:06:21.600
+Is this correct?
+
+00:06:22.640 --> 00:06:23.640
+Right?
+
+00:06:24.480 --> 00:06:26.340
+Does this rule produce exactly this set?
+
+00:06:28.260 --> 00:06:29.360
+Seems right, doesn't it?
+
+00:06:31.680 --> 00:06:34.580
+If you're unsure, take a look.
+
+00:06:38.280 --> 00:06:42.500
+One more minute. I think it's right.
+
+00:06:47.620 --> 00:06:49.280
+Is it right? Yes, it's correct.
+
+00:06:50.180 --> 00:06:51.800
+I think that's correct.
+
+00:06:52.280 --> 00:07:00.430
+So in this lecture, we learned inductive definitions
+
+00:07:00.480 --> 00:07:02.780
+to define infinite sets formally.
+
+00:07:02.980 --> 00:07:11.970
+You may not be used to it yet, but I truly guarantee that you will
+
+00:07:12.020 --> 00:07:13.020
+define sets naturally.
+
+00:07:14.380 --> 00:07:18.340
+Even if you can't do it right now, you'll get used to it soon.
+
+00:07:18.740 --> 00:07:23.070
+I'll use this all semester, so you'll get used to it quickly.
+
+00:07:23.120 --> 00:07:31.040
+To go a bit deeper: once you know what the given set is, defining it isn't that hard.
+
+00:07:31.240 --> 00:07:32.240
+This is not the hard part.
+
+00:07:33.380 --> 00:07:42.050
+What I mean is, being good at programming languages is not about expressing a given set precisely and quickly.
+
+00:07:42.100 --> 00:07:50.740
+Really being good at programming languages means discovering which sets are valuable.
+
+00:07:51.580 --> 00:08:01.030
+That's what being really good is. Figuring out which sets are valuable, which programming languages are valuable —
+
+00:08:01.080 --> 00:08:05.510
+that's almost a matter of talent. This, on the other hand, is effort.
+
+00:08:05.560 --> 00:08:10.170
+Studying this and learning to express such sets is a matter of study,
+
+00:08:10.220 --> 00:08:15.680
+but real talent in programming languages means being good at this.
+
