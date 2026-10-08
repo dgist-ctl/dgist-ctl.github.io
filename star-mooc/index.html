@@ -272,6 +272,31 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .peek-toc button{appearance:none;border:0;background:none;padding:0;color:var(--ink);font:inherit;text-align:left;cursor:pointer;text-underline-offset:3px}
 .peek-toc button:hover{text-decoration:underline;color:var(--c)}
 .r-orig{display:inline-block;margin-top:10px;font-size:13px;color:var(--accent);text-underline-offset:3px}
+/* 참여자 편의 루프 R1~R6 */
+.arrive{margin-top:24px;border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:14px 18px;background:var(--paper);max-width:40em}
+.arrive-h{margin:0 0 6px;font:600 13px/1.4 var(--f-body);color:var(--accent)}
+.arrive ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.arrive li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:baseline}
+.arrive time{font:500 15px/1.4 var(--f-mono)}
+.arrive b{display:block;font-weight:600}
+.arrive span{display:block;color:var(--muted);font-size:13.5px;line-height:1.5}
+.prep{background:var(--accent-soft);border-bottom:1px solid var(--rule)}
+.prep .wrap{padding-block:28px}
+.prep h2{font:700 19px/1.3 var(--f-display);margin-bottom:14px}
+.prep-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 22px;counter-reset:p}
+.prep-list li{counter-increment:p;display:flex;flex-direction:column;gap:4px;padding-top:10px;border-top:2px solid var(--accent);min-width:0}
+.prep-list li::before{content:counter(p);font:500 12px/1 var(--f-mono);color:var(--accent)}
+.prep-list b{font-weight:600}
+.prep-list span{font-size:14px;color:var(--muted);line-height:1.55}
+.sjump{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+.sjump a{display:flex;flex-direction:column;gap:3px;text-decoration:none;padding:10px 14px;border:1px solid var(--rule);border-top:3px solid var(--c);border-radius:2px 2px 4px 4px;background:var(--sheet);min-width:0}
+.sjump a:hover{background:var(--paper)}
+.sjump .sj-n{font:500 11px/1.2 var(--f-mono);letter-spacing:.08em;color:var(--c)}
+.sjump .sj-t{font-weight:600;font-size:14.5px;line-height:1.4}
+.sjump .sj-r{font-size:12.5px;color:var(--muted)}
+.totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.totop[hidden]{display:none}
+.addr-copy{appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 12px/1 var(--f-body);padding:5px 8px;border-radius:4px;cursor:pointer;margin:4px 8px 0 0}
 .talk:target{box-shadow:0 0 0 3px var(--c)}
 .news{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
 .news li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);font-size:14.5px}
@@ -310,6 +335,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   .days{grid-template-columns:minmax(0,1fr)}
   .note{margin-left:0}
 }
+@media (max-width:980px){.prep-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:680px){
   .sec-head,.s-head{grid-template-columns:minmax(0,1fr)}
   .sec-head .lab{padding-top:0}
@@ -320,6 +346,11 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   .slot{grid-template-columns:70px minmax(0,1fr);padding-inline:16px}
   footer.site .wrap{grid-template-columns:minmax(0,1fr)}
   .r-body{padding:10px}
+  dialog#reader{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;border-radius:0}
+  .prep-list,.sjump{grid-template-columns:minmax(0,1fr)}
+  .hero .tracks,.facts .partners{display:none}
+  .facts dl div:nth-child(3),.facts dl div:nth-child(4){display:none}
+  .hero .wrap{padding-block:28px 24px;gap:20px}
   .r-nav button span{display:none}.r-nav button{width:38px;padding:0;font-size:18px}
   .r-head{flex-wrap:nowrap;gap:10px;padding:10px 12px}.r-head h3{font-size:15px}
   .mx th,.mx td{padding:9px 8px}.mx thead th span{display:none}.cell{padding:5px 8px;font-size:12px}.mini-logo{display:none}
@@ -347,6 +378,13 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
       <p class="kicker"><i></i>STAR-MOOC Joint Workshop · 2026</p>
       <h1>2026년도 <span class="nw">STAR-MOOC</span><br><em>6개 기관 공동 워크숍</em></h1>
       <p class="lede">KAIST · GIST · DGIST · UNIST · POSTECH · UST 여섯 기관이 같은 세 질문에 각자의 답을 가져와 나란히 놓고 이야기합니다. 세션마다 기관별 5분 요약 발표 뒤 참석자 전원이 토의합니다.</p>
+      <div class="arrive" aria-label="처음 오실 곳">
+        <p class="arrive-h">처음 오실 곳 · 10. 15.(목)</p>
+        <ol>
+          <li><time>12:00</time><div><b>중식 · 능이마을 현풍점</b><span>대구 달성군 현풍읍 현풍동로29길 2 · DGIST에서 차로 약 10분</span></div></li>
+          <li><time>13:00</time><div><b>개회 · DGIST R1(연구행정동) 301호</b><span>식사 자리에서 회의장 위치를 안내합니다 · 내비 「DGIST」</span></div></li>
+        </ol>
+      </div>
       <nav class="tracks" aria-label="세션">
         <a href="#session-1"><span class="n" style="color:var(--s1)">S1</span><span class="t">온라인 강좌 운영 방안과 미래</span><span class="d">10.15 13:05</span></a>
         <a href="#session-2"><span class="n" style="color:var(--s2)">S2</span><span class="t">AI 적용 업무 추진 현황과 계획</span><span class="d">10.15 15:05</span></a>
@@ -368,16 +406,28 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   </div>
 </section>
 
+<section class="prep" aria-labelledby="prep-h">
+  <div class="wrap">
+    <h2 id="prep-h">참석 전에 확인해 주십시오</h2>
+    <ol class="prep-list">
+      <li><b>발표 자료 · 10. 12.(월)까지</b><span>10. 2. 안내 메일에 회신으로 보내 주십시오. 자료가 없으면 현장에서 말씀으로 나누셔도 됩니다.</span></li>
+      <li><b>세션마다 기관별 5분 요약 발표</b><span>세 세션 모두 같은 형식입니다. 발표 뒤 질의는 토의 시간에 함께 받습니다.</span></li>
+      <li><b>노트북 지참</b><span>인쇄 자료집이 없습니다. 토의 때 이 페이지의 자료를 함께 봅니다.</span></li>
+      <li><b>숙소 · DGIST 국제관 1인 1실</b><span>체크인 10. 15.(목) 17:00부터, 10. 16.(금) 09:00 세션 전에 퇴실합니다.</span></li>
+    </ol>
+  </div>
+</section>
+
 <section class="block" id="materials">
   <div class="wrap">
-    <div class="sec-head"><span class="lab">01 · Materials</span><div><h2>발표 자료 현황</h2><p>기관마다 세 세션의 자료를 받아 이 페이지에 모읍니다. 칸을 누르면 해당 자료로 이동합니다. 자료는 10. 2. 안내 메일에 회신으로 보내 주시면 이 페이지에 이어서 싣고, 자료가 없는 기관은 현장에서 말씀으로 나누셔도 됩니다.</p></div></div>
+    <div class="sec-head"><span class="lab">01 · Materials</span><div><h2>발표 자료 현황</h2><p>기관마다 세 세션의 자료를 받아 이 페이지에 모읍니다. 칸을 누르면 그 자료로 갑니다. 새 자료는 도착하는 대로 이어서 싣습니다.</p></div></div>
     <div class="status">
       <div class="gauge">
         <div class="big mono">8<small> / 18</small></div>
         <div class="bar" role="img" aria-label="18편 중 8편 도착"><i style="width:44%"></i></div>
         <p><b>도착 3개 기관</b> · KAIST · DGIST · UNIST</p>
         <p><b>대기</b> · GIST · POSTECH · UST — 제출 기한 10. 12.(월)</p>
-        <p class="meta">기준 2026. 10. 8.(목) 09:30 · 이메일 회신 기준</p>
+        <p class="meta">기준 2026. 10. 8.(목) 09:50 · 이메일 회신 기준</p>
         <p class="keyd-h">Key dates · 주요 일정</p>
         <ol class="keyd">
 <li class="done"><time>2026. 8. 11.</time><span>실무협의회 정기 간담회에서 공동 워크숍 제안</span></li>
@@ -427,6 +477,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 <section class="block" id="sessions">
   <div class="wrap">
     <div class="sec-head"><span class="lab">03 · Sessions</span><div><h2>세션 · 기관별 발표 자료</h2><p>같은 질문에 대한 기관별 답을 세션 안에 나란히 놓았습니다. 카드의 요점은 받은 자료에서 주관 기관이 뽑아 정리한 것이며, 자세한 내용은 자료 원문에서 확인해 주십시오.</p>
+      <nav class="sjump" aria-label="세션 바로 가기"><a href="#session-1" style="--c:var(--s1)"><span class="sj-n">SESSION 1 · 10. 15.(목)</span><span class="sj-t">온라인 강좌 운영 방안과 미래</span><span class="sj-r">자료 3편 · 슬라이드 20쪽 · 본문 약 8분</span></a><a href="#session-2" style="--c:var(--s2)"><span class="sj-n">SESSION 2 · 10. 15.(목)</span><span class="sj-t">AI 적용 업무 추진 현황과 계획</span><span class="sj-r">자료 2편 · 슬라이드 12쪽 · 본문 약 9분</span></a><a href="#session-3" style="--c:var(--s3)"><span class="sj-n">SESSION 3 · 10. 16.(금)</span><span class="sj-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="sj-r">자료 3편 · 슬라이드 28쪽 · 본문 약 9분</span></a></nav>
       <div class="chips" role="group" aria-label="기관별로 보기"><span class="lbl">기관별로 보기</span><button type="button" class="chip" data-f="" aria-pressed="true">전체</button><button type="button" class="chip" data-f="kaist" aria-pressed="false">KAIST</button><button type="button" class="chip" data-f="dgist" aria-pressed="false">DGIST</button><button type="button" class="chip" data-f="unist" aria-pressed="false">UNIST</button></div></div></div>
 <section class="session s1" id="session-1">
   <div class="s-head">
@@ -521,14 +572,14 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   <div class="wrap">
     <div class="sec-head"><span class="lab">04 · Venue</span><div><h2>장소와 안내</h2><p>회의장과 숙소는 모두 DGIST 캠퍼스 안에 있습니다. 내비게이션에 「DGIST」 또는 「테크노중앙대로 333」을 입력해 주십시오.</p></div></div>
     <ul class="venues">
-<li><span class="v-what">회의장</span><div><strong>DGIST R1(연구행정동) 301호 대회의실</strong><span class="v-when">10. 15. 13:00 – 10. 16. 13:05</span><span class="v-addr">대구광역시 달성군 유가읍 테크노중앙대로 333</span><a class="map" href="https://map.naver.com/p/search/DGIST%20%EC%97%B0%EA%B5%AC%ED%96%89%EC%A0%95%EB%8F%99" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
-<li><span class="v-what">숙소</span><div><strong>DGIST 국제관 · 1인 1실</strong><span class="v-when">체크인 10. 15.(목) 17:00부터 · 퇴실 10. 16. 09:00까지</span><span class="v-addr">캠퍼스 안 · 053-785-1114</span><a class="map" href="https://map.naver.com/p/search/DGIST%20%EA%B5%AD%EC%A0%9C%EA%B4%80" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
-<li><span class="v-what">중식</span><div><strong>능이마을 현풍점</strong><span class="v-when">10. 15.(목) 12:00</span><span class="v-addr">달성군 현풍읍 현풍동로29길 2 · DGIST에서 차로 약 10분</span><a class="map" href="https://map.naver.com/p/search/%EB%8A%A5%EC%9D%B4%EB%A7%88%EC%9D%84%20%ED%98%84%ED%92%8D%EC%A0%90" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
-<li><span class="v-what">만찬</span><div><strong>용성양꼬치</strong><span class="v-when">10. 15.(목) 18:00</span><span class="v-addr">달성군 현풍읍 테크노중앙대로5길 22 1층 · 국제관에서 걸어서 15~20분</span><a class="map" href="https://map.naver.com/p/search/%EC%9A%A9%EC%84%B1%EC%96%91%EA%BC%AC%EC%B9%98%20%ED%98%84%ED%92%8D" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
-<li><span class="v-what">브런치</span><div><strong>도케비커피 비슬산 본점</strong><span class="v-when">10. 16.(금) 11:15</span><span class="v-addr">달성군 유가읍 음동길 130-15 · DGIST에서 차로 약 10분</span><a class="map" href="https://map.naver.com/p/search/%EB%8F%84%EC%BC%80%EB%B9%84%EC%BB%A4%ED%94%BC%20%EB%B9%84%EC%8A%AC%EC%82%B0%20%EB%B3%B8%EC%A0%90" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
+<li><span class="v-what">회의장</span><div><strong>DGIST R1(연구행정동) 301호 대회의실</strong><span class="v-when">10. 15. 13:00 – 10. 16. 13:05</span><span class="v-addr">대구광역시 달성군 유가읍 테크노중앙대로 333</span><button type="button" class="addr-copy" data-copy="대구광역시 달성군 유가읍 테크노중앙대로 333" aria-label="DGIST R1(연구행정동) 301호 대회의실 주소 복사">주소 복사</button><a class="map" href="https://map.naver.com/p/search/DGIST%20%EC%97%B0%EA%B5%AC%ED%96%89%EC%A0%95%EB%8F%99" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
+<li><span class="v-what">숙소</span><div><strong>DGIST 국제관 · 1인 1실</strong><span class="v-when">체크인 10. 15.(목) 17:00부터 · 퇴실 10. 16. 09:00까지</span><span class="v-addr">캠퍼스 안 · 053-785-1114</span><button type="button" class="addr-copy" data-copy="대구광역시 달성군 유가읍 테크노중앙대로 333" aria-label="DGIST 국제관 · 1인 1실 주소 복사">주소 복사</button><a class="map" href="https://map.naver.com/p/search/DGIST%20%EA%B5%AD%EC%A0%9C%EA%B4%80" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
+<li><span class="v-what">중식</span><div><strong>능이마을 현풍점</strong><span class="v-when">10. 15.(목) 12:00</span><span class="v-addr">달성군 현풍읍 현풍동로29길 2 · DGIST에서 차로 약 10분</span><button type="button" class="addr-copy" data-copy="대구광역시 달성군 현풍읍 현풍동로29길 2" aria-label="능이마을 현풍점 주소 복사">주소 복사</button><a class="map" href="https://map.naver.com/p/search/%EB%8A%A5%EC%9D%B4%EB%A7%88%EC%9D%84%20%ED%98%84%ED%92%8D%EC%A0%90" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
+<li><span class="v-what">만찬</span><div><strong>용성양꼬치</strong><span class="v-when">10. 15.(목) 18:00</span><span class="v-addr">달성군 현풍읍 테크노중앙대로5길 22 1층 · 국제관에서 걸어서 15~20분</span><button type="button" class="addr-copy" data-copy="대구광역시 달성군 현풍읍 테크노중앙대로5길 22" aria-label="용성양꼬치 주소 복사">주소 복사</button><a class="map" href="https://map.naver.com/p/search/%EC%9A%A9%EC%84%B1%EC%96%91%EA%BC%AC%EC%B9%98%20%ED%98%84%ED%92%8D" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
+<li><span class="v-what">브런치</span><div><strong>도케비커피 비슬산 본점</strong><span class="v-when">10. 16.(금) 11:15</span><span class="v-addr">달성군 유가읍 음동길 130-15 · DGIST에서 차로 약 10분</span><button type="button" class="addr-copy" data-copy="대구광역시 달성군 유가읍 음동길 130-15" aria-label="도케비커피 비슬산 본점 주소 복사">주소 복사</button><a class="map" href="https://map.naver.com/p/search/%EB%8F%84%EC%BC%80%EB%B9%84%EC%BB%A4%ED%94%BC%20%EB%B9%84%EC%8A%AC%EC%82%B0%20%EB%B3%B8%EC%A0%90" target="_blank" rel="noopener">네이버 지도에서 보기 ↗</a></div></li>
     </ul>
     <div class="bring">
-      <div><b>노트북을 챙겨 주십시오</b><p>토의 때 이 페이지의 자료를 함께 보며 진행합니다.</p></div>
+      <div><b>당일 문의</b><p>DGIST 교수학습센터 <span class="mono">053-785-5172</span></p></div>
       <div><b>자료집 인쇄본은 없습니다</b><p>이 페이지와 10. 12. 전자문서가 자료를 받으시는 경로입니다.</p></div>
       <div><b>결과는 10월 말 회람합니다</b><p>당일에는 합의문을 확정하지 않고, 정리 초안을 기관 확인 뒤 확정합니다.</p></div>
     </div>
@@ -540,10 +591,11 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   <div class="wrap">
     <div><b>DGIST 교수학습센터</b> · 문의 이승훈 선임전임행정원<br>
       <span class="mono">053-785-5172</span> · <span class="mono" id="mail">shlee@dgist.ac.kr</span><button class="copy" type="button" data-copy="shlee@dgist.ac.kr">복사</button></div>
-    <div class="meta">기준 2026. 10. 8.(목) 09:30<br>새 자료가 도착하면 이 페이지에 이어서 싣습니다.</div>
+    <div class="meta">기준 2026. 10. 8.(목) 09:50<br>새 자료가 도착하면 이 페이지에 이어서 싣습니다.</div>
   </div>
 </footer>
 
+<button type="button" class="totop" id="totop" hidden aria-label="맨 위로">↑</button>
 <dialog id="reader" aria-labelledby="r-title">
   <div class="r-head">
     <div class="r-t"><span id="r-kick"></span><h3 id="r-title"></h3></div>
@@ -683,10 +735,20 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
 
   /* 복사 */
   $$('[data-copy]').forEach(b => b.addEventListener('click', () => {
-    const done = () => { b.textContent = '복사됨'; setTimeout(() => b.textContent = '복사', 1600); };
-    const fallback = () => { const r = document.createRange(); r.selectNodeContents($('#mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = '선택됨'; };
+    const label = b.textContent;
+    const done = () => { b.textContent = '복사됨'; setTimeout(() => b.textContent = label, 1600); };
+    // 복사가 막힌 환경 — 버튼에 값을 보여 줘 직접 선택하게
+    const fallback = () => { b.textContent = b.dataset.copy; b.style.userSelect = 'all'; };
     try{ navigator.clipboard.writeText(b.dataset.copy).then(done, fallback); }catch(_){ fallback(); }
   }));
+
+  /* 맨 위로 */
+  const tt = $('#totop');
+  if(tt){
+    const upd = () => { tt.hidden = window.scrollY < 900; };
+    addEventListener('scroll', upd, {passive:true}); upd();
+    tt.onclick = () => scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  }
 
   /* 현재 섹션 표시 */
   const links = $$('.nav a');
