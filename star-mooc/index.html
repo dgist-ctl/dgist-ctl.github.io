@@ -555,6 +555,8 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .qa-autovoice{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);cursor:pointer;user-select:none}
 .qa-autovoice input{width:18px;height:18px;accent-color:var(--accent)}
 .qa-autovoice small{color:var(--muted);font-size:12px}
+@media (max-width:560px){.qa-autovoice{flex-wrap:wrap;padding-right:64px}.qa-autovoice small{flex-basis:100%;padding-left:24px}}
+.mat-links{display:flex;flex-wrap:wrap;gap:8px}
 </style>
 </head>
 <body>
@@ -643,7 +645,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
       <nav class="sjump" aria-label="세션 바로 가기"><a href="#session-1" style="--c:var(--s1)"><span class="sj-n">SESSION 1 · 10. 15.(목)</span><span class="sj-t">온라인 강좌 운영 방안과 미래</span><span class="sj-r">자료 4편 · 슬라이드 22쪽 · 본문 약 8분</span></a><a href="#session-2" style="--c:var(--s2)"><span class="sj-n">SESSION 2 · 10. 15.(목)</span><span class="sj-t">AI 적용 업무 추진 현황과 계획</span><span class="sj-r">자료 3편 · 슬라이드 26쪽 · 본문 약 9분</span></a><a href="#session-3" style="--c:var(--s3)"><span class="sj-n">SESSION 3 · 10. 16.(금)</span><span class="sj-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="sj-r">자료 4편 · 슬라이드 30쪽 · 본문 약 9분</span></a></nav>
 </div></div>
     <div class="mat" id="materials">
-      <div class="mat-h"><h3>자료 바로 열기</h3><a class="mat-print" href="booklet.html" target="_blank" rel="noopener">인쇄용 자료집 열기 · A4 가로 78쪽 ↗</a></div>
+      <div class="mat-h"><h3>자료 바로 열기</h3><span class="mat-links"><a class="mat-print" href="originals.html" target="_blank" rel="noopener">원본 합본 보기 · 92쪽 · 원본 파일 내려받기 ↗</a><a class="mat-print" href="booklet.html" target="_blank" rel="noopener">인쇄용 자료집 열기 · A4 가로 78쪽 ↗</a></span></div>
       <ul class="mat-list">
 <li><span class="m-i"><img src="logos/kaist.png" alt="" class="logo">KAIST</span><div class="m-b"><button type="button" data-open="kaist-s1" style="--c:var(--s1)"><span class="m-s">세션 1</span><span class="m-t">작게 시작하고, 함께 키우는 STAR-MOOC</span><span class="m-f">슬라이드 7쪽</span></button><button type="button" data-open="kaist-s3" style="--c:var(--s3)"><span class="m-s">세션 3</span><span class="m-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="m-f">슬라이드 9쪽</span></button></div></li>
 <li><span class="m-i"><img src="logos/gist.png" alt="" class="logo">GIST</span><div class="m-b"><button type="button" data-open="gist-s1" style="--c:var(--s1)"><span class="m-s">세션 1</span><span class="m-t">온라인 강좌 운영 현황과 과제</span><span class="m-f">슬라이드 3쪽</span></button><button type="button" data-open="gist-s2" style="--c:var(--s2)"><span class="m-s">세션 2</span><span class="m-t">GIST AI 적용 현황과 주요 사례</span><span class="m-f">슬라이드 3쪽</span></button><button type="button" data-open="gist-s3" style="--c:var(--s3)"><span class="m-s">세션 3</span><span class="m-t">AI 시대에 무엇을 가르치고 평가할 것인가</span><span class="m-f">슬라이드 3쪽</span></button></div></li>
@@ -1018,15 +1020,20 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   const df = new Map(); ug.forEach(g => g.forEach(t => df.set(t, (df.get(t) || 0) + 1)));
   const N = units.length;
 
+  // 질문에 나온 기관 — 'GIST' 가 'DGIST' 안에 있으므로 앞뒤가 영문자가 아닐 때만 그 기관으로 본다
+  const INSTS = [...new Set(KB.chunks.map(c => c.i))];
+  const named = q => new Set(INSTS.filter(n => new RegExp(`(^|[^A-Za-z])${n}(?![A-Za-z])`, "i").test(q)));
   function answerUnits(q) {
     const qg = [...grams(q)].filter(t => df.has(t) && !STOP.has(t));
     if (!qg.length) return [];
     const w = t => Math.log(1 + N / df.get(t));
+    const want = named(q);
     const scored = units.map((u, i) => {
       let s = 0, hit = 0;
       for (const t of qg) if (ug[i].has(t)) { s += w(t); hit++; }
       if (u.ci >= 0) for (const t of qg) if (cg[u.ci].has(t)) s += 0.3 * w(t);   // 제목·절 이름이 맞으면 덤
-      return { u, s: hit ? s / Math.pow(1 + u.t.length / 120, 0.35) : 0 };
+      const boost = u.ci >= 0 && want.has(KB.chunks[u.ci].i) ? 2.5 : 1;
+      return { u, s: hit ? boost * s / Math.pow(1 + u.t.length / 120, 0.35) : 0 };
     }).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
     if (!scored.length) return [];
     const top = scored[0].s, pick = [], usedC = new Set(), perInst = {};
@@ -1046,14 +1053,16 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   function topChunks(q, k = 6) {
     const qg = [...grams(q)].filter(t => df.has(t) && !STOP.has(t));
     const best = new Map();
+    const want = named(q);
     units.forEach((u, i) => { if (u.ci < 0) return; let s = 0; for (const t of qg) if (ug[i].has(t)) s += Math.log(1 + N / df.get(t));
+      if (want.has(KB.chunks[u.ci].i)) s *= 2.5;
       if (s > (best.get(u.ci) || 0)) best.set(u.ci, s); });
     // 표지(첫 쪽)·내용이 거의 없는 쪽은 뺀다 — 제목에 질문 낱말이 있어 위로 올라오지만 근거가 못 된다(10-12 실측)
     const ranked = [...best].filter(([ci]) => KB.chunks[ci].p !== 0 && KB.chunks[ci].x.length >= 150).sort((a, b) => b[1] - a[1]);
     if (!ranked.length) return [];
     // 기관마다 가장 맞는 쪽을 먼저 하나씩(최고 점수의 35% 이상만), 남는 자리는 점수 순 — 한 기관이 근거를 독차지하지 않게
     const top = ranked[0][1], pick = [], seen = new Set();
-    for (const [ci, s] of ranked) { const i = KB.chunks[ci].i; if (!seen.has(i) && s >= top * 0.35) { seen.add(i); pick.push(ci); } }
+    for (const [ci, s] of ranked) { const i = KB.chunks[ci].i; if (!seen.has(i) && s >= top * (want.size ? 0.35 : 0.18)) { seen.add(i); pick.push(ci); } }
     for (const [ci] of ranked) { if (pick.length >= k) break; if (!pick.includes(ci)) pick.push(ci); }
     return pick.slice(0, k);   // 조각 번호 — 서버가 본문을 채운다
   }
@@ -1083,7 +1092,7 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
       + (refs.length ? `<p class="qa-wait">번호를 누르시면 그 쪽이 펼쳐집니다. 발표 자료의 문장을 그대로 옮긴 것이니 앞뒤 맥락은 원문에서 확인해 주십시오.</p>` : ""), refs };
   }
   function renderClaude(text, refs) {
-    let h = esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
+    let h = esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\s+(\[\d+\])/g, "$1");
     h = h.replace(/\[(\d+)\]/g, (m, n) => refs[n - 1] ? cite(n, refs[n - 1]) : m);
     return h.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
   }
@@ -1154,8 +1163,10 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     if (s) {
       const other = TALKS.find(t => t.s === s && !cited.has(t.inst));
       if (other) out.push(`${other.inst}에서는 「${SESS[s]}」을 어떻게 보고 있나요?`);
+      else if (cited.size > 1) out.push(`${[...cited].slice(0, 2).join("와 ")}의 생각은 어디가 같고 어디가 다른가요?`);
       const c = refs.find(c => c.p !== 0);
-      if (c) out.push(`${c.i} 자료의 「${short(c.ht || c.t, 20)}」를 더 자세히 알려 주시겠어요?`);
+      const head = c && (c.ht || c.t);   // 슬라이드 첫 줄은 목차 막대일 때가 많아 자료 제목을 쓴다
+      if (c) out.push(`${c.i} 자료의 「${short(head.replace(/[「」]/g, ""), 18)}」 부분을 더 자세히 알려 주시겠어요?`);
       const nx = s === 3 ? 1 : s + 1;
       out.push(`이 내용은 세션 ${nx}(${SESS[nx]})과 어떻게 이어지나요?`);
     }
@@ -1165,7 +1176,7 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   const chips = list => list.length ? `<div class="qa-next"><span>혹시 이런 점도 궁금하지 않으십니까?</span>${list.map(x => `<button type="button" data-ask="${esc(x)}">${esc(x)}</button>`).join("")}</div>` : "";
   log.addEventListener("click", e => { const b = e.target.closest(".qa-next [data-ask]"); if (b) ask(b.dataset.ask); });
   // 평소: 자료 속 흥미로운 사실을 하나씩 — 누르면 그 내용을 여쭌다
-  const tease = $("#qa-tease"), facts = TALKS.flatMap(t => t.pts.filter(p => /\d|사례|제안|→/.test(p)).map(p => ({ t, p })));
+  const tease = $("#qa-tease"), facts = TALKS.flatMap(t => t.pts.filter(p => /\d|사례|제안|→/.test(p) && (p.match(/[가-힣]/g) || []).length > p.length * 0.35).map(p => ({ t, p })));
   let ti = Math.floor(Math.random() * Math.max(1, facts.length));
   function nextTease() {
     if (!tease || !facts.length) return;
@@ -1245,37 +1256,53 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     try { autoVoice.checked = localStorage.getItem("dalgu-voice") === "1"; } catch (_) {}
     autoVoice.addEventListener("change", () => { try { localStorage.setItem("dalgu-voice", autoVoice.checked ? "1" : "0"); } catch (_) {} });
   }
-  /* ---------- 달구 목소리로 듣기 — 달구 튜터와 같은 목소리(Supertonic F2). 서버가 뒤에서 만들고, 준비되면 재생 ---------- */
+  /* ---------- 달구 목소리로 듣기 — 귀엽고 공손한 중성 목소리(Supertonic F2·M1 섞음). 문장 묶음으로 나눠 준비되는 대로 차례로 재생 ---------- */
   let voiceAudio = null, voiceBtn = null;
   function stopVoice() {
     if (voiceAudio) { voiceAudio.pause(); voiceAudio = null; }
     if (voiceBtn) { voiceBtn.classList.remove("on"); voiceBtn.innerHTML = '<span aria-hidden="true">🔊</span> 달구 목소리로 듣기';
       const v = voiceBtn.closest(".qa-bot")?.querySelector(".qa-av"); if (v) v.classList.remove("dg-talk"); voiceBtn = null; }
   }
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  async function fetchPart(base, id, n, btn, label) {
+    // 202 면 2.5초 뒤 다시 — 묶음 하나는 NAS 에서 보통 10~30초
+    for (let k = 0; k < 120 && voiceBtn === btn; k++) {
+      const res = await fetch(`${base}/api/workshop-tts?id=${encodeURIComponent(id)}&part=${n}`);
+      if (res.status === 200) return { blob: await res.blob(), total: +(res.headers.get("X-Parts") || 0) };
+      if (res.status !== 202) throw new Error(((await res.json().catch(() => ({}))).error) || "목소리를 만들지 못했습니다.");
+      const js = await res.json().catch(() => ({}));
+      if (label && k === 0) btn.innerHTML = `<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> ${label}`;
+      if (js.parts) btn.dataset.parts = js.parts;
+      await wait(2500);
+    }
+    return null;
+  }
   log.addEventListener("click", async e => {
     const btn = e.target.closest("[data-voice]"); if (!btn) return;
     if (voiceBtn === btn) return stopVoice();
     stopVoice(); voiceBtn = btn;
+    btn.parentElement.querySelectorAll(".qa-voice-err").forEach(x => x.remove());
     const av = btn.closest(".qa-bot")?.querySelector(".qa-av");
-    btn.classList.add("on"); btn.innerHTML = '<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> 목소리를 준비하고 있습니다';
+    btn.classList.add("on");
     try {
-      const url = (await server()) + "/api/workshop-tts?id=" + encodeURIComponent(btn.dataset.voice);
-      for (let n = 0; n < 75 && voiceBtn === btn; n++) {           // 4초 간격, 최대 5분
-        const res = await fetch(url);
-        if (res.status === 200) {
-          if (voiceBtn !== btn) return;
-          const blob = await res.blob();
-          voiceAudio = new Audio(URL.createObjectURL(blob));
-          btn.innerHTML = '<span aria-hidden="true">■</span> 듣기 멈추기';
-          if (av) av.classList.add("dg-talk");
-          voiceAudio.addEventListener("ended", stopVoice);
-          await voiceAudio.play();
-          return;
-        }
-        if (res.status !== 202) throw new Error(((await res.json().catch(() => ({}))).error) || "목소리를 만들지 못했습니다.");
-        if (n === 3) btn.innerHTML = '<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> 달구가 목소리를 가다듬고 있습니다 · 긴 답변은 1~2분';
-        await new Promise(r => setTimeout(r, 4000));
+      const base = await server();
+      let n = 0, total = 1, next = fetchPart(base, btn.dataset.voice, 0, btn, "달구가 목소리를 가다듬고 있습니다");
+      while (voiceBtn === btn && n < total) {
+        const got = await next;
+        if (!got || voiceBtn !== btn) return;
+        total = got.total || total;
+        // 지금 묶음을 재생하는 동안 다음 묶음을 받아 둔다(서버도 미리 만든다)
+        next = n + 1 < total ? fetchPart(base, btn.dataset.voice, n + 1, btn, null) : null;
+        voiceAudio = new Audio(URL.createObjectURL(got.blob));
+        btn.innerHTML = `<span aria-hidden="true">■</span> 듣기 멈추기 <small>${n + 1}/${total}</small>`;
+        if (av) av.classList.add("dg-talk");
+        await voiceAudio.play();
+        await new Promise(r => voiceAudio.addEventListener("ended", r, { once: true }));
+        if (av) av.classList.remove("dg-talk");
+        n++;
+        if (n < total && voiceBtn === btn) btn.innerHTML = `<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> 다음 문장을 준비하고 있습니다 <small>${n + 1}/${total}</small>`;
       }
+      if (voiceBtn === btn) stopVoice();
     } catch (err) {
       if (voiceBtn === btn) { stopVoice(); btn.insertAdjacentHTML("afterend", `<span class="qa-wait qa-voice-err"> ${esc(err.message || "목소리를 만들지 못했습니다.")}</span>`); }
     }
