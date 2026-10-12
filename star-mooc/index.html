@@ -515,6 +515,46 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 @keyframes dg-think{0%,100%{transform:rotate(-8deg) translateY(0)}25%{transform:rotate(0) translateY(-3px)}50%{transform:rotate(8deg) translateY(0)}75%{transform:rotate(0) translateY(-3px)}}
 @keyframes dg-hop{0%{transform:none}30%{transform:translateY(-12px) scale(1.08) rotate(-6deg)}55%{transform:translateY(0) scale(.95,1.05)}75%{transform:translateY(-4px) rotate(4deg)}100%{transform:none}}
 @media (prefers-reduced-motion:reduce){.qa-av,.qa-av.dg-nod,.qa-av.dg-think,.qa-av.dg-hop,.qa-head .qa-av,.qa-bot .qa-av{animation:none}}
+/* 달구가 사람처럼 — 타이핑 · 쉬기 · 두리번 · 깜빡, 호기심 거리 */
+.qa-av.dg-talk{animation:dg-talk .32s ease-in-out infinite alternate}
+.qa-av.dg-pause{animation:dg-pause .4s ease-out}
+.qa-av.dg-glance{animation:dg-glance .9s ease-in-out}
+.qa-av.dg-blink{animation:dg-blink .5s ease-in-out}
+@keyframes dg-talk{0%{transform:translateY(0) scale(1,1)}100%{transform:translateY(-2px) scale(1.03,.97) rotate(1.5deg)}}
+@keyframes dg-pause{0%{transform:none}60%{transform:rotate(-7deg) translateY(-1px)}100%{transform:rotate(-3deg)}}
+@keyframes dg-glance{0%,100%{transform:none}30%{transform:rotate(-9deg) translateX(-2px)}65%{transform:rotate(7deg) translateX(2px)}}
+@keyframes dg-blink{0%,100%{transform:none}45%{transform:scale(1.04,.9)}}
+.qa-speaking{cursor:pointer}
+.qa-speaking p:last-of-type::after{content:"";display:inline-block;width:2px;height:1.05em;background:var(--accent);vertical-align:-2px;margin-left:2px;animation:qa-caret .8s steps(1) infinite}
+@keyframes qa-caret{50%{opacity:0}}
+.qa-tease{appearance:none;text-align:left;border:1px dashed var(--accent);background:var(--accent-soft);color:var(--ink);font:400 14px/1.55 var(--f-body);padding:9px 12px;border-radius:10px;cursor:pointer}
+.qa-tease b{color:var(--accent);margin-right:4px}
+.qa-tease span{color:var(--accent);font-weight:600;white-space:nowrap}
+.qa-tease:hover{background:var(--sheet)}
+.qa-tease.qa-tease-in{animation:qa-pop .5s ease-out}
+.qa-next{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.qa-next span{font-size:12px;color:var(--muted);width:100%}
+.qa-next button{appearance:none;border:1px solid var(--accent);background:var(--sheet);color:var(--accent);font:500 13px/1.35 var(--f-body);padding:6px 11px;border-radius:999px;cursor:pointer;text-align:left}
+.qa-next button:hover{background:var(--accent-soft)}
+@media (prefers-reduced-motion:reduce){.qa-av.dg-talk,.qa-av.dg-pause,.qa-av.dg-glance,.qa-av.dg-blink,.qa-tease.qa-tease-in{animation:none}.qa-speaking p:last-of-type::after{display:none}}
+.mat-h{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+.mat-print{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:6px 12px}
+.mat-print:hover{background:var(--accent-soft)}
+/* 기다리는 동안 달구가 일하는 모습 · 목소리로 듣기 */
+.qa-working{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;min-height:28px}
+.qa-dots-lg i{width:9px;height:9px}
+.qa-think-t{color:var(--muted)}
+.qa-book{font:600 12px/1 var(--f-mono);color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:5px 8px}
+.qa-book.qa-flip{animation:qa-flip .5s ease-out}
+@keyframes qa-flip{0%{transform:perspective(200px) rotateY(-80deg);opacity:0}100%{transform:none;opacity:1}}
+.qa-voice{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);font:600 13px/1.2 var(--f-body);padding:7px 12px;border-radius:999px;cursor:pointer;margin:2px 0 6px}
+.qa-voice.on{background:var(--accent);color:var(--sheet)}
+.qa-voice.on .qa-dots i{background:var(--sheet)}
+.qa-voice-err{font-size:12px}
+@media (prefers-reduced-motion:reduce){.qa-book.qa-flip{animation:none}}
+.qa-autovoice{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);cursor:pointer;user-select:none}
+.qa-autovoice input{width:18px;height:18px;accent-color:var(--accent)}
+.qa-autovoice small{color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
@@ -603,7 +643,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
       <nav class="sjump" aria-label="세션 바로 가기"><a href="#session-1" style="--c:var(--s1)"><span class="sj-n">SESSION 1 · 10. 15.(목)</span><span class="sj-t">온라인 강좌 운영 방안과 미래</span><span class="sj-r">자료 4편 · 슬라이드 22쪽 · 본문 약 8분</span></a><a href="#session-2" style="--c:var(--s2)"><span class="sj-n">SESSION 2 · 10. 15.(목)</span><span class="sj-t">AI 적용 업무 추진 현황과 계획</span><span class="sj-r">자료 3편 · 슬라이드 26쪽 · 본문 약 9분</span></a><a href="#session-3" style="--c:var(--s3)"><span class="sj-n">SESSION 3 · 10. 16.(금)</span><span class="sj-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="sj-r">자료 4편 · 슬라이드 30쪽 · 본문 약 9분</span></a></nav>
 </div></div>
     <div class="mat" id="materials">
-      <h3>자료 바로 열기</h3>
+      <div class="mat-h"><h3>자료 바로 열기</h3><a class="mat-print" href="booklet.html" target="_blank" rel="noopener">인쇄용 자료집 열기 · A4 가로 78쪽 ↗</a></div>
       <ul class="mat-list">
 <li><span class="m-i"><img src="logos/kaist.png" alt="" class="logo">KAIST</span><div class="m-b"><button type="button" data-open="kaist-s1" style="--c:var(--s1)"><span class="m-s">세션 1</span><span class="m-t">작게 시작하고, 함께 키우는 STAR-MOOC</span><span class="m-f">슬라이드 7쪽</span></button><button type="button" data-open="kaist-s3" style="--c:var(--s3)"><span class="m-s">세션 3</span><span class="m-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="m-f">슬라이드 9쪽</span></button></div></li>
 <li><span class="m-i"><img src="logos/gist.png" alt="" class="logo">GIST</span><div class="m-b"><button type="button" data-open="gist-s1" style="--c:var(--s1)"><span class="m-s">세션 1</span><span class="m-t">온라인 강좌 운영 현황과 과제</span><span class="m-f">슬라이드 3쪽</span></button><button type="button" data-open="gist-s2" style="--c:var(--s2)"><span class="m-s">세션 2</span><span class="m-t">GIST AI 적용 현황과 주요 사례</span><span class="m-f">슬라이드 3쪽</span></button><button type="button" data-open="gist-s3" style="--c:var(--s3)"><span class="m-s">세션 3</span><span class="m-t">AI 시대에 무엇을 가르치고 평가할 것인가</span><span class="m-f">슬라이드 3쪽</span></button></div></li>
@@ -612,7 +652,8 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
       </ul>
     </div>
     <div class="qa" id="ask">
-      <div class="qa-head"><img class="qa-av" src="dalgu/dalgu.png" alt="" width="52" height="52"><div><h3>달구에게 자료 묻기</h3><p id="qa-mode">안녕하세요, 달구예요! 발표 자료와 행사 안내에서 찾아 바로 답해 드려요. 번호를 누르면 그 쪽이 펼쳐져요.</p></div></div>
+      <div class="qa-head"><img class="qa-av" src="dalgu/dalgu.png" alt="" width="52" height="52"><div><h3>달구에게 자료 묻기</h3><p id="qa-mode">안녕하십니까, 달구입니다. 발표 자료와 행사 안내를 살펴 정성껏 답변해 드리겠습니다. 번호를 누르시면 그 쪽이 펼쳐집니다.</p></div></div>
+      <button type="button" class="qa-tease" id="qa-tease" hidden></button>
       <div class="qa-eg" aria-label="질문 예시">
         <button type="button" data-ask="기관마다 AI를 어떤 업무에 쓰고 있는지 비교해 주세요">기관별 AI 업무 적용 비교</button>
         <button type="button" data-ask="AI가 답을 주는 시대에 평가는 무엇을 바꾸자고 하나요?">AI 시대 평가는?</button>
@@ -626,6 +667,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
         <input id="qa-in" type="search" maxlength="300" placeholder="예: 기관마다 AI를 어떤 업무에 쓰고 있나요?">
         <button type="submit">묻기</button>
       </form>
+      <label class="qa-autovoice"><input type="checkbox" id="qa-autovoice"> <span aria-hidden="true">🔊</span> 답변을 달구 목소리로도 듣기 <small>(달구 튜터와 같은 목소리 · 소리가 납니다)</small></label>
     </div>
 <section class="session s1" id="session-1">
   <div class="s-head">
@@ -1026,8 +1068,8 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
 
   function localAnswer(q) {
     const pick = answerUnits(q);
-    if (!pick.length) return { html: `<p>자료에서 맞는 내용을 찾지 못했어요. 다른 낱말로 물어봐 주세요. 예: 「수료증」, 「튜터」, 「평가」, 「숙소」.</p>
-      <p class="qa-wait">자료에 없는 내용은 토의 시간에 함께 이야기해요!</p>`, refs: [] };
+    if (!pick.length) return { html: `<p>자료에서 맞는 내용을 찾지 못했습니다. 다른 낱말로 여쭤봐 주시겠어요? 예: 「수료증」, 「튜터」, 「평가」, 「숙소」.</p>
+      <p class="qa-wait">자료에 없는 내용은 토의 시간에 함께 이야기 나누시면 좋겠습니다.</p>`, refs: [] };
     const refs = [], items = [];
     for (const u of pick) {
       if (u.ci < 0) { items.push(`<li><b>행사 안내</b> ${esc(u.t)} <a class="qa-cite" href="#${u.sec}">↗</a></li>`); continue; }
@@ -1035,10 +1077,10 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
       items.push(`<li><b>${esc(c.i)} · 세션 ${c.s}</b> ${esc(u.t)} ${cite(refs.length, c)}</li>`);
     }
     const insts = new Set(pick.map(u => u.ci >= 0 ? KB.chunks[u.ci].i : "안내"));
-    const lead = pick[0].ci < 0 ? "행사 안내에서 찾았어요."
-      : insts.size > 1 ? `${[...insts].filter(i => i !== "안내").join(" · ")} 자료에서 찾은 내용이에요.` : "자료에서 찾은 내용이에요.";
+    const lead = pick[0].ci < 0 ? "행사 안내에서 찾았습니다."
+      : insts.size > 1 ? `${[...insts].filter(i => i !== "안내").join(" · ")} 자료에서 찾은 내용입니다.` : "자료에서 찾은 내용입니다.";
     return { html: `<p>${lead}</p><ul class="qa-pts">${items.join("")}</ul>`
-      + (refs.length ? `<p class="qa-wait">번호를 누르면 그 쪽이 펼쳐져요. 발표 자료의 문장을 그대로 옮긴 것이니 앞뒤 맥락은 원문에서 확인해 주세요.</p>` : ""), refs };
+      + (refs.length ? `<p class="qa-wait">번호를 누르시면 그 쪽이 펼쳐집니다. 발표 자료의 문장을 그대로 옮긴 것이니 앞뒤 맥락은 원문에서 확인해 주십시오.</p>` : ""), refs };
   }
   function renderClaude(text, refs) {
     let h = esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
@@ -1054,6 +1096,87 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     while (log.children.length > 6) log.firstElementChild.remove();   // 최근 6개만
     return li;
   }
+
+  /* ---------- 달구가 사람처럼 말하기(타이핑) ----------
+     답을 한꺼번에 내지 않고 타이핑하듯 잇는다. 문장 끝에서 잠깐 쉬며 고개를 갸웃, 쓰는 동안은 들썩.
+     답 칸을 누르면 남은 글을 한 번에. '동작 줄이기'를 켠 기기는 처음부터 한 번에 보인다. */
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const play = (el, cls, ms) => { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); if (ms) setTimeout(() => el.classList.remove(cls), ms); };
+  function speak(el, html, av) {
+    el.innerHTML = html;
+    if (calm) return Promise.resolve();
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walker.nextNode()) nodes.push([walker.currentNode, walker.currentNode.nodeValue]);
+    const total = nodes.reduce((n, [, t]) => n + t.length, 0);
+    nodes.forEach(([n]) => { n.nodeValue = ""; });
+    el.classList.add("qa-speaking");
+    const cps = Math.max(30, total / 9);           // 초당 글자 — 길어도 9초 안팎에 끝나게
+    let k = 0, off = 0, done = false;
+    return new Promise(resolve => {
+      const finish = () => {
+        if (done) return; done = true;
+        nodes.forEach(([n, t]) => { n.nodeValue = t; });
+        el.classList.remove("qa-speaking");
+        if (av) av.classList.remove("dg-talk", "dg-pause");
+        el.removeEventListener("click", finish); resolve();
+      };
+      el.addEventListener("click", finish);
+      if (av) av.classList.add("dg-talk");
+      const step = () => {
+        if (done) return;
+        if (k >= nodes.length) return finish();
+        const [n, t] = nodes[k];
+        const end = Math.min(t.length, off + Math.max(1, Math.round(cps / 20)));
+        n.nodeValue = t.slice(0, end);
+        const last = t[end - 1] || "";
+        off = end;
+        if (off >= t.length) { k++; off = 0; }
+        let wait = 50 + Math.random() * 25;        // 사람 손처럼 조금씩 들쭉날쭉
+        if (/[.?!]/.test(last)) {
+          wait = 380 + Math.random() * 160;
+          if (av) { av.classList.remove("dg-talk"); play(av, "dg-pause", 400); setTimeout(() => { if (!done) av.classList.add("dg-talk"); }, 420); }
+        } else if (/[,·:]/.test(last)) wait = 150;
+        setTimeout(step, wait);
+      };
+      step();
+    });
+  }
+
+  /* ---------- 호기심 — 답 뒤에 이어 여쭐 거리, 평소엔 자료 속 흥미로운 사실 ---------- */
+  const TALKS = [...document.querySelectorAll("article.talk")].map(t => ({
+    inst: (t.querySelector(".inst") || {}).textContent || "", s: +((t.id.match(/-s(\d)/) || [])[1] || 0),
+    title: (t.querySelector("h4") || {}).textContent || "", pts: [...t.querySelectorAll(".pts li")].map(li => li.textContent) }));
+  const SESS = { 1: "온라인 강좌 운영", 2: "AI 업무 적용", 3: "AI 시대의 교육과 평가" };
+  const asked = new Set();
+  const short = (t, n) => t.length > n ? t.slice(0, n).replace(/[\s·,(「]+[^\s·,(「]*$/, "") + "…" : t;
+  function followups(q, refs) {
+    const out = [], s = refs[0] ? refs[0].s : 0, cited = new Set(refs.map(c => c.i));
+    if (s) {
+      const other = TALKS.find(t => t.s === s && !cited.has(t.inst));
+      if (other) out.push(`${other.inst}에서는 「${SESS[s]}」을 어떻게 보고 있나요?`);
+      const c = refs.find(c => c.p !== 0);
+      if (c) out.push(`${c.i} 자료의 「${short(c.ht || c.t, 20)}」를 더 자세히 알려 주시겠어요?`);
+      const nx = s === 3 ? 1 : s + 1;
+      out.push(`이 내용은 세션 ${nx}(${SESS[nx]})과 어떻게 이어지나요?`);
+    }
+    out.push("우리 기관에서 다음 주에 바로 시작해 볼 수 있는 일은 무엇일까요?");
+    return [...new Set(out)].filter(x => !asked.has(x)).slice(0, 3);
+  }
+  const chips = list => list.length ? `<div class="qa-next"><span>혹시 이런 점도 궁금하지 않으십니까?</span>${list.map(x => `<button type="button" data-ask="${esc(x)}">${esc(x)}</button>`).join("")}</div>` : "";
+  log.addEventListener("click", e => { const b = e.target.closest(".qa-next [data-ask]"); if (b) ask(b.dataset.ask); });
+  // 평소: 자료 속 흥미로운 사실을 하나씩 — 누르면 그 내용을 여쭌다
+  const tease = $("#qa-tease"), facts = TALKS.flatMap(t => t.pts.filter(p => /\d|사례|제안|→/.test(p)).map(p => ({ t, p })));
+  let ti = Math.floor(Math.random() * Math.max(1, facts.length));
+  function nextTease() {
+    if (!tease || !facts.length) return;
+    const f = facts[ti++ % facts.length];
+    tease.dataset.ask = `${f.t.inst} 자료의 「${short(f.p, 26)}」 내용을 자세히 알려 주시겠어요?`;
+    tease.innerHTML = `<b>알고 계셨습니까?</b> ${esc(f.t.inst)} · ${esc(short(f.p, 60))} <span aria-hidden="true">여쭤보기 →</span>`;
+    tease.hidden = false; play(tease, "qa-tease-in", 600);
+    play($(".qa-head .qa-av"), "dg-glance", 900);
+  }
+  // 평소 몸짓 — 불규칙한 간격으로 두리번 · 깜빡(사람은 규칙적으로 움직이지 않는다)
+  function idle() { if (calm) return; setTimeout(() => { const h = $(".qa-head .qa-av"); if (h && !document.hidden) play(h, Math.random() < .5 ? "dg-glance" : "dg-blink", 900); idle(); }, 3500 + Math.random() * 5000); }
 
   /* ---------- Claude Opus 5.5 — AI 학습튜터 서버(NAS)의 /api/workshop-ask ----------
      서버 주소는 터널이라 바뀔 수 있어 tunnel.json(감시자가 고친다)에서 읽는다. 서버가 안 닿으면 위의 바로 찾은 답만 남는다. */
@@ -1072,13 +1195,27 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     const li = turn(q), a = $(".qa-a", li), r = $(".qa-refs", li);
     // 달구 움직임 — 위쪽 달구는 질문을 받으면 끄덕, 답 쪽 달구는 쓰는 동안 갸웃, 답이 오면 깡충
     const head = $(".qa-head .qa-av"), av = $(".qa-av", li);
-    const play = (el, cls, ms) => { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); if (ms) setTimeout(() => el.classList.remove(cls), ms); };
+    asked.add(q);
     play(head, "dg-nod", 700);
-    a.innerHTML = localAnswer(q).html;
+    const local = localAnswer(q).html;          // 서버가 안 닿을 때만 보여 드린다
     li.scrollIntoView({ block: "nearest", behavior: "smooth" });
     const ids = topChunks(q), refs = ids.map(i => KB.chunks[i]);
+    // 기다리는 동안: 달구가 자료를 넘기며 일하는 모습 — 점 세 개 + 하는 일이 바뀌는 문구 + 넘어가는 자료 이름
     av.classList.add("dg-think");
-    r.innerHTML = `<p class="qa-wait qa-think"><span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span>달구가 자료를 읽고 답을 쓰는 중이에요(Claude Opus 5.5) · 보통 10~30초</p>`;
+    const books = [...new Set(refs.map(c => `${c.i} · 세션 ${c.s}`))];
+    a.innerHTML = `<div class="qa-working" role="status"><span class="qa-dots qa-dots-lg" aria-hidden="true"><i></i><i></i><i></i></span>`
+      + `<span class="qa-think-t">잠시만 기다려 주십시오. 자료를 펼쳐 보고 있습니다</span>`
+      + `<span class="qa-book" aria-hidden="true">${esc(books[0] || "발표 자료")}</span></div>`;
+    r.innerHTML = "";
+    const thinkLines = ["잠시만 기다려 주십시오. 자료를 펼쳐 보고 있습니다", "기관별 자료를 차례로 읽고 있습니다", "근거가 되는 쪽을 고르고 있습니다", "답변을 정리하고 있습니다", "거의 다 되었습니다. 조금만 기다려 주십시오"];
+    let tl = 0, bk = 0;
+    const thinkTimer = setInterval(() => {
+      const t = $(".qa-think-t", a), b = $(".qa-book", a);
+      if (!t) return clearInterval(thinkTimer);
+      if (++tl % 2 === 0) t.textContent = thinkLines[Math.min(tl / 2, thinkLines.length - 1)];
+      if (b && books.length) { b.textContent = books[++bk % books.length]; play(b, "qa-flip", 500); }
+      play(av, "dg-glance", 900);
+    }, 2200);
     ctl = new AbortController(); const my = ctl; stopB.hidden = false;
     const timer = setTimeout(() => my.abort(), TIMEOUT);
     try {
@@ -1086,17 +1223,66 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q, refs: ids, history: history.slice(-3) }) });
       const js = await res.json().catch(() => ({}));
       if (my !== ctl) return;
-      if (!res.ok || !js.answer) { r.innerHTML = `<p class="qa-wait">${esc(js.error || "지금은 답을 만들지 못했어요.")} 위는 자료에서 바로 찾은 내용이에요.</p>`; return; }
-      a.innerHTML = renderClaude(js.answer, refs);
-      r.innerHTML = refs.length ? `<details><summary>근거 자료 ${refs.length}곳 · Claude Opus 5.5</summary>${srcList(refs)}</details>` : "";
+      if (!res.ok || !js.answer) { clearInterval(thinkTimer); a.innerHTML = local; r.innerHTML = `<p class="qa-wait">${esc(js.error || "지금은 답변을 드리지 못했습니다.")} 위는 자료에서 바로 찾은 내용입니다.</p>` + chips(followups(q, refs)); return; }
       history.push({ q, a: js.answer.slice(0, 600) });
-      av.classList.remove("dg-think"); play(av, "dg-hop", 900);
+      clearInterval(thinkTimer); av.classList.remove("dg-think"); r.innerHTML = "";
+      await speak(a, renderClaude(js.answer, refs), av);
+      play(av, "dg-hop", 900);
+      r.innerHTML = (js.id ? `<button type="button" class="qa-voice" data-voice="${esc(js.id)}"><span aria-hidden="true">🔊</span> 달구 목소리로 듣기</button>` : "")
+        + (refs.length ? `<details><summary>근거 자료 ${refs.length}곳 · Claude Opus 5.5</summary>${srcList(refs)}</details>` : "") + chips(followups(q, refs));
+      const vb = $("[data-voice]", r);
+      if (vb && autoVoice && autoVoice.checked) vb.click();      // '목소리로 답변 듣기'를 켜 두면 답마다 읽어 드린다
     } catch (e) {
       if (my !== ctl) return;
       base = null;   // 터널 주소가 바뀌었을 수 있다 — 다음 질문에서 다시 읽는다
-      r.innerHTML = `<p class="qa-wait">${e && e.name === "AbortError" ? "답을 멈췄어요." : "답 서버에 닿지 못했어요."} 위는 자료에서 바로 찾은 내용이에요.</p>`;
-    } finally { clearTimeout(timer); av.classList.remove("dg-think"); if (my === ctl) { stopB.hidden = true; ctl = null; } }
+      clearInterval(thinkTimer); a.innerHTML = local;
+      r.innerHTML = `<p class="qa-wait">${e && e.name === "AbortError" ? "답변을 멈추었습니다." : "답변 서버에 연결하지 못했습니다."} 위는 자료에서 바로 찾은 내용입니다.</p>` + chips(followups(q, refs));
+    } finally { clearTimeout(timer); clearInterval(thinkTimer); av.classList.remove("dg-think"); if (my === ctl) { stopB.hidden = true; ctl = null; } }
   }
+  // 목소리로 답변 듣기 — 처음엔 꺼 둔다(회의장에서 갑자기 소리 나지 않게). 켜 두면 이 브라우저에서 기억한다
+  const autoVoice = $("#qa-autovoice");
+  if (autoVoice) {
+    try { autoVoice.checked = localStorage.getItem("dalgu-voice") === "1"; } catch (_) {}
+    autoVoice.addEventListener("change", () => { try { localStorage.setItem("dalgu-voice", autoVoice.checked ? "1" : "0"); } catch (_) {} });
+  }
+  /* ---------- 달구 목소리로 듣기 — 달구 튜터와 같은 목소리(Supertonic F2). 서버가 뒤에서 만들고, 준비되면 재생 ---------- */
+  let voiceAudio = null, voiceBtn = null;
+  function stopVoice() {
+    if (voiceAudio) { voiceAudio.pause(); voiceAudio = null; }
+    if (voiceBtn) { voiceBtn.classList.remove("on"); voiceBtn.innerHTML = '<span aria-hidden="true">🔊</span> 달구 목소리로 듣기';
+      const v = voiceBtn.closest(".qa-bot")?.querySelector(".qa-av"); if (v) v.classList.remove("dg-talk"); voiceBtn = null; }
+  }
+  log.addEventListener("click", async e => {
+    const btn = e.target.closest("[data-voice]"); if (!btn) return;
+    if (voiceBtn === btn) return stopVoice();
+    stopVoice(); voiceBtn = btn;
+    const av = btn.closest(".qa-bot")?.querySelector(".qa-av");
+    btn.classList.add("on"); btn.innerHTML = '<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> 목소리를 준비하고 있습니다';
+    try {
+      const url = (await server()) + "/api/workshop-tts?id=" + encodeURIComponent(btn.dataset.voice);
+      for (let n = 0; n < 75 && voiceBtn === btn; n++) {           // 4초 간격, 최대 5분
+        const res = await fetch(url);
+        if (res.status === 200) {
+          if (voiceBtn !== btn) return;
+          const blob = await res.blob();
+          voiceAudio = new Audio(URL.createObjectURL(blob));
+          btn.innerHTML = '<span aria-hidden="true">■</span> 듣기 멈추기';
+          if (av) av.classList.add("dg-talk");
+          voiceAudio.addEventListener("ended", stopVoice);
+          await voiceAudio.play();
+          return;
+        }
+        if (res.status !== 202) throw new Error(((await res.json().catch(() => ({}))).error) || "목소리를 만들지 못했습니다.");
+        if (n === 3) btn.innerHTML = '<span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> 달구가 목소리를 가다듬고 있습니다 · 긴 답변은 1~2분';
+        await new Promise(r => setTimeout(r, 4000));
+      }
+    } catch (err) {
+      if (voiceBtn === btn) { stopVoice(); btn.insertAdjacentHTML("afterend", `<span class="qa-wait qa-voice-err"> ${esc(err.message || "목소리를 만들지 못했습니다.")}</span>`); }
+    }
+  });
+
+  if (tease) { tease.addEventListener("click", () => ask(tease.dataset.ask)); nextTease(); if (!calm) setInterval(() => { if (!document.hidden && !ctl) nextTease(); }, 9000); }
+  idle();
   form.addEventListener("submit", e => { e.preventDefault(); const q = input.value; input.value = ""; ask(q); });
   stopB.addEventListener("click", () => ctl && ctl.abort());
   document.querySelectorAll("[data-ask]").forEach(b => b.addEventListener("click", () => ask(b.dataset.ask)));
