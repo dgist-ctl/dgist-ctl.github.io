@@ -975,7 +975,14 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     const best = new Map();
     units.forEach((u, i) => { if (u.ci < 0) return; let s = 0; for (const t of qg) if (ug[i].has(t)) s += Math.log(1 + N / df.get(t));
       if (s > (best.get(u.ci) || 0)) best.set(u.ci, s); });
-    return [...best].sort((a, b) => b[1] - a[1]).slice(0, k).map(([ci]) => ci);   // 조각 번호 — 서버가 본문을 채운다
+    // 표지(첫 쪽)·내용이 거의 없는 쪽은 뺀다 — 제목에 질문 낱말이 있어 위로 올라오지만 근거가 못 된다(10-12 실측)
+    const ranked = [...best].filter(([ci]) => KB.chunks[ci].p !== 0 && KB.chunks[ci].x.length >= 150).sort((a, b) => b[1] - a[1]);
+    if (!ranked.length) return [];
+    // 기관마다 가장 맞는 쪽을 먼저 하나씩(최고 점수의 35% 이상만), 남는 자리는 점수 순 — 한 기관이 근거를 독차지하지 않게
+    const top = ranked[0][1], pick = [], seen = new Set();
+    for (const [ci, s] of ranked) { const i = KB.chunks[ci].i; if (!seen.has(i) && s >= top * 0.35) { seen.add(i); pick.push(ci); } }
+    for (const [ci] of ranked) { if (pick.length >= k) break; if (!pick.includes(ci)) pick.push(ci); }
+    return pick.slice(0, k);   // 조각 번호 — 서버가 본문을 채운다
   }
 
   /* ---------- 그리기 ---------- */
