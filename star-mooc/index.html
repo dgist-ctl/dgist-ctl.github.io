@@ -314,10 +314,36 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .dg-bubble{position:relative;background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:14px 16px 10px;box-shadow:0 6px 18px rgba(15,23,36,.08)}
 .dg-bubble::before{content:"";position:absolute;left:-8px;top:42%;width:14px;height:14px;background:var(--sheet);border-left:1px solid var(--rule);border-bottom:1px solid var(--rule);transform:rotate(45deg)}
 .dg-bubble p{margin:0;font-size:15px;line-height:1.6;font-weight:500;min-height:3.2em}
-.dg-hint{display:block;margin-top:6px;font:400 11.5px/1.3 var(--f-mono);color:var(--faint)}
+.dg-bubble p b{font-weight:700;color:var(--accent)}
+/* 달구 안내(10-12) — 답마다 바로 가는 버튼 하나, 질문은 상황 순서(지금→장소→자료→숙소→문의) */
+.dg-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.dg-act:empty{display:none}
+.dg-act a,.dg-act button{appearance:none;border:0;font:600 13px/1 var(--f-body);color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:8px 12px;text-decoration:none;cursor:pointer}
+.dg-act a:hover,.dg-act button:hover{text-decoration:underline;text-underline-offset:3px}
+.dg-act .tel{font-family:var(--f-mono);user-select:all}
+.dg-ask{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.dg-ask-h{font:500 11.5px/1 var(--f-mono);letter-spacing:.06em;color:var(--faint);margin-right:2px;width:100%}
+.dg-q{appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 13px/1 var(--f-body);padding:8px 11px;border-radius:999px;cursor:pointer}
+.dg-q:hover{border-color:var(--accent);color:var(--accent)}
+.dg-q[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.dg-stage img{animation:none}}
 @media (max-width:680px){.welcome{grid-template-columns:96px minmax(0,1fr)}.dg{width:96px;height:96px}.dg-stage img,.dg-stage canvas{width:96px!important;height:96px!important}.dg-bubble p{font-size:14px}}
+/* 참여자 중심 단순화(10-12) — 표제 사실 4줄, 토의 준비는 접어 둔다 */
+.keyfacts{margin:22px 0 0;display:grid;gap:0;max-width:40em;border-top:1px solid var(--rule)}
+.keyfacts div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:9px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+.keyfacts dt{font:500 12px/1.6 var(--f-mono);color:var(--faint);letter-spacing:.06em}
+.keyfacts dd{margin:0;font-size:15.5px;font-weight:500}
+.keyfacts .dday{display:inline-block;margin-left:8px;font:500 11.5px/1 var(--f-mono);letter-spacing:.06em;color:var(--sheet);background:var(--accent);padding:5px 8px;border-radius:3px;vertical-align:2px}
+.keyfacts .dday:empty{display:none}
+.disc summary{display:flex;gap:12px;flex-wrap:wrap;align-items:baseline;cursor:pointer;list-style:none}
+.disc summary::-webkit-details-marker{display:none}
+.disc summary::after{content:"펼치기";margin-left:auto;font:500 12px/1 var(--f-body);color:var(--accent)}
+.disc[open] summary::after{content:"접기"}
+.disc-sum{font-size:14px;color:var(--muted)}
+.disc-in>p{margin:12px 0 0;font-size:14.5px;line-height:1.65;max-width:820px}
+.disc-in>p.defer{font-size:13px;color:var(--faint)}
 /* 참여자 편의 루프 R1~R6 */
+.side .arrive{margin-top:4px}
 .arrive{margin-top:24px;border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:14px 18px;background:var(--paper);max-width:40em}
 .arrive-h{margin:0 0 6px;font:600 13px/1.4 var(--f-body);color:var(--accent)}
 .arrive ol{list-style:none;margin:0;padding:0;display:grid;gap:8px}
@@ -341,6 +367,11 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .sjump .sj-r{font-size:12.5px;color:var(--muted)}
 .totop{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:15;appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.15)}
 .totop[hidden]{display:none}
+.totop.dg-mini{width:56px;height:56px;padding:0;display:grid;place-items:center;overflow:hidden}
+.totop.dg-mini img{width:50px;height:50px;border-radius:50%;display:block}
+.totop.dg-mini span{position:absolute;right:-2px;top:-2px;width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--paper);font:600 12px/20px var(--f-body)}
+.totop.dg-mini{overflow:visible}
+.totop.dg-mini[hidden]{display:none}
 .addr-copy{appearance:none;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 12px/1 var(--f-body);padding:5px 8px;border-radius:4px;cursor:pointer;margin:4px 8px 0 0}
 .talk:target{box-shadow:0 0 0 3px var(--c)}
 .news{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
@@ -412,7 +443,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   <div class="wrap">
     <a class="brand" href="#top"><img src="logos/starmooc.png" alt="STAR-MOOC" class="logo"><span>Joint Workshop 2026</span><b>DAEGU</b></a>
     <nav class="nav" aria-label="섹션">
-      <a href="#programme">프로그램</a><a href="#sessions">세션 · 발표 자료</a><a href="#venue">장소 · 안내</a>
+      <a href="#programme">프로그램</a><a href="#sessions">발표 자료</a><a href="#venue">장소</a>
     </nav>
   </div>
 </header>
@@ -424,7 +455,32 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
     <div>
       <a class="sm-logo" href="https://www.starmooc.kr/" target="_blank" rel="noopener" aria-label="STAR-MOOC 사이트(새 창)"><img class="c" src="brand/starmooc-logo.png" alt="STAR-MOOC" width="182" height="87"><img class="w" src="brand/starmooc-logo-w.png" alt="STAR-MOOC" width="182" height="87"></a>
       <h1>2026년도 <span class="nw" translate="no">STAR-MOOC</span><br><em>6개 기관 공동 워크숍</em></h1>
-      <p class="lede">KAIST · GIST · DGIST · UNIST · POSTECH · UST 여섯 기관이 같은 세 질문에 각자의 답을 가져와 나란히 놓고 이야기합니다. 세션마다 기관별 5분 요약 발표 뒤 참석자 전원이 토의합니다.</p>
+      <p class="lede">여섯 기관이 세 가지 질문을 두고 기관별 5분 발표 뒤 함께 토의합니다.</p>
+      <dl class="keyfacts">
+        <div><dt>언제</dt><dd>10. 15.(목) 12:00 – 10. 16.(금) 13:05 <span class="dday" id="dday"></span></dd></div>
+        <div><dt>어디서</dt><dd>DGIST R1(연구행정동) 301호 대회의실</dd></div>
+        <div><dt>숙소</dt><dd>DGIST 국제관 · 1인 1실</dd></div>
+        <div><dt>참석</dt><dd>6개 기관 MOOC · 교수학습 담당 부서</dd></div>
+      </dl>
+    </div>
+    <div class="side">
+    <div class="welcome">
+      <button type="button" class="dg" id="dg" aria-label="달구에게 지금 필요한 안내 듣기">
+        <span class="dg-stage" id="dg-stage"><img src="dalgu/dalgu.png" alt="" width="132" height="132" draggable="false"></span>
+      </button>
+      <div class="dg-bubble" role="status" aria-live="polite">
+        <p id="dg-say">안녕하세요! DGIST 마스코트 달구예요. 2026 STAR-MOOC 공동 워크숍에 오신 것을 환영해요!</p>
+        <div class="dg-act" id="dg-act"><a href="#programme">프로그램 보기</a></div>
+      </div>
+    </div>
+    <div class="dg-ask" id="dg-ask" role="group" aria-label="달구에게 물어보기">
+      <span class="dg-ask-h">달구에게 물어보기</span>
+      <button type="button" class="dg-q" data-q="now" aria-pressed="false">지금 뭐 해요?</button>
+      <button type="button" class="dg-q" data-q="where" aria-pressed="false">어디로 가요?</button>
+      <button type="button" class="dg-q" data-q="read" aria-pressed="false">미리 볼 자료</button>
+      <button type="button" class="dg-q" data-q="stay" aria-pressed="false">숙소</button>
+      <button type="button" class="dg-q" data-q="call" aria-pressed="false">문의</button>
+    </div>
       <div class="arrive" aria-label="처음 오실 곳">
         <p class="arrive-h">처음 오실 곳 · 10. 15.(목)</p>
         <ol>
@@ -432,35 +488,6 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
           <li><time>13:00</time><div><b>개회 · DGIST R1(연구행정동) 301호</b><span>식사 자리에서 회의장 위치를 안내합니다 · 내비 「DGIST」</span></div></li>
         </ol>
       </div>
-      <nav class="tracks" aria-label="세션">
-        <a href="#session-1"><span class="n" style="color:var(--s1)">S1</span><span class="t">온라인 강좌 운영 방안과 미래</span><span class="d">10.15 13:05</span></a>
-        <a href="#session-2"><span class="n" style="color:var(--s2)">S2</span><span class="t">AI 적용 업무 추진 현황과 계획</span><span class="d">10.15 15:05</span></a>
-        <a href="#session-3"><span class="n" style="color:var(--s3)">S3</span><span class="t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="d">10.16 09:00</span></a>
-      </nav>
-    </div>
-    <div class="side">
-    <div class="welcome">
-      <button type="button" class="dg" id="dg" aria-label="달구 — 누르면 다음 인사를 들려줘요">
-        <span class="dg-stage" id="dg-stage"><img src="dalgu/dalgu.png" alt="" width="132" height="132" draggable="false"></span>
-      </button>
-      <div class="dg-bubble" role="status" aria-live="polite">
-        <p id="dg-say">안녕하세요! DGIST 마스코트 달구예요. 2026 STAR-MOOC 공동 워크숍에 오신 것을 환영해요!</p>
-        <span class="dg-hint" id="dg-hint">달구를 누르면 다음 인사 · <span id="dg-n">1</span>/<span id="dg-total">4</span></span>
-      </div>
-    </div>
-    <figure class="sky">
-        <figcaption><b>대구로 모이는 여섯 별</b><span>캠퍼스에서 DGIST까지 직선거리</span></figcaption>
-        <svg class="cst" viewBox="0 0 420 250" role="img" aria-labelledby="cst-t cst-d"><title id="cst-t">6개 기관 별자리</title><desc id="cst-d">KAIST·UST(대전), GIST(광주), UNIST(울산), POSTECH(포항)에서 워크숍이 열리는 대구 DGIST까지의 직선거리. 위치는 캠퍼스 좌표 근사.</desc><line class="gr" x1="20" y1="223" x2="400" y2="223"/><line class="gr" x1="20" y1="149" x2="400" y2="149"/><line class="gr" x1="20" y1="76" x2="400" y2="76"/><line class="gr" x1="20" y1="3" x2="400" y2="3"/><line class="gr" x1="73" y1="230" x2="73" y2="-48"/><line class="gr" x1="133" y1="230" x2="133" y2="-48"/><line class="gr" x1="192" y1="230" x2="192" y2="-48"/><line class="gr" x1="252" y1="230" x2="252" y2="-48"/><line class="gr" x1="311" y1="230" x2="311" y2="-48"/><line class="gr" x1="370" y1="230" x2="370" y2="-48"/><line class="ln" style="--i:0" x1="115.8" y1="20.7" x2="246.3" y2="120.7"/><line class="ln" style="--i:1" x1="54.8" y1="189.3" x2="246.3" y2="120.7"/><line class="ln" style="--i:2" x1="333.5" y1="138.8" x2="246.3" y2="120.7"/><line class="ln" style="--i:3" x1="349.4" y1="74.4" x2="246.3" y2="120.7"/><path class="st" style="--i:0" d="M115.8,13.7 L117.5,18.3 L122.5,18.6 L118.6,21.6 L119.9,26.4 L115.8,23.7 L111.7,26.4 L113.0,21.6 L109.1,18.6 L114.1,18.3Z"/><path class="st" style="--i:1" d="M54.8,182.3 L56.5,186.9 L61.5,187.1 L57.6,190.2 L58.9,195.0 L54.8,192.2 L50.7,195.0 L52.0,190.2 L48.1,187.1 L53.1,186.9Z"/><path class="st" style="--i:2" d="M333.5,131.8 L335.3,136.4 L340.2,136.6 L336.3,139.7 L337.7,144.5 L333.5,141.7 L329.4,144.5 L330.7,139.7 L326.9,136.6 L331.8,136.4Z"/><path class="st" style="--i:3" d="M349.4,67.4 L351.1,72.1 L356.0,72.3 L352.2,75.3 L353.5,80.1 L349.4,77.4 L345.3,80.1 L346.6,75.3 L342.7,72.3 L347.6,72.1Z"/><path class="st host" d="M246.3,108.7 L249.3,116.6 L257.7,117.0 L251.1,122.2 L253.4,130.4 L246.3,125.7 L239.3,130.4 L241.5,122.2 L234.9,117.0 L243.4,116.6Z"/><text class="lb" x="125.8" y="10.7" text-anchor="start" translate="no">KAIST · UST</text><text class="km" x="125.8" y="23.7" text-anchor="start">약 125km</text><text class="lb" x="64.8" y="193.3" text-anchor="start" translate="no">GIST</text><text class="km" x="64.8" y="206.3" text-anchor="start">약 155km</text><text class="lb" x="343.5" y="152.8" text-anchor="start" translate="no">UNIST</text><text class="km" x="343.5" y="165.8" text-anchor="start">약 68km</text><text class="lb" x="339.4" y="64.4" text-anchor="end" translate="no">POSTECH</text><text class="km" x="339.4" y="77.4" text-anchor="end">약 86km</text><text class="lb host" x="246.3" y="146.7" text-anchor="middle" translate="no">DGIST</text><text class="km" x="246.3" y="159.7" text-anchor="middle">대구 · 주관</text></svg>
-      </figure>
-    <aside class="facts" aria-label="행사 개요">
-      <div class="date"><b>15–16 Oct 2026</b><span>10. 15.(목) 13:00 → 10. 16.(금) 13:05</span><br><span>1박 2일 · 대구 달성 DGIST</span><br><span class="dday" id="dday"></span></div>
-      <dl>
-        <div><dt>VENUE</dt><dd>DGIST R1(연구행정동) 301호 대회의실</dd></div>
-        <div><dt>STAY</dt><dd>DGIST 국제관 · 1인 1실</dd></div>
-        <div><dt>PEOPLE</dt><dd>6개 기관 MOOC · 교수학습 담당 부서</dd></div>
-        <div><dt>HOST</dt><dd>DGIST 교수학습센터</dd></div>
-      </dl>
-    </aside>
     </div>
   </div>
 </section>
@@ -479,108 +506,98 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 
 <section class="block" id="programme">
   <div class="wrap">
-    <div class="sec-head"><span class="lab">01 · Programme</span><div><h2>프로그램</h2><p>세션마다 배포 자료를 5분간 함께 훑어본 뒤, 여섯 기관이 5분씩 요약 발표하고 토의로 넘어갑니다. 요약 발표 중에는 질의를 받지 않고 토의에서 함께 다룹니다.</p></div></div>
+    <div class="sec-head"><span class="lab">01 · Programme</span><div><h2>프로그램</h2><p>세션은 자료 훑어보기 5분 → 기관별 요약 발표 5분씩 → 토의 순서입니다. 질의는 토의 시간에 함께 받습니다.</p></div></div>
     <div class="days">
 <section class="day"><header><span class="tag">DAY 1</span><h3>10. 15.(목)</h3></header><ol class="slots"><li class="slot" data-d="2026-10-15" data-a="12:00" data-b="13:00"><time>12:00<span>–13:00</span></time><div><strong>중식</strong><span class="live">진행 중</span><p>능이마을 현풍점 · 식사 자리에서 회의장 위치 안내</p></div></li><li class="slot" data-d="2026-10-15" data-a="13:00" data-b="13:05"><time>13:00<span>–13:05</span></time><div><strong>개회</strong><span class="live">진행 중</span><p>인사 및 진행 방식 안내</p></div></li><li class="slot s1" data-d="2026-10-15" data-a="13:05" data-b="14:50"><time>13:05<span>–14:50</span></time><div><strong>세션 1 · 온라인 강좌 운영 방안과 미래</strong><span class="live">진행 중</span><p>사전자료 검토 5분 → 기관별 요약 발표 6 × 5분 → 휴식 → 토의 55분</p> <a class="jump" href="#session-1">자료 보기</a></div></li><li class="slot" data-d="2026-10-15" data-a="14:50" data-b="15:05"><time>14:50<span>–15:05</span></time><div><strong>휴식</strong><span class="live">진행 중</span></div></li><li class="slot s2" data-d="2026-10-15" data-a="15:05" data-b="16:50"><time>15:05<span>–16:50</span></time><div><strong>세션 2 · AI 적용 업무 추진 현황과 계획</strong><span class="live">진행 중</span><p>사전자료 검토 5분 → 기관별 요약 발표 6 × 5분 → 휴식 → 토의 55분</p> <a class="jump" href="#session-2">자료 보기</a></div></li><li class="slot" data-d="2026-10-15" data-a="16:50" data-b="17:00"><time>16:50<span>–17:00</span></time><div><strong>정리</strong><span class="live">진행 중</span><p>세션 1 · 2 요지 확인, 둘째 날 안내</p></div></li><li class="slot" data-d="2026-10-15" data-a="17:00" data-b="17:30"><time>17:00<span>–17:30</span></time><div><strong>숙소 체크인 및 휴식</strong><span class="live">진행 중</span><p>DGIST 국제관 · 체크인 17:00부터</p></div></li><li class="slot" data-d="2026-10-15" data-a="17:30" data-b="18:00"><time>17:30<span>–18:00</span></time><div><strong>이동</strong><span class="live">진행 중</span><p>국제관에서 만찬 장소까지 걸어서 15~20분</p></div></li><li class="slot" data-d="2026-10-15" data-a="18:00" data-b="20:00"><time>18:00<span>–20:00</span></time><div><strong>만찬</strong><span class="live">진행 중</span><p>기관 간 네트워킹 · 용성양꼬치</p></div></li><li class="slot" data-d="2026-10-15" data-a="20:00" data-b="20:00"><time>20:00~</time><div><strong>숙소 복귀 및 자유 시간</strong><span class="live">진행 중</span></div></li></ol></section>
 <section class="day"><header><span class="tag">DAY 2</span><h3>10. 16.(금)</h3></header><ol class="slots"><li class="slot" data-d="2026-10-16" data-a="09:00" data-b="09:00"><time>~09:00</time><div><strong>숙소 퇴실</strong><span class="live">진행 중</span></div></li><li class="slot s3" data-d="2026-10-16" data-a="09:00" data-b="11:00"><time>09:00<span>–11:00</span></time><div><strong>세션 3 · AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</strong><span class="live">진행 중</span><p>사전자료 검토 5분 → 기관별 요약 발표 6 × 5분 → 휴식 → 토의 70분</p> <a class="jump" href="#session-3">자료 보기</a></div></li><li class="slot" data-d="2026-10-16" data-a="11:00" data-b="11:15"><time>11:00<span>–11:15</span></time><div><strong>이동</strong><span class="live">진행 중</span><p>브런치 장소로 이동</p></div></li><li class="slot" data-d="2026-10-16" data-a="11:15" data-b="12:15"><time>11:15<span>–12:15</span></time><div><strong>브런치</strong><span class="live">진행 중</span><p>도케비커피 비슬산 본점</p></div></li><li class="slot" data-d="2026-10-16" data-a="12:15" data-b="12:35"><time>12:15<span>–12:35</span></time><div><strong>이동</strong><span class="live">진행 중</span><p>회의장 복귀</p></div></li><li class="slot" data-d="2026-10-16" data-a="12:35" data-b="13:00"><time>12:35<span>–13:00</span></time><div><strong>종합 정리</strong><span class="live">진행 중</span><p>세 세션 결과 확인 · 기관별 후속 조치와 담당 · 시한</p></div></li><li class="slot" data-d="2026-10-16" data-a="13:00" data-b="13:05"><time>13:00<span>–13:05</span></time><div><strong>폐회</strong><span class="live">진행 중</span></div></li><li class="slot" data-d="2026-10-16" data-a="13:05" data-b="13:05"><time>13:05~</time><div><strong>해산</strong><span class="live">진행 중</span></div></li></ol></section>
     </div>
-    <p class="prog-note">공문(교수학습센터-665) 붙임 프로그램 기준. 등록 절차와 현장 자료집 배부는 없습니다.</p>
+    <p class="prog-note">따로 등록하실 필요가 없습니다. 인쇄 자료집은 없으니 노트북을 가져와 주십시오.</p>
   </div>
 </section>
 
 <section class="block" id="sessions">
   <div class="wrap">
-    <div class="sec-head"><span class="lab">02 · Sessions</span><div><h2>세션 · 기관별 발표 자료</h2><p>같은 질문에 대한 기관별 답을 세션 안에 나란히 놓았습니다. 카드의 요점은 받은 자료에서 주관 기관이 뽑아 정리한 것이며, 자세한 내용은 자료 원문에서 확인해 주십시오.</p>
+    <div class="sec-head"><span class="lab">02 · Sessions</span><div><h2>발표 자료</h2><p>세션마다 기관별 자료를 나란히 놓았습니다. 토의 전에 읽어 오시면 좋습니다. 카드의 요점은 주관 기관이 뽑은 것이니 자세한 내용은 자료에서 확인해 주십시오.</p>
       <nav class="sjump" aria-label="세션 바로 가기"><a href="#session-1" style="--c:var(--s1)"><span class="sj-n">SESSION 1 · 10. 15.(목)</span><span class="sj-t">온라인 강좌 운영 방안과 미래</span><span class="sj-r">자료 3편 · 슬라이드 20쪽 · 본문 약 8분</span></a><a href="#session-2" style="--c:var(--s2)"><span class="sj-n">SESSION 2 · 10. 15.(목)</span><span class="sj-t">AI 적용 업무 추진 현황과 계획</span><span class="sj-r">자료 2편 · 슬라이드 22쪽 · 본문 약 9분</span></a><a href="#session-3" style="--c:var(--s3)"><span class="sj-n">SESSION 3 · 10. 16.(금)</span><span class="sj-t">AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</span><span class="sj-r">자료 3편 · 슬라이드 28쪽 · 본문 약 9분</span></a></nav>
-      <div class="chips" role="group" aria-label="기관별로 보기"><span class="lbl">기관별로 보기</span><button type="button" class="chip" data-f="" aria-pressed="true">전체</button><button type="button" class="chip" data-f="kaist" aria-pressed="false">KAIST</button><button type="button" class="chip" data-f="dgist" aria-pressed="false">DGIST</button><button type="button" class="chip" data-f="unist" aria-pressed="false">UNIST</button></div></div></div>
+</div></div>
 <section class="session s1" id="session-1">
   <div class="s-head">
     <div class="s-no"><span>SESSION</span><b>1</b></div>
     <div class="s-title"><h3>온라인 강좌 운영 방안과 미래</h3><p class="en">Online courses: operations and the road ahead</p>
-      <dl class="s-meta"><div><dt>일시</dt><dd>10. 15.(목) 13:05–14:50</dd></div><div><dt>요약 발표</dt><dd>13:10–13:45 · 기관별 5분</dd></div><div><dt>토의</dt><dd>13:55–14:50 · 55분</dd></div><div><dt>자료</dt><dd>3 / 6개 기관</dd></div></dl>
+      <dl class="s-meta"><div><dt>일시</dt><dd>10. 15.(목) 13:05–14:50</dd></div><div><dt>요약 발표</dt><dd>13:10–13:45 · 기관별 5분</dd></div><div><dt>토의</dt><dd>13:55–14:50 · 55분</dd></div></dl>
     </div>
   </div>
-  <aside class="note"><span class="note-tag">편집 노트</span><p>세 기관이 다른 쪽에서 출발합니다. KAIST는 공급(짧은 강좌 · 유튜브 · 자동 수료증), UNIST는 수요(진단에 맞춘 외부 강좌 경로), DGIST는 운영 결정(대상 · 기획 · 이수 확인)을 봅니다.</p><p>토의 거리: 단기 강좌와 특강을 STAR-MOOC 이수 체계 안에 둘지 밖에 둘지, 그리고 이수 인증을 무엇으로 확인할지.</p><p class="note-by">받은 자료를 나란히 읽고 주관 기관이 정리한 토의 거리이며, 각 기관의 공식 입장이 아닙니다.</p></aside>
   <div class="talks"><article class="talk" id="kaist-s1" data-inst="kaist">
   <header><img src="logos/kaist.png" alt="" class="logo"><div><span class="inst">KAIST</span><span class="unit">교수학습지원팀</span></div></header>
   <h4>작게 시작하고, 함께 키우는 STAR-MOOC</h4>
   <ul class="pts"><li>강좌 개발 부담 · 6시간 규격 · 수강 뒤 활용 경로를 세 가지 문제로 짚음</li><li>정규 MOOC(6시간 내외)에 단기 강좌(1~3시간) · 특강형(30분~1시간)을 더해 기관별 연 1과목 이상 공급</li><li>STAR-MOOC 유튜브 채널을 주제별 재생목록으로 재활성화</li><li>구글 폼 + Apps Script로 수료 인증 자동화, 특강 1~2개 공동 시범 제안</li></ul>
-  <div class="peek"><button type="button" class="pv" data-open="kaist-s1" data-page="0" aria-label="1쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s1_01.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s1" data-page="1" aria-label="2쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s1_02.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s1" data-page="2" aria-label="3쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s1_03.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s1" data-page="3" aria-label="4쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s1_04.webp" alt="" loading="lazy"></button><button type="button" class="pv more" data-open="kaist-s1" data-page="4">+3쪽</button></div>
-  <footer><span class="meta">PPTX · 7쪽 · 받은 날 10. 6.(화) 13:22</span>
-  <div class="acts"><button class="btn" type="button" data-open="kaist-s1">슬라이드 보기</button><span class="orig-note">원본 PPTX 파일은 10. 12.(월) 전자문서와 함께 보내 드립니다</span></div></footer>
+  <footer><span class="meta">PPTX · 7쪽</span>
+  <div class="acts"><button class="btn" type="button" data-open="kaist-s1">슬라이드 보기</button></div></footer>
 </article><article class="talk" id="dgist-s1" data-inst="dgist">
   <header><img src="logos/dgist.png" alt="" class="logo"><div><span class="inst">DGIST</span><span class="unit">교수학습센터</span></div></header>
   <h4>해외 대학 · 기관은 어떻게 하는가 — 온라인 강좌</h4>
   <ul class="pts"><li>오래 간 공동 강좌는 플랫폼이 아니라 대상 · 범위, 촬영 전 기획, 이수 확인 방식에서 갈림</li><li>TU Delft · MIT OCW는 역할이 나뉜 팀이 정해진 단계로 강좌를 만들고 공개</li><li>새 강좌 계획서를 촬영 전에 점검하는 여덟 가지 질문</li><li>실무자가 지금 시작할 세 가지: 기입 정비 · 제작 기준 · 지표 정의</li></ul>
-  <div class="peek"><button type="button" class="pv" data-open="dgist-s1" data-page="0" aria-label="1쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s1_01.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s1" data-page="1" aria-label="2쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s1_02.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s1" data-page="2" aria-label="3쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s1_03.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s1" data-page="3" aria-label="4쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s1_04.webp" alt="" loading="lazy"></button><button type="button" class="pv more" data-open="dgist-s1" data-page="4">+9쪽</button></div>
-  <footer><span class="meta">HTML · 13쪽 · 받은 날 10. 6.(화) 확정본 v1.2</span>
-  <div class="acts"><button class="btn" type="button" data-open="dgist-s1">슬라이드 보기</button><a class="btn ghost" href="files/dgist-s1.html" target="_blank" rel="noopener">원본 HTML ↗</a></div></footer>
+  <footer><span class="meta">HTML · 13쪽</span>
+  <div class="acts"><button class="btn" type="button" data-open="dgist-s1">슬라이드 보기</button></div></footer>
 </article><article class="talk" id="unist-s1" data-inst="unist">
   <header><img src="logos/unist.png" alt="" class="logo"><div><span class="inst">UNIST</span><span class="unit">Pioneers교육혁신팀</span></div></header>
   <h4>콘텐츠 제공에서 학생 맞춤형 학습경로 설계로</h4>
   <ul class="pts"><li>2026 신입생 기초학업진단(ARA) 결과로 Coursera 수준별 맞춤학습 운영</li><li>수학 · 물리 · 화학 · 생물을 난이도 1 · 2 · 3단계 모듈로 구성(Course Builder)</li><li>교수진이 강좌를 고르고, 교육혁신팀이 분야 · 난이도별 경로로 구현</li><li>강좌 수보다 참여 · 이수 · 학생 의견으로 효과를 따로 확인하자는 제안</li></ul>
-  <ol class="peek-toc" aria-label="목차"><li><button type="button" data-open="unist-s1" data-sec="h1">머리말</button></li><li><button type="button" data-open="unist-s1" data-sec="h2">연구중심대학에서 온라인 강좌의 역할</button></li><li><button type="button" data-open="unist-s1" data-sec="h3">Coursera 수준별 맞춤학습과 교육혁신팀의 기여</button></li><li><button type="button" data-open="unist-s1" data-sec="h4">향후 활용 방향과 검토 과제</button></li><li><button type="button" data-open="unist-s1" data-sec="h5">맺음말</button></li><li><button type="button" data-open="unist-s1" data-sec="h6">참고 자료</button></li></ol>
-  <footer><span class="meta">HWPX · 본문 전체 · 받은 날 10. 6.(화) 13:39</span>
-  <div class="acts"><button class="btn" type="button" data-open="unist-s1">본문 읽기</button><span class="orig-note">원본 HWPX 파일은 10. 12.(월) 전자문서와 함께 보내 드립니다</span></div></footer>
-</article></div><div class="waiting"><span class="w-lab">자료 대기</span><span class="w-org" data-inst="gist"><img src="logos/gist.png" alt="" class="mini-logo">GIST</span><span class="w-org" data-inst="postech"><img src="logos/postech.png" alt="" class="mini-logo">POSTECH</span><span class="w-org" data-inst="ust"><img src="logos/ust.png" alt="" class="mini-logo">UST</span><span class="w-note">제출 기한 10. 12.(월) · 자료 없이 현장에서 말씀으로 나누셔도 됩니다</span></div><div class="disc"><div class="disc-h"><span class="note-tag">토의 질문</span><span class="disc-src">DGIST 세션 1 자료 12쪽</span></div><ol><li><b>공통 기입 기준을 둘 것인가</b><span>이수증 표시 · 분야 · 연작 · 태그 네 칸. 예산이나 기관 승인 없이 정할 수 있는 항목</span></li><li><b>어느 층까지 얹을 것인가</b><span>네 갈래 중 우리 기관이 기대하는 것은 어디에 가까운가</span></li><li><b>무엇을 셀 것인가</b><span>「개발 강좌 수」를 계속 쓸지, 상시 가용 강좌 · 이수 건수 · 기입 충족률로 바꿀지, 분모를 어떻게 적을지</span></li><li><b>제작에서 함께 쓸 수 있는 것은 무엇인가</b><span>스토리보드 양식 · 촬영 전 확인 항목 · 납품 검수 질문</span></li><li><b>수강자는 누구인가</b><span>아는 범위에서 재학생과 일반 학습자의 비중</span></li></ol><p class="defer">미룰 것 — 예산 분담 비율(기관 내부 절차) · 학점 인정 · 소단위 전공과정(교무 부서 소관) · 공동 인증 확인 주체</p></div>
+  <footer><span class="meta">HWPX · 본문 전체</span>
+  <div class="acts"><button class="btn" type="button" data-open="unist-s1">본문 읽기</button></div></footer>
+</article></div><details class="disc"><summary><span class="note-tag">토의 준비</span><span class="disc-sum">질문 5개 · 미리 생각해 오시면 토의가 빨라집니다</span></summary><div class="disc-in"><p>세 기관이 다른 쪽에서 출발합니다. KAIST는 공급(짧은 강좌 · 유튜브 · 자동 수료증), UNIST는 수요(진단에 맞춘 외부 강좌 경로), DGIST는 운영 결정(대상 · 기획 · 이수 확인)을 봅니다.</p><p>토의 거리: 단기 강좌와 특강을 STAR-MOOC 이수 체계 안에 둘지 밖에 둘지, 그리고 이수 인증을 무엇으로 확인할지.</p><ol><li><b>공통 기입 기준을 둘 것인가</b><span>이수증 표시 · 분야 · 연작 · 태그 네 칸. 예산이나 기관 승인 없이 정할 수 있는 항목</span></li><li><b>어느 층까지 얹을 것인가</b><span>네 갈래 중 우리 기관이 기대하는 것은 어디에 가까운가</span></li><li><b>무엇을 셀 것인가</b><span>「개발 강좌 수」를 계속 쓸지, 상시 가용 강좌 · 이수 건수 · 기입 충족률로 바꿀지, 분모를 어떻게 적을지</span></li><li><b>제작에서 함께 쓸 수 있는 것은 무엇인가</b><span>스토리보드 양식 · 촬영 전 확인 항목 · 납품 검수 질문</span></li><li><b>수강자는 누구인가</b><span>아는 범위에서 재학생과 일반 학습자의 비중</span></li></ol><p class="defer">미룰 것 — 예산 분담 비율(기관 내부 절차) · 학점 인정 · 소단위 전공과정(교무 부서 소관) · 공동 인증 확인 주체 · 출처 DGIST 세션 1 자료 12쪽 · 편집 노트는 주관 기관 정리이며 각 기관의 공식 입장이 아닙니다.</p></div></details>
 </section>
 <section class="session s2" id="session-2">
   <div class="s-head">
     <div class="s-no"><span>SESSION</span><b>2</b></div>
     <div class="s-title"><h3>AI 적용 업무 추진 현황과 계획</h3><p class="en">AI in centre operations: where we are, what comes next</p>
-      <dl class="s-meta"><div><dt>일시</dt><dd>10. 15.(목) 15:05–16:50</dd></div><div><dt>요약 발표</dt><dd>15:10–15:45 · 기관별 5분</dd></div><div><dt>토의</dt><dd>15:55–16:50 · 55분</dd></div><div><dt>자료</dt><dd>2 / 6개 기관</dd></div></dl>
+      <dl class="s-meta"><div><dt>일시</dt><dd>10. 15.(목) 15:05–16:50</dd></div><div><dt>요약 발표</dt><dd>15:10–15:45 · 기관별 5분</dd></div><div><dt>토의</dt><dd>15:55–16:50 · 55분</dd></div></dl>
     </div>
   </div>
-  <aside class="note"><span class="note-tag">편집 노트</span><p>UNIST와 DGIST 모두 사람이 최종 확인하는 자리를 먼저 정하라고 말합니다. UNIST는 부서 안의 과업 · 원칙으로, DGIST는 해외 도입 사례의 범위 · 비용 상한으로 같은 결론에 닿습니다.</p><p>토의 거리: 기관마다 AI에 맡기지 않을 단계 한 가지와 틀린 결과를 잡는 방법 한 가지.</p><p class="note-by">받은 자료를 나란히 읽고 주관 기관이 정리한 토의 거리이며, 각 기관의 공식 입장이 아닙니다.</p></aside>
   <div class="talks"><article class="talk" id="dgist-s2" data-inst="dgist">
   <header><img src="logos/dgist.png" alt="" class="logo"><div><span class="inst">DGIST</span><span class="unit">교수학습센터</span></div></header>
   <h4>해외 사례 · DGIST CTL 적용 현황 · Claude Code 설치와 활용 — AI 업무 적용</h4>
   <ul class="pts"><li>해외에서 성과를 확인한 사례는 모두 범위를 좁히고 사람 승인 · 비용 상한을 먼저 정함(CS50 · Georgia State · Coursera)</li><li>DGIST CTL 실제 운영: AI 학습튜터 「달구」 11과목 54주차, 강의평가 분석 리포트 교수 197명, 교수법 트렌드 웹진 5호, 학생 개별 안내 1,619명</li><li>1학기 수업 녹화를 AI로 편집해 STAR-MOOC 규격 영상 · 한영 자막까지 — 원본과 AI 편집본 비교 샘플(3차시 추론 규칙)</li><li>Claude Code 설치 네 단계와 활용(DGIST PLX Lab 공개 안내서) — 강의 학습 · 시범 기반 업무 자동화</li></ul>
-  <div class="peek"><button type="button" class="pv" data-open="dgist-s2" data-page="0" aria-label="1쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s2_01.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s2" data-page="1" aria-label="2쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s2_02.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s2" data-page="2" aria-label="3쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s2_03.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s2" data-page="3" aria-label="4쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s2_04.webp" alt="" loading="lazy"></button><button type="button" class="pv more" data-open="dgist-s2" data-page="4">+18쪽</button></div>
-  <footer><span class="meta">HTML · 22쪽 · 받은 날 10. 8.(목) 갱신본 v1.3</span>
-  <div class="acts"><button class="btn" type="button" data-open="dgist-s2">슬라이드 보기</button><a class="btn ghost" href="files/dgist-s2.html" target="_blank" rel="noopener">원본 HTML ↗</a></div></footer>
+  <footer><span class="meta">HTML · 22쪽</span>
+  <div class="acts"><button class="btn" type="button" data-open="dgist-s2">슬라이드 보기</button></div></footer>
 </article><article class="talk" id="unist-s2" data-inst="unist">
   <header><img src="logos/unist.png" alt="" class="logo"><div><span class="inst">UNIST</span><span class="unit">Pioneers교육혁신팀</span></div></header>
   <h4>전문가의 판단과 AI의 속도를 결합한 업무 재설계</h4>
   <ul class="pts"><li>Coursera 계약 · 운영자료 비교, 월별 실적 초안, STAR-MOOC 인계항목 정리에 AI 활용</li><li>학습법 워크숍 홍보물을 직접 제작해 외주비 절감, 개인정보는 입력 최소화</li><li>과업별 역할 · 확인 범위 정리, 반복 문서의 입출력 표준화, 수정 이력 축적</li><li>운영 원칙 네 가지: 근거 확인 · 최종 판단 · 개인정보 보호 · 기록과 버전관리</li></ul>
-  <ol class="peek-toc" aria-label="목차"><li><button type="button" data-open="unist-s2" data-sec="h1">머리말</button></li><li><button type="button" data-open="unist-s2" data-sec="h2">업무전문성과 AI의 역할</button></li><li><button type="button" data-open="unist-s2" data-sec="h3">AI 적용 업무 추진 현황</button></li><li><button type="button" data-open="unist-s2" data-sec="h4">참고 가능한 공유 지침 마련</button></li><li><button type="button" data-open="unist-s2" data-sec="h5">맺음말</button></li><li><button type="button" data-open="unist-s2" data-sec="h6">참고문헌</button></li></ol>
-  <footer><span class="meta">HWPX · 본문 전체 · 받은 날 10. 6.(화) 13:39</span>
-  <div class="acts"><button class="btn" type="button" data-open="unist-s2">본문 읽기</button><span class="orig-note">원본 HWPX 파일은 10. 12.(월) 전자문서와 함께 보내 드립니다</span></div></footer>
-</article></div><div class="waiting"><span class="w-lab">자료 대기</span><span class="w-org" data-inst="kaist"><img src="logos/kaist.png" alt="" class="mini-logo">KAIST</span><span class="w-org" data-inst="gist"><img src="logos/gist.png" alt="" class="mini-logo">GIST</span><span class="w-org" data-inst="postech"><img src="logos/postech.png" alt="" class="mini-logo">POSTECH</span><span class="w-org" data-inst="ust"><img src="logos/ust.png" alt="" class="mini-logo">UST</span><span class="w-note">제출 기한 10. 12.(월) · 자료 없이 현장에서 말씀으로 나누셔도 됩니다</span></div><div class="disc"><div class="disc-h"><span class="note-tag">토의 질문</span><span class="disc-src">DGIST 세션 2 자료 11쪽</span></div><ol><li><b>남길 버튼</b><span>AI에게 맡기지 않을 단계(발송 · 공개 · 결재 · 삭제)를 어디에 두고 있는가</span></li><li><b>조용한 오류</b><span>정상으로 끝난 것처럼 보이지만 틀린 결과를 누가, 어떻게 잡는가(표본 검토 · 원본 대조)</span></li><li><b>비용의 주인</b><span>학생이 쓸수록 늘어나는 AI 사용료는 누구 예산인가, 사용 상한을 둘 것인가</span></li><li><b>번역 · 자막 책임</b><span>AI 자막 · 번역의 동의 · 검수 책임을 어디에 두는가</span></li><li><b>함께 쓸 수 있는 것</b><span>도입 점검표 · 동의 양식 · 용어집처럼 시스템이 달라도 나눌 수 있는 문서는 무엇인가</span></li></ol><p class="defer">미룰 것 — 기관 단위 AI 계약 · 보안 정책(정보 부서 · 기관장 결정) · AI 업무 전환에 따른 직무 · 정원(인사 부서 소관)</p></div>
+  <footer><span class="meta">HWPX · 본문 전체</span>
+  <div class="acts"><button class="btn" type="button" data-open="unist-s2">본문 읽기</button></div></footer>
+</article></div><details class="disc"><summary><span class="note-tag">토의 준비</span><span class="disc-sum">질문 5개 · 미리 생각해 오시면 토의가 빨라집니다</span></summary><div class="disc-in"><p>UNIST와 DGIST 모두 사람이 최종 확인하는 자리를 먼저 정하라고 말합니다. UNIST는 부서 안의 과업 · 원칙으로, DGIST는 해외 도입 사례의 범위 · 비용 상한으로 같은 결론에 닿습니다.</p><p>토의 거리: 기관마다 AI에 맡기지 않을 단계 한 가지와 틀린 결과를 잡는 방법 한 가지.</p><ol><li><b>남길 버튼</b><span>AI에게 맡기지 않을 단계(발송 · 공개 · 결재 · 삭제)를 어디에 두고 있는가</span></li><li><b>조용한 오류</b><span>정상으로 끝난 것처럼 보이지만 틀린 결과를 누가, 어떻게 잡는가(표본 검토 · 원본 대조)</span></li><li><b>비용의 주인</b><span>학생이 쓸수록 늘어나는 AI 사용료는 누구 예산인가, 사용 상한을 둘 것인가</span></li><li><b>번역 · 자막 책임</b><span>AI 자막 · 번역의 동의 · 검수 책임을 어디에 두는가</span></li><li><b>함께 쓸 수 있는 것</b><span>도입 점검표 · 동의 양식 · 용어집처럼 시스템이 달라도 나눌 수 있는 문서는 무엇인가</span></li></ol><p class="defer">미룰 것 — 기관 단위 AI 계약 · 보안 정책(정보 부서 · 기관장 결정) · AI 업무 전환에 따른 직무 · 정원(인사 부서 소관) · 출처 DGIST 세션 2 자료 11쪽 · 편집 노트는 주관 기관 정리이며 각 기관의 공식 입장이 아닙니다.</p></div></details>
 </section>
 <section class="session s3" id="session-3">
   <div class="s-head">
     <div class="s-no"><span>SESSION</span><b>3</b></div>
     <div class="s-title"><h3>AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</h3><p class="en">When AI gives the answer: what to teach, what to assess</p>
-      <dl class="s-meta"><div><dt>일시</dt><dd>10. 16.(금) 09:00–11:00</dd></div><div><dt>요약 발표</dt><dd>09:05–09:40 · 기관별 5분</dd></div><div><dt>토의</dt><dd>09:50–11:00 · 70분</dd></div><div><dt>자료</dt><dd>3 / 6개 기관</dd></div></dl>
+      <dl class="s-meta"><div><dt>일시</dt><dd>10. 16.(금) 09:00–11:00</dd></div><div><dt>요약 발표</dt><dd>09:05–09:40 · 기관별 5분</dd></div><div><dt>토의</dt><dd>09:50–11:00 · 70분</dd></div></dl>
     </div>
   </div>
-  <aside class="note"><span class="note-tag">편집 노트</span><p>세 기관이 같은 방향을 가리킵니다. KAIST는 Human first → AI second, UNIST는 질문 → 선택 → 검증 → 재구성 → 책임, DGIST는 연습과 판정의 분리를 제안합니다.</p><p>갈리는 지점: 과정 기록을 평가에 넣을 때 교수자 부담을 누가 덜어 줄지, 시험을 AI 없는 조건으로 남길지.</p><p class="note-by">받은 자료를 나란히 읽고 주관 기관이 정리한 토의 거리이며, 각 기관의 공식 입장이 아닙니다.</p></aside>
   <div class="talks"><article class="talk" id="kaist-s3" data-inst="kaist">
   <header><img src="logos/kaist.png" alt="" class="logo"><div><span class="inst">KAIST</span><span class="unit">교수학습혁신센터</span></div></header>
   <h4>AI가 답을 주는데 무엇을 가르치고 평가할 것인가?</h4>
   <ul class="pts"><li>KAIST Beyond AI · MIT AI-aware Education · Brown GAITL 세 대학의 재설계 사례 비교</li><li>가르칠 것 네 가지: THINK · USE · JUDGE · INTEGRATE (Hackl et al., 2026 재구성)</li><li>Human first → Peer thinking → AI second → Human judgment → Justify &amp; reflect</li><li>평가는 결과물만이 아니라 초안 · AI 질문과 출력 · 검증 · 채택/거부 · 수정 이유까지 학습의 증거로</li></ul>
-  <div class="peek"><button type="button" class="pv" data-open="kaist-s3" data-page="0" aria-label="1쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s3_01.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s3" data-page="1" aria-label="2쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s3_02.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s3" data-page="2" aria-label="3쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s3_03.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="kaist-s3" data-page="3" aria-label="4쪽 열기" style="aspect-ratio:16 / 9"><img src="slides/kaist_s3_04.webp" alt="" loading="lazy"></button><button type="button" class="pv more" data-open="kaist-s3" data-page="4">+5쪽</button></div>
-  <footer><span class="meta">PPTX · 9쪽 · 받은 날 10. 6.(화) 13:22</span>
-  <div class="acts"><button class="btn" type="button" data-open="kaist-s3">슬라이드 보기</button><span class="orig-note">원본 PPTX 파일은 10. 12.(월) 전자문서와 함께 보내 드립니다</span></div></footer>
+  <footer><span class="meta">PPTX · 9쪽</span>
+  <div class="acts"><button class="btn" type="button" data-open="kaist-s3">슬라이드 보기</button></div></footer>
 </article><article class="talk" id="dgist-s3" data-inst="dgist">
   <header><img src="logos/dgist.png" alt="" class="logo"><div><span class="inst">DGIST</span><span class="unit">교수학습센터</span></div></header>
   <h4>해외 대학 · 기관은 어떻게 하는가 — 가르칠 것과 평가</h4>
   <ul class="pts"><li>연습과 판정을 두 차선으로 나누고, 판정에서는 답이 아니라 판별을 봄</li><li>AI가 답을 주느냐 힌트를 주느냐에 따라 연습 성적과 시험 성적이 갈림</li><li>AI 탐지기 대신 사용 표시로, 과목 방어에서 프로그램 보증으로 옮겨 가는 흐름</li><li>교수 한 명의 동의로 시작할 수 있는 시범 네 가지</li></ul>
-  <div class="peek"><button type="button" class="pv" data-open="dgist-s3" data-page="0" aria-label="1쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s3_01.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s3" data-page="1" aria-label="2쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s3_02.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s3" data-page="2" aria-label="3쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s3_03.webp" alt="" loading="lazy"></button><button type="button" class="pv" data-open="dgist-s3" data-page="3" aria-label="4쪽 열기" style="aspect-ratio:1123 / 794"><img src="slides/dgist_s3_04.webp" alt="" loading="lazy"></button><button type="button" class="pv more" data-open="dgist-s3" data-page="4">+15쪽</button></div>
-  <footer><span class="meta">HTML · 19쪽 · 받은 날 10. 6.(화) 확정본 v1.2</span>
-  <div class="acts"><button class="btn" type="button" data-open="dgist-s3">슬라이드 보기</button><a class="btn ghost" href="files/dgist-s3.html" target="_blank" rel="noopener">원본 HTML ↗</a></div></footer>
+  <footer><span class="meta">HTML · 19쪽</span>
+  <div class="acts"><button class="btn" type="button" data-open="dgist-s3">슬라이드 보기</button></div></footer>
 </article><article class="talk" id="unist-s3" data-inst="unist">
   <header><img src="logos/unist.png" alt="" class="logo"><div><span class="inst">UNIST</span><span class="unit">Pioneers교육혁신팀</span></div></header>
   <h4>완성된 답에서 질문 · 검증 · 판단의 과정으로</h4>
   <ul class="pts"><li>시험은 AI 없이 독립적 이해를, AI 활용 과제는 판단의 과정을 보는 상호보완 평가</li><li>사람이 맡을 판단 다섯 단계: 질문 → 선택 → 검증 → 재구성 → 책임</li><li>Think first, ChatGPT later(Wong &amp; Qiu, 2026): 자기 아이디어에서 출발한 집단이 AI 없는 새 과제에서 독창성 · 유용성이 더 높음</li><li>AI의 답은 근거가 아니라 원자료와 대조할 가설로 다루게 하자는 제안</li></ul>
-  <ol class="peek-toc" aria-label="목차"><li><button type="button" data-open="unist-s3" data-sec="h1">머리말</button></li><li><button type="button" data-open="unist-s3" data-sec="h2">무엇을 가르칠 것인가: 답보다 문제와 판단 가르치기</button></li><li><button type="button" data-open="unist-s3" data-sec="h3">무엇을 확인하게 할 것인가: 답의 근거와 한계 검증하기</button></li><li><button type="button" data-open="unist-s3" data-sec="h4">무엇을 평가할 것인가: 완성된 결과와 판단의 흔적</button></li><li><button type="button" data-open="unist-s3" data-sec="h5">맺음말</button></li><li><button type="button" data-open="unist-s3" data-sec="h6">참고문헌</button></li></ol>
-  <footer><span class="meta">HWPX · 본문 전체 · 받은 날 10. 6.(화) 13:39</span>
-  <div class="acts"><button class="btn" type="button" data-open="unist-s3">본문 읽기</button><span class="orig-note">원본 HWPX 파일은 10. 12.(월) 전자문서와 함께 보내 드립니다</span></div></footer>
-</article></div><div class="waiting"><span class="w-lab">자료 대기</span><span class="w-org" data-inst="gist"><img src="logos/gist.png" alt="" class="mini-logo">GIST</span><span class="w-org" data-inst="postech"><img src="logos/postech.png" alt="" class="mini-logo">POSTECH</span><span class="w-org" data-inst="ust"><img src="logos/ust.png" alt="" class="mini-logo">UST</span><span class="w-note">제출 기한 10. 12.(월) · 자료 없이 현장에서 말씀으로 나누셔도 됩니다</span></div><div class="disc"><div class="disc-h"><span class="note-tag">토의 질문</span><span class="disc-src">DGIST 세션 3 자료 14쪽</span></div><ol><li><b>순서 문제</b><span>우리 강좌 1~2주차에 AI를 허용할 것인가 — 몇 주차부터, 어떤 형태(힌트형만? 전면?)로</span></li><li><b>지표 문제</b><span>내년 이수율이 10%p 오르면 성과인가, 경고인가 — 이수율 옆에 둘 지표에 합의할 수 있는가</span></li><li><b>층 문제</b><span>학점 인정 강좌의 최종 판정을 소속 캠퍼스 대면으로 옮길 수 있는가</span></li></ol><p class="defer">학칙 · 학점 인정은 각 기관 교무 부서 소관이며, 센터는 제안 자료까지 맡는다</p></div>
+  <footer><span class="meta">HWPX · 본문 전체</span>
+  <div class="acts"><button class="btn" type="button" data-open="unist-s3">본문 읽기</button></div></footer>
+</article></div><details class="disc"><summary><span class="note-tag">토의 준비</span><span class="disc-sum">질문 3개 · 미리 생각해 오시면 토의가 빨라집니다</span></summary><div class="disc-in"><p>세 기관이 같은 방향을 가리킵니다. KAIST는 Human first → AI second, UNIST는 질문 → 선택 → 검증 → 재구성 → 책임, DGIST는 연습과 판정의 분리를 제안합니다.</p><p>갈리는 지점: 과정 기록을 평가에 넣을 때 교수자 부담을 누가 덜어 줄지, 시험을 AI 없는 조건으로 남길지.</p><ol><li><b>순서 문제</b><span>우리 강좌 1~2주차에 AI를 허용할 것인가 — 몇 주차부터, 어떤 형태(힌트형만? 전면?)로</span></li><li><b>지표 문제</b><span>내년 이수율이 10%p 오르면 성과인가, 경고인가 — 이수율 옆에 둘 지표에 합의할 수 있는가</span></li><li><b>층 문제</b><span>학점 인정 강좌의 최종 판정을 소속 캠퍼스 대면으로 옮길 수 있는가</span></li></ol><p class="defer">학칙 · 학점 인정은 각 기관 교무 부서 소관이며, 센터는 제안 자료까지 맡는다 · 출처 DGIST 세션 3 자료 14쪽 · 편집 노트는 주관 기관 정리이며 각 기관의 공식 입장이 아닙니다.</p></div></details>
 </section>
   </div>
 </section>
+
 
 <section class="block" id="venue">
   <div class="wrap">
@@ -594,11 +611,11 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
     </ul>
     <div class="bring">
       <div><b>당일 문의</b><p>DGIST 교수학습센터 <span class="mono">053-785-5172</span></p></div>
-      <div><b>자료집 인쇄본은 없습니다</b><p>이 페이지와 10. 12. 전자문서가 자료를 받으시는 경로입니다.</p></div>
       <div><b>결과는 10월 말 회람합니다</b><p>당일에는 합의문을 확정하지 않고, 정리 초안을 기관 확인 뒤 확정합니다.</p></div>
     </div>
   </div>
 </section>
+
 </main>
 
 <footer class="site">
@@ -609,7 +626,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
   </div>
 </footer>
 
-<button type="button" class="totop" id="totop" hidden aria-label="맨 위로">↑</button>
+<button type="button" class="totop dg-mini" id="totop" hidden aria-label="맨 위로 올라가 달구에게 묻기" title="맨 위로 · 달구에게 묻기"><img src="dalgu/dalgu.png" alt="" width="50" height="50"><span aria-hidden="true">↑</span></button>
 <dialog id="reader" aria-labelledby="r-title">
   <div class="r-head">
     <div class="r-t"><span id="r-kick"></span><h3 id="r-title"></h3></div>
@@ -761,7 +778,11 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   if(tt){
     const upd = () => { tt.hidden = window.scrollY < 900; };
     addEventListener('scroll', upd, {passive:true}); upd();
-    tt.onclick = () => scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    // 떠 있는 작은 달구 — 맨 위로 올라가 '지금 뭐 해요?'에 바로 답한다
+    tt.onclick = () => {
+      scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+      const q = $('.dg-q[data-q="now"]'); if(q){ q.focus({preventScroll:true}); q.click(); }
+    };
   }
 
   /* 현재 섹션 표시 */
@@ -777,34 +798,134 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
 
 </script>
 <script type="module">
-// 달구 환영 인사 — 3D 는 꾸밈이다. 첫 프레임을 그린 뒤에만 PNG 를 바꾸고, 실패하면 PNG 그대로 둔다.
-const btn = document.getElementById("dg"), stage = document.getElementById("dg-stage");
-const say = document.getElementById("dg-say"), nEl = document.getElementById("dg-n"), tEl = document.getElementById("dg-total");
-const day = (() => { const p = new Intl.DateTimeFormat("en-CA", {timeZone: "Asia/Seoul"}).format(new Date()); return p; })();
-const LINES = day === "2026-10-15" || day === "2026-10-16" ? [
-  "어서 오세요! 오늘 STAR-MOOC 워크숍에 함께해 주셔서 고마워요.",
-  "지금 진행 중인 순서는 화면 위 검은 띠에서 바로 볼 수 있어요.",
-  "토의 때는 아래 세션 자료를 노트북으로 같이 봐요.",
-  "궁금한 게 생기면 053-785-5172로 연락 주세요!",
-] : [
-  "안녕하세요! DGIST 마스코트 달구예요. 2026 STAR-MOOC 공동 워크숍에 오신 것을 환영해요!",
-  "10월 15일(목) 12시, 능이마을 현풍점에서 점심부터 함께해요.",
-  "세션 자료는 아래에서 미리 볼 수 있어요. 노트북도 꼭 챙겨 주세요!",
-  "대구까지 먼 길, 조심히 오세요. 궁금한 점은 053-785-5172로 물어봐 주세요.",
-];
-let i = 0, d = null;
-say.textContent = LINES[0]; tEl.textContent = LINES.length;
+// 달구 안내(10-12) — 환영 인사 4줄을 '지금 필요한 안내'로 바꿨다.
+// 서울 시각으로 지금이 행사 전·자료 마감일·행사 중·행사 뒤 중 어디인지 보고, 질문마다 답 한 줄 + 바로 가는 버튼 하나.
+// 3D 는 꾸밈이다. 첫 프레임을 그린 뒤에만 PNG 를 바꾸고, 실패하거나 데이터 절약 모드면 PNG 그대로 둔다.
+const G = {"tel": "053-785-5172", "venues": [{"what": "회의장", "name": "DGIST R1(연구행정동) 301호 대회의실", "when": "10. 15. 13:00 – 10. 16. 13:05", "full": "대구광역시 달성군 유가읍 테크노중앙대로 333"}, {"what": "숙소", "name": "DGIST 국제관 · 1인 1실", "when": "체크인 10. 15.(목) 17:00부터 · 퇴실 10. 16. 09:00까지", "full": "대구광역시 달성군 유가읍 테크노중앙대로 333"}, {"what": "중식", "name": "능이마을 현풍점", "when": "10. 15.(목) 12:00", "full": "대구광역시 달성군 현풍읍 현풍동로29길 2"}, {"what": "만찬", "name": "용성양꼬치", "when": "10. 15.(목) 18:00", "full": "대구광역시 달성군 현풍읍 테크노중앙대로5길 22"}, {"what": "브런치", "name": "도케비커피 비슬산 본점", "when": "10. 16.(금) 11:15", "full": "대구광역시 달성군 유가읍 음동길 130-15"}], "sessions": [{"no": 1, "title": "온라인 강좌 운영 방안과 미래", "n": 3, "keys": ["kaist-s1", "dgist-s1", "unist-s1"]}, {"no": 2, "title": "AI 적용 업무 추진 현황과 계획", "n": 2, "keys": ["dgist-s2", "unist-s2"]}, {"no": 3, "title": "AI가 답을 주는데 무엇을 가르치고 평가할 것인가?", "n": 3, "keys": ["kaist-s3", "dgist-s3", "unist-s3"]}]};
+const $ = (q) => document.querySelector(q), $$ = (q) => [...document.querySelectorAll(q)];
+const btn = $("#dg"), stage = $("#dg-stage"), say = $("#dg-say"), act = $("#dg-act");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const toMin = (s) => { const [h, m] = s.split(":").map(Number); return h * 60 + m; };
+
+function seoul() {
+  const p = new Intl.DateTimeFormat("en-CA", {timeZone: "Asia/Seoul", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23"}).formatToParts(new Date());
+  const g = (t) => p.find((x) => x.type === t).value;
+  return {d: `${g("year")}-${g("month")}-${g("day")}`, m: +g("hour") * 60 + +g("minute")};
+}
+// 프로그램 칸은 페이지에 이미 있다(.slot data-d/a/b) — 같은 출처를 읽어 '지금 띠'와 어긋나지 않게
+const SLOTS = $$(".slot").map((li) => ({d: li.dataset.d, a: li.dataset.a, b: li.dataset.b, t: li.querySelector("strong").textContent,
+  s: (li.className.match(/\bs(\d)\b/) || [])[1]}));
+const at = (s) => s.d + " " + s.a.padStart(5, "0");
+function phase(n = seoul()) {
+  const key = n.d + " " + String(Math.floor(n.m / 60)).padStart(2, "0") + ":" + String(n.m % 60).padStart(2, "0");
+  const cur = SLOTS.find((s) => s.d === n.d && n.m >= toMin(s.a) && n.m < toMin(s.b));
+  const next = SLOTS.find((s) => at(s) > key && s.b !== s.a);
+  const dd = Math.round((Date.UTC(2026, 9, 15) - Date.UTC(...n.d.split("-").map((v, i) => (i === 1 ? v - 1 : +v)))) / 864e5);
+  const kind = n.d > "2026-10-16" || (n.d === "2026-10-16" && n.m >= toMin("13:05")) ? "after"
+    : n.d === "2026-10-15" && n.m >= toMin("12:00") || n.d === "2026-10-16" ? "live"
+    : n.d === "2026-10-12" ? "deadline" : n.d < "2026-10-12" ? "early" : "soon";
+  return {n, cur, next, dd, kind};
+}
+const dayLabel = (d) => (d === "2026-10-15" ? "15일(목)" : "16일(금)");
+
+// 지금 있어야 할 곳 — 프로그램 순서 그대로
+function venueNow(p) {
+  const V = Object.fromEntries(G.venues.map((v) => [v.what, v])), {d, m} = p.n;
+  if (p.kind === "after") return null;
+  if (d < "2026-10-15" || (d === "2026-10-15" && m < toMin("13:00"))) return V["중식"];
+  if (d === "2026-10-15") return m < toMin("17:00") ? V["회의장"] : m < toMin("17:30") || m >= toMin("20:00") ? V["숙소"] : V["만찬"];
+  if (m < toMin("09:00")) return V["숙소"];
+  return m < toMin("11:00") || m >= toMin("12:15") ? V["회의장"] : V["브런치"];
+}
+function nextSession(p) {
+  if (p.cur && p.cur.s) return G.sessions[p.cur.s - 1];
+  const s = SLOTS.find((x) => x.s && (!p.next || at(x) >= at(p.next)));
+  return s ? G.sessions[s.s - 1] : null;
+}
+
+const A = {
+  link: (href, label) => `<a href="${href}">${esc(label)}</a>`,
+  open: (key, label) => `<a href="#${key}" data-open="${key}">${esc(label)}</a>`,
+  copy: (val, label, cls = "") => `<button type="button" class="${cls}" data-dg-copy="${esc(val)}">${esc(label)}</button>`,
+};
+const ANSWER = {
+  greet(p) {
+    if (p.kind === "early") return [`안녕하세요! 달구예요. 워크숍까지 <b>D-${p.dd}</b>, 발표 자료는 <b>10월 12일(월)</b>까지 받아요.`, A.link("#sessions", "올라온 자료 보기")];
+    if (p.kind === "deadline") return ["오늘이 <b>발표 자료 마감일</b>이에요. 10월 2일 안내 메일에 회신으로 보내 주시면 이 페이지에 실어 드려요.", A.link("#sessions", "올라온 자료 보기")];
+    if (p.kind === "soon" && p.dd === 0) return ["오늘이에요! <b>12시 능이마을 현풍점</b>에서 점심부터 함께해요. 조심히 오세요.", A.copy(G.venues.find((x) => x.what === "중식").full, "주소 복사") + A.link("#venue", "장소 안내")];
+    if (p.kind === "soon") return [`워크숍까지 <b>D-${p.dd}</b>! 15일(목) 12시, 능이마을 현풍점에서 점심부터 함께해요.`, A.link("#venue", "장소 안내")];
+    if (p.kind === "after") return ["함께해 주셔서 고마워요. 논의 결과 정리 초안은 <b>10월 말</b>에 회람할게요.", A.link("#sessions", "세션 자료 다시 보기")];
+    return ANSWER.now(p);
+  },
+  now(p) {
+    if (p.kind === "after") return ["워크숍은 16일(금) 13:05에 마쳤어요. 결과 정리 초안은 10월 말에 보내 드려요.", A.link("#programme", "프로그램 보기")];
+    if (p.cur) {
+      const nx = p.next ? ` 다음은 ${p.next.a} <b>${esc(p.next.t)}</b>.` : "";
+      return [`지금은 <b>${esc(p.cur.t)}</b> 시간이에요(${p.cur.a}–${p.cur.b}).${nx}`, p.cur.s ? A.link(`#session-${p.cur.s}`, `세션 ${p.cur.s} 자료 보기`) : A.link("#programme", "프로그램 보기")];
+    }
+    const {d, m} = p.n;
+    if (p.kind === "live" && ((d === "2026-10-15" && m >= toMin("20:00")) || (d === "2026-10-16" && m < toMin("09:00"))))
+      return [`오늘 일정은 끝났어요. 국제관에서 푹 쉬세요. 내일은 09:00까지 퇴실하고, 다음 순서는 <b>${p.next.a} ${esc(p.next.t)}</b>.`, A.link("#programme", "프로그램 보기")];
+    if (p.next) return [`다음 순서는 ${dayLabel(p.next.d)} ${p.next.a}, <b>${esc(p.next.t)}</b>.`, A.link("#programme", "프로그램 보기")];
+    return ["프로그램은 아래에 있어요.", A.link("#programme", "프로그램 보기")];
+  },
+  where(p) {
+    const v = venueNow(p);
+    if (!v) return ["행사는 끝났어요. 장소 안내는 아래에 그대로 남겨 둘게요.", A.link("#venue", "장소 안내")];
+    return [`지금 가실 곳은 <b>${esc(v.name)}</b>이에요. ${esc(v.when)}.`, A.copy(v.full, "주소 복사") + A.link("#venue", "장소 안내")];
+  },
+  read(p) {
+    const s = p.kind === "after" ? null : nextSession(p);
+    const total = G.sessions.reduce((a, x) => a + x.n, 0);
+    if (!s) return [`세 세션 자료 ${total}편을 아래에서 다시 볼 수 있어요.`, A.link("#sessions", "세션 자료")];
+    const first = s.keys[0];
+    return [`${p.cur && p.cur.s ? "지금" : "다음"} 세션은 <b>세션 ${s.no}</b>이에요. 「${esc(s.title)}」 자료 ${s.n}편이 올라와 있어요.`,
+      (first ? A.open(first, "첫 자료 펼치기") : "") + A.link(`#session-${s.no}`, `세션 ${s.no}로 가기`)];
+  },
+  stay(p) {
+    const v = G.venues.find((x) => x.what === "숙소");
+    return [`<b>${esc(v.name)}</b>이에요. ${esc(v.when)}.`, A.link("#venue", "장소 안내")];
+  },
+  call() {
+    return [`당일 문의는 교수학습센터 <b>${G.tel}</b>로 주세요. 번호를 눌러 복사할 수 있어요.`, A.copy(G.tel, G.tel, "tel")];
+  },
+};
+
+let d = null, moodT = 0;
+function mood(m, back = 2400) { if (!d) return; d.set(m); clearTimeout(moodT); if (m !== "nod") moodT = setTimeout(() => d && d.set("idle"), back); }
+function show(q) {
+  const [text, actions] = ANSWER[q](phase());
+  say.innerHTML = text; act.innerHTML = actions || "";
+  $$(".dg-q").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.q === q)));
+}
+show("greet");
+setInterval(() => { const on = $('.dg-q[aria-pressed="true"]'); show(on ? on.dataset.q : "greet"); }, 60000);
+
+$$(".dg-q").forEach((b) => b.addEventListener("click", () => {
+  show(b.dataset.q);
+  if (d) { d.set("think"); clearTimeout(moodT); moodT = setTimeout(() => mood("talk"), 450); }
+}));
+// 달구를 누르면 지금 필요한 질문을 차례로(지금 → 어디로 → 자료 → 숙소 → 문의)
+const ORDER = ["now", "where", "read", "stay", "call"];
 btn.addEventListener("click", () => {
-  i = (i + 1) % LINES.length;
-  say.textContent = LINES[i]; nEl.textContent = i + 1;
-  if (d) { d.set(i === 0 ? "wave" : i % 2 ? "talk" : "nod"); clearTimeout(btn._t); btn._t = setTimeout(() => d && d.set("idle"), 2400); }
+  const on = $('.dg-q[aria-pressed="true"]'), i = on ? ORDER.indexOf(on.dataset.q) : -1;
+  show(ORDER[(i + 1) % ORDER.length]); mood(i === -1 ? "wave" : "talk");
 });
-try {
-  const { mountDalgu } = await import("./dalgu/dalgu3d.js");
-  const box = document.createElement("span");
-  box.className = "dg-stage"; box.setAttribute("aria-hidden", "true");
-  d = await mountDalgu(box, { size: btn.offsetWidth || 132, framing: "full" });
-  if (d) {
+act.addEventListener("click", (e) => {
+  const c = e.target.closest("[data-dg-copy]"); if (!c) return;
+  const v = c.dataset.dgCopy, label = c.textContent;
+  const done = () => { c.textContent = "복사했어요"; mood("nod"); setTimeout(() => (c.textContent = label), 1600); };
+  const fallback = () => { c.textContent = v; c.style.userSelect = "all"; };   // 복사가 막힌 화면 — 값을 보여 직접 고르게
+  try { navigator.clipboard.writeText(v).then(done, fallback); } catch (_) { fallback(); }
+});
+
+async function mount3d() {
+  try {
+    const { mountDalgu } = await import("./dalgu/dalgu3d.js");
+    const box = document.createElement("span");
+    box.className = "dg-stage"; box.setAttribute("aria-hidden", "true");
+    d = await mountDalgu(box, { size: btn.offsetWidth || 132, framing: "full" });
+    if (!d) return;
     stage.replaceWith(box);
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) setTimeout(() => d.set("wave"), 400);
     if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -815,8 +936,17 @@ try {
           d.lookAt(c((px - r.left - r.width / 2) / (innerWidth / 2)), c((py - r.top - r.height / 2) / (innerHeight / 2))); });
       }, { passive: true });
     }
-  }
-} catch (e) { /* PNG 그대로 */ }
+    // 질문 버튼에 손을 올리면 그쪽을 본다(터치 화면 포함 — 초점이 가면)
+    $$(".dg-q").forEach((b) => b.addEventListener("focus", () => {
+      const r = b.getBoundingClientRect(), o = btn.getBoundingClientRect();
+      d.lookAt(Math.max(-1, Math.min(1, (r.left + r.width / 2 - o.left - o.width / 2) / 300)), 0.6);
+    }));
+  } catch (e) { /* PNG 그대로 */ }
+}
+// three.js 690KB — 데이터 절약 모드면 받지 않고, 아니면 첫 화면이 그려진 뒤 한가할 때 받는다
+const saveData = navigator.connection && navigator.connection.saveData;
+if (!saveData) (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(mount3d, { timeout: 1500 });
+
 </script>
 
 </body>
