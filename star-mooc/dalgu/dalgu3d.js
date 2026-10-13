@@ -44,14 +44,15 @@ function fixMaterials(root) {
 }
 
 const FRAMING = {
-  full: { y: -0.36, h: 2.6 },      // 잔머리 끝 ~ 발
-  bust: { y: -0.12, h: 1.85 },     // 머리 + 어깨
-  face: { y: -0.02, h: 1.72 },     // 동그란 얼굴 칸(자료에 묻기) — 깡충해도 잔머리가 남게
+  // 잘림 재기(clip.html, 10-13): 그림 꼭대기 평소 0.83 · think 0.87 · 깡충 1.22, 발끝 -1.56, 옆 1.14(월드 단위)
+  full: { y: -0.14, h: 2.9 },      // 모든 동작 — 깡충 꼭대기 잔머리까지(예전 y -0.36, h 2.6 은 깡충 때 잘림)
+  bust: { y: -0.07, h: 1.96 },     // 머리 + 어깨 — 깡충은 쓰지 않는다(학습 화면 머리·단추)
+  face: { y: 0.21, h: 2.18 },      // 동그란 얼굴 칸(자료에 묻기) — 깡충해도 잔머리가 남게
 };
 
 export async function mountDalgu(box, opt = {}) {
   const size = opt.size || 88;
-  const frame = FRAMING[opt.framing || "full"];
+  const frame = opt.frame || FRAMING[opt.framing || "full"];   // opt.frame = { y, h } 직접(잘림 재기용)
   // WebGL 이 없으면 three 가 콘솔에 오류를 남긴다 — 먼저 조용히 물어본다.
   const probe = document.createElement("canvas");
   if (!(probe.getContext("webgl2") || probe.getContext("webgl"))) return null;
