@@ -74,6 +74,13 @@ td:first-child{white-space:nowrap;font-family:var(--mono);font-size:13px}
 .flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
 .flow div{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px;font-size:14px;min-width:0}
 .flow b{display:block;font-family:var(--mono);color:var(--accent);font-size:12px;letter-spacing:.06em;margin-bottom:4px}
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+.dl a{display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--fg);text-decoration:none}
+.dl a:hover,.dl a:focus-visible{border-color:var(--accent);outline:none}
+.dl a b{font-size:16px;color:var(--accent)}
+.dl a b::after{content:" ↗";font-weight:400}
+.dl a span{font-size:13.5px;color:var(--muted);line-height:1.55}
+.dl a em{font-style:normal;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
 footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 @media (max-width:860px){
   .wrap{grid-template-columns:minmax(0,1fr);gap:8px}
@@ -116,13 +123,23 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
   <p class="sub">한 번만 갖춰 두면 됩니다.</p>
   <div class="tbl"><table>
     <tr><th>무엇</th><th>왜 필요한가</th><th>확인 방법</th></tr>
-    <tr><td>Claude 유료 계정</td><td>Pro 또는 Max 구독이 있어야 Claude Code에 로그인됩니다.</td><td>claude.ai 로그인</td></tr>
+    <tr><td>Claude 유료 계정</td><td>Pro 또는 Max 구독이 있어야 Claude Code에 로그인됩니다.</td><td><a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> 로그인</td></tr>
     <tr><td>Git for Windows</td><td>Claude Code가 Windows에서 명령을 실행할 때 Git Bash를 씁니다.</td><td><code>git --version</code></td></tr>
     <tr><td>Node.js LTS</td><td>Claude Code 설치에는 필요 없지만, Word·PowerPoint 문서를 만드는 docx·pptx 스킬과 상태줄이 Node로 돌아갑니다. 같이 깔아 두세요.</td><td><code>node --version</code></td></tr>
     <tr><td>Python 3.11 이상</td><td>포털 자동화(Playwright)와 관측기 스크립트를 돌립니다.</td><td><code>python --version</code></td></tr>
-    <tr><td>학내망 또는 VPN</td><td>포털·전자결재·웹메일은 학외에서 바로 열리지 않습니다.</td><td>portal.dgist.ac.kr 접속</td></tr>
+    <tr><td>학내망 또는 VPN</td><td>포털·전자결재·웹메일은 학외에서 바로 열리지 않습니다.</td><td><a href="https://portal.dgist.ac.kr" target="_blank" rel="noopener">portal.dgist.ac.kr</a> 접속</td></tr>
   </table></div>
-  <p>PowerShell은 시작 메뉴에서 <b>“PowerShell”</b>을 검색해 엽니다. 관리자 권한은 필요 없습니다.</p>
+  <h3>설치 파일 받기</h3>
+  <p>아래 순서대로 눌러 내려받고 설치합니다. 질문이 나오면 적힌 것만 바꾸고 나머지는 <b>Next</b>(기본값)로 넘기면 됩니다.</p>
+  <div class="dl">
+    <a href="https://claude.com/pricing" target="_blank" rel="noopener"><em>① 계정</em><b>Claude 가입·구독</b><span>Pro 또는 Max 요금제를 고릅니다. 이미 있으면 건너뜁니다.</span></a>
+    <a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener"><em>② Git</em><b>Git for Windows</b><span>“64-bit Git for Windows Setup”을 받아 실행하고 끝까지 Next.</span></a>
+    <a href="https://nodejs.org/ko/download" target="_blank" rel="noopener"><em>③ Node.js</em><b>Node.js LTS</b><span>“Windows 설치 프로그램(.msi)” LTS 버전을 받아 끝까지 Next.</span></a>
+    <a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener"><em>④ Python</em><b>Python 3.12</b><span>첫 화면 아래 <b>“Add python.exe to PATH”</b>를 꼭 체크한 뒤 Install Now.</span></a>
+  </div>
+  <p>Claude Code 공식 설치 안내는 <a href="https://docs.claude.com/ko/docs/claude-code/setup" target="_blank" rel="noopener">docs.claude.com 설치 페이지</a>에 있습니다.</p>
+  <h3>명령어로 한 번에 설치(선택)</h3>
+  <p>설치 파일 대신 명령어가 편하면 이 방법을 씁니다. PowerShell은 시작 메뉴에서 <b>“PowerShell”</b>을 검색해 엽니다. 관리자 권한은 필요 없습니다.</p>
   <div class="term"><div class="bar"><span>POWERSHELL · Git·Node·Python 한 번에 설치</span><button class="copy" type="button">복사</button></div>
 <pre>winget install --id Git.Git -e
 winget install --id OpenJS.NodeJS.LTS -e
@@ -148,13 +165,13 @@ winget install --id Python.Python.3.12 -e</pre></div>
       <div class="term"><div class="bar"><span>POWERSHELL</span><button class="copy" type="button">복사</button></div>
 <pre>cd $HOME
 claude</pre></div>
-      <p>처음 실행하면 브라우저가 열립니다. Claude 계정으로 로그인하고 <b>승인</b>을 누르면 터미널로 돌아옵니다. 테마 선택, 폴더 신뢰 여부 질문은 기본값으로 진행해도 됩니다.</p>
+      <p>처음 실행하면 브라우저가 열립니다. <a href="https://claude.ai" target="_blank" rel="noopener">Claude 계정</a>으로 로그인하고 <b>승인</b>을 누르면 터미널로 돌아옵니다. 테마 선택, 폴더 신뢰 여부 질문은 기본값으로 진행해도 됩니다.</p>
     </li>
     <li><strong class="t">설치 점검</strong>
       <div class="term"><div class="bar"><span>POWERSHELL</span><button class="copy" type="button">복사</button></div>
 <pre>claude --version
 claude doctor</pre></div>
-      <div class="check"><b>확인</b><span><code>claude doctor</code>에 빨간 오류가 없으면 설치 완료입니다.</span></div>
+      <div class="check"><b>확인</b><span><code>claude doctor</code>에 빨간 오류가 없으면 설치 완료입니다. 문제가 있으면 <a href="https://docs.claude.com/ko/docs/claude-code/troubleshooting" target="_blank" rel="noopener">공식 문제 해결 안내</a>를 보세요.</span></div>
     </li>
   </ol>
   <div class="note"><b>어느 폴더에서 켜나요?</b> Claude는 켠 폴더를 작업 공간으로 봅니다. 처음에는 내 홈 폴더(<code>C:\Users\내아이디</code>)에서 켜고, 특정 업무를 할 때는 그 업무 폴더로 <code>cd</code> 한 뒤 켜는 습관을 들이세요.</div>
