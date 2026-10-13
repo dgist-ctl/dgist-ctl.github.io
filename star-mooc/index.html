@@ -1372,7 +1372,7 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   async function goLive(img) {
     if (calm || !img || live.has(img)) return;
     live.set(img, null);
-    let mod; try { mod = await import("./dalgu/dalgu3d.js"); } catch (e) { live.delete(img); return; }
+    let mod; try { mod = await import("./dalgu/dalgu3d.js?v=4"); } catch (e) { live.delete(img); return; }
     const size = img.offsetWidth || 44;
     const box = document.createElement("span");
     box.className = "qa-av3"; box.setAttribute("aria-hidden", "true");
@@ -1539,7 +1539,7 @@ act.addEventListener("click", (e) => {
 
 async function mount3d() {
   try {
-    const { mountDalgu } = await import("./dalgu/dalgu3d.js");
+    const { mountDalgu } = await import("./dalgu/dalgu3d.js?v=4");
     const box = document.createElement("span");
     box.className = "dg-stage"; box.setAttribute("aria-hidden", "true");
     d = await mountDalgu(box, { size: btn.offsetWidth || 132, framing: "full" });

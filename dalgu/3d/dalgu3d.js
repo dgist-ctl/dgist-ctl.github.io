@@ -5,6 +5,7 @@
 //   const d = await mountDalgu(box, { size: 88, framing: "full" });   // 실패하면 null
 //   d.set("idle" | "think" | "nod" | "talk" | "hop" | "wave");
 //   d.lookAt(nx, ny);   // -1 ~ 1, 오른쪽·아래가 +
+//   d.smile(sec);       // 눈웃음(∩∩)을 sec 초 동안 — 끄덕·깡충·손 흔들기 때는 저절로 웃는다
 //   d.dispose();
 //
 // 첫 프레임을 그린 뒤에야 box 에 캔버스를 넣는다 — 호출한 쪽은 null 이면 PNG 를 그대로 두면 된다.
@@ -18,6 +19,7 @@ const O = (x, y) => [(x - 292) * K, -(y - 265) * K];     // 공식 그림 px →
 const GLB = new URL("./dalgu.glb", import.meta.url).href;
 const ONCE = { nod: 1, wave: 1, hop: 1 };                  // 한 번 하고 idle 로 돌아가는 동작
 // 멈춘 그림(still·스냅샷·맞춤)에 쓰는 순간(초) — anim.py 의 pose 프레임 / 24
+const SMILE = { nod: 1, hop: 1, wave: 1 };                // 이 동작들은 눈웃음과 함께
 const POSE = { idle: 0, think: 1, nod: 9 / 24, talk: 4 / 24, wave: 22 / 24, hop: 12 / 24 };
 const FADE = 0.25;
 
@@ -98,7 +100,11 @@ export async function mountDalgu(box, opt = {}) {
   const bone = (n) => model.getObjectByName(n);
   const B = { root: bone("root"), head: bone("head"), eyes: [bone("eye_L"), bone("eye_R")] };
   const hairs = [];
-  model.traverse((o) => { if (o.morphTargetDictionary && "dna" in o.morphTargetDictionary) hairs.push(o); });
+  const smiles = [];                                       // 눈·눈빛의 쉐이프키 smile(10-13)
+  model.traverse((o) => {
+    if (o.morphTargetDictionary && "dna" in o.morphTargetDictionary) hairs.push(o);
+    if (o.morphTargetDictionary && "smile" in o.morphTargetDictionary) smiles.push(o);
+  });
 
   const mixer = new THREE.AnimationMixer(model);
   const acts = {};
@@ -110,7 +116,7 @@ export async function mountDalgu(box, opt = {}) {
   if (!acts.idle || !B.head || !B.root) { renderer.dispose(); return null; }
 
   const still = opt.still ?? matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const st = { mood: "idle", look: [0, 0], lookNow: [0, 0], dna: 0, spike: 0, nextBlink: 1.5, blinkAt: -9, turn: 0 };
+  const st = { mood: "idle", look: [0, 0], lookNow: [0, 0], dna: 0, spike: 0, nextBlink: 1.5, blinkAt: -9, turn: 0, smile: 0, smileUntil: -1 };
   const clock = new THREE.Clock();
   let cur = acts.idle, raf = 0, visible = true, alive = true, seeking = false;
   cur.play();
@@ -127,7 +133,7 @@ export async function mountDalgu(box, opt = {}) {
     B.eyes.forEach((e) => { if (e) e.scale.y /= last.lid; });
     last.root.identity(); last.head.identity(); last.lid = 1;
   }
-  function overlay(instant) {
+  function overlay(instant, dt = 1 / 60) {
     const k = instant ? 1 : 0.12;
     st.lookNow[0] += (st.look[0] - st.lookNow[0]) * k;
     st.lookNow[1] += (st.look[1] - st.lookNow[1]) * k;
@@ -142,8 +148,11 @@ export async function mountDalgu(box, opt = {}) {
       h.morphTargetInfluences[h.morphTargetDictionary.dna] = st.dna;
       h.morphTargetInfluences[h.morphTargetDictionary.spike] = st.spike;
     }
+    const smT = SMILE[st.mood] || clock.elapsedTime < st.smileUntil ? 1 : 0;
+    st.smile += (smT - st.smile) * (instant ? 1 : 1 - Math.exp(-dt * 12));   // 시간 기준 — 느린 기기에서도 같은 빠르기
+    for (const o of smiles) o.morphTargetInfluences[o.morphTargetDictionary.smile] = st.smile;
     let lid = 1;
-    if (!instant) {
+    if (!instant && st.smile < 0.3) {                         // 웃는 동안엔 깜빡이지 않는다
       const t = clock.elapsedTime;
       if (t > st.nextBlink) { st.nextBlink = t + 2.8 + Math.random() * 3.2; st.blinkAt = t; }
       const b = t - st.blinkAt;
@@ -153,7 +162,7 @@ export async function mountDalgu(box, opt = {}) {
     last.lid = lid;
   }
 
-  function frameOnce(dt) { unoverlay(); mixer.update(dt); overlay(still); renderer.render(scene, cam); }
+  function frameOnce(dt) { unoverlay(); mixer.update(dt); overlay(still, dt); renderer.render(scene, cam); }
   function loop() {
     raf = 0;
     if (!alive || !visible || document.hidden) return;
@@ -185,7 +194,8 @@ export async function mountDalgu(box, opt = {}) {
   return {
     canvas, set,
     get mood() { return st.mood; },
-    get _probe() { return { eye: B.eyes[0] ? B.eyes[0].scale.y : 1, head: B.head.quaternion.toArray() }; },   // 시험용
+    get _probe() { return { eye: B.eyes[0] ? B.eyes[0].scale.y : 1, head: B.head.quaternion.toArray(), smile: st.smile, smiles: smiles.length }; },   // 시험용
+    smile(sec = 1.6) { st.smileUntil = clock.elapsedTime + sec; if (still) { st.smile = 1; frameOnce(0); } else kick(); },
     lookAt(nx, ny) { st.look = [nx, ny]; if (still) frameOnce(0); },
     turn(rad) { st.turn = rad; frameOnce(0); },              // 시안 캡처용(정면·3/4·옆)
     seek(mood, t) {                                          // 미리보기 영상·시험용 — mood 의 t초 모습을 그린다
