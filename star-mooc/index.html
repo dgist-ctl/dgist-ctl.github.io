@@ -343,7 +343,7 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .dg{appearance:none;border:0;background:none;padding:0;width:132px;height:132px;cursor:pointer;position:relative;border-radius:50%}
 .dg-stage{position:absolute;inset:0;display:block}
 .dg-stage img,.dg-stage canvas{width:132px!important;height:132px!important;display:block;border-radius:0}
-.dg-stage img{border-radius:50%;animation:dg-in .7s cubic-bezier(.2,1.4,.4,1) both}
+.dg-stage img{border-radius:0;animation:dg-in .7s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes dg-in{from{transform:translateY(16px) scale(.85);opacity:0}to{transform:none;opacity:1}}
 .dg-bubble{position:relative;background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:14px 16px 10px;box-shadow:0 6px 18px rgba(15,23,36,.08)}
 .dg-bubble::before{content:"";position:absolute;left:-8px;top:42%;width:14px;height:14px;background:var(--sheet);border-left:1px solid var(--rule);border-bottom:1px solid var(--rule);transform:rotate(45deg)}
@@ -629,7 +629,7 @@ v.innerHTML='<source src="intro/intro.webm" type="video/webm"><source src="intro
     <div class="side">
     <div class="welcome">
       <button type="button" class="dg" id="dg" aria-label="달구에게 지금 필요한 안내 듣기">
-        <span class="dg-stage" id="dg-stage"><img src="dalgu/dalgu.png" alt="" width="132" height="132" draggable="false"></span>
+        <span class="dg-stage" id="dg-stage"><img src="dalgu/dalgu_full.png" alt="" width="132" height="132" draggable="false"></span>
       </button>
       <div class="dg-bubble" role="status" aria-live="polite">
         <p id="dg-say">안녕하세요! DGIST 마스코트 달구예요. 2026 STAR-MOOC 공동 워크숍에 오신 것을 환영해요!</p>
@@ -695,7 +695,7 @@ v.innerHTML='<source src="intro/intro.webm" type="video/webm"><source src="intro
       </ul>
     </div>
     <div class="qa" id="ask">
-      <div class="qa-head"><img class="qa-av" src="dalgu/dalgu.png" alt="" width="52" height="52"><div><h3>달구에게 자료 묻기</h3><p id="qa-mode">안녕하십니까, 달구입니다. 발표 자료와 행사 안내를 살펴 정성껏 답변해 드리겠습니다. 번호를 누르시면 그 쪽이 펼쳐집니다.</p></div></div>
+      <div class="qa-head"><img class="qa-av" src="dalgu/dalgu_head.png" alt="" width="52" height="52"><div><h3>달구에게 자료 묻기</h3><p id="qa-mode">안녕하십니까, 달구입니다. 발표 자료와 행사 안내를 살펴 정성껏 답변해 드리겠습니다. 번호를 누르시면 그 쪽이 펼쳐집니다.</p></div></div>
       <button type="button" class="qa-tease" id="qa-tease" hidden></button>
       <div class="qa-eg" aria-label="질문 예시">
         <button type="button" data-ask="기관마다 AI를 어떤 업무에 쓰고 있는지 비교해 주세요">기관별 AI 업무 적용 비교</button>
@@ -853,7 +853,7 @@ v.innerHTML='<source src="intro/intro.webm" type="video/webm"><source src="intro
   </div>
 </footer>
 
-<button type="button" class="totop dg-mini" id="totop" hidden aria-label="맨 위로 올라가 달구에게 묻기" title="맨 위로 · 달구에게 묻기"><img src="dalgu/dalgu.png" alt="" width="50" height="50"><span aria-hidden="true">↑</span></button>
+<button type="button" class="totop dg-mini" id="totop" hidden aria-label="맨 위로 올라가 달구에게 묻기" title="맨 위로 · 달구에게 묻기"><img src="dalgu/dalgu_head.png" alt="" width="50" height="50"><span aria-hidden="true">↑</span></button>
 <dialog id="reader" aria-labelledby="r-title">
   <div class="r-head">
     <div class="r-t"><span id="r-kick"></span><h3 id="r-title"></h3></div>
@@ -1158,7 +1158,7 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
   function turn(q) {
     const li = document.createElement("li");
     li.className = "qa-turn";
-    li.innerHTML = `<p class="qa-q">${esc(q)}</p><div class="qa-bot"><img class="qa-av" src="dalgu/dalgu.png" alt="" width="44" height="44">`
+    li.innerHTML = `<p class="qa-q">${esc(q)}</p><div class="qa-bot"><img class="qa-av" src="dalgu/dalgu_head.png" alt="" width="44" height="44">`
       + `<div class="qa-say"><span class="qa-who">달구</span><div class="qa-a"></div><div class="qa-refs"></div></div></div>`;
     log.append(li); log.hidden = false;
     while (log.children.length > 6) log.firstElementChild.remove();   // 최근 6개만
