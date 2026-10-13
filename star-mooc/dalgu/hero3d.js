@@ -132,6 +132,11 @@ export async function mountHero(host) {
     const intro = host.classList.contains("intro");
     side = intro ? 0 : W > 980 ? 2.4 : W > 680 ? 1.2 : 0;   // 첫 화면 도입 땐 가운데
     near = intro ? (W / H < 0.8 ? 9.5 : 6.6) : 10.5;          // 도입 땐 궤도가 표제를 감싸도록 가까이
+    if (!intro) {   // 기관 이름이 화면 밖으로 나가지 않게: 보이는 반폭 안에 궤도(이름 포함 반지름 ≈ 3.4)가 들도록
+      const half = Math.tan((cam.fov * Math.PI) / 360) * cam.aspect;   // 거리 1 당 반폭
+      near = Math.max(10.5, 3.6 / half);
+      side = Math.max(0, Math.min(side, half * near - 3.6));
+    }
   }
   const ro = new ResizeObserver(size); ro.observe(host); size();
   const mo2 = new MutationObserver(size); mo2.observe(host, { attributes: true, attributeFilter: ["class"] });
