@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="처음 하는 분을 위한 Claude Code 설치, 포털 CDP 연결, 관측기로 업무 스킬 만들기 안내(Windows)">
+<meta property="og:title" content="클로드 실전 가이드">
+<meta property="og:image" content="https://dgist-ctl.github.io/dalgu/dalgu-og-1200x630.png">
+<link rel="icon" type="image/png" href="../dalgu/dalgu-icon-64.png">
+<title>클로드 실전 가이드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* 레이아웃: 왼쪽 진행 체크 목차 + 오른쪽 따라 하기 본문. 단계마다 '할 일 → 이렇게 보이면 성공 → 안 되면' */
+:root{
+  --bg:#f5f7f8; --panel:#ffffff; --fg:#1b2428; --muted:#4f5e64; --line:#d6dfe2;
+  --accent:#0d6e6a; --accent-soft:#e1f0ee; --warn:#94560a; --warn-soft:#fdf1dc;
+  --term-bg:#14201f; --term-fg:#d6ece8; --term-dim:#86aaa4; --term-key:#f0b45c; --term-sel:#2c4a46; --glow:#d7ece8; --shadow:rgba(13,60,58,.16);
+  --sans:"IBM Plex Sans KR","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:"JetBrains Mono",Consolas,"D2Coding",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1515; --panel:#161e1e; --fg:#e3ecea; --muted:#a3b5b3; --line:#2a4340;
+  --accent:#5cc7bd; --accent-soft:#183331; --warn:#f0b45c; --warn-soft:#2e2414;
+  --term-bg:#0a1010; --term-fg:#d6ece8; --term-dim:#7c9f99; --term-key:#f0b45c; --term-sel:#22403c; --glow:#1d3c38; --shadow:rgba(0,0,0,.45); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1515; --panel:#161e1e; --fg:#e3ecea; --muted:#a3b5b3; --line:#2a4340;
+  --accent:#5cc7bd; --accent-soft:#183331; --warn:#f0b45c; --warn-soft:#2e2414;
+  --term-bg:#0a1010; --term-fg:#d6ece8; --term-dim:#7c9f99; --term-key:#f0b45c; --term-sel:#22403c; --glow:#1d3c38; --shadow:rgba(0,0,0,.45); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17.5px;line-height:1.85;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:32px 80px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px}
+
+/* 목차 = 진행 체크 */
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;font-size:15px}
+nav.toc .k{font-size:13px;color:var(--muted);margin-bottom:8px}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+nav.toc li{display:flex;align-items:center;gap:8px}
+nav.toc input{width:18px;height:18px;accent-color:var(--accent);flex:none;margin:0}
+nav.toc a{color:var(--fg);text-decoration:none;padding:2px 0}
+nav.toc a:hover{color:var(--accent)}
+nav.toc li.done a{color:var(--muted);text-decoration:line-through}
+nav.toc .bar{height:6px;border-radius:3px;background:var(--line);margin-top:12px;overflow:hidden}
+nav.toc .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+nav.toc .pct{font-size:13px;color:var(--muted);margin-top:4px}
+
+main{min-width:0}
+header.hero{padding-bottom:28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:14px;color:var(--accent);font-weight:500}
+h1{font-size:clamp(32px,5vw,46px);line-height:1.2;margin:6px 0 14px;text-wrap:balance;font-weight:700}
+.lede{max-width:58ch;margin:0;font-size:18.5px}
+.how{display:flex;flex-wrap:wrap;gap:8px 18px;margin:16px 0 0;padding:0;list-style:none;font-size:15.5px;color:var(--muted)}
+.how b{color:var(--fg)}
+.map{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:22px}
+.map a{display:block;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--fg);font-size:16px;line-height:1.45}
+.map a:hover{border-color:var(--accent)}
+.map b{display:block;font-size:13px;color:var(--accent)}
+.map small{display:block;color:var(--muted);font-size:13.5px;margin-top:4px}
+
+section{padding-top:56px;scroll-margin-top:16px}
+h2{font-size:28px;line-height:1.3;margin:0 0 8px;text-wrap:balance}
+h2 .no{color:var(--accent);font-size:15px;display:block;font-weight:500}
+h3{font-size:20px;margin:32px 0 6px}
+p{max-width:60ch;margin:10px 0}
+.sub{color:var(--muted);margin-top:0;font-size:18px}
+.steps{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:30px;counter-reset:s}
+.steps>li{position:relative;padding-left:48px;counter-increment:s;min-width:0}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--bg);font:700 16px/32px var(--mono);text-align:center}
+.steps>li strong.t{display:block;font-size:19px;line-height:1.5}
+
+/* 검은 상자 = 복사해서 붙여 넣는 글 */
+.term{background:var(--term-bg);color:var(--term-fg);border-radius:10px;margin:12px 0;font:15.5px/1.65 var(--mono);overflow:hidden;max-width:66ch}
+.term .bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 8px 7px 14px;font:13px var(--sans);color:var(--term-dim);border-bottom:1px solid #ffffff14}
+.term pre{margin:0;padding:12px 14px;overflow-x:auto;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.term .k{color:var(--term-key)}
+.copy{font:700 14px var(--sans);color:#14201f;background:var(--term-key);border:0;border-radius:6px;padding:5px 14px;cursor:pointer;flex:none}
+.copy:hover{filter:brightness(1.08)}
+/* 화면 흉내 = 그냥 보는 그림 */
+.screen{background:var(--term-bg);color:var(--term-fg);border-radius:10px;margin:12px 0;font:14.5px/1.7 var(--mono);max-width:66ch;overflow-x:auto;border:1px solid var(--line)}
+.screen .cap{font:13px var(--sans);color:var(--term-dim);padding:7px 14px;border-bottom:1px solid #ffffff14}
+.screen pre{margin:0;padding:12px 14px;white-space:pre}
+.screen .sel{background:var(--term-sel);color:var(--term-key)}
+.screen .ko{color:var(--term-dim);font-family:var(--sans);font-size:13.5px}
+
+.ok,.bad{display:flex;gap:10px;font-size:16.5px;border-radius:8px;padding:10px 14px;margin-top:12px;max-width:66ch}
+.ok{background:var(--accent-soft)} .ok b{color:var(--accent);flex:none}
+.bad{background:var(--warn-soft)} .bad b{color:var(--warn);flex:none}
+.note{border:2px solid var(--warn);background:var(--warn-soft);border-radius:10px;padding:12px 16px;margin:18px 0;max-width:66ch;font-size:17px}
+.note b{color:var(--warn)}
+code{font-family:var(--mono);font-size:.86em;background:var(--accent-soft);padding:1px 5px;border-radius:3px}
+kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--line);border-bottom-width:3px;border-radius:5px;padding:0 7px;background:var(--panel);white-space:nowrap}
+
+.words{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:18px 0}
+.words div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-width:0}
+.words b{display:block;font-size:18px}
+.words em{display:block;font-style:normal;color:var(--accent);font-size:15px;font-weight:500}
+.words span{display:block;color:var(--muted);font-size:15.5px;line-height:1.7;margin-top:4px}
+
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}
+.dl a{display:flex;flex-direction:column;gap:4px;min-width:0;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--fg);text-decoration:none}
+.dl a:hover{border-color:var(--accent)}
+.dl a b{font-size:18px;color:var(--accent)}
+.dl a>b::after{content:" ↗";font-weight:400}
+.dl a span{font-size:15px;color:var(--muted);line-height:1.6}
+.dl a em{font-style:normal;font-size:13px;color:var(--muted);font-weight:500}
+
+.chk{display:inline-flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 14px;font-size:15px;margin:8px 0}
+.chk i{width:18px;height:18px;border:2px solid var(--accent);border-radius:3px;display:grid;place-items:center;color:var(--accent);font-style:normal;font-size:13px;line-height:1;flex:none}
+.chk mark{background:var(--warn-soft);color:var(--fg);padding:0 4px;border-radius:3px}
+
+.say{display:grid;gap:8px;margin:14px 0;max-width:62ch}
+.say div{background:var(--panel);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:10px 16px;font-size:17px}
+.say div::before{content:"클로드에게 이렇게 쓰기";display:block;color:var(--accent);font-size:12.5px;font-weight:500}
+
+.tbl{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:480px;font-size:16px;background:var(--panel)}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{font-weight:700;background:var(--accent-soft)}
+td:first-child{font-weight:500}
+details{margin:18px 0;max-width:66ch;border:1px dashed var(--line);border-radius:10px;padding:10px 16px;background:var(--panel)}
+summary{cursor:pointer;color:var(--muted);font-size:15.5px}
+details[open] summary{margin-bottom:6px}
+.faq{display:grid;gap:10px;max-width:66ch}
+.faq details{margin:0;border-style:solid}
+.faq summary{color:var(--fg);font-weight:500;font-size:17px}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+/* 달구 — Blender 로 만든 3D(뼈대·동작 6개). 첫 화면 무대 + 따라다니는 도우미 */
+.hero-top{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:center}
+.stage{position:relative;height:320px;display:grid;place-items:end center}
+.stage::before{content:"";position:absolute;inset:8% 4% 0;border-radius:50%;background:radial-gradient(closest-side,var(--glow),transparent 72%)}
+.stage::after{content:"";position:absolute;bottom:14px;left:50%;width:150px;height:22px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,var(--shadow),transparent)}
+.stage .dg{position:relative;z-index:1;width:280px;height:300px;display:grid;place-items:end center;cursor:pointer;border:0;background:none;padding:0}
+.stage .dg img{width:170px;margin-bottom:24px}
+.stage .bub{position:absolute;z-index:2;top:6px;left:-6px;max-width:190px;background:var(--panel);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:8px 12px;font-size:14.5px;line-height:1.5;box-shadow:0 6px 18px var(--shadow)}
+.stage .bub b,.buddy .bub b{color:var(--accent)}
+.buddy{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 14px);z-index:20;display:flex;align-items:flex-end;gap:6px;pointer-events:none}
+.buddy .dg{pointer-events:auto;position:relative;width:96px;height:104px;border:0;padding:0;cursor:pointer;background:radial-gradient(closest-side,var(--glow),transparent 75%);border-radius:50%;display:grid;place-items:end center}
+.buddy .dg img{width:64px;margin-bottom:8px}
+.buddy .bub{pointer-events:auto;max-width:240px;background:var(--panel);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:9px 12px;font-size:14.5px;line-height:1.5;margin-bottom:56px;box-shadow:0 8px 22px var(--shadow);opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.buddy .bub.on{opacity:1;transform:none}
+.buddy .x{pointer-events:auto;position:absolute;right:-4px;top:-8px;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--muted);font-size:13px;line-height:1;cursor:pointer}
+.buddy[hidden]{display:none!important}
+.d3{display:block}
+@media (max-width:860px){
+  .hero-top{grid-template-columns:minmax(0,1fr)}
+  .stage{height:230px;order:-1}
+  .stage .dg{width:200px;height:220px}
+  .stage .dg img{width:120px}
+  .stage .bub{left:0;top:0}
+  .buddy .dg{width:76px;height:84px}
+  .buddy .dg img{width:52px}
+  .buddy .bub{max-width:200px;font-size:14px;margin-bottom:44px}
+  .wrap{grid-template-columns:minmax(0,1fr);gap:4px}
+  nav.toc{position:static;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  nav.toc ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .map{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .steps>li{padding-left:42px}
+}
+@media (max-width:420px){ nav.toc ol{grid-template-columns:minmax(0,1fr)} }
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<nav class="toc" aria-label="목차와 진행 상황">
+  <div class="k">끝낸 단계에 체크하세요</div>
+  <ol>
+    <li><input type="checkbox" id="c-prep" data-s="prep" aria-label="1단계 끝냄"><a href="#prep">1. 준비물 4가지</a></li>
+    <li><input type="checkbox" id="c-install" data-s="install" aria-label="2단계 끝냄"><a href="#install">2. 클로드 깔기</a></li>
+    <li><input type="checkbox" id="c-first" data-s="first" aria-label="3단계 끝냄"><a href="#first">3. 말 걸어 보기</a></li>
+    <li><input type="checkbox" id="c-cdp" data-s="cdp" aria-label="4단계 끝냄"><a href="#cdp">4. 포털 연결(CDP)</a></li>
+    <li><input type="checkbox" id="c-observe" data-s="observe" aria-label="5단계 끝냄"><a href="#observe">5. 내 일 가르치기</a></li>
+  </ol>
+  <div class="bar" aria-hidden="true"><i id="pbar"></i></div>
+  <div class="pct" id="pct">0 / 5 단계</div>
+  <ol style="margin-top:14px">
+    <li><a href="#words">먼저 알아 둘 말</a></li>
+    <li><a href="#safety">꼭 지킬 약속</a></li>
+    <li><a href="#faq">자주 묻는 질문</a></li>
+    <li><a href="#trouble">안 될 때</a></li>
+  </ol>
+</nav>
+
+<main>
+<header class="hero">
+ <div class="hero-top">
+  <div>
+  <div class="eyebrow">DGIST 교수학습센터 · 처음 하는 분용 · Windows</div>
+  <h1>클로드 실전 가이드</h1>
+  <p class="lede">컴퓨터를 잘 몰라도 따라 할 수 있습니다. 위에서부터 차례로 <b>누르고, 복사하고, 붙여 넣기</b>만 하세요. 처음 한 번 준비하는 데 30분쯤 걸립니다.</p>
+  <ul class="how">
+    <li><b>검은 상자</b> = 노란 <b>복사</b> 버튼 누르고 붙여 넣기</li>
+    <li><b>말풍선</b> = 클로드에게 그대로 쓰기</li>
+    <li><b>초록 상자</b> = 이렇게 보이면 성공</li>
+  </ul>
+  </div>
+  <div class="stage">
+    <div class="bub" id="stage-say">안녕하세요, 저는 <b>달구</b>예요. 천천히 같이 해 봐요!</div>
+    <button class="dg" id="stage-dg" type="button" aria-label="달구, 누르면 깡충"><img src="../dalgu/dalgu-apple-180.png" alt=""></button>
+  </div>
+ </div>
+  <div class="map">
+    <a href="#prep"><b>1단계 · 15분</b>준비물 4가지<small>버튼 누르고 “Next”만</small></a>
+    <a href="#install"><b>2단계 · 5분</b>클로드 깔기<small>한 줄 붙여 넣기</small></a>
+    <a href="#first"><b>3단계 · 바로</b>말 걸어 보기<small>한국어로 부탁하기</small></a>
+    <a href="#cdp"><b>4단계 · 10분</b>포털 연결<small>클로드에게 부탁하기</small></a>
+    <a href="#observe"><b>5단계 · 15분</b>내 일 가르치기<small>한 번 보여 주기</small></a>
+  </div>
+</header>
+
+<section id="words">
+  <h2><span class="no">시작 전에</span>먼저 알아 둘 말 다섯 개</h2>
+  <div class="words">
+    <div><b>클로드 코드</b><em>내 컴퓨터에 사는 AI 비서</em><span>말로 부탁하면 파일을 열고, 정리하고, 프로그램도 대신 실행해 줍니다.</span></div>
+    <div><b>PowerShell</b><em>클로드와 대화하는 창</em><span>글자만 있는 검은(파란) 창입니다. 클로드는 이 창 안에서 일합니다.</span></div>
+    <div><b>CDP 연결</b><em>클로드 손에 쥐여 주는 크롬 리모컨</em><span>이게 연결되면 클로드가 포털 화면을 보고 대신 누를 수 있습니다.</span></div>
+    <div><b>스킬</b><em>클로드의 업무 요령서</em><span>한 번 가르쳐 두면 “○○ 해줘” 한마디로 같은 일을 반복합니다.</span></div>
+    <div><b>관측기</b><em>옆에서 받아 적는 도우미</em><span>내가 포털에서 일하는 순서를 적어 두면, 클로드가 그걸로 요령서를 만듭니다.</span></div>
+  </div>
+</section>
+
+<section id="prep">
+  <h2><span class="no">1단계 · 약 15분</span>준비물 4가지 갖추기</h2>
+  <p class="sub">구독 1개와 프로그램 3개입니다. 버튼을 <b>①부터 차례로</b> 누르세요.</p>
+  <div class="dl">
+    <a href="https://claude.com/pricing" target="_blank" rel="noopener"><em>①</em><b>Claude 구독</b><span>Pro 또는 Max 요금제를 고릅니다. 이미 쓰고 있으면 건너뛰세요.</span></a>
+    <a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener"><em>②</em><b>Git</b><span>“64-bit Git for Windows Setup”을 받습니다. 질문이 많지만 전부 <b>Next</b>.</span></a>
+    <a href="https://nodejs.org/ko/download" target="_blank" rel="noopener"><em>③</em><b>Node.js</b><span>“Windows 설치 프로그램(.msi)”을 받습니다. 전부 <b>Next</b>.</span></a>
+    <a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener"><em>④</em><b>Python</b><span>맨 위 “Latest Python 3”을 받습니다. <b>아래 그림의 칸에 꼭 체크!</b></span></a>
+  </div>
+  <p>받은 파일은 화면 오른쪽 위(또는 <b>다운로드</b> 폴더)에 있습니다. 더블클릭해서 설치합니다.</p>
+  <div class="note"><b>④ Python에서 가장 많이 틀립니다.</b> 설치 첫 화면 맨 아래 이 칸에 체크하고 <b>Install Now</b>를 누르세요.<br>
+    <span class="chk"><i>✓</i><mark>Add python.exe to PATH</mark></span><br>
+    체크를 빠뜨렸으면 설치 파일을 다시 실행해 <b>Uninstall</b>한 뒤 다시 깔면 됩니다.</div>
+  <div class="ok"><b>성공</b><span>네 개 모두 “Setup was successful” 또는 “완료”가 나왔으면 됩니다. 제대로 깔렸는지는 2단계에서 클로드가 확인해 줍니다.</span></div>
+  <details><summary>왜 4개나 필요한가요?</summary>
+    <p>Git은 클로드가 컴퓨터에 일을 시킬 때, Node.js는 Word·PowerPoint 문서를 만들 때, Python은 포털 일을 할 때 씁니다. 클로드만 쓰려면 Git 하나로도 되지만, 이 가이드의 4·5단계까지 하려면 넷 다 필요합니다.</p>
+  </details>
+</section>
+
+<section id="install">
+  <h2><span class="no">2단계 · 약 5분</span>클로드 깔기</h2>
+  <p class="sub">한 줄 붙여 넣으면 깔립니다.</p>
+  <ol class="steps">
+    <li><strong class="t">PowerShell 창 열기</strong>
+      <p>키보드 왼쪽 아래 <kbd>⊞</kbd>(윈도우) 키를 누르고 <b>powershell</b>이라고 칩니다. 맨 위에 나온 <b>Windows PowerShell</b>을 누르세요.</p>
+    </li>
+    <li><strong class="t">아래 한 줄을 붙여 넣고 <kbd>Enter</kbd></strong>
+      <div class="term"><div class="bar"><span>PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>irm https://claude.ai/install.ps1 | iex</pre></div>
+      <p>붙여 넣기 = PowerShell 창 안에서 <b>마우스 오른쪽 버튼</b> 한 번. 글자가 올라가다 멈추면 끝입니다.</p>
+      <div class="bad"><b>빨간 글씨?</b><span>“스크립트를 실행할 수 없으므로…”가 보이면, 아래 줄을 먼저 붙여 넣고 <kbd>Enter</kbd> → 위의 줄을 다시 붙여 넣으세요.</span></div>
+      <div class="term"><div class="bar"><span>빨간 글씨가 났을 때만</span><button class="copy" type="button">복사</button></div>
+<pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
+    </li>
+    <li><strong class="t">창을 닫고, 새로 열고, <code>claude</code> 입력</strong>
+      <p>PowerShell 창을 <b>X</b>로 닫았다가 1번처럼 다시 엽니다. 그리고 아래를 붙여 넣고 <kbd>Enter</kbd>.</p>
+      <div class="term"><div class="bar"><span>새 PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>claude</pre></div>
+    </li>
+    <li><strong class="t">영어 질문 4개에 답하기</strong>
+      <p>처음 한 번만 나옵니다. 위아래 화살표 키로 고르고 <kbd>Enter</kbd>. 글자는 버전마다 조금 다를 수 있습니다.</p>
+      <div class="screen"><div class="cap">처음 켜면 나오는 질문(회색 글씨는 뜻)</div>
+<pre>Choose the text style …            <span class="ko">← 글자 색 고르기: 아무거나 Enter</span>
+
+Select login method:
+<span class="sel">❯ 1. Claude account with subscription</span>  <span class="ko">← 이걸 고르기</span>
+  2. Anthropic Console account
+
+<span class="ko">→ 인터넷 창이 열리면 로그인 → [Authorize(승인)] 클릭</span>
+Login successful. Press Enter       <span class="ko">← Enter</span>
+
+Do you trust the files in this folder?
+<span class="sel">❯ 1. Yes, proceed</span>                   <span class="ko">← 이걸 고르기</span></pre></div>
+      <div class="ok"><b>성공</b><span>창 아래에 <code>&gt;</code> 표시와 글 쓰는 칸이 보이면 됩니다. 이제 한국어로 말을 걸 수 있습니다.</span></div>
+    </li>
+    <li><strong class="t">1단계가 잘 됐는지 클로드에게 물어보기</strong>
+      <div class="say"><div>git, node, python 이 잘 설치됐는지 확인해줘</div></div>
+      <p>셋 다 숫자(버전)가 나오면 준비 끝입니다. 하나라도 “찾을 수 없음”이면 클로드가 고치는 방법을 알려 줍니다.</p>
+    </li>
+  </ol>
+  <details><summary>회사 보안 때문에 위 한 줄이 막힐 때</summary>
+    <p>Node.js를 깔았다면 아래 한 줄로도 똑같이 깔립니다.</p>
+    <div class="term"><div class="bar"><span>PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>npm install -g @anthropic-ai/claude-code</pre></div>
+    <p>공식 안내: <a href="https://docs.claude.com/ko/docs/claude-code/setup" target="_blank" rel="noopener">설치 안내</a> · <a href="https://docs.claude.com/ko/docs/claude-code/troubleshooting" target="_blank" rel="noopener">문제 해결</a></p>
+  </details>
+</section>
+
+<section id="first">
+  <h2><span class="no">3단계 · 바로</span>말 걸어 보기</h2>
+  <p class="sub">사람에게 부탁하듯 한국어로 쓰고 <kbd>Enter</kbd>. 명령어는 몰라도 됩니다.</p>
+  <div class="say">
+    <div>바탕화면에 있는 파일 목록 보여줘</div>
+    <div>바탕화면의 설문결과.xlsx 열어서 문항별 평균 정리해줘</div>
+    <div>이 폴더의 hwp 파일을 전부 docx로 바꿔줘</div>
+  </div>
+  <h3>클로드가 “해도 될까요?” 하고 물을 때</h3>
+  <p>파일을 고치거나 프로그램을 돌리기 전에 꼭 이렇게 묻습니다.</p>
+  <div class="screen"><div class="cap">클로드의 허락 질문(회색 글씨는 뜻)</div>
+<pre>Do you want to proceed?
+<span class="sel">❯ 1. Yes</span>                         <span class="ko">← 이번 한 번 허락</span>
+  2. Yes, and don't ask again …    <span class="ko">← 같은 일은 다음부터 묻지 않기</span>
+  3. No, and tell Claude …         <span class="ko">← 거절하고 다르게 하라고 말하기</span></pre></div>
+  <p>무슨 일인지 모르겠으면 <b>3번</b>을 고르고 “그게 뭐 하는 거야?”라고 물어보세요. 클로드가 쉬운 말로 설명해 줍니다.</p>
+  <h3>키 세 개만 기억하세요</h3>
+  <div class="tbl"><table>
+    <tr><th>누르는 것</th><th>하는 일</th></tr>
+    <tr><td><kbd>Esc</kbd></td><td><b>멈춤.</b> 클로드가 엉뚱한 일을 하면 누르세요. 언제 눌러도 안전합니다.</td></tr>
+    <tr><td><code>/clear</code> 입력</td><td><b>새 대화.</b> 다른 일로 넘어갈 때 씁니다.</td></tr>
+    <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd> 두 번</td><td><b>끄기.</b> 다시 켜려면 PowerShell에서 <code>claude</code>.</td></tr>
+  </table></div>
+  <p>같은 부탁을 자주 한다면 “앞으로 보고서는 항상 docx로 만들어. 기억해줘”처럼 말해 두세요. 다음에도 기억합니다.</p>
+</section>
+
+<section id="cdp">
+  <h2><span class="no">4단계 · 약 10분</span>포털 연결(CDP)</h2>
+  <p class="sub">클로드에게 <b>포털 전용 크롬</b>의 리모컨(CDP)을 쥐여 주는 단계입니다. 어려운 일은 클로드가 합니다. 나는 부탁하고, 로그인만 하면 됩니다.</p>
+  <div class="note"><b>왜 평소 크롬이 아닌가요?</b> 평소 크롬은 보안 때문에 리모컨 연결이 막혀 있습니다. 그래서 <b>포털만 여는 크롬을 하나 더</b> 둡니다. 평소 크롬의 즐겨찾기·비밀번호는 그대로입니다.</div>
+  <ol class="steps">
+    <li><strong class="t">아래 글을 복사해서 클로드에게 붙여 넣기</strong>
+      <div class="term"><div class="bar"><span>클로드 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>포털을 CDP로 연결해 줘.
+1) Playwright와 전용 크롬(chromium)을 설치해 줘.
+2) 바탕화면에 '포털.cmd'를 만들어 줘. 더블클릭하면 전용 크롬이 CDP 포트와 전용 프로필로 https://portal.dgist.ac.kr 을 열고, 이미 열려 있으면 새 창을 띄우지 않게. cmd 파일 주석은 영어로.
+3) 다 되면 포털.cmd를 한 번 실행해 줘.</pre></div>
+      <p>“해도 될까요?”가 몇 번 나오면 모두 <b>1. Yes</b>. 몇 분 뒤 크롬 창이 하나 뜹니다.</p>
+    </li>
+    <li><strong class="t">새로 뜬 창에서 직접 로그인</strong>
+      <p>창 제목 끝에 <b>“Chrome for Testing”</b>이라고 쓰인 창이 포털 전용 크롬입니다. 여기서 평소처럼 포털에 로그인하세요.</p>
+      <div class="bad"><b>주의</b><span>비밀번호는 절대 클로드 창에 쓰지 마세요. 로그인은 언제나 내가 합니다. 한 번 로그인하면 다음부터는 대개 저절로 들어가집니다.</span></div>
+    </li>
+    <li><strong class="t">연결됐는지 확인</strong>
+      <div class="say"><div>CDP로 연결된 포털 창에 무슨 탭이 열려 있는지 알려줘</div></div>
+      <div class="ok"><b>성공</b><span>클로드가 “DGIST 포털” 같은 탭 이름을 말해 주면 연결된 것입니다. 이제 “포털에서 내 예산 현황 조회해줘” 같은 부탁을 해 보세요.</span></div>
+    </li>
+  </ol>
+  <h3>내일부터는</h3>
+  <p>포털은 <b>바탕화면의 포털.cmd를 더블클릭</b>해서 여세요. 그 창이 열려 있어야 클로드가 포털 일을 할 수 있습니다.</p>
+  <details><summary>원리가 궁금한 분만</summary>
+    <p>CDP(Chrome DevTools Protocol)는 크롬이 바깥 프로그램에게 “화면 읽기·클릭”을 허락하는 통로입니다. 포털.cmd는 이 통로를 연 채로 크롬을 띄우고, 클로드는 Playwright라는 도구로 그 통로에 붙습니다. 통로 번호(포트)는 클로드가 정해 포털.cmd에 적어 둡니다.</p>
+    <p>웹메일은 포털과 로그인이 따로입니다. 포털 첫 화면의 <b>메일</b> 링크로 들어가야 다시 로그인하지 않아도 됩니다.</p>
+  </details>
+</section>
+
+<section id="observe">
+  <h2><span class="no">5단계 · 일 하나에 15분</span>내 일 가르치기(관측기)</h2>
+  <p class="sub">신입 직원 가르치듯 하면 됩니다. <b>말로 설명하지 말고, 한 번 해 보이세요.</b></p>
+  <p>관측기는 내가 포털 전용 크롬에서 <b>무엇을 눌렀고 무엇을 입력했는지</b> 받아 적기만 합니다. 대신 누르지 않습니다. 비밀번호는 <code>***</code>로 가려서 적습니다.</p>
+  <div class="note"><b>먼저 준비</b> 4단계(포털 연결)를 끝내야 합니다. 관측기 프로그램은 교수학습센터가 만든 것이라, 처음 한 번은 센터에 설치를 요청하세요.</div>
+  <ol class="steps">
+    <li><strong class="t">가르칠 일을 한 문장으로 말하기</strong>
+      <div class="say"><div>매달 하는 카드 지급신청을 스킬로 만들고 싶어. 관측기 켜줘</div></div>
+    </li>
+    <li><strong class="t">포털 전용 크롬에서 평소처럼 한 번 하기</strong>
+      <div class="tbl"><table>
+        <tr><th>약속</th><th>이유</th></tr>
+        <tr><td>포털 전용 크롬에서만</td><td>평소 크롬에서 한 일은 적히지 않습니다.</td></tr>
+        <tr><td>확인창은 내가 누르기</td><td>관측기는 아무것도 대신 누르지 않습니다.</td></tr>
+        <tr><td>다 하면 클로드에게 “끝”</td><td>그때 기록을 마칩니다.</td></tr>
+      </table></div>
+      <p>천천히 해도, 잘못 눌렀다 되돌려도 괜찮습니다. 마지막 <b>신청·상신</b> 버튼은 누르지 않고 멈춰도 됩니다.</p>
+    </li>
+    <li><strong class="t">클로드가 만든 순서표 확인하기</strong>
+      <p>클로드가 “① 카드사용내역 열기 → ② 날짜 고르기 → ③ 지급신청 누르기 …”처럼 정리해 보여 줍니다. <b>저장·신청·발송처럼 되돌릴 수 없는 곳</b>에 표시가 잘 됐는지만 봐 주세요.</p>
+    </li>
+    <li><strong class="t">진짜 일 1건으로 시험하기</strong>
+      <p>스킬이 만들어지면 내가 보는 앞에서 실제 1건을 해 봅니다. 틀린 곳은 그 자리에서 말하면 고칩니다.</p>
+      <div class="ok"><b>완성</b><span>다음부터는 “카드 지급신청 해줘” 한마디면 클로드가 그 순서대로 합니다.</span></div>
+    </li>
+  </ol>
+  <details><summary>받아 적은 기록은 이렇게 생겼어요</summary>
+    <div class="screen"><div class="cap">관측 기록 예시(과목명은 바꿈)</div>
+<pre>09:24:31  CLICK  '코스'          <span class="ko">← 누른 것</span>
+09:24:31  GOTO   lms…/course     <span class="ko">← 이동한 화면</span>
+09:24:48  CLICK  '예시 과목'
+09:24:57  CLICK  '6주차'
+09:25:09  CLICK  'Content Market'</pre></div>
+    <p>화면만 봐서는 모르는 숨은 단계(창 안의 창, 주소 뒤에 붙은 값)까지 적히기 때문에, 클로드가 혼자 화면을 뒤지는 것보다 훨씬 빠르고 정확합니다.</p>
+  </details>
+  <p>엑셀 정리나 문서 만들기처럼 포털이 아닌 일은 관측기 없이 “이 작업을 스킬로 만들어줘”라고 말하면 됩니다.</p>
+</section>
+
+<section id="safety">
+  <h2><span class="no">꼭 지킬 것</span>클로드에게 맡기는 범위</h2>
+  <p class="sub">포털은 돈과 결재가 오가는 곳입니다. 마지막 버튼은 언제나 사람이 누릅니다.</p>
+  <div class="tbl"><table>
+    <tr><th>일</th><th>클로드</th><th>나</th></tr>
+    <tr><td>조회·검색·내려받기</td><td>바로 합니다</td><td>결과를 봅니다</td></tr>
+    <tr><td>입력·임시저장</td><td>채운 내용을 먼저 보여 줍니다</td><td>보고 “저장해”라고 말합니다</td></tr>
+    <tr><td>신청·상신·결재</td><td>하지 않습니다</td><td>직접 누릅니다</td></tr>
+    <tr><td>메일 보내기</td><td>초안만 씁니다</td><td>읽고 보내라고 합니다</td></tr>
+    <tr><td>삭제</td><td>하지 않습니다</td><td>필요하면 직접 합니다</td></tr>
+  </table></div>
+</section>
+
+<section id="faq">
+  <h2><span class="no">궁금한 것</span>자주 묻는 질문</h2>
+  <div class="faq">
+    <details><summary>구독료 말고 돈이 더 드나요?</summary><p>Pro·Max 구독 안에서 씁니다. 따로 결제되지 않습니다. 많이 쓰면 잠시 사용 한도에 걸릴 수 있고, 몇 시간 뒤 다시 풀립니다.</p></details>
+    <details><summary>내 파일이 밖으로 나가나요?</summary><p>클로드가 읽은 내용은 답을 만들기 위해 Anthropic(클로드 회사) 서버로 보내집니다. 개인정보·학생 성적처럼 민감한 파일은 클로드에게 열게 하기 전에 한 번 더 생각하세요.</p></details>
+    <details><summary>클로드가 실수로 파일을 지우면요?</summary><p>지우거나 고치기 전에 반드시 “해도 될까요?”라고 묻습니다. 모르면 3번(No)을 고르세요. 중요한 폴더는 미리 복사본을 두면 더 안심입니다.</p></details>
+    <details><summary>영어를 못 해도 되나요?</summary><p>됩니다. 한국어로 묻고 한국어로 답을 받습니다. 처음 설치할 때 나오는 영어 질문 몇 개는 2단계 그림대로 고르면 됩니다.</p></details>
+  </div>
+</section>
+
+<section id="trouble">
+  <h2><span class="no">막혔을 때</span>안 될 때</h2>
+  <p class="sub">제일 쉬운 방법: <b>빨간 글씨를 통째로 복사해서 클로드에게 “이거 왜 나?”</b>라고 물어보세요.</p>
+  <div class="tbl"><table>
+    <tr><th>이럴 때</th><th>이렇게</th></tr>
+    <tr><td>claude를 쳐도 “인식되지 않습니다”</td><td>PowerShell 창을 닫고 새로 열기. 그래도 안 되면 2단계 한 줄을 다시 붙여 넣기.</td></tr>
+    <tr><td>포털.cmd를 눌러도 창이 안 뜸</td><td>클로드에게 “포털.cmd가 안 열려. 고쳐줘”.</td></tr>
+    <tr><td>포털 창이 멈추거나 하얗다</td><td>먼저 <kbd>F5</kbd>(새로고침). 그래도 안 되면 클로드에게 “포털 전용 크롬만 끄고 다시 켜줘”.</td></tr>
+    <tr><td>클로드가 “CDP에 연결할 수 없다”고 함</td><td>포털.cmd로 연 창이 떠 있는지 확인. 평소 크롬으로 연 포털에는 연결되지 않습니다.</td></tr>
+    <tr><td>한글이 ??? 로 보임</td><td>클로드에게 “한글이 깨져”라고만 말하기.</td></tr>
+    <tr><td>학교 밖에서 포털이 안 열림</td><td>학교 VPN에 먼저 연결하기.</td></tr>
+  </table></div>
+</section>
+
+<footer>DGIST 교수학습센터 · 2026년 10월 기준 · Windows 11에서 확인한 절차입니다. 프로그램 버전에 따라 화면 글자가 조금 다를 수 있습니다.</footer>
+</main>
+</div>
+<div class="buddy" id="buddy" aria-live="polite">
+  <div class="bub" id="buddy-say"></div>
+  <button class="dg" id="buddy-dg" type="button" aria-label="달구 도우미, 누르면 지금 단계 도움말"><img src="../dalgu/dalgu-apple-180.png" alt=""><span class="x" id="buddy-x" role="button" tabindex="0" aria-label="달구 도우미 숨기기">×</span></button>
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var pre = btn.closest('.term').querySelector('pre');
+    var txt = pre.innerText;
+    var done = function(){ btn.textContent='복사됨 ✓'; setTimeout(function(){btn.textContent='복사';},1500); };
+    try { navigator.clipboard.writeText(txt).then(done, function(){ sel(pre); }); } catch(e){ sel(pre); }
+  });
+});
+function sel(el){ var r=document.createRange(); r.selectNodeContents(el); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('nav.toc input[data-s]'));
+  var KEY='claude-guide-done';
+  var saved={}; try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){}
+  function paint(){
+    var n=0; boxes.forEach(function(b){ b.parentNode.classList.toggle('done',b.checked); if(b.checked)n++; });
+    document.getElementById('pbar').style.width=(n/boxes.length*100)+'%';
+    document.getElementById('pct').textContent=n+' / '+boxes.length+' 단계'+(n===boxes.length?' · 다 했어요!':'');
+  }
+  boxes.forEach(function(b){
+    b.checked=!!saved[b.dataset.s];
+    b.addEventListener('change',function(){ saved[b.dataset.s]=b.checked; try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){} paint(); });
+  });
+  paint();
+})();
+</script>
+<script type="module">
+// 달구 3D — Blender 에서 뼈대·동작(idle·think·nod·talk·hop·wave)을 넣어 만든 dalgu.glb 를 싣는다.
+// WebGL 이 없거나 불러오기에 실패하면 PNG 달구가 그대로 남는다(꾸밈이므로 조용히 넘어간다).
+const TIPS = {
+  words:   ["think", "모르는 말은 이 <b>다섯 개</b>면 충분해요."],
+  prep:    ["think", "Python 깔 때 <b>Add python.exe to PATH</b> 체크, 꼭이요!"],
+  install: ["talk",  "빨간 글씨가 나와도 괜찮아요. <b>아래 한 줄</b>이면 돼요."],
+  first:   ["nod",   "모르겠으면 <b>3번(No)</b> 고르고 물어보세요."],
+  cdp:     ["talk",  "비밀번호는 <b>저한테도</b> 알려 주지 마세요."],
+  observe: ["nod",   "한 번 보여 주시면 제가 <b>받아 적을게요</b>."],
+  safety:  ["nod",   "마지막 버튼은 언제나 <b>사람이</b> 눌러요."],
+  faq:     ["talk",  "궁금한 건 클로드에게 <b>그냥 물어보셔도</b> 돼요."],
+  trouble: ["think", "빨간 글씨를 <b>통째로 복사</b>해서 물어보세요."],
+};
+const $ = (id) => document.getElementById(id);
+const sayBox = $("buddy-say"), buddy = $("buddy");
+let hideT = 0, cur = "";
+function say(html, ms = 5200) {
+  sayBox.innerHTML = html; sayBox.classList.add("on");
+  clearTimeout(hideT); hideT = setTimeout(() => sayBox.classList.remove("on"), ms);
+}
+try { buddy.hidden = localStorage.getItem("claude-guide-buddy") === "off"; } catch (e) {}
+const hideBuddy = (e) => {
+  e.stopPropagation(); e.preventDefault();
+  buddy.hidden = true; try { localStorage.setItem("claude-guide-buddy", "off"); } catch (x) {}
+};
+$("buddy-x").addEventListener("click", hideBuddy);
+$("buddy-x").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") hideBuddy(e); });
+
+async function mount(btn, size, framing) {
+  try {
+    const { mountDalgu } = await import("../dalgu/3d/dalgu3d.js?v=5");
+    const box = document.createElement("span"); box.className = "d3"; box.setAttribute("aria-hidden", "true");
+    const d = await mountDalgu(box, { size, framing });
+    if (!d) return null;
+    const img = btn.querySelector("img"); if (img) img.replaceWith(box); else btn.prepend(box);
+    return d;
+  } catch (e) { return null; }
+}
+const fake = { set() {}, smile() {}, lookAt() {} };
+const narrow = matchMedia("(max-width: 860px)").matches;
+const stage = (await mount($("stage-dg"), narrow ? 200 : 280, "full")) || fake;
+const help = (await mount($("buddy-dg"), narrow ? 76 : 96, "bust")) || fake;
+window.__dalgu = { stage, help };                        // 시험용
+setTimeout(() => stage.set("wave"), 600);
+
+$("stage-dg").addEventListener("click", () => { stage.set("hop"); $("stage-say").innerHTML = "깡충! 아래 <b>1단계</b>부터 시작해요."; });
+$("buddy-dg").addEventListener("click", () => {
+  const t = TIPS[cur] || ["wave", "막히면 저를 눌러 주세요."];
+  help.set(t[0]); say(t[1]);
+});
+
+// 읽고 있는 단계가 바뀌면 그 단계의 요령을 한마디
+const io = new IntersectionObserver((es) => {
+  es.forEach((e) => {
+    if (!e.isIntersecting || e.target.id === cur) return;
+    cur = e.target.id;
+    const t = TIPS[cur]; if (!t || buddy.hidden) return;
+    help.set(t[0]); say(t[1]);
+  });
+}, { rootMargin: "-35% 0px -55% 0px" });
+document.querySelectorAll("main section[id]").forEach((s) => io.observe(s));
+
+// 단계를 체크하면 깡충 + 눈웃음
+document.addEventListener("change", (e) => {
+  const b = e.target; if (!b.matches || !b.matches("nav.toc input[data-s]") || !b.checked) return;
+  const all = [...document.querySelectorAll("nav.toc input[data-s]")].every((x) => x.checked);
+  if (all) { help.set("wave"); stage.set("wave"); say("<b>다 끝났어요!</b> 이제 내 일을 하나씩 맡겨 보세요.", 7000); }
+  else { help.set("hop"); say("한 단계 끝! <b>잘하셨어요.</b>"); }
+});
+
+// 커서를 바라본다(마우스가 있는 화면만)
+if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  let raf = 0, px = 0, py = 0;
+  const c = (v) => Math.max(-1, Math.min(1, v));
+  addEventListener("pointermove", (e) => {
+    px = e.clientX; py = e.clientY; if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      [[stage, $("stage-dg")], [help, $("buddy-dg")]].forEach(([d, el]) => {
+        const r = el.getBoundingClientRect();
+        d.lookAt(c((px - r.left - r.width / 2) / (innerWidth / 2)), c((py - r.top - r.height / 2) / (innerHeight / 2)));
+      });
+    });
+  }, { passive: true });
+}
+</script>
+
+</body>
+</html>
