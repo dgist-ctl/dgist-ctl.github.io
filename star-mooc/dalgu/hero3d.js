@@ -36,7 +36,7 @@ function glowTex() {
   return new THREE.CanvasTexture(c);
 }
 
-export async function mountHero(host) {
+export async function mountHero(host, opt = {}) {   // opt.skipDraw: 로고를 다 그린 모습부터(도입 영상이 이미 그림) · opt.lift: 도입 영상 렌더용 — 그 초부터 로고가 위로 비킴
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "low-power" });
@@ -87,7 +87,10 @@ export async function mountHero(host) {
   const links = new THREE.LineSegments(linkGeo, linkMat); ring.add(links);
 
   // 가운데 STAR-MOOC 로고 — 혜성이 손글씨 별을 그린다(logo3d.js)
-  const logo = makeLogo({ renderer, glow, reduce }), core = logo.group;
+  const logo = makeLogo({ renderer, glow, reduce, noSpin: opt.lift != null }), core = new THREE.Group();
+  const big = opt.lift != null ? 1.75 : 1;   // 도입 영상은 화면이 넓어 로고를 크게
+  core.add(logo.group);
+  if (opt.skipDraw) logo.replay(logo.IDLE);
   const coreHalo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, transparent: true, depthWrite: false, opacity: 0.35 }));
   coreHalo.scale.setScalar(2.2);
   world.add(coreHalo, core);
@@ -188,6 +191,7 @@ export async function mountHero(host) {
     ring.rotation.z = spin + (1 - k) * -1.2;
     // 로고는 도입 영상이 걷힌 뒤에 그리기 시작한다(영상 밑에서 다 그려 버리지 않게)
     if (!document.documentElement.classList.contains("intro-on")) logo.update(now, [px, py]);
+    if (opt.lift != null) { const u = ease((sec - opt.lift) / 1.1); core.position.y = u * 1.7; core.scale.setScalar(big * (1 - u * 0.4)); }
     coreHalo.material.opacity = 0.18 + 0.06 * Math.sin(sec * 1.6);
     dustPts.rotation.y = reduce ? 0 : sec * 0.015;
     dustMat.opacity = 0.5 * k;

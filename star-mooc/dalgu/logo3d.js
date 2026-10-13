@@ -63,7 +63,7 @@ function strokeMat(env) {
   return m;
 }
 
-export function makeLogo({ renderer, glow, reduce }) {
+export function makeLogo({ renderer, glow, reduce, noSpin = false }) {   // noSpin: 도입 영상 — 뒤집힌 글자로 끝나지 않게 한 바퀴 돌기를 뺀다
   const group = new THREE.Group();
   const pm = new THREE.PMREMGenerator(renderer);
   const env = pm.fromScene(new RoomEnvironment(), 0.04).texture; pm.dispose();
@@ -84,7 +84,7 @@ export function makeLogo({ renderer, glow, reduce }) {
   const trail = new THREE.Points(trailGeo, trailMat); trail.renderOrder = 2;
   group.add(trail, head);
   const strokes = [], letters = [], hist = [];
-  let ready = false, t0 = null, dark = false;
+  let ready = false, t0 = null, dark = false, off = 0;   // off = 몇 초째부터 시작할지(도입 영상에서 이미 그렸으면 다 그린 뒤부터)
 
   fetch(new URL("../brand/starmooc-logo-3d.json", import.meta.url)).then((r) => r.json()).then((J) => {
     for (const P of J.strokes) {
@@ -131,7 +131,7 @@ export function makeLogo({ renderer, glow, reduce }) {
   function update(now, tilt = [0, 0]) {
     if (!ready) return;
     if (t0 === null) t0 = now;
-    const T = reduce ? 99 : (now - t0) / 1000;
+    const T = reduce ? 99 : (now - t0) / 1000 + off;
     // 1) 펜 4번
     let hx = null, hy = 0;
     strokes.forEach((s, i) => {
@@ -168,12 +168,12 @@ export function makeLogo({ renderer, glow, reduce }) {
       s.m.userData.u.uPulse.value = w > -0.2 && w < 1.2 ? w : -1;
     });
     // 3) 한 바퀴 → 그 뒤엔 숨 쉬듯 기울기(마우스 쪽으로 조금 더)
-    const spin = inout((T - SPIN[0]) / (SPIN[1] - SPIN[0])) * Math.PI * 2;
+    const spin = noSpin ? 0 : inout((T - SPIN[0]) / (SPIN[1] - SPIN[0])) * Math.PI * 2;
     const live = sm(SPIN[1], SPIN[1] + 1.5, T);
     group.rotation.y = spin + live * (Math.sin((T - SPIN[1]) * 0.5) * 0.38 + tilt[0] * 0.25);
     group.rotation.x = live * (Math.sin((T - SPIN[1]) * 0.33) * 0.1 - tilt[1] * 0.15);
     group.position.y = live * Math.sin(T * 0.9) * 0.04;
   }
 
-  return { group, paint, update, replay() { t0 = null; hist.length = 0; }, get drawing() { return t0 !== null && !reduce; } };
+  return { group, paint, update, replay(from = 0) { t0 = null; off = from; hist.length = 0; }, IDLE: SPIN[1], get drawing() { return t0 !== null && !reduce; } };
 }
