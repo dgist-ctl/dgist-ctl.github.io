@@ -101,19 +101,19 @@ ol li{margin:3px 0}
   </section>
 
   <section class="pane ai" style="margin-top:18px">
-    <h2>같은 영어 더빙 — 교수 대신 Blender 3D 캐릭터<span class="tag">AI 생성</span></h2>
-    <div class="meta">31.8초(인트로 7초 + 본편 22초 + 끝 화면 3초) · 2026. 10. 13. 시험본 · Blender 5.2로 제작</div>
+    <h2>같은 영어 더빙 — 교수 모습을 Blender 3D로 재현<span class="tag">AI 생성</span></h2>
+    <div class="meta">31.8초(인트로 7초 + 본편 22초 + 끝 화면 3초) · 2026. 10. 13. 시험본 · 교수 사진 1장 + Blender 5.2</div>
     <div class="dub">
-      <video controls preload="metadata" playsinline poster="ai_dub_3d_poster.jpg" src="ai_dub_3d.mp4"></video>
+      <video controls preload="metadata" playsinline poster="ai_dub_3dr_poster.jpg" src="ai_dub_3dr.mp4"></video>
       <div>
         <table>
           <tr><th>층</th><th>한 일</th></tr>
-          <tr><td>캐릭터</td><td>Blender 스크립트로 만든 상반신 캐릭터(검은 머리 · 안경 · 재킷 · 셔츠 · 명찰). 얼굴 사진을 쓰지 않음</td></tr>
-          <tr><td>고개 · 몸</td><td>실제 녹화에서 프레임마다 얼굴 5점(눈 · 코 · 입꼬리)을 읽어 고개 방향 · 기울기 · 몸 위치를 옮김(550프레임 모두 검출). 슬라이드 쪽을 보도록 좌우만 바꿈</td></tr>
-          <tr><td>입 · 표정</td><td>영어 더빙 음성의 크기 · 높낮이로 입 벌림 · 너비, 말의 강조에서 눈썹, 2~4초마다 눈 깜빡임</td></tr>
-          <tr><td>목소리</td><td>위 영상과 같은 교수 목소리 복제 영어</td></tr>
+          <tr><td>얼굴</td><td>교수 사진 1장에서 3D 얼굴 형태를 복원(3DDFA_V2)하고 사진을 그대로 입힘. 머리카락 · 귀는 얼굴 분할로 사진에서 골라 입힘</td></tr>
+          <tr><td>고개 · 몸</td><td>실제 녹화에서 프레임마다 얼굴 5점을 읽어 고개 방향 · 기울기 · 몸 위치를 옮김(550프레임 모두 검출). 슬라이드 쪽을 보도록 좌우만 바꿈</td></tr>
+          <tr><td>입</td><td>영어 더빙 음성 크기에 맞춰 3D 얼굴의 표정 성분으로 턱 · 아랫입술을 내림</td></tr>
+          <tr><td>닮음</td><td>얼굴 인식 모델(FaceNet)로 강의 녹화 15장과 비교: 같은 순간의 실제 녹화 대비 평균 95.6%, 실제 얼굴이 정면인 순간만 84%(최고 99%)</td></tr>
         </table>
-        <p class="note" style="margin-top:10px">실사 더빙과 달리 거울상 얼굴 · 배경 제거 자국 문제가 없고, 같은 PC에서 22초 렌더가 약 18분(실사 더빙 약 2.5시간)이었습니다. 한계: 입 모양은 소리 크기로 움직여 발음마다 다른 입 모양은 아니며, 손짓은 넣지 않았습니다.</p>
+        <p class="note" style="margin-top:10px">한계: 원본 사진이 다른 날 · 다른 조명 · 웃는 얼굴이라 그 사진 자체가 강의 녹화와 0.645까지만 닮았고, 3D는 그 87%입니다. 정면 · 무표정 · 옆모습 사진이 더 있으면 올릴 수 있습니다. 몸은 단순한 모형이며, 손짓 · 눈 깜빡임은 없습니다.</p>
       </div>
     </div>
   </section>
