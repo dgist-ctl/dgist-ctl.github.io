@@ -66,19 +66,22 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
   -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 34%,#000 62%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 34%,#000 62%)}
 .hero3d.on{opacity:.8}
 .hero3d canvas{display:block;width:100%!important;height:100%!important}
-/* 첫 화면 도입(세션당 한 번, 3.6초) — 별자리가 화면 가득 모인 뒤 표제 뒤로 물러난다. JS 가 없어도 CSS 로 스스로 끝난다 */
+/* 첫 화면 도입(세션당 한 번, 약 6초) — Blender 로 렌더한 별자리 영상 위에 표제가 떠오른다. JS 가 없어도 CSS 로 스스로 끝난다 */
 .intro{display:none}
-.intro-on .intro{display:grid;position:fixed;inset:0;z-index:60;place-items:center;background:var(--sheet);animation:intro-out .9s ease 3.4s forwards}
-.intro-on .hero3d.intro-stage{position:fixed;z-index:0;opacity:1;-webkit-mask-image:none;mask-image:none}
-.intro-in{position:relative;z-index:62;text-align:center;padding-inline:16px;pointer-events:none}
-.intro-k{font:500 12px/1.6 var(--f-mono);letter-spacing:.32em;color:var(--accent);animation:rise .8s ease .9s both}
-.intro-t{font:900 clamp(40px,8vw,104px)/1.02 var(--f-display);letter-spacing:-.01em;margin:14px 0 10px;animation:intro-zoom 1.4s cubic-bezier(.2,.7,.2,1) 1.1s both;text-shadow:0 0 30px var(--sheet)}
-.intro-t em{font-style:normal;color:var(--accent)}
-.intro-s{font:600 clamp(15px,2vw,20px)/1.5 var(--f-body);color:var(--muted);animation:rise .8s ease 1.7s both}
-.intro-skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:63;font:500 13px/1 var(--f-body);color:var(--muted);background:var(--paper);border:1px solid var(--rule);border-radius:999px;padding:12px 16px;cursor:pointer}
+.intro-on .intro{display:grid;position:fixed;inset:0;z-index:60;place-items:center;background:#060A1A;animation:intro-out .9s ease 6.6s forwards}
+.intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* 세로 화면: 궤도가 화면 폭을 채우도록 영상을 두 배 폭으로 놓고 위아래 경계를 흐린다 */
+@media (max-aspect-ratio:4/5){.intro video{width:210%;height:auto;left:-55%;top:50%;bottom:auto;inset-inline:auto;transform:translateY(-50%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(180deg,transparent,#000 18%,#000 82%,transparent)}}
+@media (min-aspect-ratio:4/5) and (max-aspect-ratio:4/3){.intro video{object-fit:contain}}
+.intro-in{position:relative;z-index:2;text-align:center;padding-inline:16px;pointer-events:none;color:#F2F5FB}
+.intro-k{font:500 12px/1.6 var(--f-mono);letter-spacing:.32em;color:#9DB4F0;animation:rise .8s ease 4.1s both}
+.intro-t{font:900 clamp(40px,7.4vw,96px)/1.04 var(--f-display);letter-spacing:-.01em;margin:12px 0 10px;animation:intro-zoom 1.1s cubic-bezier(.2,.7,.2,1) 4.2s both;text-shadow:0 0 28px rgba(80,120,230,.55),0 2px 18px rgba(0,0,0,.6)}
+.intro-t em{font-style:normal;color:#9DB4F0}
+.intro-s{font:600 clamp(15px,2vw,20px)/1.5 var(--f-body);color:#C9D3E6;animation:rise .8s ease 4.7s both;text-shadow:0 1px 12px rgba(0,0,0,.7)}
+.intro-skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:3;font:500 13px/1 var(--f-body);color:#C9D3E6;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:12px 16px;cursor:pointer}
 @keyframes intro-zoom{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
 @keyframes intro-out{to{opacity:0;visibility:hidden}}
-.intro-on .intro.done{animation:intro-out .5s ease forwards}
+.intro-on .intro.done{animation:intro-out .6s ease forwards}
 @media (max-width:980px){.hero3d.on{opacity:.45}.hero3d{-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.08) 70%);mask-image:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.08) 70%)}}
 /* 표제 글이 차례로 떠오른다 */
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -587,9 +590,12 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 <body>
 
 <div class="intro" id="intro" aria-hidden="true">
+  <video id="intro-v" muted playsinline preload="none" poster="intro/poster.jpg"></video>
   <div class="intro-in"><div class="intro-k"><span class="nw">DGIST · DAEGU</span> · <span class="nw">2026. 10. 15 – 16</span></div><div class="intro-t"><span translate="no">STAR-MOOC</span><br><em>Joint Workshop</em></div><div class="intro-s">여섯 기관, 세 가지 질문, 함께 그리는 다음 MOOC</div></div>
   <button type="button" class="intro-skip" id="intro-skip">건너뛰기 →</button>
 </div>
+<script>(function(){if(!document.documentElement.classList.contains("intro-on"))return;var v=document.getElementById("intro-v");
+v.innerHTML='<source src="intro/intro.webm" type="video/webm"><source src="intro/intro.mp4" type="video/mp4">';v.preload="auto";v.load();var p=v.play();p&&p.catch(function(){})})()</script>
 <a class="skip" href="#sessions">발표 자료로 바로 가기</a>
 <header class="topbar">
   <div class="wrap">
@@ -1501,21 +1507,18 @@ const introOn = document.documentElement.classList.contains("intro-on");
 function endIntro() {
   if (!intro || intro.classList.contains("done")) return;
   intro.classList.add("done");
-  if (heroHost) {   // 별자리가 표제 뒤 오른쪽으로 물러난다
-    heroHost.classList.remove("intro-stage", "intro");
-    document.querySelector(".hero").prepend(heroHost);
-  }
-  setTimeout(() => { intro.remove(); document.documentElement.classList.remove("intro-on"); }, 600);
+  setTimeout(() => { intro.remove(); document.documentElement.classList.remove("intro-on"); }, 700);
 }
 if (introOn && intro) {
   document.getElementById("intro-skip").addEventListener("click", endIntro);
   intro.addEventListener("click", endIntro);
   addEventListener("keydown", endIntro, { once: true });
-  setTimeout(endIntro, 3500);
-  // 표제(.hero)는 따로 쌓임 맥락이라 그 안에선 도입 막 위로 못 올라온다 — 도입 동안만 도입 막 안으로 옮긴다
-  if (heroHost) { heroHost.classList.add("intro-stage", "intro"); intro.prepend(heroHost); }
+  // 영상(5초)이 끝나고 표제를 1.5초 보여 준 뒤 걷는다. 영상이 못 뜨면 CSS 가 6.6초에 스스로 걷는다
+  const v = document.getElementById("intro-v");
+  if (v) v.addEventListener("ended", () => setTimeout(endIntro, 1500), { once: true });
+  setTimeout(endIntro, 7000);
 }
-if (heroHost && !saveData) (introOn ? (f) => f() : (window.requestIdleCallback || ((f) => setTimeout(f, 200))))(async () => {
+if (heroHost && !saveData) (window.requestIdleCallback || ((f) => setTimeout(f, 200)))(async () => {
   try { const { mountHero } = await import("./dalgu/hero3d.js"); await mountHero(heroHost); } catch (e) { /* 그대로 */ }
 }, { timeout: 800 });
 
