@@ -101,19 +101,20 @@ ol li{margin:3px 0}
   </section>
 
   <section class="pane ai" style="margin-top:18px">
-    <h2>같은 영어 더빙 — 교수 모습을 Blender 3D로 재현<span class="tag">AI 생성</span></h2>
+    <h2>같은 영어 더빙 — 교수 모습 · 몸짓을 Blender 3D 모션으로 재현<span class="tag">AI 생성</span></h2>
     <div class="meta">31.8초(인트로 7초 + 본편 22초 + 끝 화면 3초) · 2026. 10. 13. 시험본 · 교수 사진 1장 + Blender 5.2</div>
     <div class="dub">
-      <video controls preload="metadata" playsinline poster="ai_dub_3dr_poster.jpg" src="ai_dub_3dr.mp4"></video>
+      <video controls preload="metadata" playsinline poster="ai_dub_3dm_poster.jpg" src="ai_dub_3dm.mp4"></video>
       <div>
         <table>
           <tr><th>층</th><th>한 일</th></tr>
           <tr><td>얼굴</td><td>교수 사진 1장에서 3D 얼굴 형태를 복원(3DDFA_V2)하고 사진을 그대로 입힘. 머리카락 · 귀는 얼굴 분할로 사진에서 골라 입힘</td></tr>
-          <tr><td>고개 · 몸</td><td>실제 녹화에서 프레임마다 얼굴 5점을 읽어 고개 방향 · 기울기 · 몸 위치를 옮김(550프레임 모두 검출). 슬라이드 쪽을 보도록 좌우만 바꿈</td></tr>
+          <tr><td>고개</td><td>실제 녹화에서 프레임마다 얼굴 5점을 읽어 고개 방향 · 기울기를 옮김(550프레임 모두 검출)</td></tr>
+          <tr><td>몸 · 팔 · 손</td><td>같은 녹화에서 상반신 관절(어깨 · 팔꿈치 · 손목 · 손)을 프레임마다 읽어(MediaPipe) Blender 뼈대에 옮김. 몸통을 돌리고, 펜 든 손을 들고, 두 손을 모으는 동작이 녹화와 같은 순간에 나옴. 슬라이드 쪽을 보도록 좌우만 바꿈</td></tr>
           <tr><td>입</td><td>영어 더빙 음성 크기에 맞춰 3D 얼굴의 표정 성분으로 턱 · 아랫입술을 내림</td></tr>
           <tr><td>닮음</td><td>얼굴 인식 모델(FaceNet)로 강의 녹화 15장과 비교: 같은 순간의 실제 녹화 대비 평균 95.6%, 실제 얼굴이 정면인 순간만 84%(최고 99%)</td></tr>
         </table>
-        <p class="note" style="margin-top:10px">한계: 원본 사진이 다른 날 · 다른 조명 · 웃는 얼굴이라 그 사진 자체가 강의 녹화와 0.645까지만 닮았고, 3D는 그 87%입니다. 정면 · 무표정 · 옆모습 사진이 더 있으면 올릴 수 있습니다. 몸은 단순한 모형이며, 손짓 · 눈 깜빡임은 없습니다.</p>
+        <p class="note" style="margin-top:10px">한계: 원본 사진이 다른 날 · 다른 조명 · 웃는 얼굴이라 그 사진 자체가 강의 녹화와 0.645까지만 닮았고, 3D는 그 87%입니다. 정면 · 무표정 · 옆모습 사진이 더 있으면 올릴 수 있습니다. 옷 · 손은 단순한 모형이라 손가락 동작과 펜은 없고, 눈 깜빡임도 없습니다.</p>
       </div>
     </div>
   </section>

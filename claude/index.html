@@ -130,6 +130,37 @@ details[open] summary{margin-bottom:6px}
 .faq summary{color:var(--fg);font-weight:500;font-size:17px}
 footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 
+/* 달구에게 묻기 */
+#ask{padding-top:40px}
+.qa{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;max-width:760px;box-shadow:0 10px 30px var(--shadow)}
+.qa form{display:flex;gap:8px}
+.qa input{flex:1;min-width:0;font:inherit;font-size:17px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+.qa input:focus{border-color:var(--accent);outline:none}
+.qa .go{font:700 16px var(--sans);border:0;border-radius:10px;padding:0 18px;background:var(--accent);color:var(--bg);cursor:pointer;flex:none}
+.qa .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.qa .chips button{font:14px var(--sans);border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:4px 12px;cursor:pointer}
+.qa .chips button:hover{border-color:var(--accent);color:var(--accent)}
+#qa-stop{font:13px var(--sans);border:1px solid var(--line);background:none;color:var(--muted);border-radius:6px;padding:2px 10px;margin-top:8px;cursor:pointer}
+#qa-log{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:14px}
+.qa-turn{display:grid}
+.qa-q{justify-self:end;margin:0 0 6px;max-width:85%;background:var(--accent);color:var(--bg);border-radius:14px 14px 4px 14px;padding:8px 14px}
+.qa-bot{display:flex;gap:10px;align-items:flex-start}
+.qa-av{flex:none;width:40px;height:40px;border-radius:50%;background:var(--glow) url(../dalgu/dalgu-apple-180.png) center 28%/125% no-repeat}
+.qa-say{min-width:0;flex:1;background:var(--bg);border:1px solid var(--line);border-radius:4px 14px 14px 14px;padding:10px 14px}
+.qa-who{font-size:13px;color:var(--accent);font-weight:700}
+.qa-a p{margin:4px 0;max-width:none}
+.qa-pts{margin:6px 0;padding-left:18px}
+.qa-cite{font:700 12px var(--mono);min-width:22px;height:20px;border-radius:10px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent);cursor:pointer;padding:0 6px;vertical-align:1px;margin-left:2px}
+.qa-refs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px}
+.qa-voice{font:13.5px var(--sans);border:1px solid var(--accent);color:var(--accent);background:none;border-radius:999px;padding:3px 12px;cursor:pointer}
+.qa-voice.on{background:var(--accent);color:var(--bg)}
+.qa-model,.qa-wait{font-size:13px;color:var(--muted)}
+.qa-working{color:var(--muted);font-size:15px}
+.qa-dots i{display:inline-block;width:6px;height:6px;margin-right:3px;border-radius:50%;background:var(--accent);animation:qd 1s infinite}
+.qa-dots i:nth-child(2){animation-delay:.15s}.qa-dots i:nth-child(3){animation-delay:.3s}
+@keyframes qd{0%,100%{opacity:.25}50%{opacity:1}}
+.qa-flash{animation:qf 1.8s ease-out}
+@keyframes qf{0%{box-shadow:0 0 0 4px var(--term-key);background:var(--warn-soft)}100%{box-shadow:0 0 0 0 transparent}}
 /* 달구 — Blender 로 만든 3D(뼈대·동작 6개). 첫 화면 무대 + 따라다니는 도우미 */
 .hero-top{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:center}
 .stage{position:relative;height:320px;display:grid;place-items:end center}
@@ -182,6 +213,7 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
   <div class="bar" aria-hidden="true"><i id="pbar"></i></div>
   <div class="pct" id="pct">0 / 5 단계</div>
   <ol style="margin-top:14px">
+    <li><a href="#ask">달구에게 묻기</a></li>
     <li><a href="#words">먼저 알아 둘 말</a></li>
     <li><a href="#safety">꼭 지킬 약속</a></li>
     <li><a href="#faq">자주 묻는 질문</a></li>
@@ -215,6 +247,24 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
     <a href="#observe"><b>5단계 · 15분</b>내 일 가르치기<small>한 번 보여 주기</small></a>
   </div>
 </header>
+
+<section id="ask">
+  <h2><span class="no">막히면 언제든</span>달구에게 묻기</h2>
+  <p class="sub">이 가이드를 읽은 달구가 쉬운 말로 답해 줘요. 답 속 번호를 누르면 가이드의 그 자리로 갑니다.</p>
+  <div class="qa">
+    <form id="qa-form" autocomplete="off">
+      <input id="qa-in" name="q" maxlength="300" aria-label="달구에게 물어볼 내용" placeholder="예: 빨간 글씨가 나왔어요. 어떻게 해요?">
+      <button class="go" type="submit">묻기</button></form>
+    <div class="chips">
+      <button type="button" data-ask="파이썬 설치할 때 주의할 점은?">파이썬 설치 주의점</button>
+      <button type="button" data-ask="claude 라고 쳤는데 인식되지 않는다고 나와요">claude가 안 켜져요</button>
+      <button type="button" data-ask="포털 연결은 어떻게 해요?">포털 연결 방법</button>
+      <button type="button" data-ask="관측기는 뭐고 어떻게 써요?">관측기가 뭐예요?</button>
+    </div>
+    <button type="button" id="qa-stop" hidden>답 멈추기</button>
+    <ol id="qa-log" hidden aria-live="polite"></ol>
+  </div>
+</section>
 
 <section id="words">
   <h2><span class="no">시작 전에</span>먼저 알아 둘 말 다섯 개</h2>
@@ -469,6 +519,7 @@ const TIPS = {
   install: ["talk",  "빨간 글씨가 나와도 괜찮아요. <b>아래 한 줄</b>이면 돼요."],
   first:   ["nod",   "모르겠으면 <b>3번(No)</b> 고르고 물어보세요."],
   cdp:     ["talk",  "비밀번호는 <b>저한테도</b> 알려 주지 마세요."],
+  ask:     ["wave",  "궁금한 건 <b>여기에 물어보세요</b>. 쉬운 말로 답해 드릴게요."],
   observe: ["nod",   "한 번 보여 주시면 제가 <b>받아 적을게요</b>."],
   safety:  ["nod",   "마지막 버튼은 언제나 <b>사람이</b> 눌러요."],
   faq:     ["talk",  "궁금한 건 클로드에게 <b>그냥 물어보셔도</b> 돼요."],
@@ -546,6 +597,187 @@ if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
     });
   }, { passive: true });
 }
+</script>
+<script>
+/* 달구에게 묻기 — star-mooc 「자료에 묻기」와 같은 방식(2026-10-13).
+   ① 이 페이지를 조각(단계·소제목)으로 나눠 질문과 맞는 조각을 고른다(두 글자 겹침, 드문 글자쌍 가중).
+   ② AI 학습튜터 서버(/api/guide-ask, Claude Opus 5.5)에 질문과 '몇 번 조각'만 보낸다 — 본문은 서버가 가진 guide_kb.json 이 채운다.
+   ③ 서버가 안 닿으면 ①에서 찾은 문장을 그대로 보여 준다. 근거 번호를 누르면 그 자리로 간다.
+   조각 나누기(guideChunks)는 서버 자료를 만드는 빌드(kb_dump.py)도 똑같이 쓴다 — 번호가 서로 맞아야 한다. */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const clean = (t) => t.split("\n").filter((l) => !/^\s*(복사|복사됨 ✓|×)\s*$/.test(l)).join("\n")
+    .replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim();
+
+  function guideChunks() {
+    const out = [];
+    const shut = [...document.querySelectorAll("main details:not([open])")];   // 닫힌 접기 안 글도 읽는다(빌드와 같게)
+    shut.forEach((d) => (d.open = true));
+    document.querySelectorAll("main section[id]").forEach((sec) => {
+      if (sec.id === "ask") return;
+      const h2 = sec.querySelector("h2"), no = h2.querySelector(".no");
+      const part = (no ? no.textContent.trim() + " " : "") + h2.textContent.replace(no ? no.textContent : "", "").trim();
+      let cur = null;
+      const start = (t, el) => { cur = { k: sec.id, i: part, t, els: [el] }; out.push(cur); };
+      for (const el of sec.children) {
+        if (el === h2) continue;
+        if (el.matches("ol.steps")) {
+          for (const li of el.children) start((li.querySelector("strong.t") || li).textContent.trim(), li);
+          cur = null; continue;
+        }
+        if (el.tagName === "H3") { start(el.textContent.trim(), el); continue; }
+        if (!cur) start(h2.textContent.replace(no ? no.textContent : "", "").trim(), el); else cur.els.push(el);
+      }
+    });
+    const res = out.map((c) => {
+      const x = clean(c.els.map((e) => e.innerText || e.textContent).join("\n"));
+      return { k: c.k, i: c.i, t: c.t, x: x.length > 1600 ? x.slice(0, 1600) + "…" : x, el: c.els[0] };
+    }).filter((c) => c.x.length > 20);
+    shut.forEach((d) => (d.open = false));
+    return res;
+  }
+  window.guideChunks = guideChunks;
+  const FACTS = "Windows 11 초보자용 클로드 실전 가이드. 순서: 1단계 준비물 4가지(Claude 구독·Git·Node.js·Python) → 2단계 클로드 깔기 → 3단계 말 걸어 보기 → 4단계 포털 연결(CDP, 포털.cmd·포털 전용 크롬) → 5단계 관측기로 내 일 가르치기(스킬). 신청·상신·결재·삭제는 사람이 직접.";
+  window.guideFacts = FACTS;
+
+  const form = $("#qa-form"); if (!form) return;
+  const input = $("#qa-in"), log = $("#qa-log"), stopB = $("#qa-stop");
+  const CH = guideChunks();
+
+  /* ---------- 찾기 ---------- */
+  const norm = (s) => s.toLowerCase().replace(/[^0-9a-z가-힣]+/g, " ");
+  const grams = (s) => { const g = new Set(); for (const w of norm(s).split(" ")) { if (!w) continue;
+    if (w.length === 1) { if (/[0-9a-z]/.test(w)) g.add(w); continue; } for (let i = 0; i < w.length - 1; i++) g.add(w.slice(i, i + 2)); } return g; };
+  const STOP = new Set(["무엇","어떻","떻게","뭐야","알려","려줘","주세","세요","있나","나요","인가","까요","대해","관련","하나","어요","해요","에서","은지","는지","해주","하면","되나","돼요","나요"]);
+  const units = [];
+  CH.forEach((c, ci) => c.x.split("\n").forEach((l) => l.split(/(?<=[다요]\.|[.?!])\s+/).forEach((s) => {
+    s = s.trim(); if (s.replace(/[^가-힣a-z]/gi, "").length >= 6) units.push({ ci, t: s });
+  })));
+  const ug = units.map((u) => grams(u.t + " " + CH[u.ci].t));
+  const cg = CH.map((c) => grams(c.t + " " + c.i));
+  const df = new Map(); ug.forEach((g) => g.forEach((t) => df.set(t, (df.get(t) || 0) + 1)));
+  const N = units.length, w = (t) => Math.log(1 + N / df.get(t));
+  // 한글로 묻는 영어 이름 — 가이드 본문은 영어로 적혀 있다
+  const SYN = [[/파이썬|파이선/g, "python"], [/깃허브|깃/g, "git"], [/노드/g, "node"], [/클로드/g, "claude 클로드"], [/파워\s?셸|파워쉘/g, "powershell"],
+    [/크롬/g, "chrome 크롬"], [/패스|경로/g, "path"], [/설치/g, "설치 깔기"], [/깔/g, "깔 설치"], [/에러|오류|빨간/g, "빨간 글씨 오류"], [/로그인/g, "로그인 login"]];
+  const expand = (q) => SYN.reduce((s, [re, to]) => s.replace(re, (m) => m + " " + to), q);
+  const qgrams = (q) => [...grams(expand(q))].filter((t) => df.has(t) && !STOP.has(t));
+  function scoreUnits(q) {
+    const qg = qgrams(q); if (!qg.length) return [];
+    return units.map((u, i) => { let s = 0, hit = 0;
+      for (const t of qg) if (ug[i].has(t)) { s += w(t); hit++; }
+      for (const t of qg) if (cg[u.ci].has(t)) s += 0.4 * w(t);
+      return { u, s: hit ? s / Math.pow(1 + u.t.length / 120, 0.35) : 0 };
+    }).filter((x) => x.s > 0).sort((a, b) => b.s - a.s);
+  }
+  function topChunks(q, k = 5) {
+    const best = new Map();
+    for (const x of scoreUnits(q)) if (x.s > (best.get(x.u.ci) || 0)) best.set(x.u.ci, x.s);
+    const r = [...best].sort((a, b) => b[1] - a[1]); if (!r.length) return [];
+    return r.filter(([, s]) => s >= r[0][1] * 0.3).slice(0, k).map(([ci]) => ci);
+  }
+  function localAnswer(q, ids) {
+    const sc = scoreUnits(q), pick = [], used = new Set();
+    for (const x of sc) { if (pick.length >= 4 || x.s < (sc[0] ? sc[0].s : 0) * 0.45) break; if (used.has(x.u.ci)) continue; used.add(x.u.ci); pick.push(x.u); }
+    if (!pick.length) return "<p>가이드에서 맞는 내용을 찾지 못했어요. 다른 말로 물어봐 주세요. 예: 「파이썬 설치」, 「빨간 글씨」, 「포털 연결」.</p>";
+    return "<p>가이드에서 찾은 내용이에요.</p><ul class=\"qa-pts\">" + pick.map((u) => {
+      const n = ids.indexOf(u.ci); return `<li><b>${esc(CH[u.ci].t)}</b> ${esc(u.t)} ${n >= 0 ? cite(n + 1, u.ci) : go(u.ci)}</li>`;
+    }).join("") + "</ul>";
+  }
+
+  /* ---------- 그리기 ---------- */
+  const cite = (n, ci) => `<button type="button" class="qa-cite" data-ci="${ci}" title="${esc(CH[ci].i + " · " + CH[ci].t)}로 가기">${n}</button>`;
+  const go = (ci) => `<button type="button" class="qa-cite" data-ci="${ci}" title="그 자리로 가기">↗</button>`;
+  function renderClaude(text, ids) {
+    let h = esc(text).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\s+(\[\d+\])/g, "$1");
+    h = h.replace(/\[(\d+)\]/g, (m, n) => ids[n - 1] != null ? cite(n, ids[n - 1]) : "");
+    return h.split(/\n{2,}/).map((p) => `<p>${p.replace(/\n/g, "<br>")}</p>`).join("");
+  }
+  log.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-ci]"); if (!b) return;
+    const el = CH[+b.dataset.ci].el; const d = el.closest("details"); if (d) d.open = true;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.remove("qa-flash"); void el.offsetWidth; el.classList.add("qa-flash");
+  });
+  function turn(q) {
+    const li = document.createElement("li"); li.className = "qa-turn";
+    li.innerHTML = `<p class="qa-q">${esc(q)}</p><div class="qa-bot"><span class="qa-av" aria-hidden="true"></span><div class="qa-say"><span class="qa-who">달구</span><div class="qa-a"></div><div class="qa-refs"></div></div></div>`;
+    log.append(li); log.hidden = false;
+    while (log.children.length > 6) log.firstElementChild.remove();
+    return li;
+  }
+
+  /* ---------- 서버(Opus 5.5) ---------- */
+  const TUNNEL = "https://dgist-ctl.github.io/tunnel.json", TIMEOUT = 95000;
+  let base = null, ctl = null; const history = [];
+  async function server() { if (base) return base; const r = await fetch(TUNNEL, { cache: "no-store" }); base = (await r.json()).url.replace(/\/$/, ""); return base; }
+  const buddy = () => (window.__dalgu && window.__dalgu.help) || null;
+  async function ask(q) {
+    q = q.trim(); if (!q) return;
+    if (ctl) ctl.abort();
+    const li = turn(q), a = $(".qa-a", li), r = $(".qa-refs", li);
+    const ids = topChunks(q), local = localAnswer(q, ids);
+    li.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    a.innerHTML = `<div class="qa-working" role="status"><span class="qa-dots" aria-hidden="true"><i></i><i></i><i></i></span> <span class="qa-think-t">가이드를 펼쳐 보고 있어요</span></div>`;
+    const lines = ["가이드를 펼쳐 보고 있어요", "맞는 단계를 찾고 있어요", "쉬운 말로 정리하고 있어요", "거의 다 됐어요"];
+    let tl = 0; const tt = setInterval(() => { const t = $(".qa-think-t", a); if (!t) return clearInterval(tt); t.textContent = lines[Math.min(++tl, lines.length - 1)]; }, 3500);
+    const b = buddy(); if (b) b.set("think");
+    ctl = new AbortController(); const my = ctl; stopB.hidden = false;
+    const timer = setTimeout(() => my.abort(), TIMEOUT);
+    try {
+      const res = await fetch((await server()) + "/api/guide-ask", { method: "POST", signal: my.signal,
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: q, refs: ids, history: history.slice(-3) }) });
+      const js = await res.json().catch(() => ({}));
+      if (my !== ctl) return;
+      if (!res.ok || !js.answer) { a.innerHTML = local; r.innerHTML = `<p class="qa-wait">${esc(js.error || "지금은 답을 만들지 못했어요.")} 위는 가이드에서 바로 찾은 내용이에요.</p>`; return; }
+      history.push({ q, a: js.answer.slice(0, 600) });
+      a.innerHTML = renderClaude(js.answer, ids);
+      if (b) b.set("nod");
+      r.innerHTML = (js.id ? `<button type="button" class="qa-voice" data-voice="${esc(js.id)}">달구 목소리로 듣기</button>` : "")
+        + `<span class="qa-model">Claude Opus 5.5 · 번호를 누르면 가이드의 그 자리로 가요</span>`;
+    } catch (e) {
+      if (my !== ctl) return;
+      base = null; a.innerHTML = local;
+      r.innerHTML = `<p class="qa-wait">${e && e.name === "AbortError" ? "답을 멈췄어요." : "답변 서버에 연결하지 못했어요."} 위는 가이드에서 바로 찾은 내용이에요.</p>`;
+    } finally { clearTimeout(timer); clearInterval(tt); if (my === ctl) { stopB.hidden = true; ctl = null; } }
+  }
+  form.addEventListener("submit", (e) => { e.preventDefault(); const q = input.value; input.value = ""; ask(q); });
+  stopB.addEventListener("click", () => { if (ctl) ctl.abort(); });
+  document.querySelectorAll("[data-ask]").forEach((c) => c.addEventListener("click", () => ask(c.dataset.ask)));
+
+  /* ---------- 달구 목소리로 듣기(서버가 문장 묶음으로 만든다) ---------- */
+  let audio = null, vbtn = null;
+  const stop = () => { if (audio) { audio.pause(); audio = null; } if (vbtn) { vbtn.classList.remove("on"); vbtn.textContent = "달구 목소리로 듣기"; vbtn = null; } };
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  async function part(id, n, btn) {
+    for (let k = 0; k < 120 && vbtn === btn; k++) {
+      const res = await fetch(`${await server()}/api/guide-tts?id=${encodeURIComponent(id)}&part=${n}`);
+      if (res.status === 200) return { blob: await res.blob(), total: +(res.headers.get("X-Parts") || 1) };
+      if (res.status !== 202) throw new Error(((await res.json().catch(() => ({}))).error) || "목소리를 만들지 못했어요.");
+      if (k === 0 && n === 0) btn.textContent = "달구가 목소리를 가다듬고 있어요…";
+      await wait(2500);
+    }
+    return null;
+  }
+  log.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-voice]"); if (!btn) return;
+    if (vbtn === btn) return stop();
+    stop(); vbtn = btn; btn.classList.add("on");
+    try {
+      let n = 0, total = 1, next = part(btn.dataset.voice, 0, btn);
+      while (vbtn === btn && n < total) {
+        const got = await next; if (!got || vbtn !== btn) return;
+        total = got.total; next = n + 1 < total ? part(btn.dataset.voice, n + 1, btn) : null;
+        audio = new Audio(URL.createObjectURL(got.blob)); btn.textContent = `■ 듣기 멈추기 ${n + 1}/${total}`;
+        const bd = buddy(); if (bd) bd.set("talk");
+        await audio.play(); await new Promise((r) => audio.addEventListener("ended", r, { once: true }));
+        n++;
+      }
+      if (vbtn === btn) stop();
+    } catch (err) { if (vbtn === btn) { stop(); btn.insertAdjacentHTML("afterend", ` <span class="qa-wait">${esc(err.message)}</span>`); } }
+  });
+})();
 </script>
 
 </body>
