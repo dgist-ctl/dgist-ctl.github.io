@@ -6,6 +6,7 @@
 // 처음 2.4초는 카메라가 멀리서 비스듬히 다가오며 별들이 제자리로 모이고(도입 움직임),
 // 그 뒤로는 천천히 돌고 마우스 쪽으로 살짝 기운다. 색은 페이지의 CSS 토큰을 읽어 밝은·어두운 화면을 따른다.
 import * as THREE from "./vendor/three.module.min.js";
+import { makeLogo } from "./logo3d.js";
 
 const INST = ["KAIST", "GIST", "DGIST", "UNIST", "POSTECH", "UST"];
 const ease = (t) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
@@ -85,15 +86,8 @@ export async function mountHero(host) {
   const linkMat = new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 });
   const links = new THREE.LineSegments(linkGeo, linkMat); ring.add(links);
 
-  // 가운데 STAR — 다섯 꼭지 별 판 하나(천천히 돈다)
-  const star = new THREE.Shape();
-  for (let i = 0; i < 10; i++) {
-    const r = i % 2 ? 0.17 : 0.42, a = (i / 10) * Math.PI * 2 + Math.PI / 2;
-    i ? star.lineTo(Math.cos(a) * r, Math.sin(a) * r) : star.moveTo(Math.cos(a) * r, Math.sin(a) * r);
-  }
-  const core = new THREE.Mesh(new THREE.ExtrudeGeometry(star, { depth: 0.08, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.03, bevelSegments: 3 }),
-    new THREE.MeshStandardMaterial({ roughness: 0.3, metalness: 0.35 }));
-  core.geometry.center();
+  // 가운데 STAR-MOOC 로고 — 혜성이 손글씨 별을 그린다(logo3d.js)
+  const logo = makeLogo({ renderer, glow, reduce }), core = logo.group;
   const coreHalo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glow, transparent: true, depthWrite: false, opacity: 0.35 }));
   coreHalo.scale.setScalar(2.2);
   world.add(coreHalo, core);
@@ -117,7 +111,8 @@ export async function mountHero(host) {
       n.lab = label(n.name, T.ink); n.lab.position.set(0, -0.32, 0); n.g.add(n.lab);
     });
     orbitMat.color.set(T.accent); outerMat.color.set(T.muted); linkMat.color.set(T.accent);
-    core.material.color.set(T.accent); coreHalo.material.color.set(T.accent); dustMat.color.set(T.accent);
+    logo.paint(new THREE.Color(T.sheet).getHSL({}).l < 0.4);   // 어두운 화면에선 밝은 로고
+    coreHalo.material.color.set(T.accent); dustMat.color.set(T.accent);
   }
   paint();
   const mo = new MutationObserver(paint); mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -148,7 +143,12 @@ export async function mountHero(host) {
 
   // 화면 밖이면 멈춘다(배터리)
   let visible = true;
-  const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && !raf) raf = requestAnimationFrame(frame); });
+  let hiddenAt = 0;   // 30초 넘게 안 보다가 돌아오면 혜성이 로고를 다시 그린다
+  const io = new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (!visible) hiddenAt = performance.now(); else if (hiddenAt && performance.now() - hiddenAt > 30000) logo.replay();
+    if (visible && !raf) raf = requestAnimationFrame(frame);
+  });
   io.observe(host);
 
   const t0 = performance.now(), INTRO = reduce ? 0 : 2400;
@@ -186,9 +186,9 @@ export async function mountHero(host) {
     // 느린 회전
     const spin = reduce ? 0 : sec * 0.06;
     ring.rotation.z = spin + (1 - k) * -1.2;
-    core.rotation.y = reduce ? 0.4 : sec * 0.5; core.rotation.z = Math.sin(sec * 0.4) * 0.15;
-    core.scale.setScalar(0.2 + 0.8 * ease((t - INTRO * 0.4) / 900));
-    coreHalo.material.opacity = 0.25 + 0.1 * Math.sin(sec * 1.6);
+    // 로고는 도입 영상이 걷힌 뒤에 그리기 시작한다(영상 밑에서 다 그려 버리지 않게)
+    if (!document.documentElement.classList.contains("intro-on")) logo.update(now, [px, py]);
+    coreHalo.material.opacity = 0.18 + 0.06 * Math.sin(sec * 1.6);
     dustPts.rotation.y = reduce ? 0 : sec * 0.015;
     dustMat.opacity = 0.5 * k;
     renderer.render(scene, cam);
