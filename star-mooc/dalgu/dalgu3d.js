@@ -116,13 +116,24 @@ export async function mountDalgu(box, opt = {}) {
   mixer.addEventListener("finished", (e) => { if (!still && !seeking && e.action === cur) set("idle"); });
 
   const q = new THREE.Quaternion(), eu = new THREE.Euler();
-  // 동작 위에 얹는 것 — 믹서가 매 프레임 모든 뼈를 다시 쓰므로 누적되지 않는다.
+  // 동작 위에 얹는 것(바라보기·깜빡임). ★three 믹서는 값이 바뀐 뼈만 다시 쓴다 — 늘 1 인 눈 크기, 멈춘 자세의
+  // 머리 회전은 다시 쓰지 않으므로 얹은 채로 두면 쌓인다(눈이 0 으로 쪼그라든 사고, 10-13).
+  // 그래서 믹서를 돌리기 전에 지난번에 얹은 것을 언제나 되돌린다(unoverlay → 믹서 → overlay).
+  const last = { root: new THREE.Quaternion(), head: new THREE.Quaternion(), lid: 1 };
+  function unoverlay() {
+    B.root.quaternion.multiply(q.copy(last.root).invert());
+    B.head.quaternion.multiply(q.copy(last.head).invert());
+    B.eyes.forEach((e) => { if (e) e.scale.y /= last.lid; });
+    last.root.identity(); last.head.identity(); last.lid = 1;
+  }
   function overlay(instant) {
     const k = instant ? 1 : 0.12;
     st.lookNow[0] += (st.look[0] - st.lookNow[0]) * k;
     st.lookNow[1] += (st.look[1] - st.lookNow[1]) * k;
-    B.root.quaternion.multiply(q.setFromEuler(eu.set(0, st.lookNow[0] * 0.2 + st.turn, 0)));
-    B.head.quaternion.multiply(q.setFromEuler(eu.set(st.lookNow[1] * 0.25, st.lookNow[0] * 0.38, 0)));
+    last.root.setFromEuler(eu.set(0, st.lookNow[0] * 0.2 + st.turn, 0));
+    last.head.setFromEuler(eu.set(st.lookNow[1] * 0.25, st.lookNow[0] * 0.38, 0));
+    B.root.quaternion.multiply(last.root);
+    B.head.quaternion.multiply(last.head);
     const dnaT = st.mood === "think" ? 1 : 0, spikeT = st.mood === "hop" ? 1 : 0;
     st.dna += (dnaT - st.dna) * (instant ? 1 : 0.08);
     st.spike += (spikeT - st.spike) * (instant ? 1 : 0.25);
@@ -138,9 +149,10 @@ export async function mountDalgu(box, opt = {}) {
       if (b < 0.14) lid = Math.abs(b / 0.07 - 1) * 0.92 + 0.08;
     }
     B.eyes.forEach((e) => { if (e) e.scale.y *= lid; });
+    last.lid = lid;
   }
 
-  function frameOnce(dt) { mixer.update(dt); overlay(still); renderer.render(scene, cam); }
+  function frameOnce(dt) { unoverlay(); mixer.update(dt); overlay(still); renderer.render(scene, cam); }
   function loop() {
     raf = 0;
     if (!alive || !visible || document.hidden) return;
@@ -152,7 +164,7 @@ export async function mountDalgu(box, opt = {}) {
     if (!acts[mood]) mood = "idle";
     st.mood = mood;
     const next = acts[mood];
-    if (still) { mixer.stopAllAction(); next.reset().play(); mixer.setTime(POSE[mood] || 0); frameOnce(0); return; }
+    if (still) { unoverlay(); mixer.stopAllAction(); next.reset().play(); mixer.setTime(POSE[mood] || 0); frameOnce(0); return; }
     if (next === cur && !ONCE[mood]) return;
     next.reset().setEffectiveWeight(1).play();
     if (next !== cur) cur.crossFadeTo(next, FADE, false);
@@ -172,12 +184,13 @@ export async function mountDalgu(box, opt = {}) {
   return {
     canvas, set,
     get mood() { return st.mood; },
+    get _probe() { return { eye: B.eyes[0] ? B.eyes[0].scale.y : 1, head: B.head.quaternion.toArray() }; },   // 시험용
     lookAt(nx, ny) { st.look = [nx, ny]; if (still) frameOnce(0); },
     turn(rad) { st.turn = rad; frameOnce(0); },              // 시안 캡처용(정면·3/4·옆)
     seek(mood, t) {                                          // 미리보기 영상·시험용 — mood 의 t초 모습을 그린다
       seeking = true;
       st.mood = acts[mood] ? mood : "idle";
-      mixer.stopAllAction(); cur = acts[st.mood]; cur.reset().play(); mixer.setTime(t);
+      unoverlay(); mixer.stopAllAction(); cur = acts[st.mood]; cur.reset().play(); mixer.setTime(t);
       overlay(true); renderer.render(scene, cam);
       seeking = false;
     },
