@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0E131C" media="(prefers-color-scheme: dark)">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>STAR-MOOC Workshop 2026</title>
-<script>try{var c=navigator.connection;if(!sessionStorage.getItem("intro")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&!(c&&c.saveData)&&!/[?&]nointro/.test(location.search)){document.documentElement.classList.add("intro-on");sessionStorage.setItem("intro","1")}}catch(e){}</script>
+<script>try{var c=navigator.connection;if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!(c&&c.saveData)&&!/[?&]nointro/.test(location.search)&&!location.hash){document.documentElement.classList.add("intro-on")}}catch(e){}</script>
 <meta name="description" content="2026년도 STAR-MOOC 6개 기관 공동 워크숍 — 프로그램, 세션별 기관 발표 자료, 장소 안내">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,7 +66,7 @@ h1,h2,h3,h4{text-wrap:balance;margin:0}
   -webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 34%,#000 62%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.25) 34%,#000 62%)}
 .hero3d.on{opacity:.8}
 .hero3d canvas{display:block;width:100%!important;height:100%!important}
-/* 첫 화면 도입(세션당 한 번, 약 6초) — Blender 로 렌더한 별자리 영상 위에 표제가 떠오른다. JS 가 없어도 CSS 로 스스로 끝난다 */
+/* 첫 화면 도입(열 때·새로고침할 때마다, 약 6초 · #주소로 바로 들어오면 생략) — Blender 로 렌더한 별자리 영상 위에 표제가 떠오른다. JS 가 없어도 CSS 로 스스로 끝난다 */
 .intro{display:none}
 .intro-on .intro{display:grid;position:fixed;inset:0;z-index:60;place-items:center;background:#060A1A;animation:intro-out .9s ease 6.6s forwards}
 .intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
