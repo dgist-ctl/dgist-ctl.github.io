@@ -522,6 +522,8 @@ dialog#reader::backdrop{background:rgba(8,12,20,.62)}
 .qa-head{display:flex;gap:12px;align-items:center}
 .qa-av{flex:none;width:44px;height:44px;object-fit:contain;border-radius:50%;background:var(--accent-soft);padding:3px}
 .qa-head .qa-av{width:52px;height:52px}
+.qa-av3{flex:none;display:block;border-radius:50%;overflow:hidden;background:var(--accent-soft)}
+.qa-av.qa-live{display:none}
 .qa-bot{display:flex;gap:10px;align-items:flex-start;max-width:min(100%,80ch)}
 .qa-say{display:grid;gap:4px;min-width:0}
 .qa-who{font-size:12px;font-weight:700;color:var(--accent)}
@@ -645,13 +647,6 @@ v.innerHTML='<source src="intro/intro.webm" type="video/webm"><source src="intro
       <button type="button" class="dg-q" data-q="call" aria-pressed="false">문의</button>
       <a class="dg-go" href="#ask">자료에 묻기 →</a>
     </div>
-      <div class="arrive" aria-label="처음 오실 곳">
-        <p class="arrive-h">처음 오실 곳 · 10. 15.(목)</p>
-        <ol>
-          <li><time>12:00</time><div><b>중식 · 능이마을 현풍점</b><span>대구 달성군 현풍읍 현풍동로29길 2 · DGIST에서 차로 약 10분</span></div></li>
-          <li><time>13:00</time><div><b>개회 · DGIST R1(연구행정동) 301호</b><span>식사 자리에서 회의장 위치를 안내합니다 · 내비 「DGIST」</span></div></li>
-        </ol>
-      </div>
     </div>
   </div>
 </section>
@@ -1367,11 +1362,54 @@ const READER = {"kaist-s1": {"kind": "slides", "title": "작게 시작하고, �
     }
   });
 
+  /* ---------- 움직이는 달구(3D) — 위쪽 달구와 가장 최근 답의 달구 둘만 ----------
+     몸짓 신호는 그대로 그림의 class(dg-think·dg-talk·dg-nod·dg-hop·dg-glance)로 주고, 3D 달구가 그 class 를 따라 움직인다.
+     지난 답의 달구는 그림으로 돌려 둔다(브라우저 WebGL 한도). WebGL 이 없거나 '동작 줄이기'면 그림 그대로. */
+  const live = new Map();   // img → { d, box, mo }
+  async function goLive(img) {
+    if (calm || !img || live.has(img)) return;
+    live.set(img, null);
+    let mod; try { mod = await import("./dalgu/dalgu3d.js"); } catch (e) { live.delete(img); return; }
+    const size = img.offsetWidth || 44;
+    const box = document.createElement("span");
+    box.className = "qa-av3"; box.setAttribute("aria-hidden", "true");
+    const d = await mod.mountDalgu(box, { size, framing: "face" });
+    if (!d || !img.isConnected || !live.has(img)) { if (d) d.dispose(); live.delete(img); return; }
+    img.after(box); img.classList.add("qa-live");
+    let glance = 0, busy = 0, again = 0;
+    const once = (m) => { d.set(m); busy = performance.now() + 950; clearTimeout(again); again = setTimeout(() => sync(""), 1000); };
+    const sync = (old) => {
+      const c = img.classList, was = new Set((old || "").split(/\s+/));
+      if (c.contains("dg-nod") && !was.has("dg-nod")) return once("nod");
+      if (c.contains("dg-hop") && !was.has("dg-hop")) return once("hop");
+      if (c.contains("dg-glance") && !was.has("dg-glance")) {
+        d.lookAt(Math.random() < .5 ? -.7 : .7, .15); clearTimeout(glance); glance = setTimeout(() => d.lookAt(0, 0), 800);
+      }
+      const want = c.contains("dg-think") ? "think" : c.contains("dg-talk") ? "talk" : "idle";
+      if (performance.now() < busy) return;                  // 끄덕·깡충은 끝까지(그 뒤 다시 맞춘다)
+      if (want !== d.mood) d.set(want);
+    };
+    const mo = new MutationObserver((ms) => ms.forEach((m) => sync(m.oldValue)));
+    mo.observe(img, { attributes: true, attributeFilter: ["class"], attributeOldValue: true });
+    live.set(img, { d, box, mo }); sync("");
+  }
+  function stillAgain(img) {
+    const L = live.get(img); live.delete(img);
+    if (!L) return;
+    L.mo.disconnect(); L.d.dispose(); L.box.remove(); img.classList.remove("qa-live");
+  }
+  goLive($(".qa-head .qa-av"));
+  new MutationObserver(() => {   // 새 답이 붙으면 그 달구만 움직이게
+    const last = log.lastElementChild && $(".qa-av", log.lastElementChild);
+    for (const img of [...live.keys()]) if (img !== last && !img.closest(".qa-head")) stillAgain(img);
+    if (last) goLive(last);
+  }).observe(log, { childList: true });
+
   if (tease) { tease.addEventListener("click", () => ask(tease.dataset.ask)); nextTease(); if (!calm) setInterval(() => { if (!document.hidden && !ctl) nextTease(); }, 9000); }
   idle();
   form.addEventListener("submit", e => { e.preventDefault(); const q = input.value; input.value = ""; ask(q); });
   stopB.addEventListener("click", () => ctl && ctl.abort());
-  document.querySelectorAll("[data-ask]").forEach(b => b.addEventListener("click", () => ask(b.dataset.ask)));
+  document.querySelectorAll("[data-ask]:not(#qa-tease)").forEach(b => b.addEventListener("click", () => ask(b.dataset.ask)));
 })();
 
 </script>

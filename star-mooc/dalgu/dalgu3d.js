@@ -44,6 +44,7 @@ function fixMaterials(root) {
 const FRAMING = {
   full: { y: -0.36, h: 2.6 },      // 잔머리 끝 ~ 발
   bust: { y: -0.12, h: 1.85 },     // 머리 + 어깨
+  face: { y: -0.02, h: 1.72 },     // 동그란 얼굴 칸(자료에 묻기) — 깡충해도 잔머리가 남게
 };
 
 export async function mountDalgu(box, opt = {}) {
