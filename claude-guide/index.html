@@ -118,19 +118,21 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
     <tr><th>무엇</th><th>왜 필요한가</th><th>확인 방법</th></tr>
     <tr><td>Claude 유료 계정</td><td>Pro 또는 Max 구독이 있어야 Claude Code에 로그인됩니다.</td><td>claude.ai 로그인</td></tr>
     <tr><td>Git for Windows</td><td>Claude Code가 Windows에서 명령을 실행할 때 Git Bash를 씁니다.</td><td><code>git --version</code></td></tr>
+    <tr><td>Node.js LTS</td><td>Claude Code 설치에는 필요 없지만, Word·PowerPoint 문서를 만드는 docx·pptx 스킬과 상태줄이 Node로 돌아갑니다. 같이 깔아 두세요.</td><td><code>node --version</code></td></tr>
     <tr><td>Python 3.11 이상</td><td>포털 자동화(Playwright)와 관측기 스크립트를 돌립니다.</td><td><code>python --version</code></td></tr>
     <tr><td>학내망 또는 VPN</td><td>포털·전자결재·웹메일은 학외에서 바로 열리지 않습니다.</td><td>portal.dgist.ac.kr 접속</td></tr>
   </table></div>
   <p>PowerShell은 시작 메뉴에서 <b>“PowerShell”</b>을 검색해 엽니다. 관리자 권한은 필요 없습니다.</p>
-  <div class="term"><div class="bar"><span>POWERSHELL · Git·Python 한 번에 설치</span><button class="copy" type="button">복사</button></div>
+  <div class="term"><div class="bar"><span>POWERSHELL · Git·Node·Python 한 번에 설치</span><button class="copy" type="button">복사</button></div>
 <pre>winget install --id Git.Git -e
+winget install --id OpenJS.NodeJS.LTS -e
 winget install --id Python.Python.3.12 -e</pre></div>
-  <div class="check"><b>확인</b><span>PowerShell 창을 닫았다 다시 연 뒤 <code>git --version</code>, <code>python --version</code>이 버전 숫자를 보여 주면 됩니다.</span></div>
+  <div class="check"><b>확인</b><span>PowerShell 창을 닫았다 다시 연 뒤 <code>git --version</code>, <code>python --version</code>, <code>node --version</code>이 버전 숫자를 보여 주면 됩니다.</span></div>
 </section>
 
 <section id="install">
   <h2><span class="no">STEP 1</span>Claude Code 설치</h2>
-  <p class="sub">공식 설치 스크립트 한 줄이면 끝납니다. Node.js는 따로 필요 없습니다.</p>
+  <p class="sub">공식 설치 스크립트 한 줄이면 끝납니다. 이 방법은 Node.js 없이도 설치됩니다.</p>
   <ol class="steps">
     <li><strong class="t">설치 스크립트 실행</strong>
       <div class="term"><div class="bar"><span>POWERSHELL</span><button class="copy" type="button">복사</button></div>
@@ -138,6 +140,9 @@ winget install --id Python.Python.3.12 -e</pre></div>
       <p>“실행 정책” 오류가 나면 아래 줄을 먼저 실행하고 다시 시도합니다(현재 사용자에게만 적용).</p>
       <div class="term"><div class="bar"><span>POWERSHELL</span><button class="copy" type="button">복사</button></div>
 <pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
+      <p>설치 스크립트가 막히는 환경이면 Node.js(npm)로 설치해도 같습니다. 이 경우 업데이트도 같은 명령으로 합니다.</p>
+      <div class="term"><div class="bar"><span>POWERSHELL · 대안(npm)</span><button class="copy" type="button">복사</button></div>
+<pre>npm install -g @anthropic-ai/claude-code</pre></div>
     </li>
     <li><strong class="t">새 PowerShell 창에서 실행</strong>
       <div class="term"><div class="bar"><span>POWERSHELL</span><button class="copy" type="button">복사</button></div>
