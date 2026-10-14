@@ -302,7 +302,7 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
 
 <section id="install">
   <h2><span class="no">2단계 · 약 5분</span>클로드 깔기</h2>
-  <p class="sub">한 줄 붙여 넣으면 깔립니다.</p>
+  <p class="sub">두 줄 붙여 넣으면 깔립니다.</p>
   <ol class="steps">
     <li><strong class="t">PowerShell 창 열기</strong>
       <p>키보드 왼쪽 아래 <kbd>⊞</kbd>(윈도우) 키를 누르고 <b>powershell</b>이라고 칩니다. 맨 위에 나온 <b>Windows PowerShell</b>을 누르세요.</p>
@@ -315,10 +315,16 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
       <div class="term"><div class="bar"><span>빨간 글씨가 났을 때만</span><button class="copy" type="button">복사</button></div>
 <pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
     </li>
+    <li><strong class="t">한 줄 더 붙여 넣고 <kbd>Enter</kbd> — 꼭 하세요</strong>
+      <p>“Installation complete!”가 나와도 아직 <b>컴퓨터가 클로드가 어디 있는지 모릅니다</b>. 설치 프로그램이 이 일을 해 주지 않기 때문에, 이 줄을 빠뜨리면 다음 단계에서 <code>claude</code>를 쳐도 “인식되지 않습니다”가 나옵니다. 같은 창에 붙여 넣으세요. 아무 글자도 안 나오면 정상입니다.</p>
+      <div class="term"><div class="bar"><span>같은 PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>$b=$env:USERPROFILE+'\.local\bin'; $u=[Environment]::GetEnvironmentVariable('Path','User'); if((';'+$u+';') -notlike ('*;'+$b+';*')){[Environment]::SetEnvironmentVariable('Path',$u+';'+$b,'User')}</pre></div>
+    </li>
     <li><strong class="t">창을 닫고, 새로 열고, <code>claude</code> 입력</strong>
       <p>PowerShell 창을 <b>X</b>로 닫았다가 1번처럼 다시 엽니다. 그리고 아래를 붙여 넣고 <kbd>Enter</kbd>.</p>
       <div class="term"><div class="bar"><span>새 PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
 <pre>claude</pre></div>
+      <div class="bad"><b>“인식되지 않습니다”?</b><span>바로 앞의 ‘한 줄 더’를 빠뜨렸거나, 창을 새로 열지 않은 것입니다. 그 줄을 붙여 넣고 창을 X로 닫았다가 다시 여세요.</span></div>
     </li>
     <li><strong class="t">영어 질문 4개에 답하기</strong>
       <p>처음 한 번만 나옵니다. 위아래 화살표 키로 고르고 <kbd>Enter</kbd>. 글자는 버전마다 조금 다를 수 있습니다.</p>
@@ -345,6 +351,9 @@ Do you trust the files in this folder?
     <p>회사 보안 때문에 PowerShell 명령이 막히면 <b>cmd</b>로 깔 수 있습니다. 시작 단추를 누르고 <b>cmd</b>를 쳐서 <b>명령 프롬프트</b>를 연 뒤 아래 한 줄을 붙여 넣으세요. 줄 앞에 <code>PS</code>가 없이 <code>C:&#92;Users&#92;내이름&gt;</code>만 보이면 cmd 창이 맞습니다.</p>
     <div class="term"><div class="bar"><span>명령 프롬프트(cmd) 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
 <pre>curl -fsSL https://claude.ai/install.cmd -o install.cmd &amp;&amp; install.cmd &amp;&amp; del install.cmd</pre></div>
+    <p>끝나면 cmd에서도 <b>한 줄 더</b> 붙여 넣고, 창을 닫았다가 새로 열어 <code>claude</code>를 칩니다.</p>
+    <div class="term"><div class="bar"><span>같은 cmd 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
+<pre>powershell -NoProfile -Command "$b=$env:USERPROFILE+'\.local\bin'; $u=[Environment]::GetEnvironmentVariable('Path','User'); if((';'+$u+';') -notlike ('*;'+$b+';*')){[Environment]::SetEnvironmentVariable('Path',$u+';'+$b,'User')}"</pre></div>
     <div class="bad"><b>주의</b><span>창마다 명령이 다릅니다. PowerShell 명령(<code>irm …</code>)을 cmd에 넣으면 “내부 또는 외부 명령이 아닙니다”가 나옵니다.</span></div>
     <p>그래도 안 되면, Node.js를 깔았다면 아래 한 줄로도 똑같이 깔립니다(PowerShell·cmd 어느 창이든 됩니다).</p>
     <div class="term"><div class="bar"><span>PowerShell 또는 cmd 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
