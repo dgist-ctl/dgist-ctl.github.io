@@ -115,6 +115,10 @@ kbd{font-family:var(--mono);font-size:.82em;border:1px solid var(--line);border-
 
 .say{display:grid;gap:8px;margin:14px 0;max-width:62ch}
 .say div{background:var(--panel);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:10px 16px;font-size:17px}
+.say div{position:relative;padding-right:76px}
+.saycopy{position:absolute;right:10px;top:10px;font:700 13px var(--sans);color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent);border-radius:6px;padding:3px 10px;cursor:pointer}
+.saycopy::after{content:"복사"}
+.saycopy.ok::after{content:"복사됨 ✓"}
 .say div::before{content:"클로드에게 이렇게 쓰기";display:block;color:var(--accent);font-size:13.5px;font-weight:500}
 
 .tbl{overflow-x:auto;margin:14px 0}
@@ -284,7 +288,7 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
     <a href="https://claude.com/pricing" target="_blank" rel="noopener"><em>①</em><b>Claude 구독</b><span>Pro 또는 Max 요금제를 고릅니다. 이미 쓰고 있으면 건너뛰세요.</span></a>
     <a href="https://git-scm.com/downloads/win" target="_blank" rel="noopener"><em>②</em><b>Git</b><span>“64-bit Git for Windows Setup”을 받습니다. 질문이 많지만 전부 <b>Next</b>.</span></a>
     <a href="https://nodejs.org/ko/download" target="_blank" rel="noopener"><em>③</em><b>Node.js</b><span>“Windows 설치 프로그램(.msi)”을 받습니다. 전부 <b>Next</b>.</span></a>
-    <a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener"><em>④</em><b>Python</b><span>맨 위 “Latest Python 3”을 받습니다. <b>아래 그림의 칸에 꼭 체크!</b></span></a>
+    <a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener"><em>④</em><b>Python</b><span>“Latest Python 3 Release”를 누르고, 새 쪽 맨 아래 “Windows installer (64-bit)”를 받습니다. 맨 윗줄 install manager가 아닙니다. <b>아래 그림의 칸에 꼭 체크!</b></span></a>
   </div>
   <p>받은 파일은 화면 오른쪽 위(또는 <b>다운로드</b> 폴더)에 있습니다. 더블클릭해서 설치합니다.</p>
   <div class="note"><b>④ Python에서 가장 많이 틀립니다.</b> 설치 첫 화면 맨 아래 이 칸에 체크하고 <b>Install Now</b>를 누르세요.<br>
@@ -306,7 +310,7 @@ footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);color:v
     <li><strong class="t">아래 한 줄을 붙여 넣고 <kbd>Enter</kbd></strong>
       <div class="term"><div class="bar"><span>PowerShell 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
 <pre>irm https://claude.ai/install.ps1 | iex</pre></div>
-      <p>붙여 넣기 = PowerShell 창 안에서 <b>마우스 오른쪽 버튼</b> 한 번. 글자가 올라가다 멈추면 끝입니다.</p>
+      <p>붙여 넣기 = PowerShell 창 안에서 <b>Ctrl+V</b>(또는 마우스 오른쪽 버튼). 받는 동안 1~2분은 <b>아무것도 안 보여도 정상</b>입니다. 맨 아래에 다시 <code>PS C:&#92;Users&#92;내이름&gt;</code> 줄이 나오면 끝입니다.</p>
       <div class="bad"><b>빨간 글씨?</b><span>“스크립트를 실행할 수 없으므로…”가 보이면, 아래 줄을 먼저 붙여 넣고 <kbd>Enter</kbd> → 위의 줄을 다시 붙여 넣으세요.</span></div>
       <div class="term"><div class="bar"><span>빨간 글씨가 났을 때만</span><button class="copy" type="button">복사</button></div>
 <pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre></div>
@@ -338,14 +342,14 @@ Do you trust the files in this folder?
     </li>
   </ol>
   <details><summary>PowerShell이 막힐 때 — cmd(명령 프롬프트)로 설치</summary>
-    <p>회사 보안 때문에 PowerShell 명령이 막히면 <b>cmd</b>로 깔 수 있습니다. 시작 단추를 누르고 <b>cmd</b>를 쳐서 <b>명령 프롬프트</b>를 연 뒤 아래 한 줄을 붙여 넣으세요.</p>
+    <p>회사 보안 때문에 PowerShell 명령이 막히면 <b>cmd</b>로 깔 수 있습니다. 시작 단추를 누르고 <b>cmd</b>를 쳐서 <b>명령 프롬프트</b>를 연 뒤 아래 한 줄을 붙여 넣으세요. 줄 앞에 <code>PS</code>가 없이 <code>C:&#92;Users&#92;내이름&gt;</code>만 보이면 cmd 창이 맞습니다.</p>
     <div class="term"><div class="bar"><span>명령 프롬프트(cmd) 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
 <pre>curl -fsSL https://claude.ai/install.cmd -o install.cmd &amp;&amp; install.cmd &amp;&amp; del install.cmd</pre></div>
     <div class="bad"><b>주의</b><span>창마다 명령이 다릅니다. PowerShell 명령(<code>irm …</code>)을 cmd에 넣으면 “내부 또는 외부 명령이 아닙니다”가 나옵니다.</span></div>
     <p>그래도 안 되면, Node.js를 깔았다면 아래 한 줄로도 똑같이 깔립니다(PowerShell·cmd 어느 창이든 됩니다).</p>
     <div class="term"><div class="bar"><span>PowerShell 또는 cmd 창에 붙여 넣기</span><button class="copy" type="button">복사</button></div>
 <pre>npm install -g @anthropic-ai/claude-code</pre></div>
-    <p>공식 안내: <a href="https://docs.claude.com/ko/docs/claude-code/setup" target="_blank" rel="noopener">설치 안내</a> · <a href="https://docs.claude.com/ko/docs/claude-code/troubleshooting" target="_blank" rel="noopener">문제 해결</a></p>
+    <p>공식 안내: <a href="https://code.claude.com/docs/ko/setup" target="_blank" rel="noopener">설치 안내</a> · <a href="https://code.claude.com/docs/ko/troubleshoot-install" target="_blank" rel="noopener">설치 문제 해결</a></p>
   </details>
 </section>
 
@@ -409,7 +413,7 @@ Do you trust the files in this folder?
   <h2><span class="no">5단계 · 일 하나에 15분</span>내 일 가르치기(관측기)</h2>
   <p class="sub">신입 직원 가르치듯 하면 됩니다. <b>말로 설명하지 말고, 한 번 해 보이세요.</b></p>
   <p>관측기는 내가 포털 전용 크롬에서 <b>무엇을 눌렀고 무엇을 입력했는지</b> 받아 적기만 합니다. 대신 누르지 않습니다. 비밀번호는 <code>***</code>로 가려서 적습니다.</p>
-  <div class="note"><b>먼저 준비</b> 4단계(포털 연결)를 끝내야 합니다. 관측기 프로그램은 교수학습센터가 만든 것이라, 처음 한 번은 센터에 설치를 요청하세요.</div>
+  <div class="note"><b>먼저 준비</b> 4단계(포털 연결)를 끝내야 합니다. 관측기 프로그램은 교수학습센터가 만든 것이라, 처음 한 번은 센터(<a href="tel:053-785-5172">053-785-5172</a>)에 설치를 요청하세요.</div>
   <ol class="steps">
     <li><strong class="t">가르칠 일을 한 문장으로 말하기</strong>
       <div class="say"><div>매달 하는 카드 지급신청을 스킬로 만들고 싶어. 관측기 켜줘</div></div>
@@ -480,7 +484,7 @@ Do you trust the files in this folder?
   </table></div>
 </section>
 
-<footer>DGIST 교수학습센터 · 2026년 10월 기준 · Windows 11에서 확인한 절차입니다. 프로그램 버전에 따라 화면 글자가 조금 다를 수 있습니다.</footer>
+<footer>DGIST 교수학습센터 · 2026년 10월 기준 · Windows 11에서 확인한 절차입니다. 프로그램 버전에 따라 화면 글자가 조금 다를 수 있습니다.<br>막히면 교수학습센터 <a href="tel:053-785-5172">053-785-5172</a> · <a href="mailto:shlee@dgist.ac.kr">shlee@dgist.ac.kr</a></footer>
 </main>
 </div>
 <div class="buddy" id="buddy" aria-live="polite">
@@ -496,6 +500,16 @@ document.querySelectorAll('.copy').forEach(function(btn){
     var done = function(){ btn.textContent='복사됨 ✓'; setTimeout(function(){btn.textContent='복사';},1500); };
     try { navigator.clipboard.writeText(txt).then(done, function(){ sel(pre); }); } catch(e){ sel(pre); }
   });
+});
+document.querySelectorAll('.say div').forEach(function(d){
+  var b=document.createElement('button'); b.type='button'; b.className='saycopy'; b.setAttribute('aria-label','이 말 복사');
+  b.addEventListener('click',function(){
+    var t=d.firstChild && d.firstChild.nodeType===3 ? d.textContent : d.innerText;
+    t=t.trim();
+    var ok=function(){ b.classList.add('ok'); setTimeout(function(){b.classList.remove('ok');},1500); };
+    try { navigator.clipboard.writeText(t).then(ok,function(){}); } catch(e){}
+  });
+  d.appendChild(b);
 });
 function sel(el){ var r=document.createRange(); r.selectNodeContents(el); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }
 (function(){
