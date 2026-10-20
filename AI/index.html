@@ -34,7 +34,7 @@ body{margin:0;background:var(--bg);color:var(--ink);
 a{color:var(--navy)}                                   /* 기본 파랑(#00e)은 어두운 화면에서 대비 1.8 */
 small{font-size:max(14px,.85em)}                      /* 작은 글씨 하한 14px(가독성 루프 1회) */
 /* 한 줄 길이 — 폭이 A4 가로여도 줄글은 한 줄 44자 안팎(가독성 루프 2회) */
-.intro p,.gbody p,.tip p,.guide-src,.reply p,.laws>p,.lcommon li,footer .wrap>*{max-width:44em}
+.gbody p,.tip p,.guide-src,.reply p,.laws>p,.lcommon li,footer .wrap>*{max-width:44em}
 /* 외톨이 낱말 줄이기 — 제목은 줄 길이를 고르게, 문단은 마지막 줄에 한 낱말만 남지 않게(가독성 루프 9회) */
 h1,h2,h3,h4,.q h3,.item h3{text-wrap:balance}
 p,li,dd,.box{text-wrap:pretty}
@@ -51,8 +51,8 @@ h1{font-size:clamp(22px,3.6vw,30px);line-height:1.35;margin:0 0 6px;color:var(--
 .facts .due span{color:var(--pri)}
 .intro{margin:22px 0 0;color:var(--ink2)}
 .nw{white-space:nowrap}
-.nw{white-space:nowrap}
 .intro p{margin:0 0 8px;text-align:justify;text-justify:inter-word}   /* 소개 문단 양쪽 정렬(사용자 지시 2026-10-20) */
+.intro p{max-width:none}                                               /* 소개 문단은 A4 가로 폭 전체(사용자 지시 2026-10-20) */
 @media (max-width:640px){.intro p{text-align:left}}                 /* 휴대폰 폭에선 어절 단위 양쪽 정렬이 낱말 사이를 크게 벌림 */
 .bar{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);
   backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
