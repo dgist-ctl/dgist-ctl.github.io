@@ -142,8 +142,16 @@ footer{color:var(--ink3);font-size:14px;padding:0 0 40px}
 .gbody .g1{font-size:21px;color:var(--navy);margin:36px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--navy)}
 .gbody .g2{font-size:20px;color:var(--navy);margin:30px 0 8px}
 .gbody .g3{font-size:18.5px;color:var(--navy);margin:26px 0 8px;padding-left:10px;border-left:4px solid var(--navy);line-height:1.4}   /* 원칙(2 인간 중심성…) — 아래 절과 크기가 같아 층이 안 보였음(가독성 루프 3회) */
-.gbody .g4{font-size:17.5px;margin:18px 0 6px}
-.gbody .g5{font-size:16.5px;margin:16px 0 4px;color:var(--navy)}
+.gbody .g4{font-size:18px;margin:22px 0 6px}
+.gbody .g5{font-size:17.5px;margin:20px 0 6px;color:var(--navy)}   /* 본문(17px)보다 작던 1.2.3. 제목을 키움(사용자 지시 2026-10-20) */
+/* 조항 번호 칩 — 1 · 1.2 · 1.2.3 을 제목 글과 떼어 한눈에(사용자 지시 2026-10-20) */
+.gbody .gn{display:inline-block;margin-right:.55em;padding:0 .45em;border-radius:6px;background:var(--navy-soft);color:var(--navy);
+  font-variant-numeric:tabular-nums;letter-spacing:.03em;font-weight:800;line-height:1.5}
+.gbody .g1 .gn,.gbody .g3 .gn{background:var(--navy);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gbody .g1 .gn,:root:not([data-theme="light"]) .gbody .g3 .gn{color:var(--bg)}}
+:root[data-theme="dark"] .gbody .g1 .gn,:root[data-theme="dark"] .gbody .g3 .gn{color:var(--bg)}
+.box h4 small a{display:inline-block;padding:0 .4em;border-radius:5px;background:var(--navy-soft);font-variant-numeric:tabular-nums;text-decoration:none;font-weight:700}
+.box h4 small a:hover{text-decoration:underline}
 .gbody [id]{scroll-margin-top:150px}
 .gbody :target{background:var(--pri-soft);border-radius:4px;outline:3px solid var(--pri-soft)}
 .gbody .o{font-weight:700;margin-top:10px}
@@ -2039,45 +2047,45 @@ footer{color:var(--ink3);font-size:14px;padding:0 0 40px}
 <p>가이드라인은 대학 공동체가 공유해야 할 5대 핵심 원칙과 12개 세부 원칙을 바탕으로 구성되었으며, 수업 준비 및 운영, 과제 수행, 시험 및 평가 등 다양한 교육 상황에서 참고할 수 있도록 설계하였다. 교수자와 학습자의 역할과 책임을 구분하고, 각각의 상황에 맞는 실천 방안을 제시함으로써 대학 교육 현장에서 각자의 역할에 따라 쉽게 적용할 수 있도록 하였다.</p>
 <p>교수자는 AI 활용 여부를 명확하게 안내하고, 교육 목표와 평가 방식에 적합한 활용 기준을 설계하는 데 이 가이드라인을 활용할 수 있다. 학습자는 AI를 단순히 결과물을 만들어 내는 도구가 아니라 자신의 사고와 학습을 확장하고 지식을 공유하는 협업자로 활용하기 위한 기준으로 고려할 수 있다. 대학은 학사 운영과 교육 정책을 수립하거나 AI 활용 관련 분쟁을 예방하고 조정하는 과정에서 공통의 판단 기준으로 활용할 수 있다.</p>
 <p>AI 기술은 앞으로도 지속적으로 발전할 것이며, 대학 교육 또한 이에 맞추어 변화할 것이다. 본 가이드라인은 완성된 규정이 아니라 변화하는 기술과 교육 환경에 맞추어 지속적으로 보완되고 발전해 나가야 하는 살아있는 기준이다. 이 가이드라인은 처벌이나 제재의 기준이 아니라, 대학 구성원이 스스로 판단하고 실천할 수 있도록 지원하는 자율적이고 예방적인 행동 가이드로 활용되어야 한다. 각 대학은 학문 분야와 교육 환경의 특성을 고려하여 본 가이드라인을 유연하게 적용할 수 있으며, 대학의 특성을 고려하여 자체적 가이드라인을 개발하는 데 도움을 줄 수 있을 것이다. 이 가이드라인을 바탕으로 대학 구성원 간의 신뢰와 책임에 기반한 AI 활용 문화를 만들어 가기를 기대한다.</p>
-<h3 class="g1" id="g-01">01 목적</h3>
+<h3 class="g1" id="g-01"><span class="gn">01</span>목적</h3>
 <p>대학 AI 활용 윤리 가이드라인은 AI 기술의 대학 교육 전반 확산에 대응하여, 윤리적이고 책임있는 AI 활용을 촉진하기 위해 마련되었다. 본 가이드라인은 교수자와 학습자를 대상으로, 수업·과제·평가 등 교수·학습 과정에서 AI를 활용할 때 고려해야 할 윤리기준을 마련하여 구체적이고 실천 가능한 지침으로서 역할을 할 수 있도록 구성하였다. 본 가이드라인은 각 대학에서 자체 가이드라인을 개발하거나 수업 방침을 수립할 때 필요한 요소를 선택적으로 활용할 수 있도록 설계되었다. 즉, 대학이 참고할 수 있는 공통 기준을 제시함으로써, 고등교육의 공정성과 신뢰성을 높이고 동시에 대학의 자율성과 창의적 활용을 보장하는 균형있는 AI 활용 윤리의 생태계 조성에 기여하고자 한다.</p>
-<h3 class="g1" id="g-02">02 핵심 원칙</h3>
+<h3 class="g1" id="g-02"><span class="gn">02</span>핵심 원칙</h3>
 <p>대학 AI 활용 윤리 가이드라인은 5대 ‘핵심 원칙’과 이에 대응하는 12개 ‘세부 원칙’을 다음과 같이 제시한다.</p>
 <h4 class="g2" id="g-x10">가. 핵심 원칙</h4>
-<h6 class="g5">➊ 학문적 진실성</h6>
+<h6 class="g5"><span class="gn">➊</span>학문적 진실성</h6>
 <p>교육 목적과 원칙에 따라 AI를 활용하며, 학습의 전 과정에서 윤리적 기준을 준수한다.</p>
-<h6 class="g5">➋ 인간 중심성과 책임성</h6>
+<h6 class="g5"><span class="gn">➋</span>인간 중심성과 책임성</h6>
 <p>AI는 인간의 가치를 존중하는 범위 내에서 활용되어야 하며, 모든 최종 의사결정 권한과 그에 따른 책임은 사용자에게 있다.</p>
-<h6 class="g5">➌ 투명성과 신뢰성</h6>
+<h6 class="g5"><span class="gn">➌</span>투명성과 신뢰성</h6>
 <p>AI 사용 사실과 과정을 투명하게 공개하고, 결과에 대한 사실을 검증하여 정보의 정확성을 유지한다.</p>
-<h6 class="g5">➍ 공정성</h6>
+<h6 class="g5"><span class="gn">➍</span>공정성</h6>
 <p>개인과 집단의 특성과 배경에 따른 차별 없이 모든 사용자가 AI를 공정하게 사용할 수 있어야 한다.</p>
-<h6 class="g5">➎ 정보 보호 및 보안</h6>
+<h6 class="g5"><span class="gn">➎</span>정보 보호 및 보안</h6>
 <p>AI 활용 과정에서 입력되는 모든 정보에 대한 보안 원칙을 이해하고, 개인 및 집단의 정보 보호와 안전성을 고려하여 활용한다.</p>
 <h4 class="g2" id="g-x21">나. 세부 원칙</h4>
-<h5 class="g3">1 학문적 진실성</h5>
+<h5 class="g3"><span class="gn">1</span>학문적 진실성</h5>
 <p class="b1"><b>학문적 윤리 준수</b> : 소속 기관의 학문 윤리 및 AI 활용 지침을 준수하고, 교육 목적과 원칙에 따라 사용하며, AI 활용으로 인한 윤리적 문제와 잠재적 위험성을 인지하고 준수한다.</p>
 <p class="b1"><b>인용 및 출처 표기</b> : 정해진 기준에 따라 AI 활용 방식과 범위, 인용 및 출처를 명확히 표기해야 하며, 교수자가 제시한 허용 기준과 출처 표기 요건을 준수한다.</p>
-<h5 class="g3">2 인간 중심성과 책임성</h5>
+<h5 class="g3"><span class="gn">2</span>인간 중심성과 책임성</h5>
 <p class="b1"><b>결과에 대한 책임</b> : AI 활용 과정에서 의사결정권에 대한 통제권을 유지하고, 신중하게 활용하며, 결과에 대한 책임을 다하도록 한다.</p>
 <p class="b1"><b>상호합의적 활용</b> : AI 활용은 교수자와 학습자가 참여하여 상호 합의를 바탕으로 한다. 교수자는 학습자가 관련 규칙을 준수할 수 있도록 지도하고, 학습자는 제시된 AI 활용 지침을 숙지하고 수용한다.</p>
 <p class="b1"><b>인간 중심 결정</b> : AI 도구는 인간의 자율성, 존엄, 시민권 및 인권 등 인간 가치의 원칙을 존중하는 방식으로 활용되어야 하며, AI 생성물의 사용에 관한 최종 판단과 결정은 인간의 존엄성을 고려하여 결정한다.</p>
-<h5 class="g3">3 투명성과 신뢰성</h5>
+<h5 class="g3"><span class="gn">3</span>투명성과 신뢰성</h5>
 <p class="b1"><b>사용 사실 공개</b> : 작업 산출물에 AI를 활용한 경우에는 사용 사실과 범위, 내용을 투명하게 공개한다.</p>
 <p class="b1"><b>사용 과정 공개</b> : AI 활용 시 활용 범위와 목적, 판단 근거 및 의사결정 과정에 대해 제시하고, 중요한 판단과 결정에 대해서는 그 근거와 절차를 명확히 설명할 수 있어야 한다.</p>
 <p class="b1"><b>정보 검증 의무</b> : AI가 제공하는 정보에는 최신성 결여를 포함한 오류, 편향, 환각 (hallucination) 등이 존재할 수 있으므로, 신뢰할 수 있는 1차 문헌이나 데이터를 통해 검증을 수행하여 AI 생성물의 정확성을 비판적으로 검토한다.</p>
-<h5 class="g3">4 공정성</h5>
+<h5 class="g3"><span class="gn">4</span>공정성</h5>
 <p class="b1"><b>형평성과 비차별 원칙</b> : AI 도구 활용으로 인해 성별, 인종, 사회적 배경에 따른 차별이 초래되지 않아야 하며, 모든 개인과 집단에 대해 공정성이 확보되도록 사용되어야 한다.</p>
 <p class="b1"><b>포용성</b> : AI는 모든 사용자가 접근 가능하며, 포용적으로 활용될 수 있어야 한다.</p>
-<h5 class="g3">5 정보 보호 및 보안</h5>
+<h5 class="g3"><span class="gn">5</span>정보 보호 및 보안</h5>
 <p class="b1"><b>개인정보 및 보안</b> : AI 도구에 입력되는 정보는 공개 정보로 처리되어 제3자에 의해 수집·활용될 수 있으므로, AI 서비스의 정보 보호 및 보안에 대한 한계를 인지하고 개인정보, 기밀 정보, 민감 정보 및 지식재산권이 포함된 정보가 오남용되지 않도록 한다.</p>
 <p class="b1"><b>안전성</b> : 기술적 안전성이 검증된 AI 도구를 활용하며, 활용과정에서 발생 가능한 잠재적 위험을 예방하고 안전이 확보·보장되는 범위 내에서 사용한다.</p>
-<h3 class="g1" id="g-03">03 가이드라인</h3>
+<h3 class="g1" id="g-03"><span class="gn">03</span>가이드라인</h3>
 <p>본 가이드라인은 교수자와 학습자가 현장에서 AI를 활용할 때 고려해야 할 내용을 핵심 원칙과 세부 원칙 중심으로 구체화하였다.</p>
 <h4 class="g2" id="g-t">가. 교수자를 위한 가이드라인</h4>
-<h5 class="g3" id="g-t-1">1 학문적 진실성</h5>
-<h6 class="g4">1.1. 학문적 윤리 준수</h6>
-<h6 class="g5" id="g-t-1-1-1">1.1.1. 수업에서의 AI 활용 방침</h6>
+<h5 class="g3" id="g-t-1"><span class="gn">1</span>학문적 진실성</h5>
+<h6 class="g4"><span class="gn">1.1</span>학문적 윤리 준수</h6>
+<h6 class="g5" id="g-t-1-1-1"><span class="gn">1.1.1</span>수업에서의 AI 활용 방침</h6>
 <p class="o">AI 활용 방침 설정</p>
 <p>한 학기 강의계획을 수립할 때, 강의 목적과 내용, 학습 목표, 주요 학습 활동 및 과제 평가 방법 등을 종합적으로 고려하여, AI 사용에 대한 자체 기준을 설정한다.</p>
 <p class="o">AI 활용 범위 설정</p>
@@ -2088,79 +2096,79 @@ footer{color:var(--ink3);font-size:14px;padding:0 0 40px}
 <aside class="tip"><p class="tip-h">TIP · 강의계획서 내 활용 방침 명시 내용 예시</p><p class="b1">강의계획서 내 AI 활용 방침에는 다음 사항을 포함하여 안내할 수 있다.</p><p class="b2">AI 활용 범위(예: 사용 금지, 제한적 사용, 사용 허용 등)</p><p class="b2">AI 활용 목적</p><p class="b2">과제 및 시험 평가 기준</p><p class="b2">표절 및 부정행위 정의와 처리 기준</p><p class="b2">출처 표기 및 인용 방식</p><p class="b2">결과 도출 과정 제시</p><p class="b2">평가 시 AI 탐지 도구의 활용 여부</p><p class="b2">수업에서 허용되는 AI 목록 등</p></aside>
 <p class="o">AI 활용 방법 안내(학문적 윤리 안내)</p>
 <p>AI 활용과정에서 발생할 수 있는 학문적 진실성 위반 행위를 구체적으로 안내하고, 학문적 진실성 위반 행위를 절대로 하지 않아야 함을 명확히 알려준다. 또한, 학습자가 AI 기술의 원리와 특성을 이해하고 AI의 교육적 활용 방식을 숙지하여, 책임 있게 활용할 수 있도록 안내한다.</p>
-<h6 class="g5" id="g-t-1-1-2">1.1.2. 목적에 부합하는 AI 활용</h6>
+<h6 class="g5" id="g-t-1-1-2"><span class="gn">1.1.2</span>목적에 부합하는 AI 활용</h6>
 <p>해당 강의의 학습 목표 달성에 도움이 되는 보조적 수단으로 AI를 활용할 수 있도록 수업을 설계한다.</p>
-<h6 class="g5" id="g-t-1-1-3">1.1.3. AI 활용의 장점과 한계에 대한 인식</h6>
+<h6 class="g5" id="g-t-1-1-3"><span class="gn">1.1.3</span>AI 활용의 장점과 한계에 대한 인식</h6>
 <p>AI를 교육에 활용했을 때의 장점 및 한계점에 대하여 학습자에게 설명한다. AI의 한계를 인식하여 모든 질문에 정확하게 답하거나 최신의 정보를 제공하지 못한다는 점을 안내하고, 강의 중 필요시 AI 활용의 의미와 한계를 함께 논의할 수 있는 학습 환경을 마련한다.</p>
-<h6 class="g4">1.2. 인용 및 출처 표기</h6>
-<h6 class="g5" id="g-t-1-2-1">1.2.1. 인용·출처 표기 의무 및 표기 방식</h6>
+<h6 class="g4"><span class="gn">1.2</span>인용 및 출처 표기</h6>
+<h6 class="g5" id="g-t-1-2-1"><span class="gn">1.2.1</span>인용·출처 표기 의무 및 표기 방식</h6>
 <p>AI 사용 시의 인용 및 출처 표기 기준을 학습자에게 명확히 전달하고, 학습자가 AI 생성물 활용 시 출처를 반드시 표기하도록 지도한다. AI의 생성물에 대한 인용 및 출처 표기 방식은 APA, MLA 등의 스타일 가이드를 참조할 수 있다.</p>
 <aside class="tip"><p class="tip-h">TIP · 인용 및 출처 표기 방식 예시</p><p class="b1"><b>APA</b> : https://apastyle.apa.org/blog/cite-generative-ai-references</p><p>AI Company Name. (year). Tool Name/Model in Italics and Title Case [Description; e.g., Large language model]. URL of the tool</p><p class="b2">Parenthetical citation: (AI Company Name, year)</p><p class="b2">Narrative citation: AI Company Name (year)</p><p class="b1"><b>MLA</b> : https://style.mla.org/citing-generative-ai-updated-revised/</p><p class="note">※ 자료 유형별 상세 가이드는 URL 참조</p></aside>
-<h6 class="g5" id="g-t-1-2-2">1.2.2. 표절 예방</h6>
+<h6 class="g5" id="g-t-1-2-2"><span class="gn">1.2.2</span>표절 예방</h6>
 <p>AI 생성물을 수정·가공하여 사용하고, 출처를 제시하여 표절을 예방할 수 있도록 지도한다.</p>
-<h6 class="g5" id="g-t-1-2-3">1.2.3. AI 활용 과정에서의 부정행위 예방</h6>
+<h6 class="g5" id="g-t-1-2-3"><span class="gn">1.2.3</span>AI 활용 과정에서의 부정행위 예방</h6>
 <p>학습자가 AI를 수업 목표와 교육적 활용 원칙에 맞게 사용하고 있는지 점검하고, 과제와 평가과정에서 부정행위가 발생하지 않도록 관리한다. 평가 진행 시에는 수행 과정, 구두 확인(발표, 질의응답 등), 단계별 산출물 검토 등과 같은 정성적 검토를 병행할 수 있다.</p>
 <p>학습자의 과제 또는 시험 결과에 AI가 생성한 텍스트의 포함 여부를 판단하는 가장 좋은 방법은 교수자가 면밀하게 채점하여 오류를 찾는 것이며, AI 활용 관련 부정행위로 판단하기 전 면담이나 소명 절차를 통해 학습자에게 충분한 소명 기회를 보장하고 검토한다.</p>
-<h5 class="g3" id="g-t-2">2 인간 중심성과 책임성</h5>
-<h6 class="g4">2.1. 결과에 대한 책임</h6>
-<h6 class="g5" id="g-t-2-1-1">2.1.1. AI 활용에 대한 책임</h6>
+<h5 class="g3" id="g-t-2"><span class="gn">2</span>인간 중심성과 책임성</h5>
+<h6 class="g4"><span class="gn">2.1</span>결과에 대한 책임</h6>
+<h6 class="g5" id="g-t-2-1-1"><span class="gn">2.1.1</span>AI 활용에 대한 책임</h6>
 <p>AI 활용 방침을 준수하지 않는 경우 발생하는 문제와 과제 등 수업 활동에서 활용한 AI 생성물로 인해 발생하는 문제에 대한 책임은 사용자 본인에게 있음을 사전에 명확히 안내한다.</p>
-<h6 class="g5" id="g-t-2-1-2">2.1.2. AI 활용 결과에 대한 법적(저작권 등) 책임</h6>
+<h6 class="g5" id="g-t-2-1-2"><span class="gn">2.1.2</span>AI 활용 결과에 대한 법적(저작권 등) 책임</h6>
 <p>AI를 활용하는 경우, 타인의 저작권, 초상권, 인격권을 침해하지 않아야 하며, 저작권자의 사용 허가 없이 인터넷 기사, 웹사이트 게시글 등이 AI 생성물에 포함되는 경우 저작권 문제가 발생할 수 있으므로, AI 생성물에 법적 문제가 없는지 확인할 것을 지도한다.</p>
-<h6 class="g4">2.2. 상호 합의적 활용</h6>
-<h6 class="g5" id="g-t-2-2-1">2.2.1. AI 활용 방침 안내 및 합의</h6>
+<h6 class="g4"><span class="gn">2.2</span>상호 합의적 활용</h6>
+<h6 class="g5" id="g-t-2-2-1"><span class="gn">2.2.1</span>AI 활용 방침 안내 및 합의</h6>
 <p>교수자는 첫 수업 시간에 강의계획서에 명시된 AI 활용 방침을 구두로 설명하고, AI 활용 방안에 대해 학습자들과 함께 논의하여 합의된 내용을 모두에게 투명하게 공개하는 과정이 필요하다. AI 활용에 대하여 합의된 내용은 자주, 자세히 학습자에게 설명하고 공유하며, 필요시 질의응답 시간 마련을 통해 궁금증을 해소하여 오해의 소지가 없도록 한다. 또한, 팀티칭 또는 조교가 참여하는 수업에서는 AI 활용 지침이 일관되게 적용될 수 있도록, 담당 교수자 및 조교 등 수업 구성원 간 지속적으로 공유하는 것이 권장된다.</p>
-<h6 class="g4">2.3. 인간 중심 결정</h6>
-<h6 class="g5" id="g-t-2-3-1">2.3.1. AI 생성물 사용에 관한 최종 판단 및 결정 권한</h6>
+<h6 class="g4"><span class="gn">2.3</span>인간 중심 결정</h6>
+<h6 class="g5" id="g-t-2-3-1"><span class="gn">2.3.1</span>AI 생성물 사용에 관한 최종 판단 및 결정 권한</h6>
 <p>AI 도구는 인간의 자율성, 존엄, 시민권 및 인권 등 인간 가치의 원칙을 존중하는 방식으로 활용되어야 한다. AI 생성물 사용에 대한 최종 판단과 결정권은 사용자에게 있으며, AI 생성물은 그대로 제출하지 않고 사용자가 최종 판단 후 재구성해야 함을 안내한다.</p>
-<h5 class="g3" id="g-t-3">3 투명성과 신뢰성</h5>
-<h6 class="g4">3.1. 사용 사실 공개</h6>
-<h6 class="g5" id="g-t-3-1-1">3.1.1. AI 사용 사실 공개</h6>
+<h5 class="g3" id="g-t-3"><span class="gn">3</span>투명성과 신뢰성</h5>
+<h6 class="g4"><span class="gn">3.1</span>사용 사실 공개</h6>
+<h6 class="g5" id="g-t-3-1-1"><span class="gn">3.1.1</span>AI 사용 사실 공개</h6>
 <p>과제, 발표, 시험 등에 AI를 활용한 경우, 학습자에게 해당 사실을 명시할 것을 요구할 수 있으며, 관련 지침을 강의계획서 내 기재 및 구두로 설명한다. AI 활용 여부 공개를 요구한 경우, 활용 사실에 대하여 미공개 제출 시 출처 미인용과 동일한 문제로 판단할 수 있다.</p>
-<h6 class="g4">3.2. 사용 과정 공개</h6>
-<h6 class="g5" id="g-t-3-2-1">3.2.1. AI 사용 목적 및 과정에 대한 설명 공개</h6>
+<h6 class="g4"><span class="gn">3.2</span>사용 과정 공개</h6>
+<h6 class="g5" id="g-t-3-2-1"><span class="gn">3.2.1</span>AI 사용 목적 및 과정에 대한 설명 공개</h6>
 <p>과제, 발표, 시험 등에 AI를 활용한 경우, AI 활용 목적과 과정에 대한 설명 공개를 요구할 수 있다. 공개 내용은 교수자가 설정할 수 있으며 다음의 내용을 포함할 수 있다.</p>
 <aside class="tip"><p class="tip-h">TIP · AI 사용 목적 및 과정에 대한 공개 내용 예시</p><p class="b1">사용 도구</p><p class="b1">사용 단계(과정의 어느 부분)</p><p class="b1">프롬프트</p><p class="b1">생성물을 어떻게 재구성 했는지</p><p class="b1">AI를 활용한 학습 과정에 대한 소감</p><p class="b1">AI 출력 화면 캡처 등</p></aside>
-<h6 class="g4">3.3. 정보 검증 의무</h6>
-<h6 class="g5" id="g-t-3-3-1">3.3.1. AI 생성물의 정확성 검증</h6>
+<h6 class="g4"><span class="gn">3.3</span>정보 검증 의무</h6>
+<h6 class="g5" id="g-t-3-3-1"><span class="gn">3.3.1</span>AI 생성물의 정확성 검증</h6>
 <p>AI가 항상 정확한 정보를 제공하지 않을 수 있음을 인식하도록 하고, 학습자가 비판적 사고를 바탕으로 사실을 검증할 수 있도록 지도한다. 수업 중 필요시 AI의 생성물을 함께 분석·토론하여 정확성, 편향 가능성, 활용의 적절성 등을 평가함으로써 학습자가 비판적 사고력과 정보 판별 능력을 함양할 수 있도록 한다.</p>
-<h6 class="g5" id="g-t-3-3-2">3.3.2. AI 생성물의 출처 확인</h6>
+<h6 class="g5" id="g-t-3-3-2"><span class="gn">3.3.2</span>AI 생성물의 출처 확인</h6>
 <p>학습자에게 AI 결과물의 출처를 직접 검토하고 선별적으로 사용하여야 함을 주지시킨다. AI 활용 여부를 판별하는 검증 시스템의 정확도를 전적으로 신뢰할 수 없으므로, 교수자는 관련 검증 도구를 참고자료 수준으로만 활용한다.</p>
 <aside class="tip"><p class="tip-h">TIP · AI 생성물의 검증 예시</p><p class="b1">AI가 생성한 콘텐츠의 근거를 검토한 후 활용한다.</p><p class="b1">AI가 생성한 정보를 2차 자료로 간주하고, 결과에 대해 본인이 판단하여 재구성한다.</p><p class="b1">AI가 제공하는 정보를 윤리적이고 책임감 있게 평가한다. (편향, 환각, 차별, 편견 등)</p><p class="b1">AI를 활용하여 혐오, 편향, 거짓 정보를 생성하는 행위는 지양한다.</p><p class="b1">AI는 편향적이거나 차별적 데이터 학습 시 편향된 답변이 도출될 수 있음을 인지한다.</p><p class="b1">AI의 반복 학습은 편향성을 강화할 수 있음을 인지한다.</p></aside>
-<h5 class="g3" id="g-t-4">4 공정성</h5>
-<h6 class="g4">4.1. 형평성과 비차별 원칙</h6>
-<h6 class="g5" id="g-t-4-1-1">4.1.1. AI 생성물 차별 여부 검토</h6>
+<h5 class="g3" id="g-t-4"><span class="gn">4</span>공정성</h5>
+<h6 class="g4"><span class="gn">4.1</span>형평성과 비차별 원칙</h6>
+<h6 class="g5" id="g-t-4-1-1"><span class="gn">4.1.1</span>AI 생성물 차별 여부 검토</h6>
 <p>AI 생성물이 성별, 인종, 사회적 배경 등에 따른 특정 개인이나 집단을 일반화하거나 차별적으로 표현하지 않는지 검토 후 사용해야 하며, AI 생성물에 편향이나 차별적 요소가 발견될 경우 이를 그대로 사용하지 않고, 수정·재구성할 수 있도록 지도한다.</p>
-<h6 class="g5" id="g-t-4-1-2">4.1.2. AI 자원에 대한 공평한 접근 기회 보장</h6>
+<h6 class="g5" id="g-t-4-1-2"><span class="gn">4.1.2</span>AI 자원에 대한 공평한 접근 기회 보장</h6>
 <p>모든 구성원이 공평하게 AI 자원을 사용할 수 있는 환경을 제공하며, 불가한 경우 모든 구성원이 공평하게 접근·활용할 수 있는 AI 도구를 사용할 수 있도록 수업·과제·평가를 설계한다.</p>
-<h6 class="g4">4.2. 포용성</h6>
-<h6 class="g5" id="g-t-4-2-1">4.2.1. 장애 학생 지원을 위한 보조 기술로서의 AI 활용</h6>
+<h6 class="g4"><span class="gn">4.2</span>포용성</h6>
+<h6 class="g5" id="g-t-4-2-1"><span class="gn">4.2.1</span>장애 학생 지원을 위한 보조 기술로서의 AI 활용</h6>
 <p>AI 도구는 기회를 확대하는 방식으로 사용하며, AI 접근성이 취약한 다양한 배경을 가진 학습자에게 포용적이고 접근 가능하며 공평하게 제공되어야 한다.</p>
-<h5 class="g3" id="g-t-5">5 정보 보호 및 보안</h5>
-<h6 class="g4">5.1. 개인정보 및 보안</h6>
-<h6 class="g5" id="g-t-5-1-1">5.1.1. 개인정보 및 민감·기밀 정보 입력에 대한 주의</h6>
+<h5 class="g3" id="g-t-5"><span class="gn">5</span>정보 보호 및 보안</h5>
+<h6 class="g4"><span class="gn">5.1</span>개인정보 및 보안</h6>
+<h6 class="g5" id="g-t-5-1-1"><span class="gn">5.1.1</span>개인정보 및 민감·기밀 정보 입력에 대한 주의</h6>
 <p class="o">개인정보 입력 금지</p>
 <p>수업 초기에 개인정보 보호 관련 유의 사항을 학습자에게 안내하여, AI 도구를 안전하고 책임 있게 사용할 수 있도록 지도하며, 교수자 본인 또는 학습자를 식별할 수 있는 개인정보는 AI 도구에 절대 입력하지 않는다.<br>(예: 이름, 연락처, 주소, 소속, 학번(교번), 신용카드 정보 등)</p>
 <p class="o">수업·과제·시험 관련 정보 입력 금지</p>
 <p>과제, 시험 문제, 학생이 제출한 과제 등 비공개 학습자료나 수업 관련 문서는 AI 도구에 입력하지 않는다.</p>
 <p class="o">비공개·기밀 자료 입력 금지</p>
 <p>기밀 정보, 소유권 정보 또는 기타 민감한 정보를 입력하지 않는다. (예: 학생 기록, 비공개 교육 자료, 독점 또는 미발표 연구, 보호 등급으로 분류된 기타 모든 정보)</p>
-<h6 class="g5" id="g-t-5-1-2">5.1.2. AI 도구의 보안·정책 확인 후 사용</h6>
+<h6 class="g5" id="g-t-5-1-2"><span class="gn">5.1.2</span>AI 도구의 보안·정책 확인 후 사용</h6>
 <p class="o">AI 도구 보안·정책 확인</p>
 <p>대학에서 공식적으로 제공하지 않는 외부 AI 서비스를 사용할 경우, 정상적이고 신뢰할 수 있는 서비스인지 확인하고, 서비스 이용약관 및 데이터 보관 정책을 확인하도록 지도한다.</p>
 <p class="o">보안 취약점 인지</p>
 <p>대부분의 경우 사용자가 입력·공유한 데이터는 비공개가 아니며, 도구를 운영하는 외부 주체가 접근할 수 있음을 유의한다. AI가 생성한 코드(프로그램)는 에러나 보안 취약점이 있을 수 있으므로 주의하도록 지도한다.</p>
 <p class="o">보안 서비스 활용</p>
 <p>AI 도구에서 제공하는 데이터 보안 및 개인정보 보호 서비스가 있는 경우 활용을 검토한다.</p>
-<h6 class="g4">5.2. 안전성</h6>
-<h6 class="g5" id="g-t-5-2-1">5.2.1. 안전성이 검증된 AI 도구 사용</h6>
+<h6 class="g4"><span class="gn">5.2</span>안전성</h6>
+<h6 class="g5" id="g-t-5-2-1"><span class="gn">5.2.1</span>안전성이 검증된 AI 도구 사용</h6>
 <p>대학에서 공식적으로 사용을 승인했거나 안전성이 검증된 AI 도구가 있는 경우, 해당 도구를 중심으로 수업에서 활용한다.</p>
-<h6 class="g5" id="g-t-5-2-2">5.2.2. 과도한 의존 및 오남용 주의</h6>
+<h6 class="g5" id="g-t-5-2-2"><span class="gn">5.2.2</span>과도한 의존 및 오남용 주의</h6>
 <p>교수자는 학습자가 학습 및 중요한 의사결정을 위해 AI에 지나치게 의존하지 않도록 지도한다. AI에 대한 과도한 의존은 학습과 성장을 저해할 수 있음을 인식하고, 이를 보조적 학습 도구로 사용하되 비판적 사고를 바탕으로 현명하게 활용할 수 있도록 수업을 운영한다. 또한, 수업에서 AI 도구를 사용하는 경우, 학습자의 학습 목표 달성 및 학습에 대한 이해 정도를 점검한다.</p>
 <h4 class="g2" id="g-s">나. 학습자를 위한 가이드라인</h4>
-<h5 class="g3" id="g-s-1">1 학문적 진실성</h5>
-<h6 class="g4">1.1. 학문적 윤리 준수</h6>
-<h6 class="g5" id="g-s-1-1-1">1.1.1. 수업에서의 AI 활용 방침</h6>
+<h5 class="g3" id="g-s-1"><span class="gn">1</span>학문적 진실성</h5>
+<h6 class="g4"><span class="gn">1.1</span>학문적 윤리 준수</h6>
+<h6 class="g5" id="g-s-1-1-1"><span class="gn">1.1.1</span>수업에서의 AI 활용 방침</h6>
 <p class="o">AI 활용 방침 확인</p>
 <p>AI 활용 방침(활용 범위, 도구 제한, 인용·출처 표기 등)은 각 수업에 따라 다르므로 강의계획서 및 공지 사항 등에 명시된 AI 활용 방침을 확인한다. 수업에 따라 학기 중 AI 활용 방침이 변경되는 경우도 있으므로, 교수자의 안내 및 최신 업데이트된 강의계획서를 참고한다.</p>
 <p class="o">AI 활용 방침 숙지</p>
@@ -2168,112 +2176,112 @@ footer{color:var(--ink3);font-size:14px;padding:0 0 40px}
 <aside class="tip"><p class="tip-h">TIP · AI 활용 범위의 유형</p><p>수업에서의 AI 도구 활용 범위의 유형은 참고할 수 있다.</p><p class="tip-sub">① 사용 금지</p><p class="b2">학습의 전 과정(수업 활동, 과제 및 시험 등)에서 AI 사용을 전면 금지하며, AI를 사용할 경우 부정행위로 간주한다.</p><p class="tip-sub">② 제한적 사용</p><p class="b2">교수자는 강의에서 사용 가능한 AI 도구의 종류, 활용 가능 범위, 주의 사항 등을 제시하고, 학습자는 교수자가 사전 승인한 수업 활동이나 과제 등에서만 AI를 사용할 수 있다.</p><p class="b2">학습자가 과제 또는 수업 활동 중 AI 도구를 사용할 경우, AI의 사용 목적 및 이유, 사용 부분에 대하여 명시하고 출처를 표기한다.</p><p class="tip-sub">③ 사용 허용(자유롭게 사용)</p><p class="b2">수업 활동이나 과제 수행 시 제약 없이 AI 사용이 가능하다.</p><p class="b2">단, AI의 생성물을 검토 및 수정 없이 그대로 제출할 경우 부정행위에 해당할 수 있으며 사용 부분에 대하여 명시하고 출처를 표기한다.</p></aside>
 <p class="o">AI 활용 방법 숙지(학문적 윤리 숙지)</p>
 <p>학습자는 학문의 목적과 진실성을 준수하기 위해 교수자의 지침에 따라 AI 도구를 윤리적으로 활용한다.</p>
-<h6 class="g5" id="g-s-1-1-2">1.1.2. 목적에 부합하는 AI 활용</h6>
+<h6 class="g5" id="g-s-1-1-2"><span class="gn">1.1.2</span>목적에 부합하는 AI 활용</h6>
 <p>학습자는 AI를 학습 목표 달성을 위한 보조도구로 활용해야 한다. AI를 활용한 경우 학습 목적에 부합하는 범위 내에서 신중하게 활용한다.</p>
-<h6 class="g5" id="g-s-1-1-3">1.1.3. AI 활용의 장점과 한계에 대한 인식</h6>
+<h6 class="g5" id="g-s-1-1-3"><span class="gn">1.1.3</span>AI 활용의 장점과 한계에 대한 인식</h6>
 <p>학습자는 AI를 학습에 활용했을 때의 장점 및 한계점에 대해 인지한다. 모든 질문에 정확하게 답하거나 최신의 정보를 제공하지 못하는 AI의 한계를 인식하고, 이를 고려하여 AI를 활용한다.</p>
-<h6 class="g4">1.2. 인용 및 출처 표기</h6>
-<h6 class="g5" id="g-s-1-2-1">1.2.1. 인용·출처 표기 의무 및 표기 방식</h6>
+<h6 class="g4"><span class="gn">1.2</span>인용 및 출처 표기</h6>
+<h6 class="g5" id="g-s-1-2-1"><span class="gn">1.2.1</span>인용·출처 표기 의무 및 표기 방식</h6>
 <p>학습자는 AI를 활용한 산출물에 대하여, 교수자가 지정한 인용 및 출처 표기 방법에 따라 출처를 표기한다. 명확한 규정이 없는 경우 APA, MLA 등의 스타일 가이드를 참조한다.</p>
 <aside class="tip"><p class="tip-h">TIP · 인용 및 출처 표기 방식 예시</p><p class="b1"><b>APA</b> : https://apastyle.apa.org/blog/cite-generative-ai-references</p><p>AI Company Name. (year). Tool Name/Model in Italics and Title Case [Description; e.g., Large language model]. URL of the tool</p><p class="b2">Parenthetical citation: (AI Company Name, year)</p><p class="b2">Narrative citation: AI Company Name (year)</p><p class="b1"><b>MLA</b> : https://style.mla.org/citing-generative-ai-updated-revised/</p><p class="note">※ 자료 유형별 상세 가이드는 URL 참조</p></aside>
-<h6 class="g5" id="g-s-1-2-2">1.2.2. 표절 예방</h6>
+<h6 class="g5" id="g-s-1-2-2"><span class="gn">1.2.2</span>표절 예방</h6>
 <p>생성형 AI의 정보를 가공하지 않고 그대로 사용하거나, AI 생성물의 출처를 밝히지 않고 사용하는 경우 표절에 해당할 수 있음을 인지한다.</p>
-<h6 class="g5" id="g-s-1-2-3">1.2.3. AI 활용 과정에서의 부정행위 예방</h6>
+<h6 class="g5" id="g-s-1-2-3"><span class="gn">1.2.3</span>AI 활용 과정에서의 부정행위 예방</h6>
 <p>학습자는 강의계획서에 명시된 지침 또는 학기 초에 교수자가 별도로 제시한 지침을 준수하지 않거나 AI를 부적절하게 사용한 것으로 판단될 시, 부정행위로 간주되어 불이익(성적 감점, 징계 등)을 받을 수 있음을 인지해야 한다.</p>
 <aside class="tip"><p class="tip-h">TIP · 부정행위 인정 사례 예시</p><p>부정행위(학습 윤리 위반) 인정 사례 예시는 다음을 참고할 수 있다.</p><p class="b1">허용되지 않은 과목에서 AI를 사용한 경우 (지침 위반)</p><p class="b1">교수자가 금지한 방식의 AI 활용이 확인된 경우 (지침 위반)</p><p class="b1">AI 생성물을 제출하면서 AI 사용 사실을 공개하지 않는 경우 (AI 활용 명시 의무 위반)</p><p class="b1">AI 생성물을 가공하지 않고 그대로 붙여 활용하는 경우 (표절)</p><p class="b1">AI 생성물의 인용·출처를 표기하지 않고 사용하는 경우 (표절)</p><p class="b1">타인의 AI 생성물을 무단으로 공유하는 경우 (무단 공유)</p><p class="note">※ 부정행위에 대한 구체적 기준은 소속 기관과 강의별 제시된 AI 활용 방침을 따른다.</p></aside>
-<h5 class="g3" id="g-s-2">2 인간 중심성과 책임성</h5>
-<h6 class="g4">2.1. 결과에 대한 책임</h6>
-<h6 class="g5" id="g-s-2-1-1">2.1.1. AI 활용에 대한 책임</h6>
+<h5 class="g3" id="g-s-2"><span class="gn">2</span>인간 중심성과 책임성</h5>
+<h6 class="g4"><span class="gn">2.1</span>결과에 대한 책임</h6>
+<h6 class="g5" id="g-s-2-1-1"><span class="gn">2.1.1</span>AI 활용에 대한 책임</h6>
 <p>학습자는 AI를 활용함으로써 발생하는 모든 문제에 대한 책임은 사용자 본인에게 있음을 인지한다.(예: 활용 결과물의 진실성, 학습 결과(성적 등), 부정행위 인정, 저작권 등 법적 책임 등)</p>
 <p>AI를 활용하는 경우, 타인의 저작권, 초상권, 인격권을 침해하지 않도록 유의하며, AI가 저작권자의 사용허가 없이 인터넷 기사, 웹사이트 게시글 등을 학습용 데이터로 이용하는 경우 저작권 문제가 발생할 수 있음을 인지한다.</p>
-<h6 class="g4">2.2. 상호 합의적 활용</h6>
-<h6 class="g5" id="g-s-2-2-1">2.2.1. AI 활용 방침 확인 및 합의</h6>
+<h6 class="g4"><span class="gn">2.2</span>상호 합의적 활용</h6>
+<h6 class="g5" id="g-s-2-2-1"><span class="gn">2.2.1</span>AI 활용 방침 확인 및 합의</h6>
 <p>첫 수업 시간에 강의계획서에 명시된 AI 활용 방침에 대하여 확인하고, 궁금한 사항에 대해서는 질문하여 오해의 소지가 없도록 한다. AI 활용에 대해 교수자와 논의하고 합의된 내용은, 모든 학생이 수업에 적용할 수 있도록 논의 결과에 대한 고지를 요청할 수 있다. 팀티칭 또는 조교가 참여하는 수업에서는 AI 활용 지침이 일관되게 적용될 수 있도록, 담당 교수자 및 조교 등 수업 구성원 간에 사전 협의 및 지속적인 공유가 권장된다.</p>
-<h5 class="g3" id="g-s-3">3 투명성과 신뢰성</h5>
-<h6 class="g4">3.1. 사용 사실 공개</h6>
-<h6 class="g5" id="g-s-3-1-1">3.1.1 AI 사용 사실 공개</h6>
+<h5 class="g3" id="g-s-3"><span class="gn">3</span>투명성과 신뢰성</h5>
+<h6 class="g4"><span class="gn">3.1</span>사용 사실 공개</h6>
+<h6 class="g5" id="g-s-3-1-1"><span class="gn">3.1.1</span>AI 사용 사실 공개</h6>
 <p>학습자는 과제, 발표, 시험 등에 AI를 사용한 경우 해당 사실을 교수자가 안내한 방식에 따라 명시해야 한다. 활용 사실에 대하여 미공개 제출 시 출처 미인용과 동일한 문제로 판단될 수 있음을 인지한다.</p>
-<h6 class="g4">3.2. 사용 과정 공개</h6>
-<h6 class="g5" id="g-s-3-2-1">3.2.1. AI 사용 목적 및 과정에 대한 설명 공개</h6>
+<h6 class="g4"><span class="gn">3.2</span>사용 과정 공개</h6>
+<h6 class="g5" id="g-s-3-2-1"><span class="gn">3.2.1</span>AI 사용 목적 및 과정에 대한 설명 공개</h6>
 <p>과제, 발표, 시험 등에서 AI 활용 목적 및 과정에 대한 설명 공개가 요구된 경우, 교수자의 지침에 따라 해당 내용을 제출한다.</p>
 <aside class="tip"><p class="tip-h">TIP · AI 사용 목적 및 과정에 대한 공개 내용 예시</p><p>공개 내용 및 방법은 교수자의 안내에 따르며, 다음의 내용이 포함될 수 있다.</p><p class="b1">사용 도구</p><p class="b1">사용 단계(과정의 어느 부분)</p><p class="b1">프롬프트</p><p class="b1">생성물을 어떻게 재구성 했는지</p><p class="b1">AI를 활용한 학습 과정에 대한 소감</p><p class="b1">AI 출력 화면 캡처 등</p></aside>
-<h6 class="g4">3.3. 정보 검증 의무</h6>
-<h6 class="g5" id="g-s-3-3-1">3.3.1. AI 생성물의 정확성 검증</h6>
+<h6 class="g4"><span class="gn">3.3</span>정보 검증 의무</h6>
+<h6 class="g5" id="g-s-3-3-1"><span class="gn">3.3.1</span>AI 생성물의 정확성 검증</h6>
 <p>AI 특성상, 오류(부정확)나 왜곡된 정보(부적절)를 생성할 수 있으므로, AI의 한계를 알고 결과물에 대해 비판적 검토하는 자세가 필요하다.</p>
-<h6 class="g5" id="g-s-3-3-2">3.3.2. AI 생성물의 출처 확인</h6>
+<h6 class="g5" id="g-s-3-3-2"><span class="gn">3.3.2</span>AI 생성물의 출처 확인</h6>
 <p>학습자는 AI를 활용한 결과물에 대해 사실 여부를 확인하는 절차를 거쳐야 한다. 특히, 학술 자료의 경우 AI 생성 정보를 신뢰할 만한 출처와 대조하여 검증하는 것이 필수적이며, AI 활용이 허용된 과목에서도 AI 생성물의 진위와 적절성에 대한 면밀한 검증을 통해 정보의 정확성과 신뢰성을 직접 확인해야 한다.</p>
 <aside class="tip"><p class="tip-h">TIP · AI 생성물의 검증 예시</p><p class="b1">AI가 생성한 콘텐츠의 근거를 검토한 후 활용한다.</p><p class="b1">AI가 생성한 정보를 2차 자료로 간주하고, 결과에 대해 본인이 판단하여 재구성한다.</p><p class="b1">AI가 제공하는 정보를 윤리적이고 책임감 있게 평가한다. (편향, 환각, 차별, 편견 등)</p><p class="b1">AI를 활용하여 혐오, 편향, 거짓 정보를 생성하는 행위는 지양한다.</p><p class="b1">AI는 편향적이거나 차별적 데이터 학습 시 편향된 답변이 도출될 수 있음을 인지한다.</p><p class="b1">AI의 반복 학습은 편향성을 강화할 수 있음을 인지한다.</p></aside>
-<h5 class="g3" id="g-s-4">4 공정성</h5>
-<h6 class="g4">4.1. 형평성과 비차별 원칙</h6>
-<h6 class="g5" id="g-s-4-1-1">4.1.1. AI 생성물 차별 여부 검토</h6>
+<h5 class="g3" id="g-s-4"><span class="gn">4</span>공정성</h5>
+<h6 class="g4"><span class="gn">4.1</span>형평성과 비차별 원칙</h6>
+<h6 class="g5" id="g-s-4-1-1"><span class="gn">4.1.1</span>AI 생성물 차별 여부 검토</h6>
 <p>AI 생성물이 성별, 인종, 사회적 배경 등에 따른 특정 개인이나 집단을 일반화하거나 차별적으로 표현하지 않는지 검토한 후 사용한다. AI 생성물에 편향이나 차별적 요소가 발견될 경우 이를 그대로 사용하지 않고 필요한 경우 이를 수정·재구성한다.</p>
-<h6 class="g4">4.2. 포용성</h6>
-<h6 class="g5" id="g-s-4-2-1">4.2.1. 장애 학생 지원을 위한 보조 기술로서의 AI 활용</h6>
+<h6 class="g4"><span class="gn">4.2</span>포용성</h6>
+<h6 class="g5" id="g-s-4-2-1"><span class="gn">4.2.1</span>장애 학생 지원을 위한 보조 기술로서의 AI 활용</h6>
 <p>AI 도구는 기회를 확대하는 방식으로 사용하며, 장애를 가진 학습자를 포함하여 다양한 배경을 가진 학습자에게 포용적이고 접근 가능하며 공평하게 사용 되어야함을 인지한다.</p>
-<h5 class="g3" id="g-s-5">5 정보 보호 및 보안</h5>
-<h6 class="g4">5.1. 개인정보 및 보안</h6>
-<h6 class="g5" id="g-s-5-1-1">5.1.1. 개인정보 및 민감·기밀 정보 입력에 대한 주의</h6>
+<h5 class="g3" id="g-s-5"><span class="gn">5</span>정보 보호 및 보안</h5>
+<h6 class="g4"><span class="gn">5.1</span>개인정보 및 보안</h6>
+<h6 class="g5" id="g-s-5-1-1"><span class="gn">5.1.1</span>개인정보 및 민감·기밀 정보 입력에 대한 주의</h6>
 <p class="o">개인정보 입력 금지</p>
 <p>AI가 학습하는 정보에 개인정보(인터넷상 공개된 개인정보)가 포함되는 경우, 개인정보 보호 규정에 문제가 발생할 수 있음을 인지하고, 본인이나 타인을 식별할 수 있는 개인정보는 AI 도구에 절대 입력하지 않는다. (예: 이름, 연락처, 주소, 소속, 학번(교번), 신용카드 정보 등)</p>
 <p class="o">수업·과제·시험 관련 정보 입력 금지</p>
 <p>과제, 시험 문제, 교수자의 피드백 등 비공개 학습자료나 수업 관련 문서는 AI 도구에 입력하지 않는다.</p>
 <p class="o">비공개·기밀 자료 입력 금지</p>
 <p>기밀 정보, 소유권 정보 또는 기타 민감한 정보를 입력하지 않는다.(예 : 학생 기록, 비공개 교육 자료, 독점 또는 미발표 연구, 보호 등급으로 분류된 기타 모든 정보)</p>
-<h6 class="g5" id="g-s-5-1-2">5.1.2. AI 도구의 보안·정책 확인 후 사용</h6>
+<h6 class="g5" id="g-s-5-1-2"><span class="gn">5.1.2</span>AI 도구의 보안·정책 확인 후 사용</h6>
 <p class="o">AI 도구 보안·정책 확인</p>
 <p>대학에서 공식적으로 제공하지 않는 외부 AI 서비스를 사용할 경우, 정상적이고 신뢰할 수 있는 서비스인지 확인하고, 서비스 이용약관 및 데이터 보관 정책을 확인하는 습관을 가진다.</p>
 <p class="o">보안 취약점 인지</p>
 <p>대부분의 경우 사용자가 입력·공유한 데이터는 비공개가 아니며, 도구를 운영·호스팅하는 외부 주체가 접근할 수 있음을 유의해야 한다. AI가 생성한 코드(프로그램)는 에러나 보안 취약점이 있을 수 있으므로 주의한다.</p>
 <p class="o">보안 서비스 활용</p>
 <p>AI 도구에서 제공하는 데이터 보안 및 개인정보 보호 서비스가 있는 경우 활용하도록 한다.</p>
-<h6 class="g4">5.2. 안전성</h6>
-<h6 class="g5" id="g-s-5-2-1">5.2.1. 안전성이 검증된 AI 도구 사용</h6>
+<h6 class="g4"><span class="gn">5.2</span>안전성</h6>
+<h6 class="g5" id="g-s-5-2-1"><span class="gn">5.2.1</span>안전성이 검증된 AI 도구 사용</h6>
 <p>대학에서 공식적으로 사용을 승인하고 교수자가 허용한 AI 도구를 활용한다.</p>
-<h6 class="g5" id="g-s-5-2-2">5.2.2. 과도한 의존 및 오남용에 대한 주의</h6>
+<h6 class="g5" id="g-s-5-2-2"><span class="gn">5.2.2</span>과도한 의존 및 오남용에 대한 주의</h6>
 <p>학습 및 중요한 의사결정을 위해 AI에 지나치게 의존하지 않도록 주의한다. AI에 대한 과도한 의존이 학습과 성장을 저해할 수 있음을 인식하고, 이를 보조적 학습 도구로 사용하되 비판적 사고를 바탕으로 현명하게 활용한다. AI 도구 사용 이후 자신의 학습 목표 달성 및 학습에 대한 이해를 스스로 점검한다.</p>
 <h4 class="g2" id="g-a">다. 가이드라인에 대한 부록</h4>
 <p>본 부록은 가이드라인에 대한 교수자의 참고자료로서, 다음 두 가지 내용을 제시하고 있다.</p>
 <p class="b2">1. 교수자를 위한 수업(강의) 설계 및 운영 가이드</p>
 <p class="b2">2. 체크리스트</p>
-<h5 class="g3" id="a1">1 교수자를 위한 수업(강의) 설계 및 운영 가이드</h5>
-<h6 class="g4" id="a1-1">1 수업 설계</h6>
-<h6 class="g5" id="a1-1-1">1.1. 수업 설계</h6>
+<h5 class="g3" id="a1"><span class="gn">1</span>교수자를 위한 수업(강의) 설계 및 운영 가이드</h5>
+<h6 class="g4" id="a1-1"><span class="gn">1</span>수업 설계</h6>
+<h6 class="g5" id="a1-1-1"><span class="gn">1.1</span>수업 설계</h6>
 <p>수립된 AI 활용 방침에 따라 매 주차별 강의를 설계하고, 해당 지침을 강의 종료 시까지 유지한다. 교수자는 수업 설계 시 다음을 고려하여 설계한다.</p>
 <p class="b1">전공 특성에 기반한 AI 활용 사례와 구체적인 적용 방법 안내</p>
 <p class="b1">AI의 응답만으로 해결이 어려운 복합적이고 심층적인 질문 제시</p>
 <p class="b1">AI를 학습 활동과 연계하되, 강점(정보 구조화, 초안 생성 등)과 한계(오류 가능성, 맥락 이해의 제약, 윤리적 문제 등) 인식 필요</p>
 <p class="b1">AI 활용의 윤리적 쟁점에 대한 비판적 검토를 수업 전반에 반영</p>
-<h6 class="g5" id="a1-1-2">1.2. 강의자료</h6>
+<h6 class="g5" id="a1-1-2"><span class="gn">1.2</span>강의자료</h6>
 <p>교수자가 AI를 활용하여 강의자료를 작성할 경우, 정확성·다양성·대표성을 확보하여 부정확하거나 편향된 자료 사용을 금지한다.</p>
-<h6 class="g4" id="a1-2">2 과제 설계</h6>
-<h6 class="g5" id="a1-2-1">2.1. 과제 제출 및 평가 기준 안내</h6>
+<h6 class="g4" id="a1-2"><span class="gn">2</span>과제 설계</h6>
+<h6 class="g5" id="a1-2-1"><span class="gn">2.1</span>과제 제출 및 평가 기준 안내</h6>
 <p>과제 평가 기준에 AI 활용 여부, 활용 방식, 생성물 출처 명시 등의 항목을 포함하여 학습자가 정직하고 책임 있게 AI를 활용하도록 유도한다.</p>
-<h6 class="g5" id="a1-2-2">2.2. 과제 방법</h6>
+<h6 class="g5" id="a1-2-2"><span class="gn">2.2</span>과제 방법</h6>
 <p>교수자는 학습자가 자신의 학습 과정을 되돌아보고 산출물에 대한 책임감을 기를 수 있도록 지도하기 위해, 과제물에 AI를 활용한 경우 다음과 같은 사항을 요구할 수 있다.</p>
 <p class="o">(필수) 참고 문헌 기록 (출처 및 인용 표기 등)</p>
 <p class="o">(선택) AI 활용 과정 및 방법, 기여도를 기술한 ‘AI 활용 보고서’ 제출</p>
 <p>부정행위의 가능성을 최소화하기 위해 단순히 정보를 요약하는 것이 아니라 비판적이고 창의적인 사고를 요구하는 다양한 방식의 과제를 설계한다.</p>
 <aside class="tip"><p class="tip-h">TIP · 다양한 방식의 과제 예시</p><p class="b1">과정 중심 수행 과제</p><p class="b2">과제를 단계별로 수행하며 진행 상황을 점검하고 최종 결과물을 완성하도록 하여, 충분한 계획 없이 AI를 활용하여 발생할 수 있는 표절, 사실 검증 미흡 등의 문제를 예방한다.</p><p class="b2">학습자가 과제 수행 과정을 단계별로 기록·공개하도록 하고, 각 단계에서 자신의 작업에 대한 결정 사항과 수정 과정 등을 설명하고 성찰할 수 있도록 요청한다.</p><p class="b1">문제 해결 및 프로젝트형 과제 :<br>문제를 설정하고 해결 방안을 설계·제안하는 창의적 사고력을 필요로 하는 과제</p><p class="b1"><b>협업 기반 과제</b> : 조별 과제를 통해 역할 분담, 토론, 공동 의사결정 포함</p><p class="b1"><b>지식 응용 및 표현 과제</b> : 발표, 보고서, 시각 자료 제작 등 학습 내용 응용 및 표현</p><p class="b1"><b>조사 및 사례 분석 과제</b> : 실제 사례, 데이터, 문헌을 바탕으로 비판적으로 분석·해석할 수 있는 과제</p><p class="b1"><b>AI를 학습 보조도구로 활용할 수 있는 과제</b> : 자료 탐색, 아이디어 확장, 초안 작성 등</p><p class="b1">AI의 반복 학습은 편향성을 강화할 수 있음을 인지한다.</p></aside>
 <aside class="tip"><p class="tip-h">TIP · 지양해야 할 과제 예시</p><p class="b1">지양해야 할 과제 예시</p><p class="b2">정의, 이론 나열 등 단순 지식 및 개념 조사 과제</p><p class="b2">외국어 번역 과제</p><p class="b2">정리 및 요약 과제</p><p class="b2">사고 과정이나 해석을 평가하기 어려운 단순 문제 풀이 과제</p></aside>
-<h6 class="g4" id="a1-3">3 평가 설계</h6>
-<h6 class="g5" id="a1-3-1">3.1. 평가 방법</h6>
+<h6 class="g4" id="a1-3"><span class="gn">3</span>평가 설계</h6>
+<h6 class="g5" id="a1-3-1"><span class="gn">3.1</span>평가 방법</h6>
 <p>오프라인 시험을 권장하나, 해당 강의의 특성과 교수자가 수업에서 설정한 AI 활용 기준에 부합하는 평가 방법을 설계하고 적용한다.</p>
 <p class="o">오프라인 시험</p>
 <p>학습자의 답안 제출 과정을 통제하기 용이한 오프라인 환경에서 시험을 진행하여, AI를 활용한 부정행위 가능성을 낮출 수 있다.</p>
 <p class="o">온라인 시험</p>
 <p>AI가 그대로 모방하기 어려운 정보나 역량(예: 개인적 성찰 및 경험 기반 분석, 수업 활동 연계 수행 과정 등)을 요구하는 평가를 설계하거나, 변별력과 종합적 사고를 요구하는 서술형 문항을 중심으로 구성하고, 교수자의 판단에 따라 필요시 제출 답안에 대해 추가 구술 인터뷰, 제출 내용 검증 절차를 병행하여 이해 수준과 실제 수행 여부를 함께 판단한다.</p>
 <p>평가의 공정성을 확보하기 위해 온라인 시험의 반영 비율을 상대적으로 축소하고, 인터뷰 평가, 수시 퀴즈, 과제물 등 다양한 평가 요소로 배점을 분산하여 운영한다.</p>
-<h6 class="g5" id="a1-3-2">3.2. 평가 기준 개발</h6>
+<h6 class="g5" id="a1-3-2"><span class="gn">3.2</span>평가 기준 개발</h6>
 <p>AI 활용을 고려한 평가 기준을 체계적으로 설계하고, 사전에 학습자에게 공유하여 기대 수준과 평가 방향을 명확히 인식할 수 있도록 한다.</p>
-<h6 class="g5" id="a1-3-3">3.3. 시험 문제 검증</h6>
+<h6 class="g5" id="a1-3-3"><span class="gn">3.3</span>시험 문제 검증</h6>
 <p>시험 문제 출제 과정에서 AI가 생성할 수 있는 답변을 사전에 검토하여 문항의 적절성과 변별력을 점검한다.</p>
-<h6 class="g4" id="a1-4">4 평가에서의 AI 오용</h6>
-<h6 class="g5" id="a1-4-1">4.1. 평가에서의 AI 오용의 정의</h6>
+<h6 class="g4" id="a1-4"><span class="gn">4</span>평가에서의 AI 오용</h6>
+<h6 class="g5" id="a1-4-1"><span class="gn">4.1</span>평가에서의 AI 오용의 정의</h6>
 <p>AI가 오용되지 않도록 평가 기준과 절차를 설계하고 학습자에게 명확히 안내한다. 평가에서의 AI 오용의 정의는 다음과 같다.</p>
 <p>“학습자가 하나 이상의 AI 도구를 사용했으나 사용 사실을 적절하게 인정하지 않고, 자신의 것이 아닌 과제(작업물)를 평가를 위해 제출한 경우”</p>
 <p class="note">※ 출처: Joint Council for Qualifications. AI Use in Assessments.</p>
 <aside class="tip"><p class="tip-h">TIP · 평가에서의 AI 오용 예시</p><p class="b1">AI가 생성한 콘텐츠의 일부를 포함해 더 이상 학습자 고유의 결과물이 아닌 경우</p><p class="b1">학습자 자신의 작업·분석·평가 또는 계산을 반영하지 않고, 평가의 일부에 AI를 사용한 경우</p><p class="b1">AI가 생성한 생성물 전체를 복사하거나 수정하여 작성한 경우</p><p class="b1">정보 출처로 AI 도구를 사용했음에도 이를 밝히지 않은 경우</p><p class="b1">AI 도구 사용에 대한 인정이 불완전하거나 부실한 경우</p><p class="b1">의도적으로 불완전하거나 오해의 소지가 있는 참고 문헌 또는 문헌 목록을 포함한 작업물을 제출한 경우</p></aside>
-<h6 class="g5" id="a1-4-2">4.2. AI 오용 예방 방법</h6>
+<h6 class="g5" id="a1-4-2"><span class="gn">4.2</span>AI 오용 예방 방법</h6>
 <p>AI 오용을 예방하기 위해, 다음과 같은 사항을 참고할 수 있다.</p>
 <p class="b1">시험에 사용되는 기기 및 네트워크에서 온라인 AI 도구에 대한 접근 제한 방안을 고려한다.</p>
 <p class="b1">과제 제출 마감일을 합리적으로 설정하고 그에 대한 알림을 제공한다.</p>
@@ -2285,17 +2293,17 @@ footer{color:var(--ink3);font-size:14px;padding:0 0 40px}
 <p class="b1">과거 데이터로 학습한 AI 모델이 접근하기 어려운, 구체적이고 시의성 있는 과제를 출제한다.</p>
 <aside class="tip"><p class="tip-h">TIP · AI 오용 징후 식별 방법 예시</p><p>학습자가 제출한 작업에서 다음과 같은 사항이 관찰되는 경우, AI 오용의 징후가 될 수 있다. 단, 해당 징후만으로 이를 부정행위로 간주할 수 없으며, 결과물 및 정황을 종합적으로 고려해야 한다.</p><p class="tip-sub">① 어휘 및 문체</p><p class="b2">학습자의 수준에 부합하지 않는 언어 또는 어휘의 사용<br>(단, AI 도구는 콘텐츠 생성 시 서로 다른 언어, 문체, 숙련도 수준을 사용하도록 지시할 수 있다는 점에 유의)</p><p class="b2">학습자의 평소 문체와 달리, 지나치게 장황하거나 과장된 문체 사용</p><p class="b2">교실에서의 구두·서면 활동 또는 기존 제출 자료와 비교했을 때의 문체 차이</p><p class="tip-sub">② 표현의 일관성</p><p class="b2">AI 생성물이 적절히 편집되지 않아 1인칭과 3인칭 시점이 혼재되는 등 표현의 일관성이 떨어지는 경우</p><p class="b2">AI에서 생성된 텍스트를 상당 부분 그대로 활용하고 일부만 수정하여, 하나의 작업물 내에서 언어 스타일과 표현 수준이 일관되지 못한 경우</p><p class="tip-sub">③ 인용 및 출처 표기</p><p class="b2">출처 표기가 요구되는 경우에도, 직접 인용 또는 참고문헌 표기를 누락한 경우(일부 AI 도구는 인용과 참고문헌을 생성하기도 함)</p><p class="b2">검색할 수 없는 참고문헌이 포함된 경우 (일부 AI 도구는 허위 참고문헌을 제공하기도 함)</p><p class="tip-sub">④ 내용 부족</p><p class="b2">특정 시점 이후에 발생한 사건에 대한 언급이 없는 경우</p><p class="b2">과제 성격상 통상적으로 포함되어야 할 그래프, 데이터 표, 시각 자료 등이 누락된 경우</p><p class="b2">구체적 사례, 지역적 맥락, 시사적 정보 등 실제 상황 기반 지식이 부족하고 전반적으로 추상적·일반론적 서술에 그치는 경우</p><p class="b2">학습자 개인의 경험, 수업 맥락, 제시된 과제 시나리오와의 직접적 연계 없이<br>일반적인 설명 위주로 작성된 경우</p><p class="tip-sub">⑤ 맥락 및 구조</p><p class="b2">한 편의 보고서에서 결론 문단이 여러 차례 반복되거나, 서론-본론-결론 구조가 비정상적으로 중복되는 경우(이는 여러 번 에세이를 생성하도록 요청한 결과일 수 있음)</p><p class="b2">전체 맥락과 맞지 않는 비약적 주장이나 사실과 다른 내용을 단정적으로 서술한 문장이 포함된 경우</p><p class="b2">AI가 생성 과정에서 포함하는 한계 고지, 가정적 표현, 경고성 문구 등이 수정 없이 그대로 포함된 경우</p><p class="note">※ 이전 작업과의 비교 방법</p><p class="b2">학습자의 기존 제출물과 새로운 작업물을 비교하여 AI 오용 여부를 검토할 수 있다. 특히 교실에서 수행했거나 교수자 감독하에 완료된 작업물과의 차이를 중심으로 확인한다.</p><p class="b1">철자와 구두점</p><p class="b1">문법 사용</p><p class="b1">문체와 어조</p><p class="b1">어휘</p><p class="b1">복잡성 및 일관성</p><p class="b1">전반적인 이해와 수행 수준</p><p class="b1">작성 방식(예: 손글씨 또는 워드 프로세서로 작성되었는지 여부 등)</p></aside>
 <div class="tbl"><table class="grid"><caption>AI 활용 방침 위반 등급에 따른 조치 예시</caption><thead><tr><th>등급</th><th>위반 유형(예시)</th><th>안내(예시)</th></tr></thead><tbody><tr><th scope="row">주의 (Minor)</th><td>단순 출처 표기 누락, 허용 범위를 경미하게 초과한 보조 도구 활용</td><td>해당 과제 감점 및 재제출 권고</td></tr><tr><th scope="row">경고 (Moderate)</th><td>AI 생성 내용을 자신의 창작물인 것처럼 제시하는 기만 행위(표절), 사실 왜곡(Hallucination)에 대한 검증 미흡</td><td>해당 과제 0점 처리 및 윤리 교육 이수</td></tr><tr><th scope="row">중결함 (Severe)</th><td>시험 중 실시간 AI 답변 복사, 과제 대리 작성(전체 생성), 고의적 도용</td><td>해당 과목 F 학점 부여 등</td></tr></tbody></table></div>
-<h6 class="g4" id="a1-5">5 탐지 도구</h6>
-<h6 class="g5" id="a1-5-1">5.1. AI 탐지 도구 활용</h6>
+<h6 class="g4" id="a1-5"><span class="gn">5</span>탐지 도구</h6>
+<h6 class="g5" id="a1-5-1"><span class="gn">5.1</span>AI 탐지 도구 활용</h6>
 <p>각 대학에서 사용 중인 AI 탐지 도구를 보조적 점검 수단으로 활용할 수 있으며, 학습자 또한 AI 활용 결과를 스스로 사전 검토할 수 있도록 안내한다. 다만 AI 탐지 도구의 사용 목적과 적용 범위, 기술적 한계를 사전에 충분히 고지하여 학습자의 불필요한 불안이나 오해가 발생하지 않도록 한다.</p>
-<h6 class="g5" id="a1-5-2">5.2. AI 탐지 도구의 한계</h6>
+<h6 class="g5" id="a1-5-2"><span class="gn">5.2</span>AI 탐지 도구의 한계</h6>
 <p>AI 탐지 도구의 판정 결과는 참고자료로만 활용하고, 교수자가 다시 한번 확인하고 판단하는 과정이 필요하다. 현 시점에서 AI 탐지 도구의 정확도와 신뢰도는 한계가 있으므로, 그 판정 결과를 학술적 부정행위 징계에서 결정적 증거로 인정하지 않는다.</p>
-<h5 class="g3" id="a2">2 체크리스트</h5>
+<h5 class="g3" id="a2"><span class="gn">2</span>체크리스트</h5>
 <p>교수자와 학습자가 수업 현장에서 AI를 활용할 때 고려해야 할 내용을 점검해볼 수 있도록, 교수자를 위한 체크리스트 2종, 학습자를 위한 체크리스트 1종을 다음과 같이 제시하였다.</p>
-<h6 class="g4" id="a2-1">1 교수자를 위한 체크리스트</h6>
+<h6 class="g4" id="a2-1"><span class="gn">1</span>교수자를 위한 체크리스트</h6>
 <div class="tbl"><table class="check"><caption>1.1. 학습자 지도를 위한 AI 활용 윤리 체크리스트</caption><thead><tr><th>단계</th><th>점검 내용</th><th>확인</th></tr></thead><tbody><tr><th scope="row">준비</th><td>강의 목적과 내용, 학습 목표, 주요 학습 활동 및 과제 평가 등을 종합적으로 고려하여, 학습자들을 위한 자체 AI 활용 방침을 수립했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">준비</th><td>강의계획서 내 AI 활용 방침을 명시했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">준비</th><td>학습 목표 달성에 도움이 되는 보조적 수단으로 AI를 활용할 수 있도록 수업을 설계했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>첫 수업 시간에 강의계획서에 명시된 AI 활용 방침을 설명하였는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>학습자에게 AI 활용 범위, 도구 종류, 주의사항 등을 구체적으로 제시했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>학습자에게 AI 활용 방침에 대한 타당한 근거를 제시했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>학습자가 학문적 진실성을 위반하지 않고 책임 있게 AI 도구를 활용하도록 명확히 알렸는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>학습자에게 수업 활동 또는 과제 중 AI 사용 시 목적 및 이유, 출처 표기 방법 등을 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물에 대해 사실 여부를 검증한 후 사용해야 함을 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물을 수정 없이 그대로 제출하거나, 출처를 밝히지 않는 경우 표절에 해당할 수 있음을 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI를 활용함으로써 발생하는 모든 문제에 대한 책임은 사용자 본인에게 있음을 안내했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물에 편향이나 차별적 표현이 포함되지 않았는지 검토하도록 안내했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>개인정보 및 민감·기밀 정보 입력에 관한 유의사항을 안내했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI에 대한 과도한 의존 및 오남용에 주의해야 함을 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>대학에서 공식적으로 사용을 승인했거나 안전성이 검증된 AI 도구를 활용하도록 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 활용의 장점과 한계에 대하여 학습자에게 충분히 설명했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">평가</th><td>학습자가 AI를 수업 목표와 교육적 활용 원칙에 맞게 사용하고 있는지 점검했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">평가</th><td>AI 활용 관련 부정행위로 판단하기 전 학습자에게 충분한 소명 기회를 보장했는가?</td><td class="box" aria-hidden="true">□</td></tr></tbody></table></div>
 <div class="tbl"><table class="check"><caption>1.2. 교수자의 AI 활용 윤리에 대한 자가 체크리스트</caption><thead><tr><th>단계</th><th>점검 내용</th><th>확인</th></tr></thead><tbody><tr><th scope="row">준비</th><td>소속 기관의 학문 윤리 및 AI 활용 지침을 확인했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>학문의 목적과 진실성을 위해 AI 도구를 윤리적으로 활용했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>강의자료에 AI 생성물을 포함한 경우, 인용 및 출처를 표기하였는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물을 가공하지 않고 그대로 사용하는 경우 표절에 해당할 수 있음을 인지했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물의 출처를 밝히지 않고 사용하는 경우 표절에 해당할 수 있음을 인지했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물에 대해 사실 여부를 검증하는 절차를 거쳤는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI를 활용함으로써 발생하는 모든 문제에 대한 책임은 사용자 본인에게 있음을 인지했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI 생성물이 성별, 인종, 사회적 배경 등에 따른 차별적인 표현을 사용하지 않는지 검토했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>모든 구성원이 공평하게 접근·활용할 수 있는 AI 도구를 사용할 수 있도록 수업·과제·평가를 설계하였는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>개인정보 및 민감·기밀 정보 입력에 관한 유의사항을 인지했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI에 대한 과도한 의존 및 오남용에 유의했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">활동</th><td>AI를 교육에 활용했을 때의 장점 및 한계에 대해 인지했는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">평가</th><td>AI 활용을 고려하여 평가 기준을 체계적으로 설계하였는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">평가</th><td>시험 문제 출제 과정에서 AI가 생성할 수 있는 답변을 사전에 검토하여 문항의 적절성과 변별력을 점검하였는가?</td><td class="box" aria-hidden="true">□</td></tr><tr><th scope="row">평가</th><td>학습자의 AI 활용 여부를 판별하는 검증 도구를 전적으로 신뢰할 수 없음을 인지하고 이를 고려했는가?</td><td class="box" aria-hidden="true">□</td></tr></tbody></table></div>
-<h6 class="g4" id="a2-2">2 학습자를 위한 체크리스트</h6>
+<h6 class="g4" id="a2-2"><span class="gn">2</span>학습자를 위한 체크리스트</h6>
 <p>과제 제출 시 학습자가 AI를 사용한 경우 AI 활용 윤리에 대해 자가 진단을 수행할 수 있도록, 다음과 같이 안내 사항을 제시할 수 있다.</p>
 <div class="tbl"><table class="grid"><caption>① 과제 기본 정보</caption><thead><tr><th>구분</th><th>내용</th></tr></thead><tbody><tr><th scope="row">과목명</th><td></td></tr><tr><th scope="row">학번 / 성명</th><td></td></tr><tr><th scope="row">과제(프로젝트)명</th><td></td></tr><tr><th scope="row">AI 활용 여부</th><td>□ 활용하지 않음 / □ 일부 활용함 (활용 시 ②, ③번 항목 작성)</td></tr></tbody></table></div>
 <div class="tbl"><table class="grid"><caption>② AI 활용 내용</caption><thead><tr><th>구분</th><th>내용</th></tr></thead><tbody><tr><th scope="row">사용한 AI 도구</th><td>(예: ChatGPT, Claude, Gemini 등에 대한 구체적인 버전 작성)</td></tr><tr><th scope="row">주로 활용한 단계</th><td>(예: 자료 조사, 아이디어 도출, 문장 교정, 코드 작성 등)</td></tr><tr><th scope="row">기여도 평가</th><td>AI 기여도 (  ) / 본인 기여도 (  )%</td></tr><tr><th scope="row">활용 내용 기술</th><td>(예: 서론의 영문 초록 번역 및 논리 구조 점검에 활용함)</td></tr></tbody></table></div>
