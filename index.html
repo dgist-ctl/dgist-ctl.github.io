@@ -589,14 +589,35 @@ if (layer) (async () => {
     history.replaceState(null, "", location.pathname);
   }
 
-  try {
+  if (new URLSearchParams(location.search).get("e") === "moved") {
+    say("서버가 새 주소로 옮겼어요. 학교 이메일만 다시 넣으면 이어서 볼 수 있어요.", true);
+    history.replaceState(null, "", location.pathname);
+  }
+
+  // 터널 주소는 서버를 다시 띄울 때마다 바뀐다 — 페이지를 연 뒤 바뀌어도 로그인이 되게
+  // 로그인할 때마다 새로 읽는다(2026-10-20 재배포 직후 "연결하지 못했습니다").
+  async function readBase() {
     const res = await fetch("tunnel.json?t=" + Date.now(), { cache: "no-store" });
     const data = await res.json();
     if (!data.url) throw new Error("주소 없음");
+    updated.textContent = data.updated || "";
+    return data.url.replace(/[/]+$/, "");
+  }
+
+  async function tryLogin(email) {
+    const res = await fetch(base + "/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    if (res.status >= 520 && res.status <= 530) throw new Error("터널 없음 " + res.status);
+    return res;
+  }
+
+  try {
     // 터널 주소는 화면에 보이지 않는다. 학생이 옮겨 적을 주소가 아니고,
     // 서버를 다시 띄울 때마다 바뀌어 적어 두면 오히려 틀린 주소가 된다.
-    base = data.url.replace(/[/]+$/, "");
-    updated.textContent = data.updated || "";
+    base = await readBase();
     showVisits(base);
   } catch (e) {
     down.classList.add("on");
@@ -617,11 +638,19 @@ if (layer) (async () => {
     go.disabled = true;
     say("확인하는 중…", true);
     try {
-      const res = await fetch(base + "/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      try { base = await readBase(); } catch (e) { /* 못 읽으면 가진 주소로 */ }
+      let res = null;
+      // 서버가 막 다시 떴으면 새 주소가 올라오기까지 1~2분 걸린다 — 그동안 기다렸다가 다시 시도한다.
+      for (let i = 0; i < 18 && !res; i++) {
+        try {
+          res = await tryLogin(email);
+        } catch (err) {
+          if (i === 17) throw err;
+          say("서버 주소를 새로 받는 중이에요… 잠시만 기다려 주세요.", true);
+          await new Promise(r => setTimeout(r, 5000));
+          try { base = await readBase(); } catch (e2) { /* 다음 회차에 다시 */ }
+        }
+      }
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         say(data.error || "들어가지 못했습니다.", false);
