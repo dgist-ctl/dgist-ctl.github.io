@@ -218,13 +218,26 @@ footer{color:var(--ink3);font-size:13px;padding:0 0 40px}
 @media (max-width:640px){
   .cols{grid-template-columns:1fr}
   .qa-fab{padding:4px;bottom:12px;right:12px}
-  .qa-fab span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .qa-fab span:not(.d3){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   .totop{width:36px;height:36px;bottom:14px;left:12px}
   .qa{left:0;right:0;bottom:0;width:100%;max-height:85vh;border-radius:14px 14px 0 0}
   .savebar{left:56px;right:68px;transform:none;bottom:12px;padding:4px 4px 4px 12px;font-size:13px;justify-content:space-between}
   main .wrap{padding-bottom:90px}
 }
 :root{--ok:#1f7a4d;--ok-soft:#e6f4ec}
+/* 달구 3D(dalgu3d_page.js) — 머리글 인사 달구, 도우미 단추·창 머리. 3D 가 안 뜨면 PNG 그대로 */
+.top-head{display:flex;align-items:flex-end;gap:16px}
+.top-head>div{flex:1;min-width:0}
+.hero-dalgu{flex:none;border:0;background:none;padding:0;cursor:pointer;line-height:0;border-radius:16px}
+.hero-dalgu img,.d3-hero{display:block;width:104px;height:104px}
+.hero-dalgu img{object-fit:contain;animation:dalgu-bob 2.6s ease-in-out infinite}
+.hero-dalgu:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.d3{display:block;overflow:hidden;line-height:0}
+.d3 canvas{display:block}
+.d3-fab{width:44px;height:44px;border-radius:50%;background:#eaf2ff}
+.d3-head{width:46px;height:46px;border-radius:50%;background:#eaf2ff;flex:none;margin-right:10px}
+@media (max-width:640px){.hero-dalgu img,.d3-hero{width:76px;height:76px}}
+@media print{.hero-dalgu{display:none}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ok:#7fd3a5;--ok-soft:#173326}}
 .st{font-size:12px;font-weight:700;border-radius:4px;padding:1px 7px;background:var(--bg);color:var(--ink3);border:1px solid var(--line)}
 .st.wip{background:var(--pri-soft);color:var(--pri);border-color:transparent}
@@ -298,9 +311,11 @@ footer{color:var(--ink3);font-size:13px;padding:0 0 40px}
 </head>
 <body>
 <header class="top"><div class="wrap">
+  <div class="top-head"><div>
   <p class="kicker">관련 부서 검토 요청(교육부 가이드라인 원문 포함)</p>
   <h1>「AI 활용 윤리 가이드라인」 관련 부서 검토 요청</h1>
   <p class="from">2026. 10. 교수학습센터</p>
+  </div><button class="hero-dalgu" id="hero-dalgu" type="button" title="AI 검토 도우미 열기" aria-label="AI 검토 도우미 열기"><img src="https://dgist-ctl.github.io/dalgu/dalgu-body-256.png" alt="" width="104" height="104"></button></div>
   <ul class="facts">
     <li class="due"><b>회신 기한</b><span>2026. 11. 6.(금)</span></li>
     <li><b>검토 대상</b><span>6개 부서 · 12개 조항</span></li>
@@ -14072,6 +14087,81 @@ I
   apply();
   pull();
   openLaw();
+})();
+</script>
+<script type="module">// 달구 3D(Blender 판, dgist-ctl.github.io/dalgu/3d — 안내 페이지·워크숍·학습 화면과 같은 모델) — 2026-10-20
+// 머리글 인사 달구(온몸)·도우미 단추·도우미 창 머리 세 곳의 PNG 를 3D 캔버스로 바꾼다.
+// WebGL 이 없거나 불러오기에 실패하면(공문 붙임 파일을 오프라인으로 열 때 등) PNG 가 그대로 남는다.
+const BASE = "https://dgist-ctl.github.io/dalgu/3d/dalgu3d.js?v=5";
+
+(async () => {
+  let mountDalgu;
+  try { ({ mountDalgu } = await import(BASE)); } catch (e) { return; }
+
+  // img(PNG) 자리에 3D 를 얹는다 — 첫 프레임이 나오면 바꿔 끼우고, 실패하면 PNG 그대로
+  async function swap(img, framing, cls) {
+    if (!img) return null;
+    try {
+      const box = document.createElement("span");
+      box.className = "d3 " + cls;
+      box.setAttribute("aria-hidden", "true");
+      const size = img.offsetWidth || +img.getAttribute("width") || 46;
+      const d = await mountDalgu(box, { size, framing });
+      if (!d) return null;
+      img.replaceWith(box);
+      return d;
+    } catch (e) { return null; }
+  }
+
+  const hero = document.getElementById("hero-dalgu");
+  const [dh, df, dp] = await Promise.all([
+    swap(hero && hero.querySelector("img"), "full", "d3-hero"),
+    swap(document.querySelector("#qa-open img"), "face", "d3-fab"),
+    swap(document.querySelector(".qa-h-av"), "face", "d3-head"),
+  ]);
+  const all = [dh, df, dp].filter(Boolean);
+  if (!all.length) return;
+
+  // 인사 — 머리글 달구가 손을 흔들고, 단추 달구는 조금 뒤에 웃는다
+  if (dh) setTimeout(() => dh.set("wave"), 600);
+  if (df) setTimeout(() => df.smile(1.6), 1800);
+
+  // 머리글 달구를 누르면 깡충 + 도우미 창 열기(아래 qa_client.js 의 열기 단추를 그대로 누른다)
+  if (hero) hero.addEventListener("click", () => {
+    if (dh) dh.set("hop");
+    const o = document.getElementById("qa-open");
+    if (o) o.click();
+  });
+  const fab = document.getElementById("qa-open");
+  if (fab && df) fab.addEventListener("pointerenter", () => df.set("wave"));
+
+  // 도우미가 답을 찾는 동안(.qa-av.think) 잔머리를 꼬고, 답이 오면 끄덕이며 웃는다
+  const log = document.getElementById("qa-log");
+  let thinking = false;
+  if (log) new MutationObserver(() => {
+    const now = !!log.querySelector(".qa-av.think");
+    if (now === thinking) return;
+    thinking = now;
+    for (const d of [dp, df].filter(Boolean)) {
+      if (now) d.set("think");
+      else { d.set("nod"); d.smile(1.6); setTimeout(() => { if (!thinking) d.set("idle"); }, 1600); }
+    }
+  }).observe(log, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"] });
+
+  // 커서를 바라본다(마우스 쓰는 화면만) — 화면 반 폭에서 최대
+  if (dh && matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let raf = 0, px = 0, py = 0;
+    addEventListener("pointermove", (e) => {
+      px = e.clientX; py = e.clientY;
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const r = hero.getBoundingClientRect(), c = (v) => Math.max(-1, Math.min(1, v));
+        dh.lookAt(c((px - r.left - r.width / 2) / (innerWidth / 2)), c((py - r.top - r.height / 2) / (innerHeight / 2)));
+      });
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", () => dh.lookAt(0, 0));
+  }
 })();
 </script>
 </body>
