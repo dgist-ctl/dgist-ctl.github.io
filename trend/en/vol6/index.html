@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assessing the Power to Ask — For Growth, Not Selection (Vol. 1, No. 6)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: normal;
+    line-height: 1.85;
+  }
+
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px;
+  }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30초 요약 */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .hanmadi {
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
+  }
+  .hanmadi::before { content: "In one line"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; text-transform: uppercase; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: center; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: middle;  text-align: center; }
+  table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
+  table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 52px 18px 44px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== 디자인 업그레이드 (2026-08-28) — 6개 글로벌 대학 발행물 비교 근거 ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* 마스트헤드: 얇게(THE 56px·Columbia 66px 수준), 아카이브 경로 */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* 기사 헤더 */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* 2단 그리드: 본문 + 우측 레일 */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: normal; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* 본문 타이포 */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* 시그니처: 여백에 걸린 명조 장부 숫자 */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* 말미(참고문헌·다른 호·구독) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* 좁은 화면: 레일 접고 칩 내비 sticky */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* 인쇄: 내비·레일·CTA 숨기고 링크 URL 노출 */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+
+<style id="vol6-extra">
+  /* 6호 추가: 배지 2종([기관보고서]·[언론]) · 출발점 박스 · 실전 박스 표 왼쪽 정렬·모바일 쌓기 */
+  .rail .cite { overflow-wrap: anywhere; }  /* 인용문 속 긴 URL이 레일 밖으로 넘쳐 가로 스크롤을 만들던 문제 */
+  .bdg.i { background: #dbeafe; color: #1a4a9b; }
+  .bdg.n { background: #f1f5f9; color: #4a5568; }
+  .trigger {
+    background: #fffbf0; border: 1px solid #eadfc2; border-left: 5px solid #b8860b;
+    border-radius: 12px; padding: 20px 24px; margin: 30px 0 8px;
+  }
+  .trigger h3 { font-family: var(--serif); font-size: 16.5px; font-weight: 700; color: var(--warn); margin-bottom: 10px; }
+  .trigger > p:not(.src) { font-size: 15px; line-height: 1.85; margin-bottom: 12px; }
+  .trigger b { color: var(--warn); }
+  .trigger .src a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .item em, .lensbox em, .summary em, .trigger em, .caveat em { font-style: normal; text-decoration: underline; text-decoration-color: #9fb8dc; text-underline-offset: 3px; }
+  table.box.practical td { vertical-align: top; }
+  table.box.practical td:nth-child(2) { text-align: left; }
+  table.box.practical td:first-child { white-space: normal; min-width: 6.5em; }
+  @media (max-width: 640px) {
+    table.box.practical, table.box.practical tbody, table.box.practical tr, table.box.practical td { display: block; width: 100%; }
+    table.box.practical tr:first-child { display: none; }
+    table.box.practical tr + tr { border-top: 2px solid var(--accent); }
+    table.box.practical td { text-align: left; border-top: 1px solid var(--line); }
+    table.box.practical td:first-child { background: var(--fog); }
+    table.box.practical td:nth-child(3)::before { content: "Criterion — "; font-weight: 800; color: var(--accent); }
+    .trigger { padding: 16px 16px; }
+  }
+  @media print { .trigger { break-inside: avoid; } }
+</style>
+
+<!-- journal-layer -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../../assets/journal.css">
+<script src="../../assets/journal.js" defer></script>
+<!-- /journal-layer -->
+</head>
+<body data-vol="6">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI in Teaching Trend Report</div>
+    <div class="crumb"><a href="../">Archive</a><span>Vol. 1, No. 6 (Oct. 2026)</span><a href="../../vol6/" style="margin-left:14px">한국어</a></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report</div>
+    <h1>Assessing the Power to Ask — For Growth, Not Selection</h1>
+    <p class="lede">Do the ‘growth’ assessment that teaches students how to ask and corrects their questions; put on hold the ‘selection’ that ranks students by question scores.</p>
+    <div class="meta">
+      <b>AI in Teaching Trend Report</b> · Vol. 1, No. 6 (Oct. 2026)<br>
+      Published by DGIST Center for Teaching &amp; Learning (CTL) · Contact: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="Article guide">
+      <div class="rlabel">In this article</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">Evidence grades</div>
+        <div class="legend">
+          <div><span class="bdg r">[Research]</span>Peer-reviewed research</div>
+          <div><span class="bdg p">[Preprint]</span>Preprint</div>
+          <div><span class="bdg i">[Institutional Report]</span>Report issued by an institution</div>
+          <div><span class="bdg o">[Open Resource]</span>Practical guidance &amp; tools</div>
+          <div><span class="bdg n">[Press]</span>News reports &amp; contributed articles, for fact-checking</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">Cite this article</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">Copy citation</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">&#9312; Testing the Proposals (1&#8211;3)</a>
+    <a href="#sec2">&#9313; Assessment Design (4&#8211;5)</a>
+    <a href="#sec3">&#9314; Practice Box</a>
+    <a href="#sec4">&#9315; DGIST Application (6&#8211;7)</a>
+    <a href="#sec5">&#9316; Contrasting Evidence (8&#8211;9)</a>
+    <a href="#sec6">&#9317; Editor's Lens</a>
+  </div>
+
+  <div class="policy">
+    <b>Editorial policy</b> Applicable to higher-education practice · only sources with a verifiable original are included · every source is checked against the original before publication (bibliographic details, document type, data-collection period, retractions and corrections) · source types are labelled: <span class="bdg r">[Research]</span> <span class="bdg p">[Preprint]</span> <span class="bdg i">[Institutional Report]</span> <span class="bdg o">[Open Resource]</span> <span class="bdg n">[Press]</span> ([Institutional Report] = a report or survey result issued by an institution or consortium, not peer-reviewed · [Open Resource] = practical guidance published by an institution, not an efficacy study · [Press] = news reports or contributed articles cited to confirm facts, not evidence of effect) · read evidence strength as [Research] &gt; [Preprint] &gt; [Institutional Report] &gt; [Open Resource] / [Press] · correlational studies are not described as causal · this issue addresses undergraduate and graduate teaching and, because of its topic, includes classic studies from 1993, 1994, 1996 and 2009, stating the publication date of each item · This report reflects the independent judgment of DGIST CTL and receives no external sponsorship.
+  </div>
+
+  <div class="sechead">⏱ 30-Second Summary — If You're Busy, Stop Here</div>
+  <div class="summary">
+    <div class="itm"><span><b>Cho Byeok (Distinguished Professor, Korea University) named ‘the power to ask questions’ as a core competency for the AI era and called for a shift from education for ‘selection’, which picks out the top student, to education for ‘growth’, which nurtures each child's different potential</b> (KBS 1TV, Oct. 11). On the quality of questions, he said that if teachers listen to students and applaud them, “the quality of the questions is bound to rise on its own” (per the official clip's subtitles) — words about nurturing rather than grading. Weighed against the evidence from <b>undergraduate and graduate courses</b>, this issue's judgment is as follows — <b>Do the ‘growth’ assessment that teaches students how to ask and corrects their questions; put on hold the ‘selection’ that ranks students by question scores.</b></span></div>
+    <div class="itm"><span><b>Teaching students how to ask raised understanding.</b> In a review of 26 studies that taught question-generation strategies, the median effect size (difference in standard-deviation units) on comprehension tests was 0.86 for researcher-made tests and 0.36 for standardized tests. All five studies with university students were also significant, but most of the studies were 1969–92 reading-comprehension studies in primary and secondary schools. Merely having students write questions did not raise their quality much (a course that gave credit for submission alone), and we found no experiment that isolated the effect of feedback on questions alone.</span></div>
+    <div class="itm"><span><b>Question skill moved together with the products, but its relation to separately measured learning (exams, recall) was weak or not detected</b> — which this issue reads as the reason Prof. Cho paired questions with judgment. In a study of 22 graduate students, the depth of questions was related to the quality of the assignment, but no relation with immediate recall was detected. In a randomized experiment in introductory programming (431 analysed), prompt skill (prompts being the instructions given to an AI) rose, but no difference in final-exam scores between conditions was detected. No study has yet measured whether the judgment step raises learning.</span></div>
+    <div class="itm"><span><b>To try in your next class — in the last 10 minutes, collect, without names, one line of each student's own thinking plus their questions, and open the first 5 minutes of the next class with questions the students chose.</b> This is this issue's proposal for carrying Prof. Cho's SALSA (Share, Ask, Listen, Share and Ask again) into a 10-minute slot in undergraduate and graduate courses (Practice Box). Grading question quality as a course score is put on hold this semester (it is not banned). Even human raters at first agreed only 51–72% of the time, and we found no study in which AI scored the quality of student questions and was checked against humans — and if a score is wrong, an individual student's grade is wrong.</span></div>
+  </div>
+
+  <div class="trigger">
+    <h3>Where this issue starts — five things Prof. Cho Byeok said</h3>
+    <p>
+      ① <b>The power to ask questions</b> — he named ‘the power to ask questions’, together with character and wisdom, as a core competency for the AI era.<br>
+      ② <b>Pairing questions with judgment</b> — the insight to ask good questions and judge the results matters more than accumulating knowledge.<br>
+      ③ <b>From selection to growth</b> — “We must shift from education for ‘selection’, which picks out the top student, to education for ‘growth’, which nurtures each child's different potential.” On the broadcast he said, “That is a selection system, not a growth system.” Education should teach what students can do with AI rather than how much they know, and education that blocks AI use is anachronistic (press release). On the broadcast, however, he put conversation with people first, saying “AI should be banned while children are young” — not a statement to transfer as is to university students.<br>
+      ④ <b>The SALSA method</b> — a dialogic class in which students share their thinking (Share), ask questions (Ask), listen (Listen), and share and ask again (Share and Ask again).<br>
+      ⑤ <b>Question quality rises when it is encouraged</b> — if you listen to students and applaud them, “students get more and more excited … and the quality of their questions is bound to rise on its own.” At the time of the broadcast, the editor heard it as meaning ‘let us assess the quality of questions’, but the word ‘assessment’ does not appear in the subtitles of the three public clips (about 35 minutes), nor in the four press reports. The remarks we could confirm are about nurturing question quality, not grading it.<br>
+      Separately, in an earlier column Prof. Cho criticized modern education as “a half-baked education system that has ignored tacit knowledge, which is hard to measure, and emphasized only explicit knowledge, which is easy to grade.”<br>
+      The context of the broadcast is mainly primary/secondary schooling and parenting. <b>This issue carries these five statements over to undergraduate and graduate teaching, and reads ‘assessing question quality’, in the direction of ③ and ⑤, as assessment for ‘growth’</b> — carrying them over to undergraduate and graduate education is this issue's interpretation.
+    </p>
+    <p class="src">
+      <span class="bdg n">[Press]</span>Source: <a href="https://www.specialtimes.co.kr/news/articleView.html?idxno=472106" target="_blank" rel="noopener">Press-release article on KBS 1TV Issue PICK: With Teachers, episode 299, Special Times (2026. 10. 8.)</a> — source for ①②③④. The same press-release article also ran in two other outlets (ppss, MHN)<br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://sports.khan.co.kr/article/202610110935003" target="_blank" rel="noopener">Sports Kyunghyang article on the day of the broadcast (2026. 10. 11.)</a> — none of the four uses the word ‘assessment’<br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://www.youtube.com/watch?v=TMG-3DmID04" target="_blank" rel="noopener">KBS Culture official YouTube, Issue PICK: With Teachers, 261011 broadcast clip “Does SALSA Build Competitiveness for the AI Era?”</a> — quotation in ⑤ (0:02–0:11), based on auto-generated subtitles. Same-day clips “Entrance Exams Come First!” (selection vs. growth at 7:07) · “Tectonic Shift in Education!”; none of the three uses the word ‘assessment’<br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://www.fnnews.com/news/202605181809066274" target="_blank" rel="noopener">Cho Byeok, “Let's Overhaul How We Teach for the AI Era”, Financial News column (2026. 5. 18.)</a> — source of the quotation criticizing explicit knowledge
+    </p>
+  </div>
+
+  <div class="sechead" id="sec1">&#128269; Testing the Proposals &#183; Questioning Power, Read Through Evidence</div>
+
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>Teaching students how to ask raised understanding — but what it was measured with changes the size</h2>
+    <div class="hanmadi">There is evidence that classes developing the ‘power to ask questions’ Prof. Cho named are good for learning — but what was measured was not question skill but <em>understanding</em>. The strongest evidence is for classes that <em>teach how to ask questions</em>, while the benefit of generating questions in itself varied with time conditions.</div>
+    <p class="body">In a review of 26 studies that taught students question-generation strategies (studies from 1969–92, grade 3 through university), the median effect size was <b>0.86 on researcher-made comprehension tests</b>, <b>0.36 on standardized tests</b>. All tests used material the students had not seen before. Where students were given question openers (question stems such as “Why is …?” or “How are … and … different?”), the figure was 1.12 (4 studies, researcher-made tests), and all five studies with university students were significant.</p>
+    <ul class="arrows">
+      <li>In an experiment that divided students in a university lecture course into three conditions (82 students), on a test one week later <b>generating questions was about as good as solving problems, and better than rereading</b>.</li>
+      <li>There are results in the opposite direction too. In an experiment with 143 university students, when study time was equalized, <b>generating multiple-choice questions led to lower test scores than rereading</b>. Generating questions is an activity that takes time.</li>
+      <li>The effect depends on the type of question. In an experiment with 48 undergraduates, <b>students who generated conceptual questions did better only on conceptual items</b> than those who reread, while those who generated factual-detail questions gained nothing.</li>
+      <li>Merely having students write questions did not raise their quality much. In a cell-biology lab course, the questions of students who submitted question assignments all semester for completion credit improved slightly, but neither consistently nor substantially (revisited in item 2).</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The 26-study review consists mostly of primary/secondary reading-comprehension studies, and tests were given only right after instruction. Quoting only one of 0.86 or 0.36 drops the condition of the measuring instrument. This survey found no randomized experiment comparing question generation at university level in STEM. Nor did we find an experiment isolating the effect of <em>feedback</em> on questions alone.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.3102/00346543066002181" target="_blank" rel="noopener">Rosenshine, Meister &amp; Chapman, Review of Educational Research 66(2):181–221 (1996)</a> — review of 26 intervention studies, median effect sizes 0.36 and 0.86<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1002/acp.3639" target="_blank" rel="noopener">Ebersbach, Feierabend &amp; Nazari, Applied Cognitive Psychology 34(3):724–736 (2020)</a> — 82 students in a university lecture course, three-condition comparison (sample size confirmed from secondary sources)<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1016/j.learninstruc.2017.12.006" target="_blank" rel="noopener">Hoogerheide, Staal, Schaap &amp; van Gog, Learning and Instruction 60:191–198 (2019)</a> — 143 university students, equal study time<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1037/a0028661" target="_blank" rel="noopener">Bugg &amp; McDaniel, Journal of Educational Psychology 104(4):922–931 (2012)</a> — 48 undergraduates
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>A ‘good question’ was not a matter of many questions</h2>
+    <div class="hanmadi">In the first half of the semester, the number of questions tracked how much students did not know, and question quality reflected understanding only faintly. What revealed understanding best was students' <em>answer quality</em>.</div>
+    <p class="body">A 1994 study analysing the one-on-one tutoring of 27 undergraduates in a research methods course found that students asked an average of 21.1 questions per tutoring session (about one hour), versus an estimated 0.11 per hour in the classroom (the classroom figure is an estimate from earlier research; the often-cited ‘26.5 per hour’ is a value pooled with the same study's 7th-grade sample). In the same study's tables, <b>the correlation between the total number of questions and exam scores was −.56 (significant) in the first half of the semester and −.12 in the second half</b>. By contrast, the <em>proportion</em> of questions requiring deep reasoning correlated positively with exam scores (first half .36, second half .47). The authors wrote that students with more gaps in their knowledge ended up asking more. In this study, 92% of student questions (reported without distinguishing samples) remained at level 1 (knowledge) of Bloom's taxonomy (a framework dividing levels of thinking into knowledge, comprehension, application, analysis, synthesis and evaluation).</p>
+    <ul class="arrows">
+      <li>In a study by the same group analysing 44 tutoring sessions, the quality of student questions was “only a marginal indicator” of understanding, and <b>the most reliable cue was the quality of student answers</b>. Students' “yes” to “Do you understand?” was often far off (“very misleading”).</li>
+      <li>A study of a cell-biology lab course (38 students, 924 questions) reported no correlation between question type or improvement in questions and final grades.</li>
+      <li>Questions put to AI also <b>point in mixed directions</b>. An analysis of 2,214 chatbot conversations in a junior/senior-level AI course at a US university (two semesters, 203 students) found that students who asked conceptual questions or asked for help writing code tended to score higher on assignments and exams — but only individual coefficients were significant; the model as a whole was not. In contrast, in a study of 147 students in a web programming course in which two-thirds were graduate students (97 graduate students, 104 submitted logs), the correlation between the frequency of requests for conceptual explanations and final grades was r = −0.01 (p = .91) — participants' mean final grades were 92.3–94.6%, close to the ceiling.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — All of these are correlations, not causation. The 1994 study involved face-to-face tutoring with 27 students, and because the topics differed between the first and second halves of the semester, why the correlation changed cannot be determined. The paper's abstract summarized that question frequency was unrelated to achievement, but the table in the body shows a significant negative correlation in the first half (item 9). The conclusion is not “questions do not reflect learning” but <b>“they reflect it only faintly, and results vary from study to study”</b>.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.3102/00028312031001104" target="_blank" rel="noopener">Graesser &amp; Person, American Educational Research Journal 31(1):104–137 (1994)</a> — 27 undergraduates (in a study that also included a sample of 13 7th graders), correlational. Correlation figures are from Table 5 (undergraduate sample)<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1016/1041-6080(94)90010-8" target="_blank" rel="noopener">Person, Graesser, Magliano &amp; Kreuz, Learning and Individual Differences 6(2):205–229 (1994)</a> — 44 tutoring sessions<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1187/cbe.08-09-0054" target="_blank" rel="noopener">Keeling, Polacek &amp; Ingram, CBE—Life Sciences Education 8(2):131–139 (2009)</a> — 38 students, 924 questions<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://arxiv.org/abs/2503.07928" target="_blank" rel="noopener">McNichols, Ikram &amp; Lan, The StudyChat Dataset, LAK '26 (2026)</a> — 2,214 conversations, 16,851 utterances, 203 students, correlational<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1145/3772318.3793207" target="_blank" rel="noopener">Isa et al., CHI '26 (2026. 4.)</a> — 147 students (97 graduate students, 104 logs), correlational, voluntary participation
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>Questions alone were not enough — why ‘the insight to judge the results’ must be the pair</h2>
+    <div class="hanmadi">Prof. Cho spoke of ‘the insight to ask good questions and <em>judge the results</em>’ as a single package. What the data from undergraduate and graduate courses support goes as far as ‘questions alone are not enough’ — question skill moved together with the products, but its relation to separately measured learning (exams, recall) was weak or not detected. Whether pairing it with judgment closes that gap has not been measured by any study in this survey.</div>
+    <p class="body">A randomized experiment in an introductory programming (CS1) course at a North American public university compared four conditions for teaching prompt writing (979 participants, 431 analysed). It scored prompts on five elements (problem identification, problem context, learning approach, learner level, guardrails), and inter-rater agreement (κ: agreement corrected for chance; 1 is perfect agreement) was high, at <b>0.86</b>. Prompt skill rose in every condition. However, <b>no between-group difference in final-exam scores was detected</b> (F(3,427) = 1.29, p = .278). Meanwhile, controlling for pre-test scores, students with higher post-test prompt scores also had higher final-exam scores (regression coefficient β = 0.090, p = .003).</p>
+    <ul class="arrows">
+      <li><b>Graduate course ①</b> In a single-group study of 22 graduate students (no comparison group), the depth of the questions they put to AI <b>was related to assignment quality</b> (p = .006) <b>but no relation with immediate recall was detected</b> (p = .728).</li>
+      <li><b>Graduate course ②</b> At a university in China, 106 first-year graduate students (humanities, social sciences, business, arts, science and engineering) conversed with ChatGPT for the final assignment of a general-education course. Their 1,538 questions were sorted into six categories aligned with the revised Bloom's taxonomy (factual, explanatory, application, analysis, evaluation, exploration), with agreement between two coders of κ = 0.704. As the conversations went on, <b>the group that progressed to evaluation and exploration questions (49 students) reported higher creative-thinking engagement than the group that stayed at the application and analysis level (57 students)</b> (effect size d = 0.63). In a separate analysis dividing the same 106 students into three question-type profiles, students who mainly asked fact-checking questions scored lower on critical- and creative-thinking engagement than the other two types.</li>
+      <li>In 50 medical-education submissions, the prompt domain was scored reliably (inter-rater agreement ICC .84), but the correlation between total score and grade point average (GPA) was not significant (rank correlation ρ = .194, p = .201). There is also research showing that the higher the prompt-writing skill, the higher the quality of LLM (language models such as ChatGPT) output — several lines of evidence show that question skill goes hand in hand with <em>the products</em>.</li>
+      <li><b>How to read it</b> Prof. Cho's pairing of questions with judgment reads as a proposal aimed at this gap — the point that a good product is not the same as learning. No study has yet measured whether a step in which students judge and verify AI answers raises learning. The Practice Box's ‘one line verifying the AI answer’ is a device for trying that pairing out in class, not a prescription with confirmed effects.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — This mix includes a single group of 22, 50 submissions, and manuscripts not yet peer-reviewed. The results of the Chinese graduate study are self-report surveys (rubric scores — the scoring guide — were used only to check validity) and correlational. The CS1 β reflects a <em>correlation</em> across students — students with higher post-test prompt scores also scored higher on the final — and does not mean that prompt skill produced the grades. Whether question scores can be used for grades is judged not by causation but by this ‘moving together’ (Editor's Lens check ④), and CS1 showed a positive relation by that criterion. All four CS1 conditions taught prompt writing, so there was no comparison with a group that was not taught. A sample of 22 can easily miss even a moderate-sized relationship.</div>
+    <p class="src">
+      <span class="bdg p">[Preprint]</span>Source: <a href="https://arxiv.org/abs/2602.16033" target="_blank" rel="noopener">Xiao et al., Transforming GenAI Policy to Prompting Instruction: An RCT … in a CS1 Course, arXiv:2602.16033 (2026. 2.)</a> — 979 participants, 431 analysed, random assignment to 4 conditions<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1186/s41239-026-00617-6" target="_blank" rel="noopener">Tsiligkiris, International Journal of Educational Technology in Higher Education 23:44 (2026. 8. 26.)</a> — 22 graduate students, single group, pre/post<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1371/journal.pone.0356183" target="_blank" rel="noopener">Qu, Dai &amp; Yin, What students ask matters, PLOS ONE 21(9):e0356183 (2026. 9. 8.)</a> — 106 first-year graduate students in China, data from Jan.–June 2025, self-report<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1177/23821205261442106" target="_blank" rel="noopener">Shiukashvili et al., Journal of Medical Education and Curricular Development 13:23821205261442106 (2026. 5. 6.)</a> — 50 submissions<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1016/j.caeai.2024.100225" target="_blank" rel="noopener">Knoth et al., Computers and Education: Artificial Intelligence 6:100225 (2024)</a> — prompt skill and LLM output quality
+    </p>
+  </div>
+
+  <div class="sechead" id="sec2">&#9878; Assessment Design &#183; Selection or Growth</div>
+
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>Courses that used questions for ‘selection’ — mixed reactions, and the question of who wrote them</h2>
+    <div class="hanmadi">In university courses, putting student-generated items into grades kept item quality up, but whether those scores distinguished learning was not confirmed, and student reactions split by course. For questions written at home, it is also hard to confirm who wrote them.</div>
+    <p class="body">A 4th-year medical course at the University of Otago, Wellington campus, New Zealand (106 students, 2016) counted PeerWise — an activity in which students create and share multiple-choice items — for <b>20%</b> of the grade (half for reaching 800 points answering peers' items, half for an external quality rating of one item per module). Item quality was high: 74% (313/421) of items were at the application or analysis level. But of 62 survey respondents, <b>81% (50/62) were dissatisfied</b>, and 27% (17/62) wanted to continue. Whether the dissatisfaction was due to the scores or to the burden of writing items could not be separated. Satisfaction is not an indicator of learning (Vol. 5), but pushback of this size against a graded component raises the question of whether the design can be sustained.</p>
+    <ul class="arrows">
+      <li>A kinesiology research methods course at the University of Calgary, Canada (three semesters, 118, 111 and 111 students) made a student-generated item assignment worth 15% of the grade, scored by TAs on a 45-point rubric. Assignment averages were high, at <b>87–88%</b>, and a majority (52.6–62.3%) favoured keeping it.</li>
+      <li><b>Who wrote it?</b> University students could not distinguish LLM-assisted exam items from instructor-written items (z = 1.018, p = .309). In a randomized experiment with 258 first-year medical students at UBC, Canada, AI-generated items were about as acceptable to students as items written by senior students. However, there is not yet empirical evidence of the <em>behaviour</em> of students submitting question assignments produced by AI — there is only evidence of AI's <em>capability</em> to produce questions that good.</li>
+      <li>There is a counterexample too. In a comparison in a UK university chemistry course that deployed the same PeerWise activity either as ungraded practice (formative assessment) or as graded assessment (summative assessment), item quality was similar, and corner-cutting was actually more common in the ungraded setting (learning outcomes were not measured). Attaching scores does not necessarily make quality collapse.</li>
+      <li>There is also pooled evidence on the relation with learning. In a correlational meta-analysis of 6 studies (1,571 students) of activities in which medical students created and shared items, the correlation between item writing and exam scores was ρ = 0.21 (95% confidence interval 0.09–0.32). But the prediction interval is wide, at −0.27–0.61, so in some courses there may be no relation or even a reverse one, and it is a correlation that did not control for confounders such as prior grades.</li>
+      <li><b>Read through Prof. Cho's framework,</b> these courses put student-generated items into grades (15–20%) and thereby <em>ranked</em> students — this issue reads this as the ‘selection’ side. Item quality was maintained, but whether those scores distinguished differences in learning cannot be judged from these cases (limits of interpretation), and one course's strong pushback and the question of who wrote the items remain. The benefits of grading were not confirmed; the costs showed up only as signals.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The grading cases all involve tasks in which students create multiple-choice <em>items</em>, not scoring of free-form questions as such. The cases come from medicine, kinesiology and chemistry; we found no direct case from STEM graduate programs. In the Calgary course, the correlation between assignment scores and final grades is confounded by the release of student items before the final exam, so it is not used as evidence of a learning effect.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6103861/" target="_blank" rel="noopener">Grainger et al., BMC Medical Education 18:201 (2018)</a> — 106 4th-year medical students (2016), 62 survey respondents<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.5206/cjsotlrcacea.2024.2.16625" target="_blank" rel="noopener">Katz et al., Canadian Journal for the Scholarship of Teaching and Learning 15(2), Art. 10 (2024. 8. 31.)</a> — cited as an operational case only<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1609/aaai.v39i26.34984" target="_blank" rel="noopener">Witsken, Crk &amp; Gultepe, Proceedings of AAAI 39(26):27698–27705 (2025)</a> — instructor items vs. LLM-assisted items<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1186/s12909-026-09671-0" target="_blank" rel="noopener">Al-Najafi et al., BMC Medical Education 26:1376 (2026. 6. 17.)</a> — randomized controlled trial with 258 first-year UBC medical students, retrospectively registered<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://uhra.herts.ac.uk/handle/2299/24073" target="_blank" rel="noopener">Fergus et al., AISHE-J 13(1) (2021)</a> — formative vs. summative deployment compared<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.30476/jamp.2025.104780.2084" target="_blank" rel="noopener">Hwang R. et al., Journal of Advances in Medical Education &amp; Professionalism 13(4):259–269 (2025. 10. 1.)</a> — correlational meta-analysis, 6 studies, 1,571 students; based on the abstract
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>Even humans agreed only 51–72% of the time at first — where AI scoring fits</h2>
+    <div class="hanmadi">“AI classifies questions as well as humans do” has to be read together with “humans do not agree well with one another, either.”</div>
+    <p class="body">To measure question quality, humans must first reach the same judgments. In a study that scored cell-biology questions, <b>initial inter-rater agreement was 56–72%</b>, rising to 96–100% only after the raters discussed the criteria. Agreement between two experts classifying 207 items by Bloom's taxonomy was <b>51%</b>. Among questions from 35 statics students at two universities, agreement between instructors was about 65%, rising to about 80% when disagreements in which one instructor marked a question ‘unclassifiable’ for lack of knowledge of the other's course context were excluded — question quality can only be judged with knowledge of the context. The κ of 0.86 in item 3's CS1 study was for scoring prompts, not questions, with a structured rubric (no comparison with a no-rubric condition).</p>
+    <ul class="arrows">
+      <li>In one preprint, 11 LLMs sorted questions by <em>type</em> as consistently as humans did with one another. Across 6,113 messages students sent to a chatbot, agreement among LLMs was κ .56–.57; in a 10% sample also reviewed by three humans, human–human agreement was .47 and LLM–LLM agreement .53. Agreement between LLMs and humans was not reported separately. The authors noted that agreement does not mean accuracy.</li>
+      <li><em>Cognitive level</em> judgments are weak. In a study in which LLMs and experts judged 85 exam items, detection of negatively worded items reached κ .897, but the overall judgment of whether an item was flawed was κ .53–.55 (top two models) and cognitive-level judgment was around κ .42, while agreement on Bloom level among the experts who reviewed the same items was only Fleiss κ .117. In another study evaluating LLM-generated questions, the evaluating model (Gemini Pro) classified most of them at the application and analysis levels.</li>
+      <li>Accuracies that look high also need checking. A reanalysis found that the 94.13% accuracy in detecting flaws in 271 multiple-choice items (100 student-written, 171 from public online courses), judged as 5,149 item×criterion pairs, was almost the same as the 93.09% obtained by marking every judgment “no flaw.”</li>
+      <li><b>Gap</b> In the 2024–2026 literature we found no study in which an LLM scored the <em>quality</em> of questions students wrote freely and reported its agreement with humans (survey focused on English-language literature).</li>
+      <li><b>Where it can be used</b> ① Diagnosing the class-level distribution of question <em>type</em>s (the distribution of cognitive <em>level</em> only after the instructor has checked it, since classification tends to bunch into particular levels) ② a formative-feedback <em>draft</em> for individual students — supply the lecture context and conversation history, and pass ambiguous judgments to the instructor. <b>Where it cannot be used</b> Putting question scores assigned by AI alone into grades.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The exam-item and multiple-choice-item studies target not students' free-form questions but <em>items</em>. The 6,113-message study is a manuscript not yet peer-reviewed. Distribution-level diagnosis is less sensitive to error than individual judgments, but a bias toward particular categories carries over into the distribution as is.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2689149/" target="_blank" rel="noopener">Keeling, Polacek &amp; Ingram, CBE—Life Sciences Education 8(2):131–139 (2009)</a> — initial inter-rater agreement 56–72%<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1073/pnas.2414955121" target="_blank" rel="noopener">Borges et al., PNAS 121(49):e2414955121 (2024)</a> — Bloom classification agreement 51% (appendix)<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.18260/1-2--37649" target="_blank" rel="noopener">Goldberg, Venters &amp; Masnick, ASEE Annual Conference (2021)</a> — 35 statics students (fall 2019)<br>
+      <span class="bdg p">[Preprint]</span>Source: <a href="https://arxiv.org/abs/2602.18372" target="_blank" rel="noopener">Neagu et al., arXiv:2602.18372 (2026. 2. 20.)</a> — 6,113 messages, 11 LLMs<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13391911/" target="_blank" rel="noopener">Aydin, Coşkun &amp; Hamal, Frontiers in Medicine 13:1866674 (2026)</a> — 85 exam items, 3 experts<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://aclanthology.org/2026.aimecon-wip.58.pdf" target="_blank" rel="noopener">Moore &amp; Diana, AIME-Con 2026 Works in Progress, pp. 464–471 (2026. 10.)</a> — narrative review; the first author co-authored 5 of the 14 reviewed papers<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1007/978-3-031-64299-9_12" target="_blank" rel="noopener">Scaria et al., AIED 2024</a> — evaluation of the Bloom levels of LLM-generated questions
+    </p>
+  </div>
+
+  <div class="sechead" id="sec3">&#128736; Practical Application Box &#183; SALSA in a 10-Minute Slot</div>
+  <div class="item">
+    <h2>Prof. Cho's SALSA, starting with the last 10 minutes of class — collect questions without names and open the next class with them</h2>
+    <div class="tablewrap">
+    <table class="box practical">
+      <tr><th>When</th><th>Action</th><th>Criterion</th></tr>
+      <tr><td>Next class, once (S·A)</td><td><b>Share</b> Last 10 minutes of class (thinking 2 · writing questions 4 · converting and choosing 3 · collecting and entering 1). Show one question focus (a statement that opens up thinking) and have students first write one line of their own thinking about it — example statements: General Physics “In adiabatic compression, the gas temperature rises even though no heat is added.” / Calculus “|x| is continuous at x = 0 but not differentiable.” <b>Ask</b> Students write down every question that comes to mind, convert one closed question (one that ends in yes/no) into an open question (“Does the temperature rise?” → “Why does the temperature rise when no heat was added?” / “Is it differentiable at 0?” → “Why is it not differentiable at 0 when it doesn't break there?”), and add a one-line reason to their single most important question.<small>Four rules (condensed from the Question Formulation Technique of the US Right Question Institute; effect not verified) — write as many as possible / do not stop to answer or to judge good and bad / write them down as they come / if a statement comes to mind, rewrite it as a question. Write two stems on the board — “Why is …?” and “How are … and … different?” (item 1: 1.12 with stems provided, on researcher-made tests). Collect without names, and announce “not graded; used to prepare the next class.” With more than 100 students, collect only each student's chosen question and its one-line reason — dropped in a box by the door on the way out or, if the LMS supports anonymous surveys, entered during class.</small></td><td>Did students convert a closed question into an open one (teaching)? On which concepts or scenes did questions cluster (sticking points)? What is the <em>proportion</em> of deep-reasoning questions? — look only at the class-wide distribution; do not announce it as a target figure or use it as a score. Since students' answers reveal understanding better than their questions do (item 2), view the question distribution alongside wrong quiz answers.</td></tr>
+      <tr><td>The class after (L)</td><td><b>Listen</b> The instructor picks two or three of the questions students chose and opens the first 5 minutes of class with them. Since collection was anonymous, one-line feedback goes to the whole class, not to individuals — show representative questions and rewritten examples on a single slide. Example: “‘What is an adiabatic process?’ asks for a definition. Rewriting it as ‘How do adiabatic and isothermal compression differ?’ makes it deeper.”<small>AI is not required — stacking the slips by concept may be enough. If you do use it, use it only up to a draft classification (item 5). Example: “Below are questions students submitted without names at the end of today's class (one per line). Concepts covered today: ○○, ○○, ○○. Attach each question to one of these concepts (‘Other’ if none fits) and sort it as ‘fact-checking / cause or comparison / further inquiry’. Set ambiguous ones aside as ‘Ambiguous’. Show the number of questions per concept and, for each concept on which questions clustered, two representative questions verbatim.” Paste that day's slide titles as the concept list — questions can only be judged with knowledge of the class context (item 5). The instructor or a TA checks the ‘Ambiguous’ group and the representative questions against the originals. Remove names and student IDs before entering them.</small></td><td>Do students revise their next questions on their own?</td></tr>
+      <tr><td>Once during the semester (S·A again)</td><td><b>Share and ask again</b> Students submit via the LMS one question they put to AI + the AI's answer (only the few lines they verified) + one line of verification (is it right? what is missing?) + one question to ask again. The first box for practising what Prof. Cho called ‘the insight to judge the results’ is <em>the one-line verification</em> (item 3).<small>A condensed version of the domestic engineering course case (item 7). This semester, announce it first via an LMS notice. Do it in class or, if it is assigned as homework, give submission (completion) credit only — who wrote work done at home cannot be confirmed (item 4).</small></td><td>Does the one-line verification identify errors or gaps in the AI answer? — with more than 100 students, do not read them all; read a random sample to see the class-wide trend (score by submission only)</td></tr>
+      <tr><td>For a graduate seminar</td><td><b>Share</b> The question focus is one sentence stating the core claim of this week's paper, or one figure or table. The one line of own thinking: ‘Do I accept this claim, and why?’ <b>Ask</b> Stems: “What must be true for this conclusion to hold?” and “Does the sentence in the abstract match the table in the body?” (item 9). For the chosen question, add one line on the ‘next step’ (what would need to be read or measured to answer it). <b>Listen · Ask again</b> After the presentation, the presenter picks one question from the Q&amp;A and answers or reformulates it in the first 5 minutes of the following week.<small>With 10–30 students, the instructor reads everything without AI classification. In small groups, identities can show even when collection is anonymous, so the key is writing plus the ‘not graded’ notice rather than anonymity. Base the once-a-semester assignment on the student's research topic, with the verification line being ‘Did I check it against the original source or data?’; for research ideas they would rather not disclose, students choose the scope. The effects of these stems have not been verified.</small></td><td>Has the re-asked question been narrowed to a form that can be answered by reading or measuring?</td></tr>
+    </table>
+    </div>
+    <div class="caveat"><b>Caution</b> — SALSA is the dialogic teaching method Prof. Cho proposed, built on sustained conversation. Because many students are reluctant to speak publicly (item 7), this box is a scaled-down version that takes the first step of that conversation in writing, leaving the original spoken exchange as the next step. Carrying it into 10 minutes of undergraduate and graduate classes is this issue's proposal (effect not verified). <b>This semester, do not grade question quality as a course score</b> — it is not banned but on hold (the conditions for lifting the hold are Editor's Lens checks ②④⑤). If you do include it, apply it only to the once-a-semester named submission, as small-weight submission (completion) credit — to acknowledge participation (in the course that gave credit for submission alone, quality improved only slightly; item 1). Since generating questions takes time, and conceptual questions had to be generated to gain on conceptual items (item 1), keep it short and use it in units where conceptual understanding is the goal. Stems are not mere padding for graduate students either — even among first-year graduate students, a type dominated by fact-checking questions emerged as a separate cluster (item 3). But 1.12 is a value measured with researcher-made tests, not measured in graduate courses. This box covers two sessions per semester, nothing more — whether to continue is decided after trying it. <b>To use question or conversation records accumulated for another purpose, such as AI tutor logs, for assessment or diagnosis, notify students and obtain consent before collection</b> (item 6). For sections of more than 100 students, we propose working with CTL on setting up anonymous LMS surveys, AI classification prompts and organizing question sets (whether this will be offered is undecided; inquiries: ctl@dgist.ac.kr).</div>
+  </div>
+
+  <div class="sechead" id="sec4">&#127891; DGIST Application &#183; What It Means Here</div>
+
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>To use question records for assessment — notify before collecting</h2>
+    <div class="hanmadi">To use questions collected to support learning for another purpose, be it assessment or diagnosis, students must be notified before collection. If questions collected for ‘growth’ are later used for ‘selection’, students may come to reread that tool as a place where they are being assessed (an unverified CTL hypothesis).</div>
+    <p class="body">As tools in which student questions accumulate — AI tutors, chatbots, LMS discussion boards — multiply, so does the idea of using those records for assessment or course diagnosis. To do so, <b>announcing the purpose and obtaining consent before collection</b> comes first.</p>
+    <ul class="arrows">
+      <li>Some courses at universities abroad design the submission of conversation records as an assignment requirement from the start and announce it in advance. A philosophy professor at Eindhoven University of Technology in the Netherlands collected the full record of students' conversations with AI in the professor's own undergraduate and master's philosophy courses and scored them with a rubric (about 15 minutes per student), and Stanford University's Center for Teaching and Learning advises having students save and submit the full record of prompts and outputs.</li>
+      <li>People seek feedback more often when the other party is a computer than when it is a person (face-saving costs; two 1993 studies). In a survey of computing students (47), asking publicly in front of other students drew the fewest ‘comfortable’ responses of the five situations (46.8%, vs. 68.1% for asking ChatGPT). This suggests that questions asked of AI may be more candid than those asked in class.</li>
+      <li><b>CTL interpretation (unverified hypothesis)</b> If students know their question records will be assessed, the ‘sticking points’ those records used to reveal may blur. Notice before collection is a matter of consent procedure and, as a result, also a device that protects this signal.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The claim that question records are “more honest when not assessed” has not been confirmed with DGIST data.</div>
+    <p class="src">
+      <span class="bdg n">[Press]</span>Case: <a href="https://dailynous.com/grading-prompts-to-measure-student-learning-guest-post/" target="_blank" rel="noopener">Zednik, Grading Prompts to Measure Student Learning, Daily Nous contributed article (2025. 9. 30.)</a> — philosophy courses at Eindhoven University of Technology, scoring of conversation records<br>
+      <span class="bdg o">[Open Resource]</span>Reference: <a href="https://ctl.stanford.edu/aimes/ai-teaching-strategies" target="_blank" rel="noopener">Stanford CTL, AI Teaching Strategies (updated 2026. 9. 18.)</a><br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1016/0747-5632(93)90017-M" target="_blank" rel="noopener">Kluger &amp; Adler, Computers in Human Behavior 9(1):1–16 (1993)</a> — together with Ang et al., Information Systems Research 4(3) (1993)<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1145/3636243.3636248" target="_blank" rel="noopener">Hou et al., ACE '24, pp. 39–48 (2024)</a> — survey of 47 computing students in North America + 8 interviews
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>Where questions fit in graduate courses — students asked an AI TA more theory questions than they had asked human TAs</h2>
+    <div class="hanmadi">As a report card that ranks students, questions are blurry, but they may be usable as cues <em>for fixing the course</em> — no study has tested this directly yet. On this issue's evidence, the safest place for ‘questions’ in assessment is where students are the ones <em>being asked</em>.</div>
+    <p class="body">When an AI TA was introduced in an introductory AI programming course in KAIST's graduate school (fall 2024, 477 students; 78.9% master's, 20.6% doctoral), 3,869 Q&amp;A exchanges accumulated over one semester — more than 25 times the 144 human-TA interactions in the same course the previous year. The content of the questions differed too — <b>machine-learning theory questions rose from 8.3% to 35.0%, and project questions fell from 66.4% to 39.7%.</b> This is not a change within the same students but a comparison of two cohorts in different years with different TAs.</p>
+    <ul class="arrows">
+      <li>Which concepts questions cluster on may point to where the lectures should be redesigned — notice before collection (item 6) comes first.</li>
+      <li><b>In research supervision</b> The evidence closest in format to one-on-one supervision is not a ‘graduate’ sample but the undergraduate tutoring study in item 2. There, the number of questions correlated negatively with first-half exam scores (−.56), “yes” to “Do you understand?” was off the mark, and the most reliable cue was the quality of answers. In supervision meetings too, having students explain and looking at the quality of their answers fits this evidence better than counting questions or asking “Do you understand?” (this issue's interpretation).</li>
+      <li>Undergraduate course cases also treat questions less as scores than as <b>a process of re-asking and verifying</b>. Kwangwoon University's Engineering Thermodynamics course (spring 2026) had students first write down their own thinking → converse with AI → verify the facts → submit a final summary and a representative prompt, and switched its exams to open-book (the scoring method was not reported). The sequence resembles Prof. Cho's SALSA. But SALSA is a dialogic class held in the classroom, and the step in which students ‘ask again’ is not in the report (instead, the chatbot was reportedly designed to ask the student a question back at the end of its answers).</li>
+      <li>A survey found that Korean university students rarely ask questions in class. Of 2,019 students at 50 four-year universities (2010 survey), 22.9% said they ‘almost never’ ask and 47.4% ‘sometimes’ (press report; original not consulted; data 15 years old). In a US study of 566 students, fear of negative evaluation was highest for being called on to answer and for presenting alone. Question assessment that relies on public speaking risks measuring not question quality but <b>the disposition to speak up</b> — which is why written, anonymous channels are needed.</li>
+      <li><b>Assessment in which students are questioned</b> The University of Sydney divides assessment into a lane that secures students' own ability by controlling AI use (Lane 1) and a lane that leaves AI use open and looks at the process (Lane 2). Its Lane 1 examples are in-person oral assessments, vivas (viva voce) and in-class Q&amp;A, and it explains that an in-person oral assessment probes understanding in depth through a 15-minute conversation — here the one asking questions is the instructor. Q&amp;A after presentations in graduate paper seminars, qualifying exams and thesis defences already take this form, the same form as Vol. 4's oral check.</li>
+      <li><b>When asking questions is itself the learning goal</b> In graduate seminars and research methods courses, the ability to frame research questions may itself be the goal. In that case, the key criteria are scoring agreement and who wrote it (check ④). Small seminars can take questions in class and have them scored by someone who knows the course context (item 5), so this issue's conditions are best met there. But in courses taught by a single professor, confirming agreement between two raters is hardest, and this survey found no case reporting agreement in scoring research questions. Grade products that are already graded, such as research proposals, as they are, and confirm through post-presentation Q&amp;A whether the student framed the question.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The KAIST comparison cannot determine why theory questions increased. This issue's ‘graduate’ samples (KAIST 477, China 106, and the web programming course of 147 in which two-thirds were graduate students) are graduate students in lecture-type courses. This survey found no study directly addressing paper seminars or research supervision. Being questioned is also public speaking — the two situations that drew the most fear in the 566-student study above overlap with presenting and Q&amp;A in seminars. ‘Safest’ is relative to scoring students' questions; in oral assessment too, the disposition to speak up may be read mixed in with understanding (unverified). The domestic undergraduate case is a press report and did not measure effects.</div>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://arxiv.org/abs/2506.17363" target="_blank" rel="noopener">KAIST VTA, arXiv:2506.17363 (ACL 2025 Industry Track)</a> — graduate course, 477 students (472 consented), fall 2024; comparison across different years and cohorts<br>
+      <span class="bdg n">[Press]</span>Case: <a href="https://www.kyosu.net/news/articleView.html?idxno=209811" target="_blank" rel="noopener">Kwangwoon University, Engineering Thermodynamics, Kyosu Shinmun (Professors' Newspaper) (2026. 9. 9.)</a> — open-book switch and representative-prompt submission as reported in this article<br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://hangyo.com/mobile/article.html?no=37009" target="_blank" rel="noopener">Korean Educational Development Institute (KEDI), A Study of the Learning Processes of Korean University Students, as reported by Hankook Kyoyuk Shinmun (Korea Education Newspaper) (2011. 4. 26.)</a> — 2010 survey, original not consulted<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.1187/cbe.22-10-0195" target="_blank" rel="noopener">Busch et al., CBE—Life Sciences Education 22(3):ar31 (2023)</a> — 566 students at one US university, self-report<br>
+      <span class="bdg o">[Open Resource]</span>Reference: <a href="https://educational-innovation.sydney.edu.au/teaching@sydney/frequently-asked-questions-about-the-two-lane-approach-to-assessment-in-the-age-of-ai/" target="_blank" rel="noopener">University of Sydney, FAQ: the two-lane approach to assessment in the age of AI (updated 2026. 4. 21.)</a>
+    </p>
+  </div>
+
+  <div class="sechead" id="sec5">&#9888; Contrasting Evidence &#183; How to Read Evidence in This Field</div>
+
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>Universities, too, say they will look at the ‘process’ — but the tools for assessing questions are still missing</h2>
+    <div class="hanmadi">Korean university presidents named ‘clarifying assessment criteria’ and ‘process-oriented assessment’ as priorities for trustworthy assessment in the AI era. Questions sit at the heart of that process, but universities must still build the criteria for measuring questions themselves.</div>
+    <p class="body">In a survey the Korean Council for University Education (KCUE) put to the presidents of member universities in Jan.–Feb. 2026 (140 of 192 universities responded; response rate 72.9%), the share of universities that had adopted guidelines for generative-AI use was <b>40.0% (56 universities)</b>, and another 40.0% were considering drafting them. As priorities for raising the trustworthiness of student assessment in a generative-AI environment, <b>‘clarifying assessment criteria’ and ‘process-oriented assessment’ tied for first place</b> (weighted total of 199 points). The questionnaire's options also included verification of the writing process, such as ‘submitting learning logs, oral Q&amp;A’.</p>
+    <ul class="arrows">
+      <li>Assessment reforms at universities abroad point the same way. The University of Sydney says to look at the process in tasks that are open to AI (item 7). The revised AI Assessment Scale (AIAS), which divides generative-AI use into levels, also writes that tasks at Level 2 (AI planning) will focus on the process rather than the product (“process-focused, as opposed to output-focused tasks”).</li>
+      <li>The language of national policy is out in front. At a ministry work-report briefing on Aug. 5, 2026, the President said, “In the age of artificial intelligence (AI), what questions to ask … matters more than the ability to answer.” Yet the assessment tool in the Ministry of Education's second-half work plan, reported the same day, is a system for AI pre-scoring of essay-type and descriptive <b>answers</b> in primary and secondary schools. How to assess questions in university courses remains a matter of design by universities and instructors, not of policy.</li>
+      <li>Within that scope, <b>‘question-centred assessment’ is not the mainstream of university assessment reform — the mainstream is ‘process-oriented assessment’, and in this issue, assessments that take student-generated items or questions put to AI as their object are limited to roughly the course-level cases in items 4 and 6.</b> Prof. Cho's proposal, which names the power to ask questions as a core competency for the AI era, points precisely to this empty space.</li>
+    </ul>
+    <div class="caveat"><b>Limits of interpretation</b> — The KCUE survey consists of presidents' responses and did not measure actual course practice. The remarks at the briefing and the work plan were confirmed through press reports. The AIAS quotation was confirmed in the public manuscript version, not the journal version. The OECD Digital Education Outlook 2026 and the 2025 assessment-reform guidance from Australia's higher-education quality agency (TEQSA) are not included because we could not consult the originals.</div>
+    <p class="src">
+      <span class="bdg i">[Institutional Report]</span>Source: <a href="https://www.kcue.or.kr/_upload/news/2026/02/26/application_cd09a4df87b2b1d1f79b05e7a803d001.pdf" target="_blank" rel="noopener">Korean Council for University Education press release, results of the 2026 University Presidents Survey (I) (2026. 2. 27.)</a> — survey conducted 2026. 1. 7.–2. 6., 140/192 universities<br>
+      <span class="bdg r">[Research]</span>Source: <a href="https://doi.org/10.53761/rrm4y757" target="_blank" rel="noopener">Perkins, Roe &amp; Furze, Journal of University Teaching and Learning Practice 22(7) (2025. 12. 3.)</a> — revised AI Assessment Scale (AIAS); quotation based on the arXiv 2412.09029 manuscript<br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://view.asiae.co.kr/article/2026080516143695987" target="_blank" rel="noopener">President's remarks at a work-report briefing, Asia Economy (2026. 8. 5.)</a><br>
+      <span class="bdg n">[Press]</span>Source: <a href="https://www.mt.co.kr/policy/2026/08/05/2026080416122870996" target="_blank" rel="noopener">Report on the Ministry of Education's 2026 second-half work plan, Money Today (2026. 8. 5.)</a>
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">9</div>
+    <h2>Figures that circulate differently from the originals — what this issue corrected</h2>
+    <div class="hanmadi">Sentences often quoted in this field sometimes differ from the tables in the originals. This issue took the tables, not the abstracts, as the reference. In a graduate paper seminar, this very check — matching sentences in abstracts and press releases against the tables in the body — becomes practice in ‘the insight to judge the results’ (this issue's proposal).</div>
+    <p class="body">We record here the discrepancies found when checking the originals before publication.</p>
+    <ul class="arrows">
+      <li><b>Four corrected above</b> The abstract's ‘unrelated’ vs. the table's −.56, and the often-quoted ‘26.5 per hour’ being a value pooled with the 7th-grade sample (item 2) · 0.86 vs. 0.36 (item 1) · no difference on the final vs. an individual-level correlation (item 3).</li>
+      <li><b>KAIST AI TA</b> The press release said that “more than half” used it, but the paper says “nearly 50%” (used at least once). The paper's sentence about there being ‘no effect on grades’ is a notice concerning survey responses, not concerning use of the AI TA.</li>
+      <li><b>Not cited</b> A 2025 framework that measures question quality on six dimensions of appropriateness and effectiveness was not used, because what it evaluates are LLM-generated and dataset questions, not student questions. Figures released by an AI service company classifying university students' usage were not used, because they classify AI responses, not student questions. Studies and policies targeting primary/secondary education (classroom questioning experiments, performance-assessment guidelines, PISA) were left out of this issue because the population differs. However, the 26-study review in item 1 (mostly primary/secondary) was kept as core evidence, and the Ministry of Education's work plan in item 8 was used only for contrast.</li>
+      <li><b>Strength of the remaining evidence</b> Most 2023–2026 higher-education studies are correlational, small-sample or not yet peer-reviewed. Taken together, <b>the practice of teaching questioning is worth trying, but it is too early to judge students by question scores</b> — the same place Vol. 4 and Vol. 5 each reached on their own topics.</li>
+    </ul>
+    <p class="src">
+      <span class="bdg r">[Research]</span>Source: <a href="https://arxiv.org/abs/2506.17363" target="_blank" rel="noopener">KAIST VTA, arXiv:2506.17363 (ACL 2025 Industry Track)</a> — the rest are the sources in items 1, 2 and 3
+    </p>
+  </div>
+
+  <div class="sechead" id="sec6">&#128270; Editor's Lens &#183; What Prof. Cho Byeok's Proposal Asks of DGIST</div>
+  <div class="lensbox">
+    <h3>From selection to growth — applying Prof. Cho's principle to assessing questions</h3>
+    <p>This issue does not refute Prof. Cho's proposal. Four of the five statements do not conflict with the evidence (the effects of the judgment step and of SALSA are not yet verified), and the only place they could part ways is when ‘assessing question quality’ means a <em>course score</em> — and Prof. Cho's words confirmed in the public clips point, if anything, the other way: question quality rises on its own when it is encouraged (⑤). We also state a difference in perspective — this issue measured questions mainly as <em>a path to understanding</em>, while Prof. Cho named the power to ask questions as <em>a core competency</em>. Seen through his eyes, the weak relation with exams (item 3) may be less a refutation than a sign that current exams do not measure the power to ask.</p>
+    <p><b>Assessment that uses questions for ‘selection’</b> — ranking students by question-quality scores — is <em>put on hold</em> (completion credit only). The relation with learning is weak or mixed (items 2 and 3), even humans agreed only 51–72% before aligning their criteria (item 5), and there is no agreement study of AI scoring the quality of students' free-form questions. That said, the university evidence for the ‘growth’ side is just as thin. The reason we still put only the scores on hold is not the amount of evidence but <b>the cost of being wrong</b> — if teaching is wrong, a few minutes of class are lost; if a score is wrong, an individual student's grade is wrong.</p>
+    <p><b>Assessment that uses questions for ‘growth’</b> — teaching students how to ask and correcting their questions — is <em>recommended</em>. There is evidence that classes that taught it raised understanding (item 1: mostly primary/secondary studies; in the university CS1 study (item 3), prompt skill rose but no between-condition difference on the final was detected). The effect of question <em>feedback</em> alone has not been confirmed separately, so we keep it as one step within teaching. <b>Using questions for course diagnosis</b> lies in between — since no study has measured its effect, we recommend it, on condition of notice before collection, as <em>a hypothesis worth trying</em>. So assessing question quality should be <em>assessment for growth</em> — the same direction as what Prof. Cho said on the broadcast (⑤).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Paradox — Prof. Cho's critique cuts both ways</h3>
+    <p>Prof. Cho described modern education as “a half-baked education system that has ignored tacit knowledge, which is hard to measure, and emphasized only explicit knowledge, which is easy to grade.” <b>That critique has two edges — do not ignore what is hard to measure, and do not emphasize only what is easy to grade.</b> Erasing questions from grades and walking away runs into the first edge; scoring them with easy-to-measure markers — the number of questions, Bloom level, whether they start with ‘why’ or ‘how’ — runs into the second. Counting questions could reward the students who know the least (item 2, 27 students, first half of the semester), and counting levels could multiply questions that merely have the right form (an unverified concern). The warning that when a measure becomes a target it ceases to be a good measure (Strathern, 1997) points in the same direction as the second edge. This is why this issue puts question-quality scores on hold while keeping completion credit and feedback, and uses stems not as <em>a criterion for counting</em> but only as <em>a teaching tool</em>. Keeping the hold from hardening into neglect is the job of the spring 2027 pilot. The second paradox is in item 6 — question records may be more honest when they are not assessed (a CTL hypothesis). But there is also a counterexample, in which corner-cutting was actually more common in the ungraded deployment (item 4).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Relation to Vol. 4 and Vol. 5</h3>
+    <p>Vol. 4 asked what to count as evidence of learning in courses with AI and answered with oral checks and in-class mini-performances — the one asking the questions was the instructor. Vol. 5 said that a better product is not the same as learning having happened. Vol. 6 sees that students' questions can fall into the same trap. Question skill can be raised by teaching and, with aligned criteria, can be scored reliably, but <b>whether it carried over to performance without help must be measured separately.</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Then are we saying not to assess questions?</h3>
+    <p>No. The <em>assessment for growth</em> seen above is recommended. Assessing questions as a course score is not banned but <b>put on hold</b> — the conditions for lifting the hold are checks ②④⑤ below, and until then participation can be acknowledged with submission (completion) credit. And the safest place for ‘questions’ in assessment is <b>where students are the ones being asked</b> (item 7), because what revealed understanding most reliably was the quality of students' answers (item 2). In graduate programs, oral examinations and Vol. 4's oral check are examples; in undergraduate sections of more than 100 students, Vol. 4's in-class mini-performance is a closer fit than a 15-minute individual oral (item 7). Graduate programs already divide the two directions between them — in seminars and research supervision students ask, and in qualifying exams and thesis defences students are asked. Carrying ‘from selection to growth’ into graduate education does not mean abolishing judgments; it means placing questions on the growth side and basing judgments on students' answers. Those answers are not about ‘how much you know’ but answers that explain and judge results produced with AI (starting point ②③). An oral assessment, too, is not the blocking of AI that Prof. Cho called anachronistic, but placing one moment in which students explain in their own words inside a class that is open to AI (this issue's interpretation).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>DGIST readiness check</h3>
+    <p>① Is there a step that teaches <em>how</em> to ask (question focus, converting closed/open questions, stems, choosing priorities) — or only the demand “ask questions”? ② Are questions taken in class? — for lists written at home, who wrote them cannot be confirmed ③ Is there a written or anonymous channel besides public speaking? — so that the disposition to speak up is not disguised as a question score ④ If questions go into grades, have you confirmed that in this course those scores move together with performance without help, and that two raters scored the same set of questions independently and compared results? (If AI does the scoring, the same check applies to the AI. In courses where the ability to ask questions is itself a learning goal (item 7), scoring agreement and who wrote it, rather than the ‘moving together’ above, are the key criteria.) ⑤ If you plan to use question or conversation records for assessment or diagnosis, did you announce the purpose and obtain consent before collection?</p>
+    <p><b>Meeting ①–③ means you have got as far as teaching questioning. To use questions for grading judgments, ④ and ⑤ must be added to ②.</b> Questions used for judgments cannot be collected anonymously, so the anonymous channel in ③ is for teaching and diagnosis, and questions for judgments are collected in named written form. If you find yourself unable to decide on an item, please let the Center for Teaching &amp; Learning know (ctl@dgist.ac.kr).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>The decision this issue aims to change</h3>
+    <p><b>Decision</b> From the spring 2027 semester, will CTL support aligning scoring criteria and checking agreement for undergraduate and graduate courses that intend to include student questions as a graded component, or stay with supporting teaching, formative feedback and course diagnosis? And, as a precondition, will CTL make a notice-and-consent text on ‘the purpose of using question records’ standard in the AI-tool-based courses it advises on?<br>
+    <b>Owner</b> DGIST Center for Teaching &amp; Learning (notice-and-consent text and support policy). Whether questions count toward grades is up to each course instructor.<br>
+    <b>Decided when</b> Before spring 2027 operations begin (whether notice and consent are included) / after the end of the spring 2027 semester — judged on two criteria in pilot courses (volunteer courses only) that obtained notice and consent before collection and took questions in named written form: ① Is LLM–instructor agreement κ 0.7 or higher, and not lower than the agreement between two calibrated instructors independently scoring the same 100 student questions? ② Do question scores move together with performance on check items without help, even after controlling for prior level (the item 3 CS1 approach)? We propose a division of labour in which CTL organizes question sets, drafts scoring criteria and computes agreement, and instructors do the scoring.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>Remaining uncertainties</h3>
+    <p>① This survey found no randomized experiment that taught question generation in STEM at undergraduate or graduate level — we do not know whether the effects in item 1 transfer to DGIST's curriculum. ② No experiment has directly tested whether scoring questions raises learning, or whether question feedback alone has an effect. ③ A survey focused on English-language literature found no study of LLM scoring agreement on the quality of students' free-form questions — which does not prove that none exists. ④ The data on Korean university students' reluctance to ask questions come from a 2010 survey (press report), and we do not know whether they fit DGIST students today. ⑤ There is no behavioural evidence that students have AI do their question assignments — only evidence of capability. ⑥ Prof. Cho's remarks were confirmed from the auto-generated subtitles of three official KBS YouTube clips (about 35 minutes) — not the whole broadcast, so the possibility remains that he spoke of ‘assessment’ in parts not included in the clips. Carrying proposals made in the context of primary/secondary schooling and parenting over to undergraduate and graduate education is this issue's interpretation. ⑦ “Question records are more honest when not assessed” and “class-level question distributions serve as cues for improving the course” are CTL hypotheses, not validated measures.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ The Editor's Lens is DGIST CTL's editorial opinion, interpreting verified sources and open practical resources through educational-theory frameworks, and may differ from the views of the original authors.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL AI in Teaching Trend Report · Vol. 1, No. 6 (Oct. 2026)</b><br>
+  Inquiries: Center for Teaching &amp; Learning (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | Topic: Assessing the Power to Ask — For Growth, Not Selection<br>
+  References: AERJ · Review of Educational Research · Learning and Individual Differences · CBE—Life Sciences Education · Learning and Instruction · J. Educational Psychology · Applied Cognitive Psychology · PLOS ONE · BMC Medical Education · CJSoTL · AAAI · PNAS · Computers and Education: AI · IJETHE · JUTLP · CHI · LAK · ASEE · AIED · Frontiers in Medicine · J Adv Med Educ Prof · arXiv · Korean Council for University Education · press reports<br><br>
+  This report reflects the independent judgment of DGIST CTL and receives no external sponsorship.<br>
+  Its contents represent the views of the original authors and may differ from the official position of DGIST CTL. Please cite the original sources when quoting.<br><br>
+  <a href="../">← All issues</a>
+</div>
+
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (Apr. 2026)', 'What Global Universities Are Doing Right Now'],
+    [2, 'Vol. 1, No. 2 (May 2026)', 'Automating Course Materials with AI Pipelines'],
+    [3, 'Vol. 1, No. 3 (Jun. 2026)', "How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal"],
+    [4, 'Vol. 1, No. 4 (Jul. 2026)', 'Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning'],
+    [5, 'Vol. 1, No. 5 (Sep. 2026)', 'A Semester With the AI Tutor On — What Remains as Learning'],
+    [6, 'Vol. 1, No. 6 (Oct. 2026)', 'Assessing the Power to Ask — For Growth, Not Selection']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST Center for Teaching & Learning. (' + year + '). ' + title + '. AI in Teaching Trend Report, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = 'Copied'; setTimeout(function () { cb.textContent = 'Copy citation'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = 'References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = 'Other issues';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = 'References'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>
