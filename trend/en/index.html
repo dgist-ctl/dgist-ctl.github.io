@@ -4,110 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI in Teaching Trend Report</title>
+<meta name="description" content="A periodical from the DGIST Center for Teaching &amp; Learning covering AI-in-teaching research for higher education, edited to journal standards">
+<meta name="theme-color" content="#ffffff">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
-    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
-    --serif: "Noto Serif KR", Georgia, "Times New Roman", serif;
-  }
-  body {
-    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--page); color: var(--ink); line-height: 1.7;
-  }
-  .jband { background: var(--accent); height: 6px; }
-  .langbar { max-width: 760px; margin: 0 auto; padding: 10px 20px 0; display: flex; justify-content: flex-end; gap: 6px; font-size: 12.5px; }
-  .langbar a { font-weight: 700; color: var(--accent2); text-decoration: none; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; }
-  .langbar span { font-weight: 800; color: var(--accent); padding: 4px 12px; border: 1px solid var(--accent); border-radius: 999px; }
-  .mast { background: var(--bg); border-bottom: 1px solid var(--line); }
-  .mast .inner { max-width: 760px; margin: 0 auto; padding: 44px 20px 30px; text-align: center; }
-  .mast .pub { font-size: 12px; letter-spacing: 2.5px; color: var(--accent2); font-weight: 700; margin-bottom: 12px; }
-  .mast h1 { font-family: var(--serif); font-size: clamp(26px, 4.6vw, 40px); font-weight: 900; color: var(--accent); line-height: 1.3; }
-  .mast .sub { font-size: 13px; color: var(--muted); margin-top: 10px; }
-
-  .container { max-width: 760px; margin: 0 auto; padding: 36px 20px 64px; }
-  .sechead {
-    font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--accent);
-    border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin: 34px 0 18px;
-  }
-  a.issue, div.issue {
-    display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 12px;
-    padding: 22px 26px; margin-bottom: 14px; text-decoration: none; color: var(--ink);
-    transition: box-shadow 0.15s ease, transform 0.15s ease;
-  }
-  a.issue:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,45,114,0.12); }
-  .issue .vol { font-size: 12px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; margin-bottom: 6px; }
-  .issue .title { font-family: var(--serif); font-size: clamp(16px, 2.4vw, 20px); font-weight: 700; line-height: 1.4; color: var(--ink); }
-  .issue .links { margin-top: 10px; font-size: 12px; color: var(--muted); }
-  .issue .links span, .issue .links a { color: var(--accent2); font-weight: 700; }
-  div.issue.pending { border-style: dashed; }
-  .cur-tag { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; background: var(--accent); border-radius: 3px; padding: 2px 9px; margin-bottom: 10px; letter-spacing: 1px; }
-  .cur-tag.soft { background: var(--accent-soft); color: var(--accent); }
-  .foot { margin-top: 44px; text-align: center; font-size: 12px; color: var(--muted); line-height: 2; }
-  .foot a { color: var(--accent2); }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="../assets/journal.css">
+<link rel="stylesheet" href="../assets/home.css">
 </head>
-<body>
+<body class="home">
+<a class="skip" href="#main">Skip to content</a>
 <div class="jband"></div>
-<div class="langbar">
-  <a href="../">국문</a>
-  <span>English</span>
-</div>
-<div class="mast">
-  <div class="inner">
-    <div class="pub">DGIST CENTER FOR TEACHING &amp; LEARNING</div>
+<header class="h-top">
+  <div class="wrap">
+    <div class="h-pub"><b>DGIST</b> <span lang="en">Center for Teaching &amp; Learning</span></div>
+    <nav class="h-lang" aria-label="Language"><span aria-current="page">English</span><a href="../" lang="ko">국문</a></nav>
+  </div>
+</header>
+<div class="h-mast">
+  <div class="wrap">
     <h1>AI in Teaching Trend Report</h1>
-    <p class="sub">A periodical from the DGIST Center for Teaching &amp; Learning covering AI-in-teaching research for higher education, edited to journal standards</p>
+    <p>A periodical from the DGIST Center for Teaching &amp; Learning covering AI-in-teaching research for higher education, edited to journal standards</p>
   </div>
 </div>
+<main id="main" class="wrap">
+  <section class="cover" aria-labelledby="cur-title">
+    <div class="cover-no" aria-hidden="true">5</div>
+    <div class="cover-body">
+      <div class="cover-eyebrow">Current issue <span>Vol. 1, No. 5 · Sep. 2026</span></div>
+      <h2 id="cur-title"><a href="./vol5/">A Semester With the AI Tutor On — What Remains as Learning</a></h2>
+      <p class="cover-lede">Guardrails hold the floor; they do not raise the ceiling. What five randomized experiments and CTL&#x27;s own check confirmed.</p>
+      <a class="cover-cta" href="./vol5/">Read the issue <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="cover-toc">
+      <h3>In this issue</h3>
+      <ol><li><span class="r">I</span>Problem &amp; Evidence (1–3)</li><li><span class="r">II</span>Principles &amp; Design (4–5)</li><li><span class="r">III</span>Practice Box</li><li><span class="r">IV</span>DGIST Application (6–7)</li><li><span class="r">V</span>Contrasting Evidence (8–9)</li><li><span class="r">VI</span>Editor&#x27;s Lens</li></ol>
+    </div>
+  </section>
 
-<div class="container">
+  <section class="arch" aria-labelledby="arch-h">
+    <h2 id="arch-h" class="h-sec">Archive</h2>
+    <ol class="arch-list">
+      <li><a href="./vol4/"><span class="no" aria-hidden="true">4</span><span class="when">No. 4 · Jul. 2026</span><span class="what"><span class="t">Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning</span><span class="lede">The central question of assessment in the AI era is not &quot;Did the student use AI?&quot; but &quot;Does this submission demonstrate the student&#x27;s learning?&quot;</span></span><span class="go" aria-hidden="true">→</span></a></li>
+      <li><a href="./vol3/"><span class="no" aria-hidden="true">3</span><span class="when">No. 3 · Jun. 2026</span><span class="what"><span class="t">How an AI Tutor Was Designed: Dissecting Harvard&#x27;s PS2 Pal</span><span class="lede">What matters is not the result itself, but the design that produced it — one study dissected from five angles, down to the full system prompt.</span></span><span class="go" aria-hidden="true">→</span></a></li>
+      <li><a href="./vol2/"><span class="no" aria-hidden="true">2</span><span class="when">No. 2 · May 2026</span><span class="what"><span class="t">Automating Course Materials with AI Pipelines</span><span class="lede">This issue is an in-depth analysis of a single in-house DGIST case — notes → slides → assignments as one pipeline.</span></span><span class="go" aria-hidden="true">→</span></a></li>
+      <li><a href="./vol1/"><span class="no" aria-hidden="true">1</span><span class="when">No. 1 · Apr. 2026<em>Inaugural issue</em></span><span class="what"><span class="t">What Global Universities Are Doing Right Now</span></span><span class="go" aria-hidden="true">→</span></a></li>
+    </ol>
+  </section>
 
-  <div class="sechead">Current Issue</div>
-  <a class="issue current" href="./vol5/">
-    <div class="cur-tag">CURRENT</div>
-    <div class="vol">Vol. 1, No. 5 (Sep. 2026)</div>
-    <div class="title">A Semester With the AI Tutor On — What Remains as Learning</div>
-    <div class="links">Guardrails hold the floor; they do not raise the ceiling. · <span>Read →</span></div>
-  </a>
-
-  <div class="sechead">Archive</div>
-  <a class="issue" href="./vol4/">
-    <div class="vol">Vol. 1, No. 4 (Jul. 2026)</div>
-    <div class="title">Assessment Reform in the AI Era: From Detecting AI to Designing for Evidence of Learning</div>
-    <div class="links"><span>Read →</span></div>
-  </a>
-  <a class="issue" href="./vol3/">
-    <div class="vol">Vol. 1, No. 3 (Jun. 2026)</div>
-    <div class="title">How an AI Tutor Was Designed: Dissecting Harvard's PS2 Pal</div>
-    <div class="links"><span>Read →</span></div>
-  </a>
-  <a class="issue" href="./vol2/">
-    <div class="vol">Vol. 1, No. 2 (May 2026)</div>
-    <div class="title">Automating Course Materials with AI Pipelines</div>
-    <div class="links"><span>Read →</span></div>
-  </a>
-  <a class="issue" href="./vol1/">
-    <div class="vol">Vol. 1, No. 1 (Apr. 2026) · Inaugural issue</div>
-    <div class="title">What Global Universities Are Doing Right Now</div>
-    <div class="links"><span>Read →</span></div>
-  </a>
-
-  <div class="sechead">About</div>
-  <p style="font-size:14px; color:var(--sub); line-height:1.75; margin-bottom:14px;">
-    Published quarterly by the DGIST Center for Teaching &amp; Learning. Each issue covers AI-in-teaching material for higher education
-    published within the previous 12 months, includes only sources whose originals can be verified, and labels every source by type
-    ([Research] &gt; [Preprint] &gt; [Institutional Report] &gt; [Open Resource]). All sources are checked against the originals before
-    publication (bibliographic details, document type, data-collection period, retractions and corrections).
-  </p>
-  <p class="foot">
-    This report is prepared independently by DGIST CTL and receives no external sponsorship.<br>
-    Views are those of the original authors and may differ from the official position of DGIST CTL. Please cite the original sources.<br>
-    Contact: <a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>
-  </p>
-</div>
+  <section class="about" aria-labelledby="about-h">
+    <h2 id="about-h" class="h-sec">Editorial principles</h2>
+    <div class="pr"><div><h3>Inclusion</h3><p>Each issue covers AI-in-teaching material for higher education published within the previous 12 months, and includes only sources whose originals can be verified.</p></div><div><h3>Evidence labels</h3><p>Every source is labelled by type — [Research] &gt; [Preprint] &gt; [Institutional Report] &gt; [Open Resource]. All sources are checked against the originals before publication (bibliographic details, document type, data-collection period, retractions and corrections).</p></div><div><h3>Independence</h3><p>Prepared independently by DGIST CTL with no external sponsorship. Views are those of the original authors and may differ from the official position of DGIST CTL. Please cite the original sources.</p></div></div>
+  </section>
+</main>
+<footer class="h-foot">
+  <div class="wrap">DGIST Center for Teaching &amp; Learning (CTL) · Contact <a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a></div>
+</footer>
 </body>
 </html>

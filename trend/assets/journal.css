@@ -1,0 +1,194 @@
+/* AI 활용 교수법 트렌드 리포트 — 공통 저널 레이어 (2026-10-22)
+   독자 = 교수. 원칙: 화려함 대신 학술지의 절제 — 읽기 쉬운 본문, 근거가 먼저 보이는 구조, 인용·인쇄 편의. */
+:root {
+  --ink: #141b2d; --ink2: #2e3850; --sub: #4f5b72; --muted: #75809a;
+  --accent: #002d72; --accent2: #1e4fa0; --accent-soft: #e6edf8;
+  --rule: #dde3ec; --hair: #edf0f5; --fog: #f5f7fa; --page: #ffffff; --bg: #ffffff;
+  --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  --latin: "Source Serif 4", "Noto Serif KR", Georgia, serif;
+}
+html { -webkit-text-size-adjust: 100%; }
+body { background: #fff; color: var(--ink); font-feature-settings: "tnum" 1; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; }
+::selection { background: #cfdcf2; color: var(--ink); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent2); outline-offset: 3px; border-radius: 2px; }
+.skip { position: absolute; left: 12px; top: -48px; z-index: 100; background: var(--accent); color: #fff; padding: 8px 14px; border-radius: 4px; font-size: 13px; font-weight: 700; text-decoration: none; }
+.skip:focus { top: 10px; }
+
+/* ── 상단 띠·마스트헤드 ── */
+.jband { height: 3px; background: var(--accent); }
+.masthead { border-bottom: 1px solid var(--hair); background: rgba(255,255,255,.94); }
+.masthead .brand { font-weight: 700; letter-spacing: .02em; color: var(--ink); font-size: 12.5px; }
+.masthead .brand b, .masthead .brand strong { color: var(--accent); }
+
+/* ── 기사 머리 ── */
+.hero { border-bottom: 1px solid var(--rule); background: #fff; }
+.hero .inner { padding-top: 64px; padding-bottom: 40px; }
+.hero .arttype {
+  border: 0; padding: 0; margin-bottom: 22px; border-radius: 0;
+  font-size: 12px; letter-spacing: .14em; color: var(--accent); font-weight: 700;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero .arttype::before { content: ""; width: 28px; height: 2px; background: var(--accent); }
+.hero h1 {
+  font-weight: 700; font-size: clamp(28px, 4.2vw, 46px); line-height: 1.34;
+  letter-spacing: -.012em; color: var(--ink); text-wrap: balance; max-width: 880px;
+}
+.hero .lede {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(16px, 1.7vw, 19px);
+  line-height: 1.75; color: var(--ink2); max-width: 720px; text-wrap: pretty;
+}
+.hero .meta { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--hair); color: var(--muted); }
+.hero .meta b { color: var(--ink2); }
+
+/* ── 섹션 머리: 번호(로마자) · 국문 제목 · 영문 부제 ── */
+.sechead {
+  font-family: var(--serif); letter-spacing: 0; text-transform: none;
+  color: var(--ink); font-size: 21px; font-weight: 700; line-height: 1.45;
+  border: 0; border-top: 1px solid var(--ink); padding: 18px 0 0; margin-top: 72px; margin-bottom: 26px;
+  display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: baseline;
+  background: none;
+}
+.sechead .sh-n { font-family: var(--latin); font-size: 15px; font-weight: 600; color: var(--accent); min-width: 22px; }
+.sechead .sh-k { grid-column: 2; }
+.sechead .sh-e { grid-column: 2; font-family: var(--latin); font-style: italic; font-weight: 400; font-size: 15px; color: var(--muted); margin-top: 2px; }
+.sechead.plain { grid-template-columns: 1fr; }
+.sechead.plain .sh-k, .sechead.plain .sh-e { grid-column: 1; }
+.sechead.minor { font-size: 17px; border-top-color: var(--rule); margin-top: 48px; }
+
+/* ── 항목 번호(여백 명조 숫자) ── */
+.item .no { font-family: var(--latin); font-weight: 600; color: var(--accent); letter-spacing: -.02em; }
+.item h2 { font-weight: 700; color: var(--ink); letter-spacing: -.008em; text-wrap: balance; line-height: 1.45; }
+
+/* ── 본문 ── */
+.item p.body, .lensbox p { color: var(--ink); }
+.item p.body b, ul.arrows b, .summary b { color: var(--ink); font-weight: 700; background: linear-gradient(transparent 62%, #e3ebf8 62%); }
+ul.arrows li { color: var(--ink2); border-bottom-color: var(--hair); }
+ul.arrows li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); top: 21px; left: 6px; }
+
+/* 한마디 = 이 항목의 결론 문장 */
+.hanmadi {
+  background: none; border-left: 2px solid var(--accent); border-radius: 0;
+  padding: 2px 0 2px 20px; margin: 4px 0 24px;
+  font-family: var(--serif); font-weight: 600; font-size: 17.5px; line-height: 1.72; color: var(--accent);
+}
+.hanmadi::before {
+  font-family: "Pretendard", sans-serif; letter-spacing: .04em; font-size: 11.5px; font-weight: 700;
+  opacity: 1; color: var(--muted); margin-bottom: 6px;
+}
+
+.rail .rlabel { letter-spacing: .04em; color: var(--ink2); font-size: 11.5px; }
+.rail nav a.on { color: var(--accent); }
+
+@media (max-width: 1079px) {
+  .sechead { margin-top: 56px; font-size: 19px; }
+  .hero .inner { padding-top: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* ===== 3회차: 본문 구성 요소 ===== */
+.hero .meta { display: block; font-size: 13px; line-height: 1.9; }
+
+/* 편집 방침 — 접힌 상태로 두 줄, 펼치면 전문 */
+.policy {
+  background: var(--fog); border: 0; border-left: 2px solid var(--rule); border-radius: 0;
+  padding: 14px 18px; font-size: 13px; line-height: 1.85; color: var(--sub);
+}
+.policy.fold { max-height: 4.4em; overflow: hidden; position: relative; padding-bottom: 0; }
+.policy.fold::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2.2em; background: linear-gradient(rgba(245,247,250,0), var(--fog)); }
+.policy-toggle {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 32px; margin: 6px 0 0; padding: 0 2px;
+  background: none; border: 0; font: inherit; font-size: 12.5px; font-weight: 700; color: var(--accent2); cursor: pointer;
+}
+.policy-toggle:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* 30초 요약: 형광 대신 굵기만 */
+.summary b { background: none; color: var(--accent); }
+.summary .itm { border-bottom-color: var(--hair); }
+.summary .itm::before { font-family: var(--latin); font-weight: 600; font-size: 14px; background: none; color: var(--accent); border: 1px solid var(--accent); }
+
+/* 해석 한계 — 경고가 아니라 저자 주(註) */
+.caveat {
+  background: #fbfaf6; border: 0; border-left: 2px solid #b08a3e; border-radius: 0;
+  padding: 12px 18px; color: #5b4a26; font-size: 14px; line-height: 1.8;
+}
+.caveat b { color: #7a5a17; }
+
+/* 출처 줄 */
+.src { font-size: 12.5px; line-height: 1.8; color: var(--muted); border-top: 1px solid var(--hair); padding-top: 10px; margin-top: 4px; }
+.src a, .lensbox a, p.body a, ul.arrows a, .trigger .src a { color: var(--ink2); text-decoration: underline; text-decoration-style: solid; text-decoration-color: #b9c6db; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.src a:hover, .lensbox a:hover, p.body a:hover, ul.arrows a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.bdg { border-radius: 2px; letter-spacing: 0; font-weight: 700; }
+
+/* 편집자 렌즈·출발점 상자: 상자 대신 괘선 */
+.lensbox { background: none; border: 0; border-top: 1px solid var(--rule); border-radius: 0; padding: 22px 0 6px; }
+.lensbox h3 { color: var(--ink); font-size: 18px; }
+.lensbox b { color: var(--ink); }
+.trigger { background: #fbfaf6; border: 0; border-left: 2px solid #b08a3e; border-radius: 0; padding: 22px 26px; }
+.trigger h3 { color: #5b4a26; }
+.trigger b { color: #5b4a26; }
+.item em, .lensbox em, .summary em, .trigger em, .caveat em { text-decoration-color: #b9c6db; }
+
+/* 표 */
+table.box { border-radius: 0; border: 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--ink); }
+table.box th { background: none; color: var(--ink); border-bottom: 1px solid var(--ink); font-weight: 700; }
+table.box td { border-top-color: var(--hair); }
+table.box td:first-child { color: var(--ink); }
+
+/* 핵심 지표 카드(1호 등) */
+.kcard { border-radius: 2px; box-shadow: none; border-color: var(--rule); }
+
+/* 말미: 참고문헌·다른 호 */
+ol.refs li { border-bottom-color: var(--hair); font-size: 13.5px; }
+ol.refs li::before { font-family: var(--latin); font-weight: 600; font-size: 13px; }
+ol.refs li a { color: var(--ink2); text-decoration: none; }
+ol.refs li a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.issues { display: block; border-top: 0; }
+.issues a {
+  display: grid; grid-template-columns: 170px 1fr 20px; column-gap: 20px; align-items: baseline;
+  border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding: 16px 0; background: none;
+}
+.issues a::after { content: "→"; color: var(--muted); grid-column: 3; grid-row: 1; transition: transform .15s ease; }
+.issues a:hover::after { transform: translateX(3px); color: var(--accent); }
+.issues a:hover .t { color: var(--accent); }
+.issues .v { color: var(--muted); font-weight: 500; font-size: 12.5px; letter-spacing: 0; }
+.issues .t { margin: 0; font-size: 16px; }
+
+/* 기사 끝 판권 */
+.footer {
+  background: var(--fog); color: var(--sub); border-top: 1px solid var(--rule);
+  font-size: 12.5px; line-height: 1.9; padding: 36px 20px 44px;
+}
+.footer b { color: var(--ink); }
+.footer a { color: var(--accent2); }
+
+@media (max-width: 640px) {
+  .issues a { grid-template-columns: 1fr 16px; }
+  .issues .v { grid-column: 1; }
+  .issues .t { grid-column: 1; }
+  .issues a::after { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .trigger { padding: 16px 16px; }
+}
+@media print {
+  .policy.fold { max-height: none; } .policy.fold::after, .policy-toggle { display: none; }
+  .footer { background: none; }
+}
+.article .policy:has(+ .policy-toggle) { margin-bottom: 0; }
+.policy-toggle { margin-bottom: 8px; }
+
+/* ===== 4회차: 교수 독자 편의 — 항목 링크·인쇄 ===== */
+.item h2 { scroll-margin-top: 72px; }
+.item { scroll-margin-top: 72px; }
+.item .anchor {
+  margin-left: 8px; font-family: "Pretendard", sans-serif; font-size: 12.5px; font-weight: 600; color: var(--muted);
+  text-decoration: none; opacity: 0; transition: opacity .15s ease; vertical-align: middle; white-space: nowrap;
+  border: 1px solid var(--rule); border-radius: 3px; padding: 2px 7px; background: #fff; cursor: pointer;
+}
+.item:hover .anchor, .item .anchor:focus-visible { opacity: 1; }
+.item .anchor:hover { color: var(--accent); border-color: var(--accent); }
+@media (hover: none) { .item .anchor { display: none; } }
+.rail .tools { display: flex; gap: 6px; flex-wrap: wrap; }
+.rail .tools button { margin-top: 8px; }
+@media print { .item .anchor, .rail .tools { display: none !important; } .sechead { break-after: avoid; } .item h2 { break-after: avoid; } }
+@page { margin: 18mm 16mm; }
+@media print { .hero .inner { padding-top: 0; } .sechead { margin-top: 36px; } }
+@media (max-width: 640px) { .hanmadi { font-size: 16px; padding-left: 16px; } .hero .lede { font-size: 16px; } }
