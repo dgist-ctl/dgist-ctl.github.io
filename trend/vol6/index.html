@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>질문하는 힘을 평가한다는 것 — 선발이 아니라 성장의 평가로 (Vol. 1, No. 6)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #ffffff; --page: #fafbfc; --ink: #1a1a2e; --sub: #4a5568; --muted: #718096;
+    --accent: #002D72; --accent2: #1a4a9b; --accent-soft: #D8E4F4; --line: #dfe5ee;
+    --warn: #7d4e00; --warn-bg: #fff3cd;
+    --good: #2d6a4f; --good-bg: #d8f3dc;
+    --serif: "Noto Serif KR", "Batang", "Nanum Myeongjo", serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
+    background: var(--page); color: var(--ink); word-break: keep-all;
+    line-height: 1.85;
+  }
+
+  /* 상단 마스트헤드 */
+  .masthead {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.96); backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .inner {
+    max-width: 900px; margin: 0 auto; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .masthead .brand { font-size: 12.5px; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
+  .masthead .brand small { font-weight: 600; color: var(--muted); letter-spacing: 0; margin-left: 8px; }
+
+  /* 저널 기사 헤더 */
+  .jband { background: var(--accent); height: 6px; }
+  .hero { background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hero .inner { max-width: 760px; margin: 0 auto; padding: 48px 20px 36px; }
+  .hero .arttype {
+    display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 2px;
+    color: var(--accent2); border: 1px solid var(--accent2); border-radius: 3px;
+    padding: 3px 10px; margin-bottom: 18px; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(26px, 4.6vw, 42px); font-weight: 900;
+    line-height: 1.42; margin-bottom: 16px; color: var(--ink);
+  }
+  .hero .lede { font-size: clamp(14px, 1.8vw, 17px); line-height: 1.8; color: var(--sub); max-width: 640px; }
+  .hero .meta {
+    margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted); line-height: 1.9;
+  }
+  .hero .meta b { color: var(--accent); }
+
+  /* 본문 컨테이너 */
+  .paper { background: var(--bg); }
+  .article { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* 인페이지 내비 */
+  .toc {
+    display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 10px;
+  }
+  .toc a {
+    font-size: 12.5px; font-weight: 700; color: var(--accent2);
+    background: var(--accent-soft); border-radius: 999px; padding: 6px 13px; text-decoration: none;
+  }
+
+  .policy {
+    background: #fafafa; border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 18px; font-size: 12.5px; color: var(--sub); line-height: 1.9; margin: 28px 0;
+  }
+  .policy b { color: var(--accent); }
+
+  /* 섹션 구분자 */
+  .sechead {
+    font-family: var(--serif);
+    margin: 64px 0 8px; padding-bottom: 10px; border-bottom: 2px solid var(--accent);
+    font-size: 15px; font-weight: 700; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* 30초 요약 */
+  .summary { counter-reset: sm; margin: 20px 0 8px; }
+  .summary .itm {
+    display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #eef1f6;
+    font-size: 15px; line-height: 1.8;
+  }
+  .summary .itm::before {
+    counter-increment: sm; content: counter(sm);
+    flex: 0 0 auto; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; margin-top: 4px;
+  }
+  .summary b { color: var(--accent); }
+
+  /* 아이템 기사 */
+  .item { margin: 44px 0 0; }
+  .item .no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .item h2 { font-family: var(--serif); font-size: clamp(19px, 2.8vw, 25px); font-weight: 700; line-height: 1.5; margin-bottom: 14px; }
+  .hanmadi {
+    border-left: 4px solid var(--accent); background: #f6f9fe;
+    padding: 13px 18px; border-radius: 0 10px 10px 0;
+    font-size: 15px; font-weight: 700; color: var(--accent); line-height: 1.7; margin-bottom: 18px;
+  }
+  .hanmadi::before { content: "한마디"; display: block; font-size: 10.5px; letter-spacing: 2px; opacity: 0.65; margin-bottom: 4px; }
+  .item p.body { font-size: 15.5px; margin-bottom: 16px; }
+  .item p.body b, ul.arrows b { color: var(--accent); }
+
+  ul.arrows { list-style: none; margin: 0 0 16px; }
+  ul.arrows li {
+    font-size: 14.5px; line-height: 1.8; padding: 10px 0 10px 26px;
+    position: relative; border-bottom: 1px solid #f0f3f8;
+  }
+  ul.arrows li:last-child { border-bottom: none; }
+  ul.arrows li::before { content: "►"; position: absolute; left: 2px; top: 12px; color: var(--accent2); font-size: 10px; }
+
+  .caveat {
+    background: #fbfaf3; border: 1px solid #e8e4c9; border-radius: 10px;
+    padding: 12px 17px; font-size: 13.5px; color: var(--warn); line-height: 1.75; margin-bottom: 14px;
+  }
+  .caveat b { font-weight: 800; }
+
+  .src a, .lensbox a, p.body a, ul.arrows a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .src a:hover, .lensbox a:hover { text-decoration-style: solid; }
+  .src { font-size: 12px; color: var(--muted); line-height: 1.75; padding-top: 4px; }
+  .bdg {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    font-size: 10px; font-weight: 700; margin-right: 4px; vertical-align: 1px;
+  }
+  .bdg.r { background: var(--good-bg); color: var(--good); }
+  .bdg.p { background: #fff3cd; color: var(--warn); }
+  .bdg.x { background: #fde8e8; color: #b03030; }
+  .bdg.o { background: #f1f5f9; color: #4a5568; }
+
+  table.box { border-collapse: collapse; width: 100%; margin: 18px 0 14px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  table.box th { background: var(--accent); color: #fff; font-size: 13.5px; padding: 11px 15px; text-align: center; }
+  table.box td { border-top: 1px solid var(--line); font-size: 13.5px; padding: 11px 15px; line-height: 1.75; vertical-align: middle;  text-align: center; }
+  table.box td:first-child { font-weight: 800; color: var(--accent); white-space: nowrap; }
+  table.box td small { color: var(--sub); display: block; margin-top: 6px; }
+  .tablewrap { overflow-x: auto; }
+
+  .lensbox {
+    background: #f8fafd; border: 1px solid var(--line); border-left: 5px solid var(--accent);
+    border-radius: 12px; padding: 22px 26px; margin: 20px 0;
+  }
+  .lensbox h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+  .lensbox p { font-size: 14.5px; line-height: 1.9; margin-bottom: 12px; }
+  .lensbox p:last-child { margin-bottom: 0; }
+  .lensbox b { color: var(--accent); }
+
+  .footer {
+    background: var(--accent); color: rgba(255,255,255,0.85);
+    padding: 40px 20px 48px; text-align: center; font-size: 12.5px; line-height: 2;
+  }
+  .footer b { color: #fff; }
+  .footer a { color: #cfe0f7; }
+
+  .totop {
+    position: fixed; right: 22px; bottom: 22px; z-index: 60;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 18px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; box-shadow: 0 4px 14px rgba(0,45,114,0.3);
+  }
+
+  @media (max-width: 640px) {
+    .hero .inner { padding: 52px 18px 44px; }
+    .article { padding: 32px 16px 64px; }
+  }
+</style>
+
+<style id="design-upgrade">
+  /* ===== 디자인 업그레이드 (2026-08-28) — 6개 글로벌 대학 발행물 비교 근거 ===== */
+  :root { --rail: 250px; --col: 720px; --gap: 56px; --ink2: #2b3446; --fog: #f5f7fa; --rule: #d9dee7; }
+  body { line-height: 1.78; }
+
+  /* 마스트헤드: 얇게(THE 56px·Columbia 66px 수준), 아카이브 경로 */
+  .masthead .inner { padding: 9px 20px; max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); }
+  .masthead .brand { font-size: 12px; letter-spacing: 1.5px; }
+  .masthead .brand small { display: none; }
+  .masthead .crumb { font-size: 12px; color: var(--muted); }
+  .masthead .crumb a { color: var(--accent2); text-decoration: none; font-weight: 700; }
+  .masthead .crumb a:hover { text-decoration: underline; }
+  .masthead .crumb span::before { content: "›"; margin: 0 7px; color: var(--rule); }
+
+  /* 기사 헤더 */
+  .hero .inner { max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px); padding: 44px 20px 30px; }
+  .hero h1 { max-width: 820px; letter-spacing: -0.2px; }
+  .hero .lede { max-width: 680px; font-size: 16px; }
+  .hero .meta { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12.5px; }
+  .hero .meta b { font-weight: 700; }
+
+  /* 2단 그리드: 본문 + 우측 레일 */
+  .paper .article {
+    display: grid; grid-template-columns: minmax(0, var(--col)) var(--rail);
+    column-gap: var(--gap); max-width: calc(var(--col) + var(--rail) + var(--gap) + 40px);
+    padding: 36px 20px 72px;
+  }
+  .paper .article > * { grid-column: 1; min-width: 0; }
+  .paper .article > .rail { grid-column: 2; grid-row: 1 / span 600; align-self: start; position: sticky; top: 58px; }
+  .paper .article > .toc { display: none; }
+
+  .rail { font-size: 12.5px; color: var(--sub); }
+  .rail .rlabel { font-size: 10.5px; letter-spacing: 2px; font-weight: 800; color: var(--accent); margin-bottom: 10px; }
+  .rail nav a {
+    display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--rule);
+    color: var(--sub); text-decoration: none; line-height: 1.45;
+  }
+  .rail nav a:hover { color: var(--accent); }
+  .rail nav a.on { border-left-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .rail .rbox { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .rail .legend .bdg { margin-right: 6px; }
+  .rail .legend div { margin: 5px 0; line-height: 1.5; }
+  .rail .cite { font-size: 12px; line-height: 1.6; color: var(--ink2); word-break: keep-all; }
+  .rail button.copy {
+    margin-top: 8px; font: inherit; font-size: 12px; font-weight: 700; color: var(--accent);
+    background: var(--fog); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 12px; cursor: pointer;
+  }
+  .rail button.copy:hover { background: var(--accent-soft); }
+  .rail button.copy:focus-visible, .rail nav a:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+  /* 본문 타이포 */
+  .item p.body { font-size: 16px; line-height: 1.8; }
+  ul.arrows li { font-size: 15px; line-height: 1.78; }
+  .lensbox p { font-size: 15px; line-height: 1.82; }
+  .summary .itm { font-size: 15.5px; line-height: 1.75; }
+  .hanmadi { font-size: 15.5px; }
+
+  /* 시그니처: 여백에 걸린 명조 장부 숫자 */
+  .item { position: relative; }
+  .item .no {
+    position: absolute; left: -76px; top: -6px; width: 60px; height: auto;
+    background: none; color: var(--accent); font-family: var(--serif);
+    font-size: 44px; font-weight: 900; line-height: 1; text-align: right; letter-spacing: -1px;
+  }
+  .sechead { font-size: 14px; letter-spacing: 1.5px; }
+
+  /* 말미(참고문헌·다른 호·구독) */
+  .endmatter { margin-top: 64px; }
+  .endmatter .sechead { margin-top: 44px; }
+  ol.refs { padding-left: 0; list-style: none; counter-reset: ref; }
+  ol.refs li {
+    position: relative; padding: 9px 0 9px 36px; border-bottom: 1px solid #f0f3f8;
+    font-size: 13.5px; line-height: 1.65; color: var(--ink2);
+  }
+  ol.refs li::before {
+    counter-increment: ref; content: counter(ref);
+    position: absolute; left: 0; top: 10px; font-family: var(--serif); font-weight: 700; color: var(--accent);
+  }
+  ol.refs li a { color: var(--accent2); text-decoration: underline dotted; text-underline-offset: 3px; }
+  ol.refs li small { color: var(--muted); margin-left: 6px; }
+  .issues { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .issues a {
+    display: block; padding: 14px 16px; border: 1px solid var(--rule); border-radius: 10px;
+    text-decoration: none; color: var(--ink); background: #fff;
+  }
+  .issues a:hover { border-color: var(--accent2); }
+  .issues .v { font-size: 11px; color: var(--accent2); font-weight: 700; letter-spacing: 0.5px; }
+  .issues .t { font-family: var(--serif); font-size: 14.5px; font-weight: 700; line-height: 1.5; margin-top: 3px; }
+  .subscribe {
+    margin-top: 20px; padding: 18px 22px; background: var(--fog); border: 1px solid var(--rule); border-radius: 10px;
+    font-size: 14px; line-height: 1.7; color: var(--ink2);
+  }
+  .subscribe b { color: var(--accent); }
+  .subscribe a { color: var(--accent2); font-weight: 700; }
+  .totop { display: none; }
+
+  /* 좁은 화면: 레일 접고 칩 내비 sticky */
+  @media (max-width: 1079px) {
+    .paper .article { display: block; max-width: 780px; }
+    .paper .article > .rail { display: none; }
+    .paper .article > .toc { display: flex; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; position: sticky; top: 44px; z-index: 40; background: rgba(255,255,255,0.97); padding: 8px 0; margin: 0 0 8px; border-bottom: 1px solid var(--rule); }
+    .paper .article > .toc::-webkit-scrollbar { display: none; }
+    .paper .article > .toc a { white-space: nowrap; flex: 0 0 auto; }
+    .item .no { position: static; font-size: 30px; text-align: left; width: auto; margin-bottom: 8px; display: block; }
+  }
+  @media (max-width: 640px) {
+    .issues { grid-template-columns: 1fr; }
+    .hero .meta { gap: 4px 14px; }
+    .masthead .brand { white-space: nowrap; font-size: 11px; letter-spacing: 1px; }
+    .masthead .crumb span { display: none; }
+  }
+
+  /* 인쇄: 내비·레일·CTA 숨기고 링크 URL 노출 */
+  @media print {
+    .masthead, .rail, .toc, .subscribe, .issues, .totop { display: none !important; }
+    body { background: #fff; color: #000; line-height: 1.6; }
+    .paper .article { display: block; max-width: none; padding: 0; }
+    .jband { display: none; }
+    .hero { border: 0; }
+    .footer { background: none; color: #333; padding: 12px 0; }
+    .src a::after, ol.refs a::after { content: " (" attr(href) ")"; font-size: 11px; color: #555; }
+    .item, .lensbox, .caveat, table.box { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+
+<style id="vol6-extra">
+  /* 6호 추가: 배지 2종([기관보고서]·[언론]) · 출발점 박스 · 실전 박스 표 왼쪽 정렬·모바일 쌓기 */
+  .rail .cite { overflow-wrap: anywhere; }  /* 인용문 속 긴 URL이 레일 밖으로 넘쳐 가로 스크롤을 만들던 문제 */
+  .bdg.i { background: #dbeafe; color: #1a4a9b; }
+  .bdg.n { background: #f1f5f9; color: #4a5568; }
+  .trigger {
+    background: #fffbf0; border: 1px solid #eadfc2; border-left: 5px solid #b8860b;
+    border-radius: 12px; padding: 20px 24px; margin: 30px 0 8px;
+  }
+  .trigger h3 { font-family: var(--serif); font-size: 16.5px; font-weight: 700; color: var(--warn); margin-bottom: 10px; }
+  .trigger > p:not(.src) { font-size: 15px; line-height: 1.85; margin-bottom: 12px; }
+  .trigger b { color: var(--warn); }
+  .trigger .src a { color: var(--accent2); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .item em, .lensbox em, .summary em, .trigger em, .caveat em { font-style: normal; text-decoration: underline; text-decoration-color: #9fb8dc; text-underline-offset: 3px; }
+  table.box.practical td { vertical-align: top; }
+  table.box.practical td:nth-child(2) { text-align: left; }
+  table.box.practical td:first-child { white-space: normal; min-width: 6.5em; }
+  @media (max-width: 640px) {
+    table.box.practical, table.box.practical tbody, table.box.practical tr, table.box.practical td { display: block; width: 100%; }
+    table.box.practical tr:first-child { display: none; }
+    table.box.practical tr + tr { border-top: 2px solid var(--accent); }
+    table.box.practical td { text-align: left; border-top: 1px solid var(--line); }
+    table.box.practical td:first-child { background: var(--fog); }
+    table.box.practical td:nth-child(3)::before { content: "판단 기준 — "; font-weight: 800; color: var(--accent); }
+    .trigger { padding: 16px 16px; }
+  }
+  @media print { .trigger { break-inside: avoid; } }
+</style>
+</head>
+<body data-vol="6">
+
+<div class="masthead">
+  <div class="inner">
+    <div class="brand">DGIST CTL · AI 활용 교수법 트렌드 리포트</div>
+    <div class="crumb"><a href="../">아카이브</a><span>Vol. 1, No. 6 (2026년 10월)</span></div>
+  </div>
+</div>
+
+<div class="jband"></div>
+<div class="hero">
+  <div class="inner">
+    <div class="arttype">Report · 리포트</div>
+    <h1>질문하는 힘을 평가한다는 것 — 선발이 아니라 성장의 평가로</h1>
+    <p class="lede">질문하는 법을 가르치고 고쳐 주는 ‘성장’의 평가는 하고, 질문 점수로 학생을 매기는 ‘선발’은 보류한다.</p>
+    <div class="meta">
+      <b>AI 활용 교수법 트렌드 리포트</b> · Vol. 1, No. 6 (2026년 10월)<br>
+      발행: DGIST 교수학습센터(CTL) · 문의: ctl@dgist.ac.kr
+    </div>
+  </div>
+</div>
+
+<div class="paper">
+<div class="article">
+    <aside class="rail" aria-label="기사 안내">
+      <div class="rlabel">이 글에서</div>
+      <nav id="railnav"></nav>
+      <div class="rbox">
+        <div class="rlabel">근거 등급</div>
+        <div class="legend">
+          <div><span class="bdg r">[연구]</span>동료심사 연구</div>
+          <div><span class="bdg p">[예비연구]</span>프리프린트</div>
+          <div><span class="bdg i">[기관보고서]</span>기관 발행 보고서</div>
+          <div><span class="bdg o">[공개자료]</span>실무 안내·도구</div>
+          <div><span class="bdg n">[언론]</span>사실 확인용 보도·기고</div>
+        </div>
+      </div>
+      <div class="rbox">
+        <div class="rlabel">이 글 인용하기</div>
+        <div class="cite" id="citetext"></div>
+        <button class="copy" id="copycite" type="button">인용문 복사</button>
+      </div>
+    </aside>
+
+
+  <div class="toc">
+    <a href="#sec1">&#9312; 제안을 근거로 (1&#8211;3)</a>
+    <a href="#sec2">&#9313; 평가 설계 (4&#8211;5)</a>
+    <a href="#sec3">&#9314; 실전 박스</a>
+    <a href="#sec4">&#9315; DGIST 적용 (6&#8211;7)</a>
+    <a href="#sec5">&#9316; 대조 증거 (8&#8211;9)</a>
+    <a href="#sec6">&#9317; 편집자 렌즈</a>
+  </div>
+
+  <div class="policy">
+    <b>편집 방침</b> 고등교육 현장 적용 가능성 · 원문 확인 가능 출처만 수록 · 발행 전 모든 출처 원문 대조(서지·문헌유형·조사시점·철회·정오표 확인) · 출처 유형 표기: <span class="bdg r">[연구]</span> <span class="bdg p">[예비연구]</span> <span class="bdg i">[기관보고서]</span> <span class="bdg o">[공개자료]</span> <span class="bdg n">[언론]</span> ([기관보고서]=기관·협의체가 낸 보고서·조사 결과로 동료심사 아님 · [공개자료]=기관이 공개한 실무 안내로 효과 검증 연구가 아님 · [언론]=사실 확인용 보도·기고이며 효과 근거가 아님) · 근거 강도는 [연구] &gt; [예비연구] &gt; [기관보고서] &gt; [공개자료]·[언론] 순으로 읽으십시오 · 상관연구는 인과로 쓰지 않았습니다 · 이번 호는 대학·대학원 수업을 대상으로 하며, 주제 특성상 1993·1994·1996·2009년 고전 연구를 포함해 각 항목에 게재 시점을 밝혔습니다 · 본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.
+  </div>
+
+  <div class="sechead">⏱ 30초 요약 — 바쁘면 여기까지만</div>
+  <div class="summary">
+    <div class="itm"><span><b>조벽 고려대 석좌교수는 AI 시대 핵심 역량으로 ‘질문하는 힘’을 꼽고, 1등을 가려내는 ‘선발’에서 아이마다 다른 가능성을 키우는 ‘성장’의 교육으로 전환하자고 했다</b>(KBS 1TV, 10. 11.). 질문의 질에 대해서는 학생 말을 경청하고 박수쳐 주면 “질문의 질도 저절로 올라가게 되어 있다”고 했다(공식 클립 자막 기준) — 매기기보다 키우는 쪽의 말이다. 이 호가 <b>대학·대학원 수업</b>의 근거로 따져 본 판단은 이렇다 — <b>질문하는 법을 가르치고 고쳐 주는 ‘성장’의 평가는 하고, 질문 점수로 학생을 매기는 ‘선발’은 보류한다.</b></span></div>
+    <div class="itm"><span><b>질문하는 법을 가르치면 이해가 높아졌다.</b> 질문 생성 전략을 가르친 연구 26편의 리뷰에서 이해검사 효과크기(표준편차 단위의 차이) 중앙값은 연구자가 만든 검사 0.86, 표준화 검사 0.36이었다. 대학생 대상 5편도 모두 유의했지만, 대부분은 1969–92년 초중등 독해 연구다. 써 보게 하는 것만으로는 질이 크게 오르지 않았고(제출만 하면 점수를 준 과목), 질문에 피드백만 준 효과를 따로 본 실험은 확인하지 못했다.</span></div>
+    <div class="itm"><span><b>질문 실력은 결과물과는 함께 움직였지만, 따로 잰 학습(시험·회상)과의 관계는 약하거나 검출되지 않았다</b> — 조 교수가 질문에 판단을 짝지은 까닭으로 이 호는 읽는다. 대학원생 22명 연구에서 질문의 깊이는 과제의 질과는 관련이 있었지만 즉시 회상과의 관계는 검출되지 않았다. 입문 프로그래밍 무작위 실험(431명 분석)에서는 프롬프트(AI에 넣는 지시문) 실력이 올랐지만 조건 사이 기말 차이는 검출되지 않았다. 판단 단계가 학습을 높이는지는 아직 잰 연구가 없다.</span></div>
+    <div class="itm"><span><b>다음 수업에 해 볼 것 — 수업 끝 10분, 자기 생각 한 줄과 질문을 이름 없이 적어 걷고, 다음 수업 첫 5분을 학생이 고른 질문으로 연다.</b> 조 교수의 SALSA(나누고·묻고·듣고·다시 묻기)를 대학·대학원 수업 10분으로 옮긴 이 호의 제안이다(실전 박스). 질문의 질을 성적 점수로 매기는 일은 이번 학기 보류한다(금지가 아니다). 사람끼리도 처음엔 51–72%만 일치했고 학생 질문의 질을 AI가 채점해 사람과 맞춰 본 연구도 찾지 못했는데, 점수가 틀리면 학생 한 사람의 성적이 틀리기 때문이다.</span></div>
+  </div>
+
+  <div class="trigger">
+    <h3>이번 호의 출발점 — 조벽 교수가 말한 다섯 가지</h3>
+    <p>
+      ① <b>질문하는 힘</b> — AI 시대 핵심 역량으로 인성·지혜와 함께 ‘질문하는 힘’을 꼽았다.<br>
+      ② <b>질문과 판단의 짝</b> — 지식을 쌓는 것보다 좋은 질문을 던지고 결과를 판단하는 통찰력이 중요하다.<br>
+      ③ <b>선발에서 성장으로</b> — “1등을 가려내는 ‘선발’에서 아이마다 다른 가능성을 키우는 ‘성장’의 교육으로 전환해야 한다.” 방송에서는 “그것은 선발 시스템이지 성장 시스템이 아니에요”라고 했다. 얼마나 많이 아는가보다 AI와 함께 무엇을 할 수 있는가를 가르쳐야 하며, AI 활용을 막는 교육은 시대착오적이다(보도자료). 다만 방송에서는 “아이가 어릴 때는 AI 금지시켜야” 한다며 사람과의 대화를 먼저 두었다 — 대학생에게 그대로 옮길 말은 아니다.<br>
+      ④ <b>SALSA 교육법</b> — 생각을 나누고(Share), 질문하고(Ask), 경청하고(Listen), 다시 나누고 묻는(Share and Ask again) 대화식 수업.<br>
+      ⑤ <b>질문의 질은 북돋울 때 오른다</b> — 학생 말에 경청하고 박수쳐 주면 “학생들이 점점 신이 나고 … 질문의 질도 저절로 올라가게 되어 있어요.” 방송 당시 편집자는 ‘질문의 질을 평가하자’는 취지로 들었으나, 공개 클립 3편(약 35분)의 자막에는 ‘평가’라는 단어가 없고 보도 4건에도 없다. 확인된 발언은 질문의 질을 매기는 쪽이 아니라 키우는 쪽이다.<br>
+      아울러 조 교수는 앞서 한 칼럼에서 현대 교육을 “측정하기 어려운 암묵지는 외면하고 채점이 수월한 형식지만 강조해온 반쪽짜리 교육 시스템”이라고 비판했다.<br>
+      방송의 맥락은 주로 초중등과 자녀 교육이다. <b>이 호는 이 다섯 문장을 대학·대학원 수업에 옮겨 읽고, ‘질문의 질 평가’를 ③⑤의 방향대로 ‘성장’의 평가로 읽는다</b> — 대학·대학원으로 옮긴 것은 이 호의 해석이다.
+    </p>
+    <p class="src">
+      <span class="bdg n">[언론]</span>출처: <a href="https://www.specialtimes.co.kr/news/articleView.html?idxno=472106" target="_blank" rel="noopener">KBS 1TV 〈이슈 PICK 쌤과 함께〉 299회 보도자료 기사, 스페셜타임스 (2026. 10. 8.)</a> — ①②③④의 출처. 같은 보도자료 기사 ppss·MHN 2건<br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://sports.khan.co.kr/article/202610110935003" target="_blank" rel="noopener">스포츠경향 방송 당일 기사 (2026. 10. 11.)</a> — 4건 모두 ‘평가’ 단어 없음<br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://www.youtube.com/watch?v=TMG-3DmID04" target="_blank" rel="noopener">KBS 교양 공식 유튜브, 〈이슈 픽 쌤과 함께〉 261011 방송 클립 「살사(Salsa)가 AI 시대 경쟁력을 키운다?」</a> — ⑤ 인용(0:02–0:11), 자동 자막 기준. 같은 날 클립 「입시가 최우선!」(선발·성장 7:07) · 「교육계 지각변동!」, 세 편 모두 ‘평가’ 단어 없음<br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://www.fnnews.com/news/202605181809066274" target="_blank" rel="noopener">조벽, 「AI시대, 교육방식을 확 바꾸자」, 파이낸셜뉴스 칼럼 (2026. 5. 18.)</a> — 형식지 비판 인용
+    </p>
+  </div>
+
+  <div class="sechead" id="sec1">&#128269; 제안을 근거로 &#183; Questioning Power, Read Through Evidence</div>
+
+
+  <div class="item">
+    <div class="no">1</div>
+    <h2>질문하는 법을 가르치면 이해가 높아졌다 — 다만 무엇으로 쟀느냐가 크기를 바꾼다</h2>
+    <div class="hanmadi">조 교수가 꼽은 ‘질문하는 힘’을 키우는 수업이 학습에 이롭다는 근거가 있다 — 다만 잰 것은 질문 실력이 아니라 <em>이해</em>다. 근거가 가장 두꺼운 것은 <em>질문하는 법을 가르치는</em> 수업이고, 질문 만들기 자체의 이득은 시간 조건에 따라 엇갈렸다.</div>
+    <p class="body">학생에게 질문 생성 전략을 가르친 연구 26편(1969–92년 연구, 초등 3학년~대학)을 모은 리뷰에서, 효과크기 중앙값은 <b>연구자가 만든 이해검사 0.86</b>, <b>표준화 검사 0.36</b>이었다. 모든 검사는 학생이 처음 보는 자료로 치렀다. 질문의 첫머리(“왜 ~인가?”, “~와 ~는 어떻게 다른가?” 같은 질문 어간)를 준 조건에서는 1.12(4편, 연구자가 만든 검사)였고, 대학생 대상 5편은 모두 유의했다.</p>
+    <ul class="arrows">
+      <li>대학 강의 수강생을 세 조건으로 나눈 실험(82명)에서는 1주 뒤 시험에서 <b>질문 만들기가 문제 풀이와 비슷했고, 다시 읽기보다 나았다</b>.</li>
+      <li>반대 방향의 결과도 있다. 대학생 143명 실험에서 공부 시간을 같게 맞추자 <b>객관식 문항 만들기가 다시 읽기보다 시험 성적이 낮았다</b>. 질문 만들기는 시간을 쓰는 활동이다.</li>
+      <li>효과는 질문의 종류에 따라 달라진다. 학부생 48명 실험에서 <b>개념 질문을 만든 학생은 개념 문항에서만</b> 다시 읽기보다 나았고, 세부 사실 질문을 만든 쪽은 이득이 없었다.</li>
+      <li>써 보게 하는 것만으로는 질이 크게 오르지 않았다. 세포생물학 실험 과목에서 제출만 하면 점수를 준 질문 과제를 한 학기 동안 써 낸 학생들의 질문은 조금 나아졌지만 꾸준하지도 크지도 않았다(2번에서 다시 다룬다).</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 26편 리뷰는 대부분 초중등 독해 연구이고, 검사는 수업 직후에만 했다. 0.86과 0.36 가운데 어느 한 값만 인용하면 측정 도구 조건이 빠진다. 이공계 대학에서 질문 생성을 무작위로 비교한 실험은 이번 조사에서 찾지 못했다. 질문에 대한 <em>피드백</em>만의 효과를 따로 떼어 본 실험도 확인하지 못했다.</div>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.3102/00346543066002181" target="_blank" rel="noopener">Rosenshine, Meister &amp; Chapman, Review of Educational Research 66(2):181–221 (1996)</a> — 개입 연구 26편 리뷰, 효과크기 중앙값 0.36·0.86<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1002/acp.3639" target="_blank" rel="noopener">Ebersbach, Feierabend &amp; Nazari, Applied Cognitive Psychology 34(3):724–736 (2020)</a> — 대학 강의 82명, 세 조건 비교(표본 수는 2차 자료로 확인)<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1016/j.learninstruc.2017.12.006" target="_blank" rel="noopener">Hoogerheide, Staal, Schaap &amp; van Gog, Learning and Instruction 60:191–198 (2019)</a> — 대학생 143명, 학습 시간 동일 조건<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1037/a0028661" target="_blank" rel="noopener">Bugg &amp; McDaniel, Journal of Educational Psychology 104(4):922–931 (2012)</a> — 학부생 48명
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">2</div>
+    <h2>‘좋은 질문’은 많은 질문이 아니었다</h2>
+    <div class="hanmadi">질문의 수는 학기 전반에는 모르는 것이 많다는 쪽으로 움직였고, 질문의 질은 흐릿하게만 이해를 비췄다. 이해를 가장 잘 드러낸 것은 학생 <em>답의 질</em>이었다.</div>
+    <p class="body">연구방법론 과목 학부생 27명의 일대일 튜터링을 분석한 1994년 연구에서 학생은 튜터링 1회기(약 1시간)에 평균 21.1개의 질문을 했고, 교실에서는 시간당 0.11개로 추정됐다(교실 수치는 선행 연구의 추정치. 흔히 인용되는 ‘시간당 26.5개’는 같은 연구의 7학년 표본과 합친 값이다). 같은 연구의 표에서 <b>질문 총수와 시험 점수의 상관은 학기 전반 −.56(유의), 후반 −.12</b>였다. 반대로 깊은 추론을 요구하는 질문의 <em>비율</em>과 시험 점수의 상관은 양(+)이었다(전반 .36, 후반 .47). 저자들은 지식의 빈틈이 많은 학생이 결국 더 많이 물었다고 적었다. 이 연구에서 학생 질문의 92%는(표본 구분 없이 보고) 블룸 분류(사고 수준을 지식·이해·적용·분석·종합·평가로 나눈 틀)의 1단계(지식)에 머물렀다.</p>
+    <ul class="arrows">
+      <li>같은 연구진이 튜터링 44회기를 분석한 연구에서, 학생 질문의 질은 이해도의 “주변적 지표(only a marginal indicator)”에 그쳤고 <b>가장 믿을 만한 단서는 학생 답의 질</b>이었다. “이해했나요?”에 학생이 한 “네”는 크게 빗나가곤 했다(“very misleading”).</li>
+      <li>세포생물학 실험 과목(학생 38명, 질문 924개) 연구는 “질문 유형이나 질문의 향상과 최종 성적 사이에 상관이 없었다”고 보고했다.</li>
+      <li>AI에게 던진 질문도 방향이 <b>엇갈린다</b>. 미국 한 대학 3·4학년 AI 과목(두 학기, 203명)의 챗봇 대화 2,214건을 분석한 연구에서는 개념 질문이나 코드 작성 도움을 요청한 학생의 과제·시험 점수가 높은 경향이 있었다 — 다만 개별 계수만 유의했고 모형 전체로는 유의하지 않았다. 반면 대학원생이 3분의 2인 웹 프로그래밍 과목 147명(대학원생 97명, 로그 제출 104명) 연구에서는 개념 설명 요청 빈도와 최종 성적의 상관이 r = −0.01(p = .91)이었다 — 참여 학생의 평균 최종 성적이 92.3–94.6%로 천장에 가까웠다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 모두 상관이며 인과가 아니다. 1994년 연구는 대면 튜터링·27명이고, 학기 전반과 후반의 주제가 달라 상관이 왜 변했는지 가를 수 없다. 이 논문의 초록은 “질문 빈도는 성취와 상관없다”고 요약했지만, 본문 표에는 전반부의 유의한 음의 상관이 있다(9번). 결론은 “질문은 학습을 비추지 못한다”가 아니라 <b>“비추는 정도가 흐리고 연구마다 엇갈린다”</b>다.</div>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.3102/00028312031001104" target="_blank" rel="noopener">Graesser &amp; Person, American Educational Research Journal 31(1):104–137 (1994)</a> — 학부생 27명(7학년 13명 표본 포함 연구), 상관연구. 상관 수치는 표 5(학부 표본) 기준<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1016/1041-6080(94)90010-8" target="_blank" rel="noopener">Person, Graesser, Magliano &amp; Kreuz, Learning and Individual Differences 6(2):205–229 (1994)</a> — 튜터링 44회기<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1187/cbe.08-09-0054" target="_blank" rel="noopener">Keeling, Polacek &amp; Ingram, CBE—Life Sciences Education 8(2):131–139 (2009)</a> — 학생 38명·질문 924개<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://arxiv.org/abs/2503.07928" target="_blank" rel="noopener">McNichols, Ikram &amp; Lan, The StudyChat Dataset, LAK '26 (2026)</a> — 대화 2,214건·발화 16,851개·203명, 상관<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1145/3772318.3793207" target="_blank" rel="noopener">Isa et al., CHI '26 (2026. 4.)</a> — 147명(대학원생 97명, 로그 104명), 상관, 자발적 참여
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">3</div>
+    <h2>질문만으로는 모자랐다 — ‘결과를 판단하는 통찰력’이 짝이어야 하는 이유</h2>
+    <div class="hanmadi">조 교수는 ‘좋은 질문을 던지고 <em>결과를 판단하는</em> 통찰력’을 한데 묶어 말했다. 대학·대학원 수업의 데이터가 받치는 것은 ‘질문만으로는 모자라다’까지다 — 질문 실력은 결과물과는 함께 움직였지만, 따로 잰 학습(시험·회상)과의 관계는 약하거나 검출되지 않았다. 판단을 짝지으면 그 간극이 메워지는지는 이번 조사에서 잰 연구가 없다.</div>
+    <p class="body">북미 공립대 입문 프로그래밍(CS1) 과목에서 프롬프트 작성법을 가르치는 네 조건을 무작위로 비교한 실험(979명 참여, 431명 분석)은 프롬프트를 다섯 요소(문제 파악·문제 맥락·학습 방법·학습자 수준·가드레일)로 채점했고, 채점자 간 일치도(κ: 우연 일치를 뺀 값, 1이 완전 일치)는 <b>0.86</b>으로 높았다. 모든 조건에서 프롬프트 실력이 올랐다. 그러나 <b>기말시험의 집단 간 차이는 검출되지 않았다</b>(F(3,427) = 1.29, p = .278). 한편 사전 점수를 통제하면 사후 프롬프트 점수가 높은 학생이 기말 점수도 높았다(회귀계수 β = 0.090, p = .003).</p>
+    <ul class="arrows">
+      <li><b>대학원 수업 ①</b> 대학원생 22명 단일집단(비교군 없음) 연구에서 AI에게 던진 질문의 깊이는 <b>과제의 질과 관련이 있었지만</b>(p = .006) <b>즉시 회상과의 관계는 검출되지 않았다</b>(p = .728).</li>
+      <li><b>대학원 수업 ②</b> 중국 한 대학의 대학원 1학년 106명(인문·사회·경영·예술·이공)이 교양 과목 기말 과제로 ChatGPT와 대화했다. 학생 질문 1,538개를 개정 블룸 분류에 맞춘 여섯 범주(사실·설명·적용·분석·평가·탐구)로 나눴고, 두 분류자의 일치는 κ = 0.704였다. 대화가 이어지며 <b>평가·탐구형 질문으로 나아간 집단(49명)은 적용·분석 수준에 머문 집단(57명)보다 창의적 사고 참여를 더 높게 보고했다</b>(효과크기 d = 0.63). 같은 106명을 질문 유형 프로필 세 갈래로 따로 나눈 분석에서는, 사실 확인 질문 위주의 학생들이 다른 두 유형보다 비판적·창의적 사고 참여 점수가 낮았다.</li>
+      <li>의학교육 제출물 50건에서 프롬프트 영역은 믿을 만하게 채점됐지만(채점자 간 일치도 ICC .84), 총점과 학점(GPA)의 상관은 순위상관 ρ = .194(p = .201)로 유의하지 않았다. 프롬프트 작성 실력이 높을수록 LLM(ChatGPT 같은 언어 모델) 결과물의 질이 높다는 연구도 있다 — 질문 실력이 <em>결과물</em>과 맞물린다는 근거는 여럿이다.</li>
+      <li><b>읽는 법</b> 조 교수가 질문과 판단을 짝지은 것은 이 간극 — 좋은 결과물이 곧 학습은 아니라는 점 — 을 겨눈 제안으로 읽힌다. 학생이 AI 답을 판단·확인하는 단계가 학습을 높이는지는 아직 잰 연구가 없다. 실전 박스의 ‘AI 답 검증 한 줄’은 그 짝을 수업에서 시험해 보는 장치이지, 효과가 확인된 처방이 아니다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 22명 단일집단, 50건, 동료심사 전 원고가 섞여 있다. 중국 대학원 연구의 결과는 자기보고 설문이며(채점 기준표인 루브릭 점수는 타당도 점검용), 상관이다. CS1의 β는 사후 프롬프트 점수가 높은 학생이 기말도 높았다는 학생 간 <em>상관</em>이며, 프롬프트 실력이 성적을 만들었다는 뜻이 아니다. 질문 점수를 성적에 쓸 수 있는지는 인과가 아니라 이 ‘함께 움직임’으로 따지며(편집자 렌즈 점검 ④), CS1은 그 기준에서 양의 관계를 보였다. CS1의 네 조건은 모두 프롬프트 작성법을 가르친 조건이어서 가르치지 않은 집단과의 비교는 없다. 22명 표본은 중간 크기의 관계도 놓치기 쉽다.</div>
+    <p class="src">
+      <span class="bdg p">[예비연구]</span>출처: <a href="https://arxiv.org/abs/2602.16033" target="_blank" rel="noopener">Xiao et al., Transforming GenAI Policy to Prompting Instruction: An RCT … in a CS1 Course, arXiv:2602.16033 (2026. 2.)</a> — 979명 참여·431명 분석, 4조건 무작위 배정<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1186/s41239-026-00617-6" target="_blank" rel="noopener">Tsiligkiris, International Journal of Educational Technology in Higher Education 23:44 (2026. 8. 26.)</a> — 대학원생 22명 단일집단 사전·사후<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1371/journal.pone.0356183" target="_blank" rel="noopener">Qu, Dai &amp; Yin, What students ask matters, PLOS ONE 21(9):e0356183 (2026. 9. 8.)</a> — 중국 대학원 1학년 106명, 2025년 1–6월 자료, 자기보고<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1177/23821205261442106" target="_blank" rel="noopener">Shiukashvili et al., Journal of Medical Education and Curricular Development 13:23821205261442106 (2026. 5. 6.)</a> — 제출물 50건<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1016/j.caeai.2024.100225" target="_blank" rel="noopener">Knoth et al., Computers and Education: Artificial Intelligence 6:100225 (2024)</a> — 프롬프트 실력과 LLM 출력 질
+    </p>
+  </div>
+
+  <div class="sechead" id="sec2">&#9878; 평가 설계 &#183; Selection or Growth</div>
+
+
+  <div class="item">
+    <div class="no">4</div>
+    <h2>질문을 ‘선발’에 쓴 과목들 — 엇갈린 반응, 그리고 누가 썼는가</h2>
+    <div class="hanmadi">대학 과목에서 학생이 만든 문항을 성적에 넣어도 문항의 질은 유지됐지만, 그 점수가 학습을 가려냈는지는 확인되지 않았고 학생 반응은 과목마다 갈렸다. 집에서 써 온 질문은 누가 썼는지도 확인하기 어렵다.</div>
+    <p class="body">뉴질랜드 오타고대 웰링턴 캠퍼스 의대 4학년 과목(106명, 2016년)은 학생이 객관식 문항을 만들어 공유하는 PeerWise 활동을 성적의 <b>20%</b>로 반영했다(절반은 동료 문항 풀이 점수 800점 도달, 절반은 모듈별 문항 1개의 외부 질 평정). 문항의 74%(313/421)가 적용·분석 수준으로 질은 높았다. 그러나 설문 응답 62명 중 <b>81%(50/62)가 불만족</b>했고, 계속하자는 응답은 27%(17/62)였다. 불만이 점수 때문인지 문항 작성 부담 때문인지는 가려지지 않았다. 만족도는 학습의 지표가 아니지만(5호), 성적 요소에 대한 이 정도 반발은 그 설계를 계속 운영할 수 있느냐의 문제다.</p>
+    <ul class="arrows">
+      <li>캐나다 캘거리대 운동학 연구방법론 과목(3개 학기, 118·111·111명)은 학생이 만든 문항 과제를 성적의 15%로 넣고 조교가 45점 루브릭으로 채점했다. 과제 평균은 <b>87–88%</b>로 높았고, 유지 찬성은 52.6–62.3%로 과반이었다.</li>
+      <li><b>누가 썼는가.</b> 대학생들은 LLM이 도와 만든 시험 문항을 교수 문항과 구별하지 못했다(z = 1.018, p = .309). 캐나다 UBC 의대 1학년 258명 무작위 실험에서 AI가 만든 문항은 상급생이 만든 문항과 학생 수용성이 비슷했다. 다만 학생이 질문 과제를 AI로 대신 냈다는 <em>행동</em> 실증은 아직 없다 — AI가 그만한 질문을 만들 수 있다는 <em>능력</em> 증거만 있다.</li>
+      <li>반례도 있다. 같은 PeerWise 활동을 성적에 넣지 않는 연습(형성평가)과 성적에 넣는 평가(총괄평가)로 나눠 배치한 영국 대학 화학 과목 비교에서 문항의 질은 비슷했고, 대충 때우는 행동은 오히려 성적에 넣지 않은 쪽에 더 많았다(학습성과는 재지 않았다). 점수를 붙인다고 질이 반드시 무너지지는 않는다.</li>
+      <li>학습과의 관계를 모은 종합 근거도 있다. 의대생이 문항을 만들어 공유한 활동 연구 6편(1,571명)을 모은 상관 메타분석에서 문항 작성과 시험 성적의 상관은 ρ = 0.21(95% 신뢰구간 0.09–0.32)이었다. 다만 예측구간이 −0.27–0.61로 넓어 과목에 따라 관계가 없거나 반대일 수도 있고, 이전 성적 같은 교란을 통제하지 못한 상관이다.</li>
+      <li><b>조 교수의 틀로 읽으면</b> 이 과목들은 학생이 만든 문항을 성적(15–20%)에 넣어 학생을 <em>매겼다</em> — 이 호는 이것을 ‘선발’ 쪽으로 읽는다. 문항의 질은 지켰지만 그 점수가 학습 차이를 가려냈는지는 이 사례들로 판단할 수 없고(해석 한계), 한 과목의 큰 반발과 누가 썼는지의 문제는 남았다. 성적 반영의 이득은 확인되지 않았고 비용은 신호로만 보였다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 성적 반영 사례는 모두 학생이 객관식 <em>문항</em>을 만드는 과제이며, 자유로운 질문 자체를 채점한 사례가 아니다. 의대·운동학·화학 사례이고 이공계 대학원의 직접 사례는 찾지 못했다. 캘거리 과목의 과제 점수와 최종 성적의 상관은 학생 문항이 기말시험 전에 공개된 교란이 있어 학습 효과의 근거로 쓰지 않는다.</div>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6103861/" target="_blank" rel="noopener">Grainger et al., BMC Medical Education 18:201 (2018)</a> — 의대 4학년 106명(2016년), 설문 응답 62명<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.5206/cjsotlrcacea.2024.2.16625" target="_blank" rel="noopener">Katz et al., Canadian Journal for the Scholarship of Teaching and Learning 15(2), Art. 10 (2024. 8. 31.)</a> — 운영 사례로만 인용<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1609/aaai.v39i26.34984" target="_blank" rel="noopener">Witsken, Crk &amp; Gultepe, Proceedings of AAAI 39(26):27698–27705 (2025)</a> — 교수 문항 대 LLM 보조 문항<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1186/s12909-026-09671-0" target="_blank" rel="noopener">Al-Najafi et al., BMC Medical Education 26:1376 (2026. 6. 17.)</a> — UBC 의대 1학년 258명 무작위 대조, 사후 등록<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://uhra.herts.ac.uk/handle/2299/24073" target="_blank" rel="noopener">Fergus et al., AISHE-J 13(1) (2021)</a> — 형성 대 총괄 배치 비교<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.30476/jamp.2025.104780.2084" target="_blank" rel="noopener">Hwang R. et al., Journal of Advances in Medical Education &amp; Professionalism 13(4):259–269 (2025. 10. 1.)</a> — 상관 메타분석 6편·1,571명, 초록 기준
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">5</div>
+    <h2>사람끼리도 처음엔 51–72%만 일치했다 — AI 채점의 자리</h2>
+    <div class="hanmadi">“AI가 사람만큼 질문을 분류한다”는 말은 “사람끼리도 잘 일치하지 않는다”는 말과 함께 읽어야 한다.</div>
+    <p class="body">질문의 질을 재려면 먼저 사람끼리 같은 판단을 내려야 한다. 세포생물학 질문을 채점한 연구에서 채점자 간 <b>초기 일치는 56–72%</b>였고, 기준을 토의한 뒤에야 96–100%로 올랐다. 문항 207개를 블룸 분류로 나눈 전문가 두 명의 일치는 <b>51%</b>였다. 두 대학의 정역학 수강생 35명 질문에서 교수 간 일치는 약 65%였고, 상대 교수의 수업 맥락을 몰라 ‘분류 불가’로 본 불일치를 빼자 약 80%가 됐다 — 질문의 질은 맥락을 알아야 판단된다. 3번 CS1의 κ 0.86은 구조화된 루브릭으로 질문이 아닌 프롬프트를 채점한 값이다(루브릭 없는 조건과 견주지는 않았다).</p>
+    <ul class="arrows">
+      <li>한 예비연구에서 LLM 11개는 질문의 <em>유형</em>을 사람끼리만큼 일관되게 나눴다. 학생이 챗봇에 보낸 메시지 6,113개에서 LLM끼리의 일치는 κ .56–.57이었고, 사람 3명이 함께 본 10% 표본에서는 사람끼리 .47, LLM끼리 .53이었다. LLM과 사람 사이의 일치는 따로 보고되지 않았다. 저자들은 “일치가 정확을 뜻하지는 않는다”고 밝혔다.</li>
+      <li><em>인지 수준</em> 판정은 약하다. 시험 문항 85개를 LLM과 전문가가 판정한 연구에서 부정형 문항 탐지는 κ .897이었지만 결함 유무 전체 판정은 κ .53–.55(상위 두 모델), 인지 수준 판정은 κ .42 안팎이었고, 같은 문항을 본 전문가끼리의 블룸 수준 일치도 Fleiss κ .117에 그쳤다. LLM이 만든 질문을 평가한 다른 연구에서는 평가 모델(Gemini Pro)이 대부분을 적용·분석 단계로 분류했다.</li>
+      <li>높아 보이는 정확도도 따져 봐야 한다. 객관식 문항 271개(학생 작성 100·공개 온라인 강좌 171)를 문항×기준 5,149개로 판정한 결함 탐지 정확도 94.13%는, 모든 판정을 “결함 없음”으로 찍었을 때의 93.09%와 거의 같다는 재분석이 나왔다.</li>
+      <li><b>공백</b> 2024–2026년 문헌에서 학생이 자유롭게 쓴 질문의 <em>질</em>을 LLM이 채점하고 사람과의 일치도를 보고한 연구는 찾지 못했다(영어 문헌 위주 조사).</li>
+      <li><b>쓸 수 있는 자리</b> ① 수업 단위의 질문 <em>유형</em> 분포 진단(인지 <em>수준</em> 분포는 특정 단계로 몰아 분류하는 편향이 있어 교수자가 확인한 뒤에) ② 학생 개인에게 주는 형성 피드백의 <em>초안</em> — 강의 맥락과 대화 이력을 함께 넣고, 애매한 판정은 교수자에게 넘긴다. <b>쓸 수 없는 자리</b> AI 혼자 매긴 질문 점수를 성적에 넣는 것.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 시험 문항·객관식 문항 연구는 학생의 자유 질문이 아니라 <em>문항</em>이 대상이다. 6,113개 메시지 연구는 동료심사 전 원고다. 분포 진단은 개인 판정보다 오차에 덜 민감하지만, 특정 범주로 쏠리는 편향은 분포에도 그대로 남는다.</div>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2689149/" target="_blank" rel="noopener">Keeling, Polacek &amp; Ingram, CBE—Life Sciences Education 8(2):131–139 (2009)</a> — 평정자 간 초기 일치 56–72%<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1073/pnas.2414955121" target="_blank" rel="noopener">Borges et al., PNAS 121(49):e2414955121 (2024)</a> — 블룸 분류 일치 51%(부록)<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.18260/1-2--37649" target="_blank" rel="noopener">Goldberg, Venters &amp; Masnick, ASEE Annual Conference (2021)</a> — 정역학 수강생 35명(2019년 가을)<br>
+      <span class="bdg p">[예비연구]</span>출처: <a href="https://arxiv.org/abs/2602.18372" target="_blank" rel="noopener">Neagu et al., arXiv:2602.18372 (2026. 2. 20.)</a> — 메시지 6,113개, LLM 11개<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13391911/" target="_blank" rel="noopener">Aydin, Coşkun &amp; Hamal, Frontiers in Medicine 13:1866674 (2026)</a> — 시험 문항 85개, 전문가 3명<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://aclanthology.org/2026.aimecon-wip.58.pdf" target="_blank" rel="noopener">Moore &amp; Diana, AIME-Con 2026 Works in Progress, pp. 464–471 (2026. 10.)</a> — 서술적 리뷰, 1저자가 검토 14편 중 5편 공저<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1007/978-3-031-64299-9_12" target="_blank" rel="noopener">Scaria et al., AIED 2024</a> — LLM 생성 질문의 블룸 수준 평가
+    </p>
+  </div>
+
+  <div class="sechead" id="sec3">&#128736; 실전 적용 박스 &#183; SALSA in a 10-Minute Slot</div>
+  <div class="item">
+    <h2>조 교수의 SALSA, 수업 끝 10분부터 — 이름 없이 질문을 걷고 다음 수업을 그 질문으로 연다</h2>
+    <div class="tablewrap">
+    <table class="box practical">
+      <tr><th>시기</th><th>실행</th><th>판단 기준</th></tr>
+      <tr><td>다음 수업 1회 (S·A)</td><td><b>나누기(Share)</b> 수업 끝 10분(생각 2 · 질문 쓰기 4 · 바꾸기·고르기 3 · 걷기·입력 1). 질문 초점(생각을 여는 문장) 하나를 띄우고 먼저 그에 대한 자기 생각을 한 줄 쓰게 한다 — 띄울 문장 예: 일반물리 “단열 압축하면 열을 넣지 않아도 기체 온도가 올라간다.” / 미적분 “|x|는 x = 0에서 연속이지만 미분 가능하지 않다.” <b>묻기(Ask)</b> 떠오르는 질문을 모두 적고, 닫힌 질문(예/아니오로 끝나는 질문) 하나를 열린 질문으로 바꾼 뒤(“온도가 올라가나요?” → “열을 넣지 않았는데 왜 온도가 올라가나요?” / “0에서 미분 가능한가요?” → “끊기지 않았는데 왜 0에서 미분이 안 되나요?”), 가장 중요한 질문 하나에 이유를 한 줄 단다.<small>규칙 넷(미국 Right Question Institute의 질문 형성 기법을 줄인 것, 효과는 검증되지 않음) — 되도록 많이 쓰기 / 답하거나 좋고 나쁨을 따지느라 멈추지 않기 / 떠오른 그대로 적기 / 진술이 떠오르면 질문으로 바꿔 적기. 칠판에 어간 두 개를 적어 둔다 — “왜 ~인가?”, “~와 ~는 어떻게 다른가?”(1번: 어간을 준 조건 1.12, 연구자가 만든 검사 기준). 이름 없이 걷고, “성적과 무관, 다음 수업 준비용”이라고 알린다. 100명이 넘으면 각자 고른 질문 하나와 이유 한 줄만 받는다 — 나가며 문 앞 상자에 넣거나, LMS 익명 설문이 되면 수업 중 입력하게 한다.</small></td><td>닫힌 질문을 열린 질문으로 바꿔 냈는가(가르치기), 질문이 어느 개념·장면에 몰렸는가(막힌 곳), 깊은 추론 질문의 <em>비율</em>은 어떤가 — 반 전체 분포로만 보고, 목표 수치로 알리거나 점수로 쓰지 않는다. 이해는 질문보다 학생의 답이 더 잘 드러내므로(2번) 질문 분포는 퀴즈 오답 옆에 두고 본다.</td></tr>
+      <tr><td>그다음 수업 (L)</td><td><b>듣기(Listen)</b> 학생들이 고른 질문 가운데 교수자가 두세 개를 뽑아 수업 첫 5분을 연다. 이름 없이 걷었으므로 한 줄 피드백은 개인이 아니라 반 전체에 준다 — 대표 질문과 고쳐 쓴 예를 슬라이드 한 장에 띄워 짚는다. 예: “‘단열 과정이 뭐예요?’는 정의를 묻습니다. ‘단열 압축과 등온 압축은 무엇이 다른가요?’로 바꾸면 더 깊어집니다.”<small>AI는 꼭 쓰지 않아도 된다 — 쪽지를 개념별로 쌓아 보는 것으로 족할 수 있다. 쓴다면 분류 초안까지만(5번). 예: “아래는 오늘 수업 끝에 학생들이 이름 없이 낸 질문이다(한 줄에 하나). 오늘 다룬 개념: ○○, ○○, ○○. 각 질문을 이 개념 가운데 하나에 붙이고(맞는 것이 없으면 ‘기타’) ‘사실 확인 / 원인·비교 / 추가 탐구’로 나누라. 애매한 것은 ‘애매’로 따로 두라. 개념별 질문 수와, 질문이 몰린 개념마다 원문 그대로의 대표 질문 두 개를 보여라.” 개념 목록은 그날 슬라이드 제목을 그대로 넣는다 — 질문은 수업 맥락을 알아야 판단된다(5번). ‘애매’ 묶음과 대표 질문은 교수자나 조교가 원문과 맞춰 본다. 이름·학번은 지우고 넣는다.</small></td><td>학생이 다음 번 질문을 스스로 고쳐 쓰는가</td></tr>
+      <tr><td>학기 중 1회 (S·A again)</td><td><b>다시 나누고 묻기</b> AI에 던진 질문 1개 + AI의 답(검증한 대목만 몇 줄) + 검증 한 줄(맞는가·빠진 것은) + 다시 던질 질문 1개를 LMS로 제출받는다. 조 교수가 말한 ‘결과를 판단하는 통찰력’을 연습하는 첫 칸이 <em>검증 한 줄</em>이다(3번).<small>국내 공대 강의 사례(7번)의 축약판. 이번 학기는 LMS 공지로 먼저 알린다. 수업 안에서 하거나, 과제로 낸다면 제출(완료) 점수만 준다 — 집에서 쓴 것은 누가 썼는지 확인할 수 없다(4번).</small></td><td>검증 한 줄이 AI 답의 오류나 빈틈을 짚었는가 — 100명이 넘으면 다 읽지 않고 무작위로 일부만 읽어 반 전체 경향을 본다(점수는 제출 여부로만)</td></tr>
+      <tr><td>대학원 세미나라면</td><td><b>나누기</b> 질문 초점은 이번 주 논문의 핵심 주장 한 문장이나 그림·표 하나. 자기 생각 한 줄은 ‘이 주장을 받아들이는가, 무엇 때문에’. <b>묻기</b> 어간은 “이 결론이 성립하려면 무엇이 참이어야 하는가?”, “초록의 문장이 본문 표와 같은가?”(9번). 고른 질문 하나에 ‘다음 단계’(답하려면 무엇을 읽거나 재야 하나)를 한 줄 단다. <b>듣기·다시 묻기</b> 발표 뒤 질의에서 나온 질문 하나를 발표자가 골라 다음 주 첫 5분에 답하거나 고쳐 묻는다.<small>10~30명이면 AI 분류 없이 교수자가 모두 읽는다. 소규모에서는 이름 없이 걷어도 누구인지 드러날 수 있어, 핵심은 익명보다 서면과 ‘성적과 무관’ 고지다. 학기 중 1회 과제는 연구 주제로 하되 검증 한 줄은 ‘원문·데이터로 확인했는가’로 하고, 공개하기 어려운 연구 아이디어는 학생이 범위를 고른다. 이 어간들의 효과는 검증되지 않았다.</small></td><td>다시 던진 질문이 읽거나 재서 답할 수 있는 형태로 좁혀졌는가</td></tr>
+    </table>
+    </div>
+    <div class="caveat"><b>주의</b> — SALSA는 조 교수가 제안한, 대화를 이어 가는 교육법이다. 이 박스는 공개 발화를 꺼리는 학생이 많아(7번) 그 대화의 첫발을 서면으로 떼는 축소판이고, 말로 주고받는 본래의 대화는 그다음 걸음으로 남겨 둔다. 대학·대학원 수업 10분으로 옮긴 것은 이 호의 제안이다(효과는 검증되지 않았다). <b>이번 학기에는 질문의 질을 성적 점수로 매기지 않는다</b> — 금지가 아니라 보류다(열리는 조건은 편집자 렌즈 점검 ②④⑤). 넣는다면 기명으로 받는 학기 중 1회 제출에만, 작은 비중의 제출(완료) 점수로 준다 — 참여를 인정하는 용도다(제출만 하면 점수를 준 과목에서 질은 조금 나아졌을 뿐이다, 1번). 질문 만들기는 시간을 쓰고 개념 질문을 만들어야 개념 문항에서 이득이 났으니(1번), 짧게 끊어 개념 이해가 목표인 단원에 쓴다. 대학원생에게도 어간이 군더더기만은 아니다 — 대학원 1학년에서도 사실 확인 위주 유형이 따로 묶였다(3번). 다만 1.12는 연구자가 만든 검사로 잰 값이고 대학원에서 잰 값이 아니다. 이 박스는 한 학기 두 번이 전부다 — 이어 갈지는 해 본 뒤 정한다. <b>AI 튜터 로그처럼 다른 목적으로 쌓인 질문·대화 기록을 평가나 진단에 쓰려면 수집 전에 알리고 동의를 받는다</b>(6번). 100명이 넘는 분반이라면 LMS 익명 설문 설정·AI 분류 지시문·질문 묶음 정리를 CTL과 함께 해 보는 방안을 제안한다(운영 여부 미정, 문의 ctl@dgist.ac.kr).</div>
+  </div>
+
+  <div class="sechead" id="sec4">&#127891; DGIST 적용 &#183; What It Means Here</div>
+
+
+  <div class="item">
+    <div class="no">6</div>
+    <h2>질문 기록을 평가에 쓰려면 — 모으기 전에 알린다</h2>
+    <div class="hanmadi">학습을 돕기 위해 모은 질문을 평가든 진단이든 다른 목적에 쓰려면, 모으기 전에 알려야 한다. ‘성장’을 위해 모은 질문을 사후에 ‘선발’에 쓰면, 학생은 그 도구를 평가받는 곳으로 다시 읽을 수 있다(CTL의 검증되지 않은 가설).</div>
+    <p class="body">AI 튜터·챗봇·LMS 토론방처럼 학생 질문이 쌓이는 도구가 늘면서, 그 기록을 평가나 수업 진단에 쓰자는 생각도 따라온다. 그러려면 <b>모으기 전에 목적을 알리고 동의를 받는 것</b>이 먼저다.</p>
+    <ul class="arrows">
+      <li>해외 대학 일부 과목은 대화 기록 제출을 처음부터 과제 요건으로 설계하고 미리 알린다. 네덜란드 에인트호번공대의 한 철학 교수는 자신의 학부·석사 철학 과목에서 AI와의 대화 기록 전체를 받아 루브릭으로 채점했고(학생당 약 15분), 스탠퍼드대 교수학습센터는 프롬프트와 출력의 전체 기록을 저장해 제출하게 하는 방식을 안내한다.</li>
+      <li>사람들은 상대가 사람일 때보다 컴퓨터일 때 피드백을 더 자주 청한다(체면 비용, 1993년 연구 2편). 컴퓨팅 전공 학생 설문(47명)에서 다른 학생 앞에서 공개적으로 묻는 상황은 다섯 상황 가운데 ‘편하다’는 응답이 가장 적었다(46.8%, ChatGPT에 묻기 68.1%). AI 앞에서 나오는 질문이 교실보다 솔직할 수 있다는 뜻이다.</li>
+      <li><b>CTL 해석(검증되지 않은 가설)</b> 질문 기록이 평가된다고 알려지면, 그 기록이 보여 주던 ‘막힌 자리’가 흐려질 수 있다. 수집 전 고지는 동의 절차의 문제이면서, 결과적으로 이 신호를 지키는 장치이기도 하다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — “평가되지 않을 때 더 정직하다”는 DGIST 자료로 확인한 것이 아니다.</div>
+    <p class="src">
+      <span class="bdg n">[언론]</span>사례: <a href="https://dailynous.com/grading-prompts-to-measure-student-learning-guest-post/" target="_blank" rel="noopener">Zednik, Grading Prompts to Measure Student Learning, Daily Nous 기고 (2025. 9. 30.)</a> — 에인트호번공대 철학 과목, 대화 기록 채점<br>
+      <span class="bdg o">[공개자료]</span>참고: <a href="https://ctl.stanford.edu/aimes/ai-teaching-strategies" target="_blank" rel="noopener">Stanford CTL, AI Teaching Strategies (2026. 9. 18. 갱신)</a><br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1016/0747-5632(93)90017-M" target="_blank" rel="noopener">Kluger &amp; Adler, Computers in Human Behavior 9(1):1–16 (1993)</a> — Ang et al., Information Systems Research 4(3) (1993)와 함께<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1145/3636243.3636248" target="_blank" rel="noopener">Hou et al., ACE '24, pp. 39–48 (2024)</a> — 북미 컴퓨팅 전공 설문 47명 + 면담 8명
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">7</div>
+    <h2>대학원 수업에서 질문이 들어갈 자리 — AI 조교에게는 이론 질문이 사람 조교 때보다 많았다</h2>
+    <div class="hanmadi">질문은 학생을 매기는 성적표로는 흐리지만, <em>수업을 고치는</em> 단서로는 쓸 수 있을지 모른다 — 직접 시험한 연구는 아직 없다. 이번 호의 근거로 보면 ‘질문’이 평가에 가장 안전하게 들어가는 자리는 학생이 질문을 <em>받는</em> 쪽이다.</div>
+    <p class="body">KAIST 대학원의 입문 AI 프로그래밍 과목(2024년 가을, 477명, 석사 78.9%·박사 20.6%)에 AI 조교를 두자 한 학기 3,869건의 질의응답이 쌓였다. 전년 같은 과목의 사람 조교 상호작용 144건의 25배가 넘는다. 질문의 내용도 달랐다 — <b>머신러닝 이론 질문이 8.3%에서 35.0%로 늘고, 프로젝트 질문은 66.4%에서 39.7%로 줄었다.</b> 같은 학생의 변화가 아니라, 해와 조교가 다른 두 수강 집단의 비교다.</p>
+    <ul class="arrows">
+      <li>어느 개념에 질문이 몰리는지는 강의를 다시 짤 곳을 가리킬 수 있다 — 수집 전 고지(6번)가 먼저다.</li>
+      <li><b>연구실 지도에서</b> 일대일 지도와 형식이 가장 가까운 근거는 ‘대학원’ 표본이 아니라 2번의 학부 튜터링 연구다. 거기서 질문 수는 학기 전반 시험 점수와 음의 상관(−.56)이었고, “이해했나요?”에 대한 “네”는 빗나갔으며, 가장 믿을 만한 단서는 답의 질이었다. 지도 면담에서도 질문 수나 “이해했어?”보다 설명하게 해 답의 질을 보는 쪽이 이 근거와 맞는다(이 호의 해석).</li>
+      <li>학부 수업 사례도 질문을 점수보다 <b>고쳐 묻고 검증하는 과정</b>으로 다룬다. 광운대 「공학열역학」(2026-1학기)은 본인 생각을 먼저 쓰고 → AI와 대화하고 → 사실관계를 검증하고 → 최종 정리와 대표 프롬프트를 제출하게 했고, 시험은 오픈북으로 바꿨다(점수 방식은 보도되지 않았다). 조 교수의 SALSA와 순서가 닮았다. 다만 SALSA는 교실 안의 대화식 수업이고, 학생이 ‘다시 묻는’ 단계는 보도에 없다(대신 챗봇이 답변 끝에 학생에게 되묻도록 설계했다고 보도됐다).</li>
+      <li>한국 대학생은 수업 중 질문을 잘 하지 않는다는 조사가 있다. 4년제 대학 50곳 2,019명(2010년 조사) 중 ‘거의 안 한다’ 22.9%, ‘가끔’ 47.4%였다(언론 보도, 원문 미열람, 15년 전 자료). 미국 566명 연구에서는 지명당해 답하기와 혼자 발표하기에서 부정적 평가에 대한 두려움이 가장 컸다. 공개 발화에 기대는 질문 평가는 질문의 질이 아니라 <b>말하기 성향</b>을 잴 위험이 있다 — 서면·익명 경로가 필요한 이유다.</li>
+      <li><b>질문받는 평가</b> 시드니대는 평가를 AI 사용을 통제해 본인 실력을 확인하는 갈래(Lane 1)와 AI 사용을 열어 두고 과정을 보는 갈래(Lane 2)로 나눈다. Lane 1의 예시는 대면 구술·구두시험(viva voce)·수업 중 질의응답이며, 대면 구술은 15분 대화로 이해를 깊이 확인한다고 설명한다 — 여기서 질문하는 쪽은 교수자다. 대학원 논문 세미나의 발표 뒤 질의, 자격시험·학위논문 심사가 이미 이 형식이고, 4호의 구술확인과 같은 형식이다.</li>
+      <li><b>질문 자체가 학습 목표일 때</b> 대학원 세미나·연구방법 과목에서는 연구 질문을 세우는 힘이 곧 목표일 수 있다. 그때 핵심 기준은 채점 일치와 누가 썼는가다(점검 ④). 소규모 세미나는 질문을 수업 안에서 받고, 수업 맥락을 아는 사람이 채점할 수 있어(5번) 이 호의 조건이 가장 잘 갖춰진다. 그러나 교수 한 명이 맡는 과목에서는 채점자 둘의 일치 확인이 가장 어렵고, 연구 질문 채점의 일치도 사례는 이번 조사에 없다. 연구계획서처럼 이미 채점하는 산출물은 그대로 매기고, 그 질문을 학생이 세웠는지는 발표 뒤 질의로 확인한다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — KAIST 비교로는 이론 질문이 늘어난 원인을 가를 수 없다. 이 호의 ‘대학원’ 표본(KAIST 477명, 중국 106명, 대학원생이 3분의 2인 웹 프로그래밍 147명)은 강의형 과목의 대학원생이다. 논문 세미나나 연구실 지도를 직접 다룬 연구는 이번 조사에서 찾지 못했다. 질문받는 평가도 공개 발화다 — 위 566명 연구에서 두려움이 가장 컸던 두 상황은 세미나의 발표·질의와 겹친다. ‘가장 안전하다’는 학생의 질문을 점수로 매기는 것에 견준 말이며, 구술에서도 말하기 성향이 이해와 섞여 읽힐 수 있다(검증되지 않음). 국내 학부 사례는 언론 보도이며 효과를 잰 것이 아니다.</div>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://arxiv.org/abs/2506.17363" target="_blank" rel="noopener">KAIST VTA, arXiv:2506.17363 (ACL 2025 Industry Track)</a> — 대학원 과목 477명(472명 동의), 2024년 가을, 연도·대상이 다른 비교<br>
+      <span class="bdg n">[언론]</span>사례: <a href="https://www.kyosu.net/news/articleView.html?idxno=209811" target="_blank" rel="noopener">광운대 「공학열역학」, 교수신문 (2026. 9. 9.)</a> — 오픈북 전환·대표 프롬프트 제출은 이 기사 기준<br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://hangyo.com/mobile/article.html?no=37009" target="_blank" rel="noopener">한국교육개발원 「한국 대학생의 학습과정 분석연구」 보도, 한국교육신문 (2011. 4. 26.)</a> — 2010년 조사, 원문 미열람<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.1187/cbe.22-10-0195" target="_blank" rel="noopener">Busch et al., CBE—Life Sciences Education 22(3):ar31 (2023)</a> — 미국 1개 대학 566명, 자기보고<br>
+      <span class="bdg o">[공개자료]</span>참고: <a href="https://educational-innovation.sydney.edu.au/teaching@sydney/frequently-asked-questions-about-the-two-lane-approach-to-assessment-in-the-age-of-ai/" target="_blank" rel="noopener">University of Sydney, FAQ: the two-lane approach to assessment in the age of AI (2026. 4. 21. 갱신)</a>
+    </p>
+  </div>
+
+  <div class="sechead" id="sec5">&#9888; 대조 증거 &#183; How to Read Evidence in This Field</div>
+
+
+  <div class="item">
+    <div class="no">8</div>
+    <h2>대학도 ‘과정’을 보겠다고 했다 — 그러나 질문을 평가할 도구는 아직 비어 있다</h2>
+    <div class="hanmadi">국내 대학 총장들은 AI 시대 평가 신뢰의 우선 과제로 ‘평가 기준 명확화’와 ‘과정 중심 평가’를 꼽았다. 질문은 그 과정의 한가운데 있지만, 질문을 재는 기준은 아직 대학 스스로 만들어야 한다.</div>
+    <p class="body">한국대학교육협의회가 2026년 1–2월 회원대학 총장에게 물은 설문(192개교 중 140개교 응답, 응답률 72.9%)에서 생성형 AI 활용 가이드라인을 채택한 대학은 <b>40.0%(56개교)</b>, 제정을 검토 중인 대학도 40.0%였다. 생성형 AI 환경에서 학생 평가의 신뢰를 높이기 위한 우선 과제로는 <b>‘평가 기준 명확화’와 ‘과정 중심 평가’가 공동 1순위</b>(가중치 반영 합계 199점)였다. 설문지의 선택지에는 ‘학습 로그 제출, 구술 문답’ 같은 작성 과정 검증도 들어 있었다.</p>
+    <ul class="arrows">
+      <li>해외 대학의 평가 개편도 같은 방향이다. 시드니대는 AI를 열어 둔 과제에서 과정을 보라고 한다(7번). 생성형 AI 사용 수준을 단계로 나눈 ‘AI 평가 척도(AIAS)’ 개정판도 2단계(AI로 계획하기)의 과제는 결과물이 아니라 과정에 초점을 두게 될 것이라고 적었다(“process-focused, as opposed to output-focused tasks”).</li>
+      <li>국가 정책의 말은 앞서 있다. 2026년 8월 5일 업무보고에서 대통령은 “인공지능(AI) 시대에는 답하는 능력보다 어떤 질문을 할 것인지 … 중요하다”고 말했다. 그러나 같은 날 보도된 교육부 하반기 업무계획의 평가 수단은 초중등 서·논술형 <b>답안</b>을 AI로 가채점하는 체계다. 대학 수업에서 질문을 어떻게 평가할지는 정책이 아니라 대학과 교수자의 설계로 남아 있다.</li>
+      <li>그 범위에서 <b>‘질문 중심 평가’는 대학 평가 개편의 주류가 아니다 — 주류는 ‘과정 중심 평가’이고, 학생이 만든 문항이나 AI에 던진 질문을 평가 대상으로 삼은 것은 이 호에서 4·6번의 과목 단위 사례 정도다.</b> 질문하는 힘을 AI 시대 핵심 역량으로 꼽은 조 교수의 제안은 바로 이 빈자리를 가리킨다.</li>
+    </ul>
+    <div class="caveat"><b>해석 한계</b> — 대교협 설문은 총장 응답이며 실제 수업 운영을 잰 것이 아니다. 업무보고 발언과 업무계획은 언론 보도로 확인했다. AIAS 인용은 학술지 게재본이 아니라 공개 원고판에서 확인했다. OECD 『Digital Education Outlook 2026』과 호주 고등교육 질 보증기관(TEQSA)의 2025년 평가 개편 안내는 원문을 열람하지 못해 싣지 않는다.</div>
+    <p class="src">
+      <span class="bdg i">[기관보고서]</span>출처: <a href="https://www.kcue.or.kr/_upload/news/2026/02/26/application_cd09a4df87b2b1d1f79b05e7a803d001.pdf" target="_blank" rel="noopener">한국대학교육협의회 보도자료, 「2026 대학 총장 설문(Ⅰ)」 조사 결과 (2026. 2. 27.)</a> — 2026. 1. 7.–2. 6. 조사, 140/192개교<br>
+      <span class="bdg r">[연구]</span>출처: <a href="https://doi.org/10.53761/rrm4y757" target="_blank" rel="noopener">Perkins, Roe &amp; Furze, Journal of University Teaching and Learning Practice 22(7) (2025. 12. 3.)</a> — AI 평가 척도(AIAS) 개정판, 인용은 arXiv 2412.09029 원고 기준<br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://view.asiae.co.kr/article/2026080516143695987" target="_blank" rel="noopener">대통령 업무보고 발언, 아시아경제 (2026. 8. 5.)</a><br>
+      <span class="bdg n">[언론]</span>출처: <a href="https://www.mt.co.kr/policy/2026/08/05/2026080416122870996" target="_blank" rel="noopener">교육부 2026 하반기 업무계획 보도, 머니투데이 (2026. 8. 5.)</a>
+    </p>
+  </div>
+
+  <div class="item">
+    <div class="no">9</div>
+    <h2>원문과 다르게 돌아다니는 수치들 — 이번 호가 바로잡은 것</h2>
+    <div class="hanmadi">이 분야에서 자주 인용되는 문장이 원문의 표와 다를 때가 있다. 이번 호는 초록이 아니라 표를 기준으로 삼았다. 대학원 논문 세미나라면 이 대조 — 초록·보도자료의 문장을 본문 표와 맞춰 보기 — 가 그대로 ‘결과를 판단하는 통찰력’의 연습이 된다(이 호의 제안).</div>
+    <p class="body">발행 전 원문 대조에서 확인한 차이를 적어 둔다.</p>
+    <ul class="arrows">
+      <li><b>앞에서 바로잡은 넷</b> 초록의 “상관없다” 대 표의 −.56, 흔히 인용되는 ‘시간당 26.5개’는 7학년 표본 합산값(2번) · 0.86 대 0.36(1번) · 기말 차이 없음 대 개인 수준 상관(3번).</li>
+      <li><b>KAIST AI 조교</b> 보도자료는 “절반 이상”이 썼다고 했지만 논문은 “nearly 50%”(한 번 이상 사용)다. 논문의 “성적에 영향 없음” 문장은 AI 조교 사용이 아니라 설문 응답에 관한 안내다.</li>
+      <li><b>인용하지 않은 것</b> 질문 품질을 적절성·효과성 6차원으로 재는 2025년 틀은 평가 대상이 학생 질문이 아니라 LLM이 만든 질문·데이터셋 질문이어서 쓰지 않았다. AI 서비스 회사가 공개한 대학생 이용 분류 수치는 학생 질문이 아니라 AI 응답을 분류한 것이어서 쓰지 않았다. 초중등 대상 연구와 정책(교실 질문 실험, 수행평가 지침, PISA)은 대상이 달라 이번 호에서 뺐다. 다만 1번의 26편 리뷰(대부분 초중등)는 핵심 근거여서 남겼고, 8번의 교육부 업무계획은 대조로만 썼다.</li>
+      <li><b>남는 근거의 강도</b> 2023~2026년 고등교육 연구 대부분이 상관·소표본·동료심사 전 원고다. 종합하면 <b>질문을 가르치는 실천은 해 볼 만하고, 질문 점수로 학생을 판정하기에는 이르다</b> — 4호·5호가 각자 주제에서 도달한 자리와 같다.</li>
+    </ul>
+    <p class="src">
+      <span class="bdg r">[연구]</span>출처: <a href="https://arxiv.org/abs/2506.17363" target="_blank" rel="noopener">KAIST VTA, arXiv:2506.17363 (ACL 2025 Industry Track)</a> — 나머지는 1·2·3번 출처
+    </p>
+  </div>
+
+  <div class="sechead" id="sec6">&#128270; 편집자 렌즈 &#183; 조벽 교수의 제안이 DGIST에 묻는 것</div>
+  <div class="lensbox">
+    <h3>선발에서 성장으로 — 조 교수의 원칙을 질문 평가에 적용하면</h3>
+    <p>이 호는 조 교수의 제안을 반박하지 않는다. 다섯 문장 가운데 넷은 근거와 어긋나지 않고(판단 단계와 SALSA의 효과는 아직 검증되지 않았다), 갈라질 수 있는 곳은 ‘질문의 질 평가’가 <em>성적 점수</em>를 뜻할 때뿐인데, 공개 클립에서 확인된 조 교수의 말은 오히려 질문의 질은 북돋울 때 저절로 오른다는 쪽이었다(⑤). 관점의 차이도 밝혀 둔다 — 이 호는 질문을 주로 <em>이해에 이르는 길</em>로 재었고, 조 교수는 질문하는 힘을 <em>핵심 역량</em>으로 꼽았다. 그 눈으로 보면 시험과의 약한 관계(3번)는 반박이라기보다 지금의 시험이 질문하는 힘을 재지 못한다는 신호일 수도 있다.</p>
+    <p><b>질문을 ‘선발’에 쓰는 평가</b> — 질문 질 점수로 학생을 매기는 일 — 는 <em>보류</em>한다(완료 점수만). 학습과의 관계가 약하거나 엇갈리고(2·3번), 사람끼리도 기준을 맞추기 전엔 51–72%만 일치했으며(5번), 학생 자유 질문의 질을 AI가 채점한 일치도 연구는 없다. 다만 대학 근거가 얇기는 ‘성장’ 쪽도 같다. 그래도 점수만 보류하는 까닭은 근거의 양보다 <b>틀렸을 때의 비용</b>이다 — 가르치기가 틀리면 수업 몇 분을 잃고, 점수가 틀리면 학생 한 사람의 성적이 틀린다.</p>
+    <p><b>질문을 ‘성장’에 쓰는 평가</b> — 질문하는 법을 가르치고 고쳐 주는 일 — 는 <em>권장</em>한다. 가르친 수업이 이해를 높였다는 근거가 있다(1번: 대부분 초중등 연구. 대학 CS1(3번)에서는 프롬프트 실력은 올랐지만 조건 간 기말 차이 미검출). 질문 <em>피드백</em>만의 효과는 따로 확인되지 않았으니 가르치기 안의 한 단계로 둔다. <b>질문을 수업 진단에 쓰는 일</b>은 그 중간이다 — 효과를 잰 연구가 없어, 수집 전 고지를 전제로 <em>시도해 볼 가설</em>로 권한다. 그러니 질문의 질 평가는 <em>성장의 평가</em>여야 한다 — 조 교수가 방송에서 한 말(⑤)과 같은 방향이다.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>역설 — 조 교수의 비판에는 날이 둘이다</h3>
+    <p>조 교수는 현대 교육을 “측정하기 어려운 암묵지는 외면하고 채점이 수월한 형식지만 강조해온 반쪽짜리 교육 시스템”이라 했다. <b>그 비판에는 날이 둘이다 — 측정하기 어려운 것을 외면하지 말 것, 채점이 수월한 것만 강조하지 말 것.</b> 질문을 성적에서 지우고 손을 놓으면 앞의 날에 걸리고, 질문 개수·블룸 단계·‘왜·어떻게’로 시작하는가 같은 재기 쉬운 표지로 점수화하면 뒤의 날에 걸린다. 질문 수를 세면 모르는 것이 많은 학생이 점수를 받을 수 있고(2번, 27명·학기 전반), 단계를 세면 형식만 갖춘 질문이 늘 수 있다(검증되지 않은 우려). 측정이 목표가 되면 좋은 측정이 아니게 된다는 경고(Strathern, 1997)도 뒤의 날과 같은 방향이다. 이 호가 질문 질 점수는 보류하되 완료 점수와 되돌려 주기는 남기고, 어간을 <em>세는 기준</em>이 아니라 <em>가르치는 도구</em>로만 쓰는 까닭이다. 보류가 외면으로 굳지 않게 하는 것은 2027-1 파일럿의 몫이다. 두 번째 역설은 6번에 있다 — 질문 기록은 평가되지 않을 때 더 정직할 수 있다(CTL의 가설). 다만 성적에 넣지 않은 배치에서 대충 때우기가 오히려 많았다는 반례도 있다(4번).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>4호·5호와의 관계</h3>
+    <p>4호는 AI가 있는 수업에서 무엇을 학습 증거로 볼지 물었고 구술확인·수업 내 미니 수행을 답했다 — 질문하는 쪽은 교수자였다. 5호는 산출물이 좋아진 것과 학습이 일어난 것은 다르다고 했다. 6호는 학생의 질문도 같은 함정에 빠질 수 있음을 본다. 질문 실력은 가르쳐 올릴 수 있고 기준을 맞추면 믿을 만하게 채점할 수도 있지만, <b>그것이 도움 없는 수행으로 이어졌는지는 따로 재야 한다.</b></p>
+  </div>
+
+  <div class="lensbox">
+    <h3>그럼 질문을 평가하지 말라는 건가</h3>
+    <p>아니다. 위에서 본 <em>성장의 평가</em>는 권한다. 성적 점수로서의 질문 평가는 금지가 아니라 <b>보류</b>다 — 열리는 조건은 아래 점검 ②④⑤이고, 그 전까지는 제출(완료) 점수로 참여를 인정할 수 있다. 그리고 ‘질문’이 평가에 가장 안전하게 들어가는 쪽은 <b>학생이 질문을 받는 쪽</b>이다(7번). 이해를 가장 믿을 만하게 드러낸 것이 학생 답의 질이었기 때문이다(2번). 대학원에서는 구술 심사와 4호의 구술확인이 그 예이고, 100명이 넘는 학부 분반에서는 1인 15분 구술(7번)보다 4호의 수업 내 미니 수행이 가깝다. 대학원은 이미 두 방향을 나눠 갖고 있다 — 세미나와 연구 지도에서는 학생이 묻고, 자격시험과 학위논문 심사에서는 학생이 질문받는다. ‘선발에서 성장으로’를 대학원에 옮기면 판정을 없애자는 말이 아니라, 질문은 성장 쪽에 두고 판정은 학생의 답으로 하자는 말이다. 그 답은 ‘얼마나 많이 아는가’가 아니라 AI와 함께 낸 결과를 설명하고 판단하는 답이다(출발점 ②③). 구술도 조 교수가 시대착오라 한 AI 막기가 아니라, AI를 열어 둔 수업 안에 본인이 설명하는 순간을 하나 두는 일이다(이 호의 해석).</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>DGIST 적용 조건 점검</h3>
+    <p>① 질문하는 <em>법</em>을 가르치는 단계(질문 초점, 닫힌/열린 질문 바꾸기, 어간, 우선순위 고르기)가 있는가 — “질문하라”는 요구만 있는가 ② 질문을 수업 안에서 받는가 — 집에서 써 오는 목록은 누가 썼는지 확인할 수 없다 ③ 공개 발화 말고 서면·익명 경로가 있는가 — 말하기 성향이 질문 점수로 둔갑하지 않게 ④ 질문을 성적에 넣는다면, 그 점수가 이 과목에서 도움 없는 수행과 함께 움직이는지, 채점자 둘이 같은 질문 묶음을 따로 매겨 맞춰 봤는지 확인했는가(AI 채점이면 AI에도 같은 확인. 질문하는 능력 자체가 학습 목표인 과목(7번)이라면 앞의 ‘함께 움직임’ 대신 채점 일치와 누가 썼는지가 핵심 기준이다) ⑤ 질문·대화 기록을 평가나 진단에 쓸 계획이면 수집 전에 목적을 알리고 동의를 받았는가.</p>
+    <p><b>①~③을 갖추면 질문을 가르치는 데까지 왔다. 성적 판정에 쓰려면 ②에 ④⑤가 더해져야 한다.</b> 판정용 질문은 익명으로 받을 수 없으므로 ③의 익명 경로는 가르치기·진단용이고, 판정용은 기명 서면으로 받는다. 판단이 서지 않는 항목은 교수학습센터(ctl@dgist.ac.kr)로 알려 주기 바란다.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>이 호가 바꾸려는 결정</h3>
+    <p><b>결정</b> 2027-1학기부터 학생 질문을 성적 요소로 넣으려는 대학·대학원 과목에 CTL이 채점 기준 맞추기·일치도 확인을 지원할 것인가, 가르치기·형성 피드백·수업 진단 지원에 머물 것인가. 그리고 그 전제로 CTL이 안내하는 AI 도구 활용 수업에 ‘질문 기록의 이용 목적’ 고지·동의 문안을 표준으로 넣을 것인가.<br>
+    <b>소유자</b> DGIST 교수학습센터(고지·동의 문안과 지원 방침). 질문의 성적 반영 여부는 각 과목 교수자.<br>
+    <b>판가름 시점</b> 2027-1 운영 시작 전(고지·동의 포함 여부) / 2027-1학기 종료 후 — 수집 전 고지·동의를 받고 기명 서면으로 질문을 받은 파일럿 과목(참여 희망 과목만)에서 두 가지로 판정한다. ① LLM–교수자 일치도가 κ 0.7 이상이면서, 기준을 맞춘 교수자 2명이 같은 학생 질문 100개를 따로 채점한 일치도보다 낮지 않은가 ② 사전 수준을 통제하고도 질문 점수가 도움 없는 확인 문항의 수행과 함께 움직이는가(3번 CS1 방식). 질문 묶음 정리·채점 기준 초안·일치도 계산은 CTL이, 채점은 교수자가 맡는 분담을 제안한다.</p>
+  </div>
+
+  <div class="lensbox">
+    <h3>남은 불확실성</h3>
+    <p>① 이공계 대학·대학원에서 질문 생성을 가르친 무작위 실험을 이번 조사에서 찾지 못했다 — 1번의 효과가 DGIST 교과로 옮겨지는지 모른다. ② 질문 점수화가 학습을 올리는지, 질문 피드백만의 효과가 있는지 직접 시험한 실험이 없다. ③ 학생 자유형 질문의 질에 대한 LLM 채점 일치도 연구는 영어 문헌 위주 조사에서 찾지 못했다 — 없다는 증명은 아니다. ④ 한국 대학생 질문 기피 자료는 2010년 조사(언론 보도)이며 지금 DGIST 학생에게 맞는지 모른다. ⑤ 학생이 질문 과제를 AI로 대행한다는 행동 실증은 없다 — 능력 증거뿐이다. ⑥ 조 교수의 발언은 KBS 공식 유튜브 클립 3편(약 35분)의 자동 자막으로 확인했다 — 방송 전체가 아니며, 클립에 없는 대목에 ‘평가’ 발언이 있었을 가능성은 남는다. 초중등·자녀 교육 맥락의 제안을 대학·대학원에 옮긴 것은 이 호의 해석이다. ⑦ “질문 기록은 평가되지 않을 때 더 정직하다”와 “반 단위 질문 분포가 수업 개선 단서가 된다”는 CTL의 가설이며 검증된 측정이 아니다.</p>
+  </div>
+
+  <p class="src" style="margin-top:20px;">※ 편집자 렌즈는 검증된 출처와 공개 실무 자료를 교육 이론 프레임으로 해석한 DGIST CTL의 편집 의견이며, 원출처 저자의 견해와 다를 수 있습니다.</p>
+
+</div>
+</div>
+
+<div class="footer">
+  <b>DGIST CTL AI 활용 교수법 트렌드 리포트 · Vol. 1, No. 6 (2026년 10월)</b><br>
+  문의: 교수학습센터 (<a href="mailto:ctl@dgist.ac.kr">ctl@dgist.ac.kr</a>) | 주제: 질문하는 힘을 평가한다는 것 — 선발이 아니라 성장의 평가로<br>
+  참고: AERJ · Review of Educational Research · Learning and Individual Differences · CBE—Life Sciences Education · Learning and Instruction · J. Educational Psychology · Applied Cognitive Psychology · PLOS ONE · BMC Medical Education · CJSoTL · AAAI · PNAS · Computers and Education: AI · IJETHE · JUTLP · CHI · LAK · ASEE · AIED · Frontiers in Medicine · J Adv Med Educ Prof · arXiv · 한국대학교육협의회 · 언론 보도<br><br>
+  본 리포트는 DGIST CTL의 독립적 판단으로 작성되며 외부 후원이 없습니다.<br>
+  내용은 원출처 저자의 견해이며 DGIST CTL의 공식 입장과 다를 수 있습니다. 인용 시 원출처를 명기하십시오.<br><br>
+  <a href="../">← 전체 호 보기</a>
+</div>
+
+
+<script>
+(function () {
+  var ISSUES = [
+    [1, 'Vol. 1, No. 1 (2026년 4월)', '글로벌 대학이 지금 하고 있는 것들'],
+    [2, 'Vol. 1, No. 2 (2026년 5월)', 'AI 파이프라인으로 수업자료를 자동 생성한다'],
+    [3, 'Vol. 1, No. 3 (2026년 6월)', 'AI 튜터를 어떻게 설계했나 — Harvard PS2 Pal 해부'],
+    [4, 'Vol. 1, No. 4 (2026년 7월)', 'AI 시대의 평가 혁신 — AI 탐지에서 학습증거 설계로'],
+    [5, 'Vol. 1, No. 5 (2026년 9월)', 'AI 튜터를 켠 학기 — 무엇이 배움으로 남는가'],
+    [6, 'Vol. 1, No. 6 (2026년 10월)', '질문하는 힘을 평가한다는 것 — 선발이 아니라 성장의 평가로']
+  ];
+  var vol = parseInt(document.body.getAttribute('data-vol'), 10);
+  var cur = ISSUES.filter(function (i) { return i[0] === vol; })[0];
+  var article = document.querySelector('.article');
+  if (!article || !cur) return;
+
+  // 1) 레일 내비 = 기존 칩 내비 복제 + 활성 표시
+  var toc = document.querySelector('.toc');
+  var nav = document.getElementById('railnav');
+  var links = [];
+  if (toc && nav) {
+    toc.querySelectorAll('a').forEach(function (a) {
+      var b = document.createElement('a');
+      b.href = a.getAttribute('href'); b.textContent = a.textContent;
+      nav.appendChild(b); links.push(b);
+    });
+    var targets = links.map(function (l) { return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    function setActive() {
+      var y = window.scrollY + 120, idx = 0;
+      targets.forEach(function (t, i) { if (t.offsetTop <= y) idx = i; });
+      links.forEach(function (l, i) { l.classList.toggle('on', i === idx); });
+    }
+    window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  }
+
+  // 2) 인용문
+  var h1 = document.querySelector('.hero h1');
+  var title = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : document.title;
+  var year = (cur[1].match(/(\d{4})/) || [,''])[1];
+  var no = cur[1].match(/No\. (\d)/)[1];
+  var cite = 'DGIST 교수학습센터. (' + year + '). ' + title + '. AI 활용 교수법 트렌드 리포트, 1(' + no + '). ' + location.origin + location.pathname;
+  var ct = document.getElementById('citetext'); if (ct) ct.textContent = cite;
+  var cb = document.getElementById('copycite');
+  if (cb) cb.addEventListener('click', function () {
+    var done = function () { cb.textContent = '복사됨'; setTimeout(function () { cb.textContent = '인용문 복사'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(cite).then(done);
+    else { var ta = document.createElement('textarea'); ta.value = cite; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done(); }
+  });
+
+  // 3) 말미: 참고문헌(본문 출처 링크 수집) · 다른 호 · 구독
+  var end = document.createElement('div'); end.className = 'endmatter';
+  var seen = {}, refs = [];
+  article.querySelectorAll('.src a[href], .lensbox a[href], p.body a[href], ul.arrows a[href]').forEach(function (a) {
+    var h = a.getAttribute('href'); if (!/^https?:/.test(h) || seen[h]) return;
+    seen[h] = 1; refs.push([a.textContent.replace(/\s+/g, ' ').trim(), h]);
+  });
+  if (refs.length) {
+    var hd = document.createElement('div'); hd.className = 'sechead'; hd.id = 'refs'; hd.textContent = '참고문헌 · References (' + refs.length + ')';
+    var ol = document.createElement('ol'); ol.className = 'refs';
+    refs.forEach(function (r) {
+      var li = document.createElement('li'), a = document.createElement('a'), s = document.createElement('small');
+      a.href = r[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r[0];
+      var host = r[1].replace(/^https?:\/\//, '').split('/')[0].replace(/^www\./, '');
+      s.textContent = host;
+      li.appendChild(a); li.appendChild(s); ol.appendChild(li);
+    });
+    end.appendChild(hd); end.appendChild(ol);
+  }
+  var hd2 = document.createElement('div'); hd2.className = 'sechead'; hd2.textContent = '다른 호 읽기';
+  var grid = document.createElement('div'); grid.className = 'issues';
+  ISSUES.filter(function (i) { return i[0] !== vol; }).reverse().forEach(function (i) {
+    var a = document.createElement('a'); a.href = '../vol' + i[0] + '/';
+    a.innerHTML = '<div class="v">' + i[1] + '</div><div class="t"></div>';
+    a.querySelector('.t').textContent = i[2]; grid.appendChild(a);
+  });
+  end.appendChild(hd2); end.appendChild(grid);
+  article.appendChild(end);
+  if (nav && refs.length) { var b = document.createElement('a'); b.href = '#refs'; b.textContent = '참고문헌'; nav.appendChild(b); }
+})();
+</script>
+</body>
+</html>
